@@ -1,0 +1,5 @@
+{"name": "marsh_night", "label": "Night marsh expedition (lighting test on the clearing)", "season": "summer", "hour": 1.0, "weather": "fog", "intensity": 0.55,
+ "grade": {"key": [40, 80, 90], "t": 0.18, "val": 0.9, "sat": 1.1}, "fireflies": 1.6,
+ "extra_lights": [{"x": 630, "y": 300, "radius": 22, "color": [0.5, 1.0, 0.95], "intensity": 0.8, "kind": "glow"},
+                  {"x": 600, "y": 250, "radius": 18, "color": [0.5, 1.0, 0.95], "intensity": 0.7, "kind": "glow"},
+                  {"x": 680, "y": 270, "radius": 20, "color": [0.5, 1.0, 0.95], "intensity": 0.7, "kind": "glow"}]}

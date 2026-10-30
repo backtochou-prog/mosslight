@@ -1,0 +1,50 @@
+{
+ "name": "summer_pond_evening",
+ "label": "Summer evening by the pond",
+ "season": "summer",
+ "hour": 21.2,
+ "weather": "clear",
+ "intensity": 0,
+ "grade": {
+  "key": [
+   255,
+   210,
+   150
+  ],
+  "t": 0.05,
+  "val": 1.0,
+  "sat": 1.05
+ },
+ "fireflies": 2.5,
+ "extra_lights": [
+  {
+   "x": 560,
+   "y": 330,
+   "radius": 44,
+   "color": [
+    1.0,
+    0.8,
+    0.5
+   ],
+   "intensity": 0.9,
+   "kind": "fire"
+  }
+ ],
+ "props": [
+  {
+   "sprite": "campfire",
+   "x": 560,
+   "y": 330
+  },
+  {
+   "sprite": "log_seat",
+   "x": 536,
+   "y": 348
+  },
+  {
+   "sprite": "stool_0",
+   "x": 586,
+   "y": 346
+  }
+ ]
+}

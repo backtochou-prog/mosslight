@@ -1,0 +1,113 @@
+{
+ "name": "winter_fishing",
+ "label": "Winter fishing night",
+ "season": "winter",
+ "hour": 21.5,
+ "weather": "snow",
+ "intensity": 0.5,
+ "grade": {
+  "key": [
+   120,
+   150,
+   200
+  ],
+  "t": 0.08,
+  "val": 1.0,
+  "sat": 1.05
+ },
+ "extra_lights": [
+  {
+   "x": 560,
+   "y": 236,
+   "radius": 40,
+   "color": [
+    1.0,
+    0.84,
+    0.58
+   ],
+   "intensity": 0.9,
+   "kind": "lantern"
+  },
+  {
+   "x": 640,
+   "y": 206,
+   "radius": 40,
+   "color": [
+    1.0,
+    0.84,
+    0.58
+   ],
+   "intensity": 0.9,
+   "kind": "lantern"
+  },
+  {
+   "x": 700,
+   "y": 300,
+   "radius": 40,
+   "color": [
+    1.0,
+    0.84,
+    0.58
+   ],
+   "intensity": 0.9,
+   "kind": "lantern"
+  },
+  {
+   "x": 600,
+   "y": 338,
+   "radius": 36,
+   "color": [
+    1.0,
+    0.78,
+    0.5
+   ],
+   "intensity": 0.8,
+   "kind": "fire"
+  }
+ ],
+ "note": "props (ice holes, stools, lantern posts) are a scene variant bake; lights/palette/weather/time are overrides",
+ "props": [
+  {
+   "sprite": "ice_hole_0",
+   "x": 600,
+   "y": 250,
+   "layer": "ground"
+  },
+  {
+   "sprite": "ice_hole_1",
+   "x": 660,
+   "y": 300,
+   "layer": "ground"
+  },
+  {
+   "sprite": "stool_0",
+   "x": 588,
+   "y": 256
+  },
+  {
+   "sprite": "stool_1",
+   "x": 648,
+   "y": 306
+  },
+  {
+   "sprite": "lantern_post",
+   "x": 560,
+   "y": 236
+  },
+  {
+   "sprite": "lantern_post",
+   "x": 640,
+   "y": 206
+  },
+  {
+   "sprite": "lantern_post",
+   "x": 700,
+   "y": 300
+  },
+  {
+   "sprite": "campfire",
+   "x": 600,
+   "y": 338
+  }
+ ]
+}

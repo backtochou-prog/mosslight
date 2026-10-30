@@ -1,0 +1,128 @@
+{
+ "tile_size": 16,
+ "edge_geometry": "shared 32px periodic wobble; mask code tl|tr<<1|bl<<2|br<<3; rows = phase (tx%2, ty%2)",
+ "grass": {
+  "file": "terrain_grass.png",
+  "rows": [
+   "dark",
+   "mid",
+   "sun"
+  ],
+  "variants": 6
+ },
+ "materials": [
+  {
+   "id": 0,
+   "name": "grass",
+   "label": "lush grass",
+   "under": null,
+   "edge": "none"
+  },
+  {
+   "id": 1,
+   "name": "worn",
+   "label": "short worn grass",
+   "under": 0,
+   "edge": "soft",
+   "file": "terrain_worn.png"
+  },
+  {
+   "id": 2,
+   "name": "forest",
+   "label": "dense forest ground",
+   "under": 0,
+   "edge": "soft",
+   "file": "terrain_forest.png"
+  },
+  {
+   "id": 3,
+   "name": "sand",
+   "label": "sandy ground",
+   "under": 0,
+   "edge": "soft",
+   "file": "terrain_sand.png"
+  },
+  {
+   "id": 4,
+   "name": "dirt",
+   "label": "soft dirt",
+   "under": 0,
+   "edge": "rim",
+   "file": "terrain_dirt.png"
+  },
+  {
+   "id": 5,
+   "name": "earth",
+   "label": "packed earth",
+   "under": 4,
+   "edge": "soft",
+   "file": "terrain_earth.png"
+  },
+  {
+   "id": 6,
+   "name": "pebble",
+   "label": "pebbled path",
+   "under": 4,
+   "edge": "soft",
+   "file": "terrain_pebble.png"
+  },
+  {
+   "id": 7,
+   "name": "mud",
+   "label": "mud / wet bank",
+   "under": 0,
+   "edge": "soft",
+   "file": "terrain_mud.png"
+  },
+  {
+   "id": 8,
+   "name": "stone",
+   "label": "natural stone",
+   "under": 0,
+   "edge": "ledge",
+   "file": "terrain_stone.png"
+  },
+  {
+   "id": 9,
+   "name": "mossy",
+   "label": "moss-covered stone",
+   "under": 8,
+   "edge": "ledge",
+   "file": "terrain_mossy.png"
+  },
+  {
+   "id": 10,
+   "name": "paved",
+   "label": "flagstone paving",
+   "under": 4,
+   "edge": "clip",
+   "file": "terrain_paved.png"
+  },
+  {
+   "id": 11,
+   "name": "shallow",
+   "label": "shallow water",
+   "under": 0,
+   "edge": "shore",
+   "file": "terrain_shallow.png"
+  },
+  {
+   "id": 12,
+   "name": "water",
+   "label": "deep water",
+   "under": 11,
+   "edge": "soft",
+   "file": "terrain_water.png"
+  }
+ ],
+ "snow": {
+  "snow": {
+   "file": "terrain_snow.png",
+   "kind": 1
+  },
+  "snow_path": {
+   "file": "terrain_snow_path.png",
+   "kind": 2
+  }
+ }
+}

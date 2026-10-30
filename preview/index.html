@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>MOSSlight — forest clearing preview</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root { color-scheme: dark; }
+  html, body { margin: 0; height: 100%; background: #0f1418; color: #cfd6d2; font: 13px/1.4 ui-monospace, Menlo, Consolas, monospace; }
+  body { display: flex; flex-direction: column; }
+  header { display: flex; gap: 14px; align-items: center; padding: 8px 12px; border-bottom: 1px solid #222a30; flex-wrap: wrap; }
+  header b { color: #e6ead9; letter-spacing: .04em; }
+  button, select { background: #1b2328; color: #cfd6d2; border: 1px solid #2d3840; border-radius: 4px; padding: 4px 10px; font: inherit; cursor: pointer; }
+  button.on { background: #2f4a3a; border-color: #4f7a5a; color: #eef5e8; }
+  main { flex: 1; overflow: auto; display: grid; place-items: start center; padding: 12px; }
+  canvas { image-rendering: pixelated; image-rendering: crisp-edges; background: #000; }
+  .hint { opacity: .6; }
+</style>
+</head>
+<body>
+<header>
+  <b>MOSSlight · Forest clearing</b>
+  <label>Scene <select id="scene"><option value="clearing">Forest clearing</option><option value="terrain_test">Terrain test</option></select></label>
+  <button data-v="day" class="on">Spring afternoon</button>
+  <button data-v="night">Night</button>
+  <button data-v="autumn">Autumn</button>
+  <button data-v="winter">Winter</button>
+  <button data-v="winter_night">Winter night</button>
+  <label>Zoom <select id="zoom"><option>1</option><option>2</option><option selected>3</option><option>4</option></select></label>
+  <label><input type="checkbox" id="viewport"> gameplay viewport (640×360)</label>
+  <span class="hint">keys: N toggles night · drag to pan</span>
+</header>
+<main><canvas id="c"></canvas></main>
+<script>
+const state = { view: 'day', scene: 'clearing', zoom: 3, viewport: false, ox: 60, oy: 90 };
+const FILES = {
+  clearing: { day: 'clearing_day_1x.png', night: 'clearing_night_1x.png', autumn: 'clearing_autumn_1x.png', winter: 'clearing_winter_1x.png', winter_night: 'clearing_winter_night_1x.png' },
+  terrain_test: { day: 'terrain_test_spring_1x.png', winter: 'terrain_test_winter_1x.png' },
+};
+const cache = {};
+function img(scene, view) {
+  const f = (FILES[scene] || {})[view]; if (!f) return null;
+  if (!cache[f]) { const im = new Image(); im.onload = draw; im.src = '../renders/' + f; cache[f] = im; }
+  return cache[f];
+}
+const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+function draw() {
+  const im = img(state.scene, state.view);
+  if (!im || !im.complete || !im.naturalWidth) return;
+  const z = state.zoom;
+  if (state.viewport) {
+    cv.width = 640 * z; cv.height = 360 * z;
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(im, state.ox, state.oy, 640, 360, 0, 0, 640 * z, 360 * z);
+  } else {
+    cv.width = im.naturalWidth * z; cv.height = im.naturalHeight * z;
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(im, 0, 0, cv.width, cv.height);
+  }
+  document.querySelectorAll('button[data-v]').forEach(b => { b.classList.toggle('on', b.dataset.v === state.view); b.disabled = !(FILES[state.scene] || {})[b.dataset.v]; });
+}
+document.querySelectorAll('button[data-v]').forEach(b => b.onclick = () => { state.view = b.dataset.v; draw(); });
+document.getElementById('scene').onchange = e => { state.scene = e.target.value; if (!(FILES[state.scene] || {})[state.view]) state.view = 'day'; draw(); };
+draw();
+document.getElementById('zoom').onchange = e => { state.zoom = +e.target.value; draw(); };
+document.getElementById('viewport').onchange = e => { state.viewport = e.target.checked; draw(); };
+addEventListener('keydown', e => { if (e.key.toLowerCase() === 'n') { state.view = state.view === 'night' ? 'day' : 'night'; draw(); } });
+let drag = null;
+cv.addEventListener('mousedown', e => drag = { x: e.clientX, y: e.clientY, ox: state.ox, oy: state.oy });
+addEventListener('mouseup', () => drag = null);
+addEventListener('mousemove', e => {
+  if (!drag || !state.viewport) return;
+  const im = img(state.scene, state.view); if (!im) return;
+  state.ox = Math.max(0, Math.min(im.naturalWidth - 640, drag.ox - (e.clientX - drag.x) / state.zoom));
+  state.oy = Math.max(0, Math.min(im.naturalHeight - 360, drag.oy - (e.clientY - drag.y) / state.zoom));
+  draw();
+});
+</script>
+</body>
+</html>

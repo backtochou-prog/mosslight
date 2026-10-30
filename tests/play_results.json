@@ -1,0 +1,190 @@
+{
+ "results": [
+  {
+   "name": "moves E",
+   "ok": true,
+   "detail": "94.7 px"
+  },
+  {
+   "name": "moves W",
+   "ok": true,
+   "detail": "92.6 px"
+  },
+  {
+   "name": "moves N",
+   "ok": true,
+   "detail": "93.4 px"
+  },
+  {
+   "name": "moves S",
+   "ok": true,
+   "detail": "93.4 px"
+  },
+  {
+   "name": "moves NE",
+   "ok": true,
+   "detail": "93.7 px"
+  },
+  {
+   "name": "moves NW",
+   "ok": true,
+   "detail": "94.5 px"
+  },
+  {
+   "name": "moves SE",
+   "ok": true,
+   "detail": "93.7 px"
+  },
+  {
+   "name": "moves SW",
+   "ok": true,
+   "detail": "93.7 px"
+  },
+  {
+   "name": "diagonal speed == cardinal speed",
+   "ok": true,
+   "detail": "cardinal 93.5 px, diagonal 93.9 px over 1.5 s"
+  },
+  {
+   "name": "stops without sliding",
+   "ok": true,
+   "detail": "slid 0.7 px after release"
+  },
+  {
+   "name": "blocked by oak trunk",
+   "ok": true,
+   "detail": "stopped at x=204.5 (trunk at 216)"
+  },
+  {
+   "name": "blocked by pond",
+   "ok": true,
+   "detail": "stopped at x=572.5 walking east into the pond (bank near 548)"
+  },
+  {
+   "name": "blocked by tent",
+   "ok": true,
+   "detail": "stopped at y=243.5 (tent base 244)"
+  },
+  {
+   "name": "blocked by ruin wall",
+   "ok": true,
+   "detail": "stopped at y=96.6 (wall base 94)"
+  },
+  {
+   "name": "dock is walkable (stops at the mooring post)",
+   "ok": true,
+   "detail": "reached x=584.5 on the deck"
+  },
+  {
+   "name": "path junction traversable",
+   "ok": true,
+   "detail": "ended at (577, 265)"
+  },
+  {
+   "name": "passes between edge trees on the ruin path",
+   "ok": true,
+   "detail": "reached (640, 50) heading for the ruin"
+  },
+  {
+   "name": "walks between forest trunks, stops at the playable border (x=32)",
+   "ok": true,
+   "detail": "stopped at x=36"
+  },
+  {
+   "name": "19.5:9 phone viewport: view wider than this map clamps to 0 and is capped to the map width",
+   "ok": true,
+   "detail": "camera at (0,120) with 780 px view on a 768 px map"
+  },
+  {
+   "name": "behind oak trunk: partially hidden",
+   "ok": true,
+   "detail": "54% of player visible"
+  },
+  {
+   "name": "in front of oak trunk: fully visible",
+   "ok": true,
+   "detail": "100% visible"
+  },
+  {
+   "name": "behind foreground canopy: hidden",
+   "ok": true,
+   "detail": "0% visible under the framing oak"
+  },
+  {
+   "name": "under the oak canopy, in front of trunk base: visible",
+   "ok": true,
+   "detail": "100%"
+  },
+  {
+   "name": "camera clamps at the north-west edge",
+   "ok": true,
+   "detail": "camera at (0,16)"
+  },
+  {
+   "name": "camera clamps at the south-east edge",
+   "ok": true,
+   "detail": "camera at (128,120)"
+  },
+  {
+   "name": "camera moves smoothly (no jump on a 1-px player step)",
+   "ok": true,
+   "detail": "moved 0.00 px"
+  },
+  {
+   "name": "prompt near tent",
+   "ok": true,
+   "detail": "prompt: Inspect tent"
+  },
+  {
+   "name": "no prompt in the open meadow",
+   "ok": true
+  },
+  {
+   "name": "interact shows the object text",
+   "ok": true,
+   "detail": "A worn canvas tent. The flap is rolled back; your bedroll is inside."
+  },
+  {
+   "name": "prompt: dock",
+   "ok": true,
+   "detail": "got dock"
+  },
+  {
+   "name": "prompt: ruin",
+   "ok": true,
+   "detail": "got ruin"
+  },
+  {
+   "name": "prompt: lantern",
+   "ok": true,
+   "detail": "got lantern"
+  },
+  {
+   "name": "prompt: campfire",
+   "ok": true,
+   "detail": "got campfire"
+  },
+  {
+   "name": "prompt: log",
+   "ok": true,
+   "detail": "got log"
+  },
+  {
+   "name": "touch joystick and keyboard give the same action vector",
+   "ok": true,
+   "detail": "touch 1.00,0.00 keys 1.00,0.00"
+  },
+  {
+   "name": "frame cost (software Chromium, 640x360 at 3x)",
+   "ok": true,
+   "detail": "18.4 ms/frame"
+  },
+  {
+   "name": "no page errors",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "passed": 37,
+ "total": 37
+}

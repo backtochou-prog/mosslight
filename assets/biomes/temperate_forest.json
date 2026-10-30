@@ -1,0 +1,113 @@
+{
+ "name": "temperate_forest",
+ "label": "Lush temperate forest (the first clearing)",
+ "materials": [
+  "grass",
+  "worn",
+  "forest",
+  "dirt",
+  "earth",
+  "pebble",
+  "mud",
+  "stone",
+  "mossy",
+  "paved",
+  "shallow",
+  "water",
+  "sand"
+ ],
+ "trees": {
+  "edge": [
+   "oak_0",
+   "oak_1",
+   "oak_2",
+   "oak_3",
+   "birch_0",
+   "birch_1",
+   "rowan_0"
+  ],
+  "north": [
+   "oak_1",
+   "oak_3",
+   "pine_0",
+   "birch_0"
+  ],
+  "deep": [
+   "pine_0",
+   "pine_1",
+   "oak_0",
+   "oak_2",
+   "oak_3"
+  ],
+  "water": [
+   "willow_0",
+   "willow_1"
+  ]
+ },
+ "understorey": [
+  "shrub_0",
+  "shrub_1",
+  "shrub_2",
+  "fern_0",
+  "fern_1",
+  "fern_2",
+  "tallgrass_0",
+  "tallgrass_1",
+  "tallgrass_2",
+  "sapling_oak0",
+  "sapling_birch0"
+ ],
+ "meadow": [
+  "flowers_w0",
+  "flowers_w1",
+  "flowers_b0",
+  "flowers_y0",
+  "flowers_p0",
+  "flowers_r0",
+  "tuft_0",
+  "tuft_1",
+  "tuft_2"
+ ],
+ "shore": [
+  "reeds_0",
+  "reeds_1",
+  "arrowhead_0",
+  "arrowhead_1",
+  "lily_0",
+  "lily_1",
+  "lily_2",
+  "lily_3",
+  "stone_0",
+  "stone_1"
+ ],
+ "rules": [
+  "forest_edge",
+  "understorey",
+  "pond_margin",
+  "path_decorate",
+  "sheltered_corner",
+  "ruin_overgrowth",
+  "vegetation_cluster",
+  "foreground_frame"
+ ],
+ "seasons": {
+  "spring": {
+   "lut": "spring_day.json",
+   "litter": 0.6
+  },
+  "summer": {
+   "lut": "summer_day.json",
+   "litter": 0.3
+  },
+  "autumn": {
+   "lut": "autumn_day.json",
+   "litter": 1.8
+  },
+  "winter": {
+   "lut": "winter_day.json",
+   "litter": 0.0,
+   "snow_coverage": 0.85,
+   "sprite_suffix": "_winter"
+  }
+ }
+}

@@ -1,0 +1,29 @@
+{
+ "planned_biomes": [
+  {
+   "name": "abandoned_village",
+   "atmosphere": "overgrown lanes, paved + earth, hedges, fruit trees, warm ruins"
+  },
+  {
+   "name": "misty_marsh",
+   "atmosphere": "mud, shallow water, reeds, willows, mist layer, cool palette"
+  },
+  {
+   "name": "rocky_highland",
+   "atmosphere": "stone + mossy stone, pines, sparse grass, strong shadows"
+  },
+  {
+   "name": "ruined_city",
+   "atmosphere": "paved everywhere, cracked, saplings in rubble, ivy"
+  },
+  {
+   "name": "frozen_forest",
+   "atmosphere": "winter tables + snow, bare trees, ice"
+  },
+  {
+   "name": "night_wetland",
+   "atmosphere": "night-first palette, glow plants, fireflies, deep water"
+  }
+ ],
+ "note": "each biome = material subset + species lists + rule parameters + palette overrides, same engine data layout as temperate_forest.json"
+}

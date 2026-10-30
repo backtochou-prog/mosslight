@@ -1,0 +1,40 @@
+{
+ "name": "camper (TEMPORARY original player sprite)",
+ "frame_w": 14,
+ "frame_h": 24,
+ "origin": [
+  7,
+  23
+ ],
+ "facings": [
+  "down",
+  "up",
+  "side",
+  "gather",
+  "fish",
+  "build"
+ ],
+ "frames": [
+  "idle0",
+  "idle1",
+  "walk0",
+  "walk1",
+  "walk2",
+  "walk3"
+ ],
+ "rows": "facing",
+ "cols": "frame",
+ "side_flips_for_left": true,
+ "walk_fps": 8,
+ "idle_fps": 1.5,
+ "foot_box": [
+  8,
+  4
+ ],
+ "actions": {
+  "gather": "row 3, 4 frames (cols 0-3)",
+  "fish": "row 4, 4 frames, side facing",
+  "build": "row 5, 4 frames"
+ },
+ "action_fps": 6
+}

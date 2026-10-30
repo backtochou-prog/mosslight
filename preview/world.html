@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>MOSSlight — living world</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root { color-scheme: dark; }
+  html, body { margin: 0; height: 100%; background: #0f1418; color: #cfd6d2; font: 13px/1.4 ui-monospace, Menlo, Consolas, monospace; }
+  body { display: flex; flex-direction: column; }
+  header { display: flex; gap: 10px 16px; align-items: center; padding: 8px 12px; border-bottom: 1px solid #222a30; flex-wrap: wrap; }
+  header b { color: #e6ead9; letter-spacing: .04em; }
+  button, select, input[type=range] { background: #1b2328; color: #cfd6d2; border: 1px solid #2d3840; border-radius: 4px; padding: 3px 8px; font: inherit; cursor: pointer; }
+  button.on { background: #2f4a3a; border-color: #4f7a5a; color: #eef5e8; }
+  main { flex: 1; overflow: auto; display: grid; place-items: start center; padding: 12px; }
+  canvas { image-rendering: pixelated; image-rendering: crisp-edges; background: #000; }
+  .hint { opacity: .6; } #clock { min-width: 15ch; color: #e6ead9; }
+  .presets button { padding: 2px 6px; font-size: 12px; }
+</style>
+</head>
+<body>
+<header>
+  <b>MOSSlight · living world</b>
+  <span id="clock"></span>
+  <button id="play" class="on">pause</button>
+  <label>speed <select id="speed"><option>60</option><option selected>240</option><option>900</option><option>3600</option></select>×</label>
+  <label>time <input type="range" id="time" min="0" max="1439" value="780" style="width:180px"></label>
+  <label>season <select id="season"><option>spring</option><option>summer</option><option>autumn</option><option>winter</option></select></label>
+  <label>weather <select id="weather"><option>clear</option><option>light_rain</option><option>heavy_rain</option><option>fog</option><option>snow</option><option>wind</option></select></label>
+  <label>intensity <input type="range" id="intensity" min="0" max="100" value="70" style="width:90px"></label>
+  <label>event <select id="event"><option value="">none</option></select></label>
+  <label>zoom <select id="zoom"><option>1</option><option selected>2</option><option>3</option></select></label>
+  <label><input type="checkbox" id="viewport" checked> 640×360 viewport</label>
+  <span class="presets" id="presets"></span>
+  <span class="hint">keys: space pause · [ ] time · drag to pan</span>
+</header>
+<main><canvas id="c"></canvas></main>
+<script>
+// ---------------------------------------------------------------- modules
+// WorldClock: game time, configurable scale, pause/advance.  (mirrors godot/WorldClock.gd)
+const WorldClock = {
+  minutes: 780, scale: 240, paused: false, _acc: 0,
+  tick(dtReal) { if (!this.paused) this.minutes = (this.minutes + dtReal * this.scale / 60) % 1440; },
+  hour() { return this.minutes / 60; },
+  label() { const h = Math.floor(this.minutes / 60), m = Math.floor(this.minutes % 60); return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`; },
+  phase(season) { const kf = DATA.keyframes[season]; const h = this.hour(); let name = 'night';
+    for (let k = 0; k < kf.hours.length; k++) { if (h >= kf.hours[k]) name = kf.names[k]; } return name; },
+};
+// SeasonState / WeatherState: current values + eased transitions.
+const SeasonState = { season: 'spring' };
+const WeatherState = { kind: 'clear', target: 0.7, intensity: 0.0, prevKind: 'clear', prevIntensity: 0.0, wind: 0.0, windTarget: 0.0,
+  set(kind, target) { if (kind !== this.kind) { this.prevKind = this.kind; this.prevIntensity = this.intensity; this.intensity = 0; } this.kind = kind; this.target = target; },
+  tick(dt) { // weather eases in over ~6 s, the previous weather eases out
+    this.intensity += (this.target - this.intensity) * Math.min(1, dt * 0.35);
+    this.prevIntensity += (0 - this.prevIntensity) * Math.min(1, dt * 0.5);
+    const w = { clear: 0.08, light_rain: 0.35, heavy_rain: 0.7, fog: 0.05, snow: 0.3, wind: 1.0 }[this.kind] * Math.max(0.3, this.target);
+    this.windTarget = w; this.wind += (this.windTarget - this.wind) * Math.min(1, dt * 0.3);
+  } };
+const EventState = { current: null };
+
+// ---------------------------------------------------------------- data
+const DATA = { keyframes: {}, entries: null, weather: null, scene: null, idx: {}, night: null, events: {} };
+async function loadJSON(p) { return (await fetch(p)).json(); }
+function loadIdx(p) { return new Promise(res => { const im = new Image(); im.onload = () => { const cv = document.createElement('canvas'); cv.width = im.width; cv.height = im.height; const g = cv.getContext('2d'); g.drawImage(im, 0, 0); const d = g.getImageData(0, 0, im.width, im.height).data; const out = new Uint8Array(im.width * im.height); for (let i = 0; i < out.length; i++) out[i] = d[i * 4]; res(out); }; im.src = p; }); }
+const A = '../assets/atmosphere/';
+async function boot() {
+  try { await fetch(A + 'scene.json'); } catch (e) { document.getElementById('clock').textContent = 'needs a local server: run  python3 preview/serve.py  in the project folder, then open http://localhost:8765/preview/world.html'; return; }
+  for (const s of ['spring', 'summer', 'autumn', 'winter']) DATA.keyframes[s] = await loadJSON(A + s + '_keyframes.json');
+  DATA.entries = await loadJSON(A + 'palette_entries.json'); DATA.weather = await loadJSON(A + 'weather_grades.json'); DATA.scene = await loadJSON(A + 'scene.json');
+  for (const s of ['spring', 'summer', 'autumn', 'winter']) DATA.idx[s] = await loadIdx(A + DATA.scene.layers[s]);
+  DATA.night = await loadIdx(A + DATA.scene.night_layer);
+  DATA.shadow = {}; for (const sn in DATA.scene.shadows) { DATA.shadow[sn] = { noon: await loadIdx(A + DATA.scene.shadows[sn].noon), long: await loadIdx(A + DATA.scene.shadows[sn].long) }; }
+  DATA.evlayers = {}; for (const en in DATA.scene.events) { const e = DATA.scene.events[en]; DATA.evlayers[en] = { idx: await loadIdx(A + e.layer), noon: await loadIdx(A + e.noon), long: await loadIdx(A + e.long) }; }
+  for (const e of ['winter_fishing', 'autumn_gathering', 'summer_pond_evening', 'marsh_night']) { try { DATA.events[e] = await loadJSON('../assets/events/' + e + '.json'); } catch (_) {} }
+  const sel = document.getElementById('event'); for (const k in DATA.events) { const o = document.createElement('option'); o.value = k; o.textContent = DATA.events[k].label; sel.appendChild(o); }
+  classify(); buildLightMap(); requestAnimationFrame(frame);
+}
+// per-index class flags: 1 canopy (sways), 2 water (ripples/reflection), 4 emissive, 8 sky
+let CLS;
+function classify() { const n = DATA.entries.entries.length; CLS = new Uint8Array(n);
+  DATA.entries.entries.forEach((e, i) => { let f = 0; if (DATA.entries.canopy.includes(e.family)) f |= 1; if (e.family === 'water') f |= 2; if (DATA.entries.emissive.includes(e.family)) f |= 4; if (DATA.entries.sky.includes(e.family)) f |= 8; if (e.family === 'firefly') f |= 16; CLS[i] = f; }); }
+
+// ---------------------------------------------------------------- lights: static falloff map, per-light flicker
+const W = 768, H = 480; let LW, LI, LIGHTS;
+function buildLightMap(extra = []) {
+  LIGHTS = DATA.scene.lights.concat(extra); LW = new Float32Array(W * H); LI = new Int16Array(W * H).fill(-1);
+  const bay = [[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]];
+  LIGHTS.forEach((L, li) => { const r = L.radius; const x0 = Math.max(0, L.x - r | 0), x1 = Math.min(W - 1, L.x + r | 0), y0 = Math.max(0, L.y - r | 0), y1 = Math.min(H - 1, L.y + r | 0);
+    for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) { const d = Math.hypot(x - L.x, (y - L.y) * 1.25) / r; if (d >= 1) continue;
+      let w = Math.pow(1 - d, 1.6) * L.intensity; w = Math.min(1, Math.floor(w * 5 + bay[y & 3][x & 3] / 16 * 0.9) / 5); const i = y * W + x; if (w > LW[i]) { LW[i] = w; LI[i] = li; } } });
+}
+// ---------------------------------------------------------------- palette table for "now"
+function lerp3(a, b, t) { return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t]; }
+function tableAt(season, hour) { const kf = DATA.keyframes[season]; const hs = kf.hours, n = hs.length;
+  for (let k = 0; k < n; k++) { const h0 = hs[k]; const h1 = hs[(k + 1) % n] + (k === n - 1 ? 24 : 0); const hh = hour + ((k === n - 1 && hour < hs[0]) ? 24 : 0);
+    if (hh >= h0 && hh <= h1) { let t = (hh - h0) / (h1 - h0); t = t * t * (3 - 2 * t); const a = kf.tables[k], b = kf.tables[(k + 1) % n];
+      return { table: a.map((c, i) => lerp3(c, b[i], t)), darkness: kf.darkness[k] * (1 - t) + kf.darkness[(k + 1) % n] * t }; } }
+  return { table: kf.tables[n - 1], darkness: 1 }; }
+function gradeTable(table, wkind, wi, ev) { // weather + event grades on the 200-entry table, never per pixel
+  const g = DATA.weather[wkind]; const out = new Array(table.length);
+  for (let i = 0; i < table.length; i++) { let c = table[i]; const em = CLS[i] & 4;
+    if (wi > 0 && !em) { const lum = 0.299 * c[0] + 0.587 * c[1] + 0.114 * c[2]; const sat = 1 - (1 - g.sat) * wi; const val = 1 - (1 - g.val) * wi;
+      c = [ (lum + (c[0] - lum) * sat) * val + g.lift * wi, (lum + (c[1] - lum) * sat) * val + g.lift * wi, (lum + (c[2] - lum) * sat) * val + g.lift * wi ];
+      c = lerp3(c, g.key, g.t * wi); }
+    if (ev && ev.grade && !em) { const lum = 0.299 * c[0] + 0.587 * c[1] + 0.114 * c[2]; c = [ (lum + (c[0] - lum) * ev.grade.sat) * ev.grade.val, (lum + (c[1] - lum) * ev.grade.sat) * ev.grade.val, (lum + (c[2] - lum) * ev.grade.sat) * ev.grade.val ]; c = lerp3(c, ev.grade.key, ev.grade.t); }
+    out[i] = c; }
+  return out; }
+
+// ---------------------------------------------------------------- weather particles
+const P = { rain: [], snow: [], leaves: [], splash: [], fire: [], ff: [] };
+function rnd(a, b) { return a + Math.random() * (b - a); }
+function spawn(kind, n, wind) {
+  for (let i = 0; i < n; i++) {
+    if (kind === 'rain') P.rain.push({ x: rnd(-60, W + 60), y: rnd(-20, H), v: rnd(260, 380), near: Math.random() < 0.4 });
+    if (kind === 'snow') P.snow.push({ x: rnd(-60, W + 60), y: rnd(-20, H), v: rnd(14, 30), ph: rnd(0, 6.28), big: Math.random() < 0.35 });
+    if (kind === 'leaves') P.leaves.push({ x: rnd(-40, W), y: rnd(0, H), v: rnd(30, 70), ph: rnd(0, 6.28), life: rnd(2, 6), col: Math.random() < 0.5 ? [196, 120, 60] : [160, 90, 48] });
+  }
+}
+function tickParticles(dt, time) {
+  const w = WeatherState, wind = w.wind, wk = w.kind, inten = w.intensity;
+  const want = { rain: wk === 'light_rain' ? 70 * inten : wk === 'heavy_rain' ? 260 * inten : 0, snow: wk === 'snow' ? 150 * inten : 0,
+                 leaves: (SeasonState.season === 'autumn' && wind > 0.3) ? 18 * wind : 0 };
+  for (const k of ['rain', 'snow', 'leaves']) { if (P[k].length < want[k]) spawn(k, Math.min(8, want[k] - P[k].length), wind); }
+  const slant = 40 + 160 * wind;
+  P.rain = P.rain.filter(p => { p.y += p.v * dt * (p.near ? 1.3 : 0.8); p.x += slant * dt * (p.near ? 1.2 : 0.7);
+    if (p.y > H) { if (Math.random() < 0.35 && P.splash.length < 60) P.splash.push({ x: p.x, y: rnd(H * 0.2, H), t: 0 }); return false; } return P.rain.length <= want.rain + 20; });
+  P.splash = P.splash.filter(p => { p.t += dt * 6; return p.t < 1; });
+  P.snow = P.snow.filter(p => { p.ph += dt * 1.6; p.y += p.v * dt * (p.big ? 1.3 : 1); p.x += (Math.sin(p.ph) * 10 + 18 + 70 * wind) * dt; if (p.y > H + 4 || p.x > W + 60) return false; return P.snow.length <= want.snow + 20; });
+  P.leaves = P.leaves.filter(p => { p.ph += dt * 3; p.life -= dt; p.x += (50 + 120 * wind) * dt; p.y += (Math.sin(p.ph) * 18 + p.v * 0.25) * dt; return p.life > 0 && p.x < W + 20; });
+  // night: fireflies drift gently; only when dark
+}
+
+// ---------------------------------------------------------------- fog field (small noise, nearest-upscaled, Bayer-thresholded)
+const FW = 96, FH = 60, FOG = new Float32Array(FW * FH), FOG2 = new Float32Array(FW * FH);
+(function () { const r = (x, y, s) => { const n = Math.sin(x * 12.9898 + y * 78.233 + s * 37.1) * 43758.5453; return n - Math.floor(n); };
+  const val = (x, y, sc, s) => { const ix = Math.floor(x / sc), iy = Math.floor(y / sc), fx = x / sc - ix, fy = y / sc - iy, sm = t => t * t * (3 - 2 * t);
+    const a = r(ix, iy, s), b = r(ix + 1, iy, s), c = r(ix, iy + 1, s), d = r(ix + 1, iy + 1, s); return (a * (1 - sm(fx)) + b * sm(fx)) * (1 - sm(fy)) + (c * (1 - sm(fx)) + d * sm(fx)) * sm(fy); };
+  for (let y = 0; y < FH; y++) for (let x = 0; x < FW; x++) { FOG[y * FW + x] = 0.6 * val(x, y, 14, 1) + 0.3 * val(x, y, 7, 2) + 0.1 * val(x, y, 3, 3); FOG2[y * FW + x] = 0.7 * val(x + 30, y + 7, 11, 4) + 0.3 * val(x, y, 5, 5); } })();
+const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
+
+// ---------------------------------------------------------------- frame
+const off = document.createElement('canvas'); off.width = W; off.height = H; const og = off.getContext('2d'); const img = og.createImageData(W, H);
+const cv = document.getElementById('c'), ctx = cv.getContext('2d');
+let last = performance.now(), T = 0, state = { zoom: 2, viewport: true, ox: 60, oy: 90 };
+function frame(now) {
+  const dt = Math.min(0.1, (now - last) / 1000); last = now; T += dt;
+  WorldClock.tick(dt); WeatherState.tick(dt); tickParticles(dt, T);
+  const season = SeasonState.season, hour = WorldClock.hour(), ev = EventState.current;
+  const { table, darkness } = tableAt(season, hour);
+  let tab = gradeTable(table, WeatherState.kind, WeatherState.intensity, ev);
+  if (WeatherState.prevIntensity > 0.01) { const prev = gradeTable(table, WeatherState.prevKind, WeatherState.prevIntensity, ev); tab = tab.map((c, i) => lerp3(c, prev[i], WeatherState.prevIntensity * 0.5)); }
+  const dayTab = DATA.keyframes[season].tables[2];
+  const evl = ev && DATA.evlayers[ev.name]; const idx = evl ? evl.idx : DATA.idx[season], night = DATA.night, d = img.data;
+  // shadows: a live layer. Length follows the sun: short at noon, long toward golden hour, gone by night.
+  const kf = DATA.keyframes[season]; const hs = kf.hours; const sunT = (() => { if (hour < hs[0] || hour > hs[5]) return 0; const noonH = hs[2]; const span = hour < noonH ? noonH - hs[0] : hs[4] - noonH; return Math.min(1, Math.abs(hour - noonH) / span); })();
+  const shadowOn = darkness < 0.6; const longW = Math.max(0, Math.min(1, (sunT - 0.35) / 0.55)); const shNoon = evl ? evl.noon : DATA.shadow[season].noon, shLong = evl ? evl.long : DATA.shadow[season].long;
+  const shadeT = DATA.scene.shade, shade2T = DATA.scene.shade2; const shadowStrength = 1 - Math.max(0, (darkness - 0.3) / 0.3);
+  const wind = WeatherState.wind, sway = Math.sin(T * 1.7) * 0.5 + Math.sin(T * 2.9) * 0.5;
+  const fogA = (WeatherState.kind === 'fog' ? WeatherState.intensity : 0) * 0.9 + (season === 'spring' && hour > 5 && hour < 8.5 && WeatherState.kind === 'clear' ? 0.25 * (1 - Math.abs(hour - 6.5) / 2) : 0);
+  const fogShift = T * 6, fogCol = tab[DATA.entries.entries.findIndex(e => e.family === 'mist' && e.rank === 1)] || [200, 210, 215];
+  const flick = LIGHTS.map(L => L.kind === 'fire' ? 0.82 + 0.18 * Math.sin(T * 11 + L.x) * Math.sin(T * 7.3) : L.kind === 'lantern' ? 0.95 + 0.05 * Math.sin(T * 3 + L.y) : L.kind === 'firefly' ? 0.5 + 0.5 * Math.sin(T * 2.2 + L.x * 0.7) : L.kind === 'glow' ? 0.85 + 0.15 * Math.sin(T * 1.3 + L.y) : 1);
+  const lightAmount = Math.max(0, Math.min(1, (darkness - 0.08) / 0.6));
+  const nightShow = Math.max(0, (darkness - 0.45) / 0.55);
+  const wetDark = (WeatherState.kind === 'light_rain' || WeatherState.kind === 'heavy_rain') ? WeatherState.intensity : 0;
+  for (let y = 0; y < H; y++) {
+    const fy = Math.min(FH - 1, (y / 8) | 0);
+    for (let x = 0; x < W; x++) {
+      const i = y * W + x; let ix = idx[i];
+      // wind sway: canopy pixels sampled from a neighbour column
+      if (wind > 0.12 && (CLS[ix] & 1)) { const o = Math.round((sway + Math.sin(T * 2.3 + y * 0.09 + x * 0.013)) * wind * 1.2); if (o) { const j = y * W + Math.min(W - 1, Math.max(0, x - o)); if (CLS[idx[j]] & 1) ix = idx[j]; } }
+      if (shadowOn) { const a = shNoon[i], bL = shLong[i]; let sv = 0; if (longW < 0.5) sv = a ? a : (bL && longW > 0.2 ? 1 : 0); else sv = bL ? bL : (a && longW < 0.8 ? 1 : 0);
+        if (sv) { const bt = BAYER[(y & 3) * 4 + (x & 3)] / 16; if (sv === 2 || bt < 0.5) { if (shadowStrength > bt * 0.6) ix = (sv === 2 && shadowStrength > 0.9 && (CLS[ix] & 2) === 0) ? shadeT[ix] : shadeT[ix]; } } }
+      let c = tab[ix]; let r = c[0], g = c[1], b = c[2];
+      // night-only pixels fade in with darkness
+      const nidx = night[i]; if (nidx && nightShow > 0 && !(season === 'winter' && (CLS[nidx] & 16))) { const nc = tab[nidx]; r += (nc[0] - r) * nightShow; g += (nc[1] - g) * nightShow; b += (nc[2] - b) * nightShow; }
+      // light pools: mix the DAY colour back in, tinted, so lamplight reveals true colour
+      const lw = LW[i]; if (lw > 0 && lightAmount > 0) { const L = LIGHTS[LI[i]]; if (L.kind === 'firefly' && season === 'winter') { } else { const w = lw * lightAmount * flick[LI[i]] * (L.kind === 'firefly' && ev && ev.fireflies ? ev.fireflies : 1); const dc = dayTab[ix];
+        r += (dc[0] * L.color[0] * 1.08 + 18 - r) * w; g += (dc[1] * L.color[1] * 1.08 + 18 - g) * w; b += (dc[2] * L.color[2] * 1.08 + 18 - b) * w; } }
+      // rain: wet surfaces darken a little, water sparkles
+      if (wetDark > 0 && (CLS[ix] & 2) && ((x * 7 + y * 13 + (T * 30 | 0)) % 97) < 2) { r += 40; g += 40; b += 40; }
+      // fog: ground mist, Bayer-thresholded so it stays crisp; thinner over emissives and the top band
+      if (fogA > 0 && !(CLS[ix] & 4)) { const fx = Math.min(FW - 1, (((x + fogShift) / 8) | 0) % FW); const n = FOG[fy * FW + fx] * 0.6 + FOG2[fy * FW + ((fx + ((T * 2) | 0)) % FW)] * 0.4;
+        const dens = Math.max(0, n - 0.34) * 3.2 * fogA * (0.55 + 0.45 * (y / H)); const bt = BAYER[(y & 3) * 4 + (x & 3)] / 16;
+        if (dens > bt * 0.8) { const k = Math.min(0.62, dens * 0.6); r += (fogCol[0] - r) * k; g += (fogCol[1] - g) * k; b += (fogCol[2] - b) * k; } }
+      const o = i * 4; d[o] = r; d[o + 1] = g; d[o + 2] = b; d[o + 3] = 255;
+    }
+  }
+  og.putImageData(img, 0, 0);
+  // particles drawn in palette-ish colours, 1-2 px, no blur
+  og.fillStyle = 'rgba(190,205,215,0.55)'; for (const p of P.rain) { og.fillRect(p.x | 0, p.y | 0, 1, p.near ? 5 : 3); if (p.near) og.fillRect((p.x | 0) + 1, (p.y | 0) + 2, 1, 2); }
+  og.fillStyle = 'rgba(200,215,225,0.5)'; for (const p of P.splash) { const s = 1 + (p.t * 3 | 0); og.fillRect((p.x | 0) - s, p.y | 0, 1, 1); og.fillRect((p.x | 0) + s, p.y | 0, 1, 1); }
+  for (const p of P.snow) { og.fillStyle = p.big ? 'rgba(246,251,255,0.95)' : 'rgba(226,235,243,0.75)'; og.fillRect(p.x | 0, p.y | 0, p.big ? 2 : 1, p.big ? 2 : 1); }
+  for (const p of P.leaves) { og.fillStyle = `rgb(${p.col[0]},${p.col[1]},${p.col[2]})`; og.fillRect(p.x | 0, p.y | 0, 2, 1); og.fillRect((p.x | 0) + 1, (p.y | 0) - 1, 1, 1); }
+  // present
+  const z = state.zoom; ctx.imageSmoothingEnabled = false;
+  if (state.viewport) { cv.width = 640 * z; cv.height = 360 * z; ctx.imageSmoothingEnabled = false; ctx.drawImage(off, state.ox, state.oy, 640, 360, 0, 0, 640 * z, 360 * z); }
+  else { cv.width = W * z; cv.height = H * z; ctx.imageSmoothingEnabled = false; ctx.drawImage(off, 0, 0, W * z, H * z); }
+  document.getElementById('clock').textContent = `${WorldClock.label()} · ${season} · ${WorldClock.phase(season)} · ${WeatherState.kind} ${(WeatherState.intensity * 100) | 0}%`;
+  if (!WorldClock.paused) document.getElementById('time').value = WorldClock.minutes | 0;
+  requestAnimationFrame(frame);
+}
+// ---------------------------------------------------------------- dev controls + presets
+const $ = id => document.getElementById(id);
+$('play').onclick = () => { WorldClock.paused = !WorldClock.paused; $('play').textContent = WorldClock.paused ? 'play' : 'pause'; $('play').classList.toggle('on', !WorldClock.paused); };
+$('speed').onchange = e => WorldClock.scale = +e.target.value;
+$('time').oninput = e => { WorldClock.minutes = +e.target.value; };
+$('season').onchange = e => { SeasonState.season = e.target.value; };
+$('weather').onchange = e => WeatherState.set(e.target.value, $('intensity').value / 100);
+$('intensity').oninput = e => WeatherState.set(WeatherState.kind, e.target.value / 100);
+$('zoom').onchange = e => state.zoom = +e.target.value; $('viewport').onchange = e => state.viewport = e.target.checked;
+$('event').onchange = e => applyEvent(e.target.value);
+function applyEvent(name) { const ev = DATA.events[name]; EventState.current = ev || null; buildLightMap(ev ? ev.extra_lights : []);
+  if (ev) { SeasonState.season = ev.season; $('season').value = ev.season; WorldClock.minutes = ev.hour * 60; $('time').value = WorldClock.minutes | 0; WeatherState.set(ev.weather, ev.intensity); $('weather').value = ev.weather; $('intensity').value = ev.intensity * 100; } }
+const PRESETS = [['spring morning', 'spring', 7.5, 'clear', 0], ['spring afternoon', 'spring', 14, 'clear', 0], ['spring sunset', 'spring', 18.7, 'clear', 0], ['summer day', 'summer', 12, 'clear', 0],
+  ['rainy autumn', 'autumn', 15, 'heavy_rain', 0.75], ['autumn fog dawn', 'autumn', 6.6, 'fog', 0.7], ['winter day snow', 'winter', 12, 'snow', 0.6], ['winter night snow', 'winter', 22, 'snow', 0.5],
+  ['summer night', 'summer', 0.5, 'clear', 0], ['lantern close-up', 'spring', 23, 'clear', 0]];
+PRESETS.forEach(([lbl, s, h, w, i], n) => { const b = document.createElement('button'); b.textContent = `${n + 1} ${lbl}`; b.onclick = () => setPreset(n); $('presets').appendChild(b); });
+function setPreset(n, instant = true) { const [lbl, s, h, w, i] = PRESETS[n]; $('event').value = ''; applyEvent(''); SeasonState.season = s; $('season').value = s; WorldClock.minutes = h * 60; $('time').value = WorldClock.minutes | 0; WorldClock.paused = true; $('play').textContent = 'play'; $('play').classList.remove('on');
+  WeatherState.set(w, i); if (instant) { WeatherState.intensity = i; WeatherState.prevIntensity = 0; WeatherState.wind = WeatherState.windTarget; } $('weather').value = w; $('intensity').value = i * 100;
+  if (n === 9) { state.ox = 150; state.oy = 150; state.zoom = 3; $('zoom').value = '3'; } else { state.ox = 60; state.oy = 90; } }
+window.setPreset = setPreset; window.WorldClock = WorldClock; window.WeatherState = WeatherState; window.SeasonState = SeasonState; window.viewState = state;
+addEventListener('keydown', e => { if (e.key === ' ') $('play').click(); if (e.key === '[') WorldClock.minutes = (WorldClock.minutes - 30 + 1440) % 1440; if (e.key === ']') WorldClock.minutes = (WorldClock.minutes + 30) % 1440; });
+let drag = null; cv.addEventListener('mousedown', e => drag = { x: e.clientX, y: e.clientY, ox: state.ox, oy: state.oy }); addEventListener('mouseup', () => drag = null);
+addEventListener('mousemove', e => { if (!drag || !state.viewport) return; state.ox = Math.max(0, Math.min(W - 640, drag.ox - (e.clientX - drag.x) / state.zoom)); state.oy = Math.max(0, Math.min(H - 360, drag.oy - (e.clientY - drag.y) / state.zoom)); });
+boot();
+</script>
+</body>
+</html>

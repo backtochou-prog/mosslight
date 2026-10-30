@@ -1,0 +1,123 @@
+{
+ "name": "autumn_gathering",
+ "label": "Autumn gathering at dusk",
+ "season": "autumn",
+ "hour": 18.6,
+ "weather": "wind",
+ "intensity": 0.35,
+ "grade": {
+  "key": [
+   255,
+   190,
+   120
+  ],
+  "t": 0.06,
+  "val": 1.0,
+  "sat": 1.08
+ },
+ "extra_lights": [
+  {
+   "x": 250,
+   "y": 300,
+   "radius": 18,
+   "color": [
+    1.0,
+    0.7,
+    0.4
+   ],
+   "intensity": 0.8,
+   "kind": "string"
+  },
+  {
+   "x": 290,
+   "y": 318,
+   "radius": 18,
+   "color": [
+    1.0,
+    0.7,
+    0.4
+   ],
+   "intensity": 0.8,
+   "kind": "string"
+  },
+  {
+   "x": 335,
+   "y": 322,
+   "radius": 18,
+   "color": [
+    1.0,
+    0.7,
+    0.4
+   ],
+   "intensity": 0.8,
+   "kind": "string"
+  },
+  {
+   "x": 380,
+   "y": 310,
+   "radius": 18,
+   "color": [
+    1.0,
+    0.7,
+    0.4
+   ],
+   "intensity": 0.8,
+   "kind": "string"
+  },
+  {
+   "x": 420,
+   "y": 292,
+   "radius": 18,
+   "color": [
+    1.0,
+    0.7,
+    0.4
+   ],
+   "intensity": 0.8,
+   "kind": "string"
+  }
+ ],
+ "note": "string-light posts and tables are a scene variant bake",
+ "props": [
+  {
+   "sprite": "stringlights_0",
+   "x": 246,
+   "y": 300
+  },
+  {
+   "sprite": "stringlights_1",
+   "x": 290,
+   "y": 318
+  },
+  {
+   "sprite": "stringlights_0",
+   "x": 335,
+   "y": 322
+  },
+  {
+   "sprite": "stringlights_1",
+   "x": 380,
+   "y": 310
+  },
+  {
+   "sprite": "stringlights_0",
+   "x": 420,
+   "y": 292
+  },
+  {
+   "sprite": "bench",
+   "x": 300,
+   "y": 345
+  },
+  {
+   "sprite": "bench",
+   "x": 380,
+   "y": 350
+  },
+  {
+   "sprite": "stool_0",
+   "x": 345,
+   "y": 330
+  }
+ ]
+}
