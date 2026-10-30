@@ -1,10 +1,10 @@
 {
- "name": "camper (TEMPORARY original player sprite)",
- "frame_w": 14,
- "frame_h": 24,
+ "name": "camper (original player sprite, cozy-sim proportions)",
+ "frame_w": 16,
+ "frame_h": 32,
  "origin": [
-  7,
-  23
+  8,
+  31
  ],
  "facings": [
   "down",
@@ -32,7 +32,7 @@
   4
  ],
  "actions": {
-  "gather": "row 3, 4 frames (cols 0-3)",
+  "gather": "row 3, 4 frames",
   "fish": "row 4, 4 frames, side facing",
   "build": "row 5, 4 frames"
  },

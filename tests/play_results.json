@@ -3,22 +3,22 @@
   {
    "name": "moves E",
    "ok": true,
-   "detail": "94.7 px"
+   "detail": "93.4 px"
   },
   {
    "name": "moves W",
    "ok": true,
-   "detail": "94.5 px"
+   "detail": "93.4 px"
   },
   {
    "name": "moves N",
    "ok": true,
-   "detail": "94.7 px"
+   "detail": "92.6 px"
   },
   {
    "name": "moves S",
    "ok": true,
-   "detail": "94.1 px"
+   "detail": "93.4 px"
   },
   {
    "name": "moves NE",
@@ -28,27 +28,27 @@
   {
    "name": "moves NW",
    "ok": true,
-   "detail": "93.7 px"
+   "detail": "95.0 px"
   },
   {
    "name": "moves SE",
    "ok": true,
-   "detail": "94.5 px"
+   "detail": "93.7 px"
   },
   {
    "name": "moves SW",
    "ok": true,
-   "detail": "94.5 px"
+   "detail": "95.1 px"
   },
   {
    "name": "diagonal speed == cardinal speed",
    "ok": true,
-   "detail": "cardinal 94.5 px, diagonal 94.4 px over 1.5 s"
+   "detail": "cardinal 93.2 px, diagonal 94.7 px over 1.5 s"
   },
   {
    "name": "stops without sliding",
    "ok": true,
-   "detail": "slid 2.2 px after release"
+   "detail": "slid 1.3 px after release"
   },
   {
    "name": "blocked by oak trunk",
@@ -98,7 +98,7 @@
   {
    "name": "behind oak trunk: partially hidden",
    "ok": true,
-   "detail": "56% of player visible"
+   "detail": "28% of player visible"
   },
   {
    "name": "in front of oak trunk: fully visible",
@@ -177,7 +177,7 @@
   {
    "name": "frame cost (software Chromium, 640x360 at 3x)",
    "ok": true,
-   "detail": "19.1 ms/frame"
+   "detail": "43.6 ms/frame"
   },
   {
    "name": "no page errors",

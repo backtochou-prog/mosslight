@@ -99,6 +99,9 @@ def build(lib) -> Scene:
     C.vegetation_cluster(ctx, 400, 350, 70, [('flowers_w', 2, 3), ('flowers_b', 2, 2), ('flowers_y', 2, 1), ('tuft_', 3, 2)], spacing=16, n=9)
     C.vegetation_cluster(ctx, 560, 380, 50, [('flowers_p', 2, 2), ('flowers_r', 2, 1), ('tallgrass_', 3, 2), ('tuft_', 3, 1)], spacing=16, n=6)
     C.vegetation_cluster(ctx, 170, 262, 36, [('flowers_w', 2, 2), ('shroom_', 2, 1), ('tuft_', 3, 1)], spacing=14, n=4)
+    C.vegetation_cluster(ctx, 470, 150, 44, [('flowers_y', 2, 2), ('flowers_w', 2, 1), ('tuft_', 3, 1)], spacing=15, n=5)
+    C.vegetation_cluster(ctx, 300, 150, 40, [('flowers_b', 2, 2), ('flowers_p', 2, 1), ('tallgrass_', 3, 1)], spacing=15, n=4)
+    C.vegetation_cluster(ctx, 640, 400, 36, [('flowers_r', 2, 2), ('flowers_y', 2, 1)], spacing=14, n=3)
     C.foreground_frame(ctx)
     for (x, y, rx, ry) in ((176, 192, 11, 6), (300, 190, 8, 4), (150, 110, 9, 5), (660, 380, 10, 6)):
         sc.decals.append(C.moss_patch(x, y, rx, ry))

@@ -198,7 +198,7 @@ def water_depth_pass(c: Canvas, rng_seed=9):
     wr = PAL.ramp('water')
     rng = random.Random(rng_seed)
     ys, xs = np.nonzero(c.a == wr[3])
-    for _ in range(len(xs) // 110):
+    for _ in range(len(xs) // 80):
         k = rng.randrange(len(xs)); x, y = int(xs[k]), int(ys[k])
         L = rng.randint(2, 5)
         if all(c.get(x + i, y) == wr[3] for i in range(L)):

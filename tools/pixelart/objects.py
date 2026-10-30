@@ -162,7 +162,11 @@ def canopy_clusters(c, lobes, ramp, rng, light=(-0.4, -0.45)):
     m = canopy_mask()
     area = int(m.sum())
     leaf_tips(c, rng, c.a == ramp[3], area // 55, ramp[4])
-    leaf_tips(c, rng, c.a == ramp[4], area // 120, hi2)
+    leaf_tips(c, rng, c.a == ramp[4], area // 70, hi2)
+    # sunlit crest: the top rows of the crown catch the brightest rank
+    ys, xs = np.nonzero(m); top = ys.min() if len(ys) else 0
+    crest = m & (idx[0] <= top + 3) & np.isin(c.a, [ramp[3], ramp[4]])
+    c.a[crest] = hi2
     leaf_arcs(c, rng, c.a == ramp[2], area // 90, ramp[1], down=True)
     leaf_arcs(c, rng, c.a == ramp[1], area // 110, ramp[0], down=True)
     leaf_notches(c, m, rng)

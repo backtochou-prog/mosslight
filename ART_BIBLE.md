@@ -282,6 +282,17 @@ so the top-down perspective is never contradicted. Atmospheric colour shift
 (haze families) and contact shading (base bands, cast shadows) do the depth
 work; no blur, no large-scale parallax.
 
+### Character proportions (v0.6)
+
+Characters are **16 × 32 px, chibi**: hair + head about 14 rows (45 %), a
+compact 9-row body, 5-row legs and 2-row boots. Big simple eyes (2 × 3 with
+a top-left white), a scalloped fringe, a rounded hair cap with a tuft; one
+accent colour (the scarf) against a muted jacket; skin from the canvas ramp,
+hair and boots from wood, outline wood[0]. Walk: four frames, strides on
+frames 0 and 2, pass frames lift the upper body one row with the feet
+planted; idle breath does the same at 1.5 fps. Tent ≈ 1.4 × character
+height, oak ≈ 2.5 ×.
+
 ### The player in the stack
 
 The player is one more y-sorted sprite: origin at the feet (ground contact),
