@@ -8,47 +8,47 @@
   {
    "name": "moves W",
    "ok": true,
-   "detail": "92.6 px"
+   "detail": "94.5 px"
   },
   {
    "name": "moves N",
    "ok": true,
-   "detail": "93.4 px"
+   "detail": "94.7 px"
   },
   {
    "name": "moves S",
    "ok": true,
-   "detail": "93.4 px"
+   "detail": "94.1 px"
   },
   {
    "name": "moves NE",
    "ok": true,
-   "detail": "93.7 px"
+   "detail": "95.0 px"
   },
   {
    "name": "moves NW",
    "ok": true,
-   "detail": "94.5 px"
+   "detail": "93.7 px"
   },
   {
    "name": "moves SE",
    "ok": true,
-   "detail": "93.7 px"
+   "detail": "94.5 px"
   },
   {
    "name": "moves SW",
    "ok": true,
-   "detail": "93.7 px"
+   "detail": "94.5 px"
   },
   {
    "name": "diagonal speed == cardinal speed",
    "ok": true,
-   "detail": "cardinal 93.5 px, diagonal 93.9 px over 1.5 s"
+   "detail": "cardinal 94.5 px, diagonal 94.4 px over 1.5 s"
   },
   {
    "name": "stops without sliding",
    "ok": true,
-   "detail": "slid 0.7 px after release"
+   "detail": "slid 2.2 px after release"
   },
   {
    "name": "blocked by oak trunk",
@@ -98,7 +98,7 @@
   {
    "name": "behind oak trunk: partially hidden",
    "ok": true,
-   "detail": "54% of player visible"
+   "detail": "56% of player visible"
   },
   {
    "name": "in front of oak trunk: fully visible",
@@ -133,7 +133,7 @@
   {
    "name": "prompt near tent",
    "ok": true,
-   "detail": "prompt: Inspect tent"
+   "detail": "prompt: Rest until morning"
   },
   {
    "name": "no prompt in the open meadow",
@@ -142,7 +142,7 @@
   {
    "name": "interact shows the object text",
    "ok": true,
-   "detail": "A worn canvas tent. The flap is rolled back; your bedroll is inside."
+   "detail": "An oil lantern on a crooked post. It will burn through the night."
   },
   {
    "name": "prompt: dock",
@@ -177,7 +177,7 @@
   {
    "name": "frame cost (software Chromium, 640x360 at 3x)",
    "ok": true,
-   "detail": "18.4 ms/frame"
+   "detail": "19.1 ms/frame"
   },
   {
    "name": "no page errors",

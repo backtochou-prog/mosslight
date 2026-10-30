@@ -1,0 +1,144 @@
+{
+ "results": [
+  {
+   "name": "advance +1h / +6h moves the clock and the lighting table",
+   "ok": true,
+   "detail": "9→10→16 h; darkness 0.00→0.07"
+  },
+  {
+   "name": "day increments exactly once crossing midnight",
+   "ok": true,
+   "detail": "day 2 at 0.50 h"
+  },
+  {
+   "name": "no double increment after midnight",
+   "ok": true
+  },
+  {
+   "name": "spring phases: 06 dawn, 12 day, 18 sunset, 20 early night, 23 deep night, 05:30 dawn transition",
+   "ok": true
+  },
+  {
+   "name": "schedule shifts per season (winter dawn later, summer night later)",
+   "ok": true,
+   "detail": "winter dawn 8.0, summer early night 20.0"
+  },
+  {
+   "name": "danger is 0 by day and 1 in deep night",
+   "ok": true
+  },
+  {
+   "name": "gather stones costs configured energy and minutes",
+   "ok": true,
+   "detail": "energy 97, clock 10.13 h"
+  },
+  {
+   "name": "cut tree costs 8 energy",
+   "ok": true,
+   "detail": "energy 89"
+  },
+  {
+   "name": "states at 80/60/30/10/0",
+   "ok": true,
+   "detail": "energetic,tired,exhausted,critical,zero"
+  },
+  {
+   "name": "walking drains ~1 energy per game hour",
+   "ok": true,
+   "detail": "energy 99 after 60 game minutes moving"
+  },
+  {
+   "name": "standing still drains nothing",
+   "ok": true
+  },
+  {
+   "name": "heavy activity refused when critical",
+   "ok": true,
+   "detail": "You are too tired for heavy work right now."
+  },
+  {
+   "name": "light activity allowed when critical",
+   "ok": true
+  },
+  {
+   "name": "activities with a cost refused at zero energy",
+   "ok": true,
+   "detail": "You are too exhausted for that. Rest first."
+  },
+  {
+   "name": "zero-cost inspect still allowed at zero energy",
+   "ok": true
+  },
+  {
+   "name": "player can still walk at zero energy",
+   "ok": true,
+   "detail": "moved to x=482"
+  },
+  {
+   "name": "heavy allowed when exhausted (config allow_heavy_when_exhausted) with reduced efficiency",
+   "ok": true,
+   "detail": "efficiency 0.6"
+  },
+  {
+   "name": "night fishing allowed with energy and logged after dark",
+   "ok": true,
+   "detail": "afterDark 140 min"
+  },
+  {
+   "name": "sleep at 23:00 day 3 → day 4 at dawn, energy full",
+   "ok": true,
+   "detail": "day 4 6 h energy 100"
+  },
+  {
+   "name": "journal summary built only from recorded fields",
+   "ok": true,
+   "detail": "Day 3, spring. A quiet day of walking and looking. Back late, by lantern light."
+  },
+  {
+   "name": "second sleep within cooldown is ignored",
+   "ok": true
+  },
+  {
+   "name": "sleep at 01:30 day 5 → dawn of day 5 (same calendar day), energy full (before 02:00)",
+   "ok": true,
+   "detail": "day 5 6 h energy 100"
+  },
+  {
+   "name": "sleep at 03:30 → short night, energy restored to 80 not 100",
+   "ok": true,
+   "detail": "energy 80"
+  },
+  {
+   "name": "tent interaction sleeps with a fade and wakes on day 8 at dawn",
+   "ok": true,
+   "detail": "mid fade 0.46, after: day 8 6.22 h"
+  },
+  {
+   "name": "phase events fire crossing sunset → early night → deep night",
+   "ok": true,
+   "detail": "day>sunset>early_night>deep_night"
+  },
+  {
+   "name": "changing season changes the phase at the same hour (07:00 winter is still dawn transition/dawn)",
+   "ok": true,
+   "detail": "winter 07:00 = dawn_transition"
+  },
+  {
+   "name": "save/load at 03:00 restores day 9, time, energy 42 without a duplicate reset",
+   "ok": true,
+   "detail": "loaded day 9 3 h energy 42; +30min → day 9"
+  },
+  {
+   "name": "save/load at 15:00 restores day 9, time, energy 42 without a duplicate reset",
+   "ok": true,
+   "detail": "loaded day 9 15 h energy 42; +30min → day 9"
+  },
+  {
+   "name": "no page errors",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "passed": 29,
+ "total": 29
+}

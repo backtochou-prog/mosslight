@@ -63,6 +63,48 @@ stays the base scene's.
 Interactable Area2D component, touch controls). **Unvalidated**: Godot cannot
 run in the authoring environment.
 
+## The survival clock (energy, exhaustion, sleep, daily rhythm)
+
+`preview/survival.js` (loaded by `play.html`) adds the first survival loop on
+top of the existing world clock, which stays the only time source:
+
+* **Energy** 0–100 with states energetic ≥75, tired 40–74, exhausted 15–39,
+  critical 1–14, zero. Walking costs 1 per game hour of movement; standing
+  still costs nothing. Heavy work is refused when critical or at zero; at
+  zero only zero-cost actions remain and movement still works.
+* **Activities** (`assets/survival/config.json`, one source for the browser
+  and Godot builds): inspect (0 energy, 2 min), tend fire (1, 4), gather
+  branches (2, 6), gather stones (3, 8), fish (2, 10), mine (6, 20), cut tree
+  (8, 25), build (5, 30). Each spends energy, advances the clock by its own
+  duration through the clock, logs to the day record and plays an action row.
+  Interactables carry their activity: rowan and hollow log gather branches,
+  the outcrop gathers stones, the dock fishes, the big oak is cut, the fire
+  is tended, the ruin and lantern are inspected. No resources are counted
+  yet (gathering does not exist).
+* **Daily rhythm**: dawn 06, day 07–17, sunset 17–19, early night 19–22,
+  deep night 22–05, dawn transition 05–06 for spring; shifted per season by
+  that season's dawn and night keyframes (winter dawn 08:00, summer early
+  night 20:00). `Survival.Clock.danger()` is the hook for future monsters.
+* **Sleep**: the tent's prompt is "Rest until morning": fade out, advance to
+  this season's dawn (next calendar day if slept before midnight, same day
+  if after), day +1, energy restored (full before 02:00, 80 after), journal
+  entry shown on waking. Re-entry is guarded by a cooldown.
+* **HUD**: compact top-left card with time · day · season, a sun/moon arc and
+  a segmented energy bar; soft pulse and vignette when critical, no flashes.
+  Respects the safe inset and the phone aspect presets.
+* **Save/restore**: `Survival.SaveState.save()/load()` (versioned JSON in
+  localStorage) restores day, season, time, energy, record without a
+  duplicate day reset.
+* **Dev tools**: open `play.html?dev=1` (or tick "dev tools"): +1h, +6h,
+  sunset/night/dawn, energy 50/10/drain/full, sleep, save, load.
+
+Tests: `tests/survival_tests.js` (29 checks: clock advance, midnight, phases
+and seasonal shift, costs, states, walking drain, exhaustion rules, night
+activity logging, sleep before/after midnight, short night, double-trigger
+guard, animated tent sleep, phase events, season change, save/load at 03:00
+and 15:00, HUD screenshots). Results in `tests/survival_results.json`,
+screenshots `renders/survival_*.png`. Godot port: `godot/survival/` (unvalidated).
+
 ## The living world (time, seasons, weather)
 
 ```

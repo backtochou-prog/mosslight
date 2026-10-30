@@ -406,6 +406,20 @@ gathering at dusk (string-light pools, wind, leaves), summer pond evening
 * **The meadow is calm.** Tufts and pockets, never dither; tiny flowers only
   in the sunniest drifts; lily rafts in sheltered water near the shore.
 
+## 7h. HUD conventions (v0.6)
+
+* One compact card, top-left, inside the safe inset: parchment text
+  (`#eedcb0`) on a soft dark card (`rgba(24,30,28,.72)`) with a thin pale rim.
+  Monospace at 9 px native; never more than two lines.
+* Time, day and season as one line; a tiny sun/moon arc instead of an icon
+  set; energy as a ten-segment bar coloured by state (energetic green
+  `8cc452`, tired straw `c8b85a`, exhausted amber `d08a46`, critical rust
+  `c0392b`). Feedback is soft: a slow pulse and a vignette at critical, never
+  flashes, alarms or modal warnings.
+* Prompts and messages sit bottom-centre in the same card style; the journal
+  card on waking is parchment-dark and fades after a few seconds.
+* Reserved: a second row under the bar for health / hunger / status marks.
+
 ## 8. What is *not* acceptable
 
 * Flat single-colour tiles; visible tile grids; any 16-px repetition that the

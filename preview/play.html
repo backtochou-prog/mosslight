@@ -36,9 +36,12 @@
   <label><input type="checkbox" id="touch"> touch controls</label>
   <label>cam smooth <input type="range" id="camsmooth" min="1" max="20" value="8" style="width:70px"></label>
   <span class="presets" id="presets"></span>
+  <span id="dev" class="presets" style="display:none"></span>
+  <label><input type="checkbox" id="devtoggle"> dev tools</label>
   <span class="hint">WASD / arrows move · E interact · space pause · [ ] time</span>
 </header>
 <main><canvas id="c"></canvas></main>
+<script src="survival.js"></script>
 <script>
 // ---------------------------------------------------------------- modules
 // WorldClock: game time, configurable scale, pause/advance.  (mirrors godot/WorldClock.gd)
@@ -82,6 +85,11 @@ async function boot() {
   DATA.col = await loadIdx(PL + 'collision.png');
   DATA.pidx = await loadIdx(PL + 'player_idx.png');
   Player.init();
+  DATA.survival = await loadJSON('../assets/survival/config.json');
+  Survival.init(DATA.survival, { WorldClock, SeasonState, Player, Interaction, DATA, keyframes: DATA.keyframes });
+  Survival.Dev.mount(document.getElementById('dev'));
+  if (location.search.includes('dev=1')) { document.getElementById('dev').style.display = ''; document.getElementById('devtoggle').checked = true; }
+  WorldClock.paused = false;
   for (const e of ['winter_fishing', 'autumn_gathering', 'summer_pond_evening', 'marsh_night']) { try { DATA.events[e] = await loadJSON('../assets/events/' + e + '.json'); } catch (_) {} }
   const sel = document.getElementById('event'); for (const k in DATA.events) { const o = document.createElement('option'); o.value = k; o.textContent = DATA.events[k].label; sel.appendChild(o); }
   classify(); buildLightMap(); requestAnimationFrame(frame);
@@ -184,7 +192,7 @@ const Player = {
     if (this.moving) { if (Math.abs(ix) >= Math.abs(iy) * 0.9 && ix) { this.facing = 'side'; this.flip = ix < 0; } else this.facing = iy < 0 ? 'up' : 'down'; }
     this.animT += dt * (this.moving ? c.walkFps : c.idleFps);
   },
-  frame() { const n = this.moving ? 2 + (Math.floor(this.animT) % 4) : (Math.floor(this.animT) % 2); return n; },
+  frame() { const a = Survival.Activities.current; if (a && a.anim) return Math.floor(a.t * 6) % 4; const n = this.moving ? 2 + (Math.floor(this.animT) % 4) : (Math.floor(this.animT) % 2); return n; },
   setPos(x, y) { this.x = x; this.y = y; this.vx = this.vy = 0; },
 };
 // ---------------------------------------------------------------- Camera (follows the player, clamps to the playable world, integer pixels)
@@ -201,7 +209,10 @@ const Camera = { x: 0, y: 0, smooth: 8, deadzone: 0.25, vw: 640, vh: 360, init: 
 const Interaction = { current: null, message: null, msgT: 0,
   update(dt) { let best = null, bd = 1e9; for (const it of DATA.play.interactables) { const d = Math.hypot(it.x - Player.x, it.y - Player.y); if (d < it.r && d < bd) { best = it; bd = d; } }
     this.current = best; if (this.msgT > 0) this.msgT -= dt; else this.message = null;
-    if (Input.consumeAction() && best) { this.message = best.text; this.msgT = 3.2; } } };
+    if (Input.consumeAction() && best && !Survival.Sleep.sleeping) {
+      if (best.sleep) { if (Survival.Sleep.start()) { this.message = null; } else { this.message = 'You just got up.'; this.msgT = 2; } }
+      else if (best.activity) { const r = Survival.Activities.perform(best.activity, best.id); this.message = r.ok ? best.text + (r.night ? ' (after dark)' : '') : r.reason; this.msgT = r.ok ? 3.2 : 2.6; }
+      else { this.message = best.text; this.msgT = 3.2; } } } };
 // ---------------------------------------------------------------- Touch controls (drawn on the canvas; only when enabled or on a touch device)
 const Touch = { enabled: false, btn: { x: 0, y: 0, r: 26 },
   attach(cv) { const pos = e => { const r = cv.getBoundingClientRect(); const t = e.changedTouches ? e.changedTouches[0] : e; return [ (t.clientX - r.left) / r.width * cv.width / state.zoom, (t.clientY - r.top) / r.height * cv.height / state.zoom, t.identifier ]; };
@@ -222,7 +233,7 @@ const off = document.createElement('canvas'); off.width = W; off.height = H; con
 const cv = document.getElementById('c'), ctx = cv.getContext('2d');
 let last = performance.now(), T = 0, state = { zoom: 3, viewport: true, ox: 60, oy: 90 }, simAcc = 0;
 const SIM_DT = 1 / 60;
-function simulate(dt) { simAcc += dt; let n = 0; while (simAcc >= SIM_DT && n < 5) { Player.step(SIM_DT, Input.axis()); simAcc -= SIM_DT; n++; } Camera.update(dt); Interaction.update(dt); }
+function simulate(dt) { simAcc += dt; let n = 0; const ax = (Survival.Sleep.sleeping || Survival.Activities.current) ? [0, 0] : Input.axis(); while (simAcc >= SIM_DT && n < 5) { Player.step(SIM_DT, ax); simAcc -= SIM_DT; n++; } Camera.update(dt); Interaction.update(dt); Survival.tick(dt, WorldClock.paused ? 0 : dt * WorldClock.scale / 60, Player.moving); }
 function frame(now) {
   const dt = Math.min(0.1, (now - last) / 1000); last = now; T += dt;
   WorldClock.tick(dt); WeatherState.tick(dt); tickParticles(dt, T); simulate(dt);
@@ -268,7 +279,7 @@ function frame(now) {
   }
   // ---- player: y-sorted against the baked scene through the depth map, lit by the same table
   { const dep = DATA.depth[season === 'winter' ? 'winter' : 'spring']; const pm = DATA.player, pidx = DATA.pidx; const fw = pm.frame_w, fh = pm.frame_h;
-    const row = pm.facings.indexOf(Player.facing), colf = Player.frame(); const px0 = Math.round(Player.x) - pm.origin[0], py0 = Math.round(Player.y) - pm.origin[1];
+    const act = Survival.Activities.current; const row = pm.facings.indexOf(act && act.anim ? act.anim : Player.facing), colf = Player.frame(); const px0 = Math.round(Player.x) - pm.origin[0], py0 = Math.round(Player.y) - pm.origin[1];
     const pyBase = Math.round(Player.y); const shade = DATA.play.shade;
     // soft contact shadow on the ground only
     for (let yy = -1; yy <= 1; yy++) for (let xx = -5; xx <= 5; xx++) { if ((xx * xx) / 25 + (yy * yy) / 1.5 > 1) continue; const sx = Math.round(Player.x) + xx, sy = pyBase + yy; if (sx < 0 || sy < 0 || sx >= W || sy >= H) continue; const i = sy * W + sx; if (dep[i] !== 0 || (CLS[idx[i]] & 2)) continue; const c = tab[shade[idx[i]]]; const o = i * 4; d[o] = c[0]; d[o + 1] = c[1]; d[o + 2] = c[2]; }
@@ -293,8 +304,8 @@ function frame(now) {
   if (Interaction.message) { ctx.font = '10px ui-monospace, monospace'; const tw = Math.min(vw - 40, ctx.measureText(Interaction.message).width + 16);
     ctx.fillStyle = 'rgba(24,30,28,0.86)'; const sf = Camera.safe; ctx.fillRect(Math.round(vw / 2 - tw / 2), vh - 64 - sf, Math.round(tw), 30); ctx.strokeStyle = 'rgba(222,220,180,0.55)'; ctx.strokeRect(Math.round(vw / 2 - tw / 2) + 0.5, vh - 63.5 - sf, Math.round(tw) - 1, 29);
     ctx.fillStyle = '#eedcb0'; ctx.textAlign = 'center'; ctx.fillText(Interaction.message, vw / 2, vh - 45 - sf); }
-  Touch.draw(ctx, vw, vh); ctx.restore();
-  document.getElementById('clock').textContent = `${WorldClock.label()} · ${season} · ${WorldClock.phase(season)} · ${WeatherState.kind} ${(WeatherState.intensity * 100) | 0}%`;
+  Touch.draw(ctx, vw, vh); Survival.HUD.draw(ctx, vw, vh, Camera.safe, T); ctx.restore();
+  document.getElementById('clock').textContent = `${WorldClock.label()} · day ${Survival.Clock.day} · ${season} · ${Survival.Clock.phase()} · ${WeatherState.kind} ${(WeatherState.intensity * 100) | 0}%`;
   if (!WorldClock.paused) document.getElementById('time').value = WorldClock.minutes | 0;
   requestAnimationFrame(frame);
 }
@@ -307,10 +318,10 @@ $('season').onchange = e => { SeasonState.season = e.target.value; };
 $('weather').onchange = e => WeatherState.set(e.target.value, $('intensity').value / 100);
 $('intensity').oninput = e => WeatherState.set(WeatherState.kind, e.target.value / 100);
 $('zoom').onchange = e => state.zoom = +e.target.value; $('viewport').onchange = e => state.viewport = e.target.checked;
-$('touch').onchange = e => Touch.enabled = e.target.checked; $('aspect').onchange = e => { const [w, h] = e.target.value.split('x').map(Number); Camera.vw = w; Camera.vh = h; }; $('safe').oninput = e => Camera.safe = +e.target.value; $('camsmooth').oninput = e => Camera.smooth = +e.target.value;
+$('touch').onchange = e => Touch.enabled = e.target.checked; $('devtoggle').onchange = e => $('dev').style.display = e.target.checked ? '' : 'none'; $('aspect').onchange = e => { const [w, h] = e.target.value.split('x').map(Number); Camera.vw = w; Camera.vh = h; }; $('safe').oninput = e => Camera.safe = +e.target.value; $('camsmooth').oninput = e => Camera.smooth = +e.target.value;
 if ('ontouchstart' in window) { Touch.enabled = true; $('touch').checked = true; }
 Touch.attach(cv);
-window.Player = Player; window.Camera = Camera; window.Interaction = Interaction; window.Input = Input; window.SIM = { step: (axis, n) => { for (let i = 0; i < n; i++) Player.step(SIM_DT, axis); }, depthAt: (x, y) => DATA.depth[SeasonState.season === 'winter' ? 'winter' : 'spring'][y * W + x], blocked: (x, y) => Player.blocked(x, y) };
+window.Player = Player; window.Camera = Camera; window.WorldClock = WorldClock; window.Interaction = Interaction; window.Input = Input; window.SIM = { step: (axis, n) => { for (let i = 0; i < n; i++) Player.step(SIM_DT, axis); }, depthAt: (x, y) => DATA.depth[SeasonState.season === 'winter' ? 'winter' : 'spring'][y * W + x], blocked: (x, y) => Player.blocked(x, y) };
 $('event').onchange = e => applyEvent(e.target.value);
 function applyEvent(name) { const ev = DATA.events[name]; EventState.current = ev || null; buildLightMap(ev ? ev.extra_lights : []);
   if (ev) { SeasonState.season = ev.season; $('season').value = ev.season; WorldClock.minutes = ev.hour * 60; $('time').value = WorldClock.minutes | 0; WeatherState.set(ev.weather, ev.intensity); $('weather').value = ev.weather; $('intensity').value = ev.intensity * 100; } }

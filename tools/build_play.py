@@ -85,13 +85,15 @@ Image.fromarray(col * 255, 'L').save(os.path.join(out, 'collision.png'))
 
 # ---- interactables: driven by data, not by the player script
 inter = [
-    {'id': 'tent', 'label': 'Inspect tent', 'x': 272, 'y': 246, 'r': 30, 'text': 'A worn canvas tent. The flap is rolled back; your bedroll is inside.'},
-    {'id': 'lantern', 'label': 'Inspect lantern', 'x': 240, 'y': 262, 'r': 18, 'text': 'An oil lantern on a crooked post. It will burn through the night.'},
-    {'id': 'campfire', 'label': 'Tend the fire', 'x': 318, 'y': 272, 'r': 22, 'text': 'A small fire in a ring of stones. The embers are still warm.'},
-    {'id': 'dock', 'label': 'Look at the pond', 'x': 562, 'y': 288, 'r': 30, 'text': 'A weathered fishing platform. Something stirs under the lily pads.'},
-    {'id': 'ruin', 'label': 'Examine the ruins', 'x': 612, 'y': 108, 'r': 34, 'text': 'Two walls and a lintel, taken back by moss. Someone hung a lantern here recently.'},
-    {'id': 'log', 'label': 'Peer into the log', 'x': 480, 'y': 404, 'r': 22, 'text': 'A hollow log, soft with rot. Mushrooms grow in its shade.'},
-    {'id': 'rowan', 'label': 'Rowan tree', 'x': 418, 'y': 188, 'r': 18, 'text': 'A young rowan alone in the meadow, heavy with red berries.'},
+    {'id': 'tent', 'label': 'Rest until morning', 'x': 272, 'y': 246, 'r': 30, 'sleep': True, 'text': 'A worn canvas tent. The flap is rolled back; your bedroll is inside.'},
+    {'id': 'lantern', 'label': 'Inspect lantern', 'x': 240, 'y': 262, 'r': 18, 'activity': 'inspect', 'text': 'An oil lantern on a crooked post. It will burn through the night.'},
+    {'id': 'campfire', 'label': 'Tend the fire', 'x': 318, 'y': 272, 'r': 22, 'activity': 'tend_fire', 'text': 'You feed the fire a few sticks. The embers brighten.'},
+    {'id': 'dock', 'label': 'Fish from the platform', 'x': 562, 'y': 288, 'r': 30, 'activity': 'fish_attempt', 'text': 'You cast from the weathered platform. Something stirs under the lily pads.'},
+    {'id': 'ruin', 'label': 'Examine the ruins', 'x': 612, 'y': 108, 'r': 34, 'activity': 'inspect', 'text': 'Two walls and a lintel, taken back by moss. Someone hung a lantern here recently.'},
+    {'id': 'log', 'label': 'Gather branches', 'x': 480, 'y': 404, 'r': 22, 'activity': 'gather_branches', 'text': 'You pull dry branches from beside the hollow log.'},
+    {'id': 'rowan', 'label': 'Gather branches', 'x': 418, 'y': 188, 'r': 18, 'activity': 'gather_branches', 'text': 'You snap a few fallen rowan twigs. The berries can wait.'},
+    {'id': 'outcrop', 'label': 'Gather stones', 'x': 326, 'y': 230, 'r': 26, 'activity': 'gather_stones', 'text': 'Loose stones around the mossy boulders. Good for a fire ring.'},
+    {'id': 'oak', 'label': 'Cut the big oak', 'x': 216, 'y': 212, 'r': 22, 'activity': 'cut_tree', 'text': 'You work at the old oak for a while. It is far from done.'},
 ]
 json.dump({'width': W, 'height': H, 'playable': sc.playable, 'spawn': [300, 318], 'interactables': inter,
            'depth': {'spring': 'depth_spring.png', 'summer': 'depth_spring.png', 'autumn': 'depth_spring.png', 'winter': 'depth_winter.png'},
