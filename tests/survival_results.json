@@ -30,7 +30,7 @@
   {
    "name": "gather stones costs configured energy and minutes",
    "ok": true,
-   "detail": "energy 97, clock 10.13 h"
+   "detail": "energy 97, clock 10.14 h"
   },
   {
    "name": "cut tree costs 8 energy",
@@ -72,7 +72,7 @@
   {
    "name": "player can still walk at zero energy",
    "ok": true,
-   "detail": "moved to x=482"
+   "detail": "moved to x=481"
   },
   {
    "name": "heavy allowed when exhausted (config allow_heavy_when_exhausted) with reduced efficiency",
@@ -82,12 +82,12 @@
   {
    "name": "night fishing allowed with energy and logged after dark",
    "ok": true,
-   "detail": "afterDark 140 min"
+   "detail": "afterDark 141.40014400000018 min"
   },
   {
    "name": "sleep at 23:00 day 3 → day 4 at dawn, energy full",
    "ok": true,
-   "detail": "day 4 6 h energy 100"
+   "detail": "day 4 6.0011133333333335 h energy 100"
   },
   {
    "name": "journal summary built only from recorded fields",
@@ -101,7 +101,7 @@
   {
    "name": "sleep at 01:30 day 5 → dawn of day 5 (same calendar day), energy full (before 02:00)",
    "ok": true,
-   "detail": "day 5 6 h energy 100"
+   "detail": "day 5 6.0011133333333335 h energy 100"
   },
   {
    "name": "sleep at 03:30 → short night, energy restored to 80 not 100",
@@ -111,7 +111,7 @@
   {
    "name": "tent interaction sleeps with a fade and wakes on day 8 at dawn",
    "ok": true,
-   "detail": "mid fade 0.43, after: day 8 6.19 h"
+   "detail": "mid fade 0.43, after: day 8 6.17 h"
   },
   {
    "name": "phase events fire crossing sunset → early night → deep night",

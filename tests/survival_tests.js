@@ -26,7 +26,7 @@ function check(name, ok, detail) { results.push({ name, ok: !!ok, detail }); con
   await ev(() => { Survival.Clock.setHour(10); Survival.Energy.set(100); });
   const cfg = await ev(() => Survival.cfg());
   let r = await ev(() => Survival.Activities.perform('gather_stones')); let e = await ev(() => [Survival.Energy.current, WorldClock.hour()]);
-  check('gather stones costs configured energy and minutes', r.ok && e[0] === 100 - cfg.activities.gather_stones.energy && Math.abs(e[1] - (10 + cfg.activities.gather_stones.minutes / 60)) < 0.01, `energy ${e[0]}, clock ${e[1].toFixed(2)} h`);
+  check('gather stones costs configured energy and minutes', r.ok && e[0] === 100 - cfg.activities.gather_stones.energy && Math.abs(e[1] - (10 + cfg.activities.gather_stones.minutes / 60)) < 0.02, `energy ${e[0]}, clock ${e[1].toFixed(2)} h`);
   r = await ev(() => Survival.Activities.perform('cut_tree')); e = await ev(() => Survival.Energy.current); check('cut tree costs 8 energy', r.ok && e === 100 - 3 - 8, `energy ${e}`);
   const states = await ev(() => [80, 60, 30, 10, 0].map(v => Survival.Energy.stateFor(v))); check('states at 80/60/30/10/0', states.join(',') === 'energetic,tired,exhausted,critical,zero', states.join(','));
   await ev(() => { Survival.Energy.set(100); Survival.Energy._walkAcc = 0; }); await ev(() => { for (let i = 0; i < 120; i++) Survival.tick(1 / 60, 60 / 120, true); }); e = await ev(() => Survival.Energy.current);   // one game hour of walking

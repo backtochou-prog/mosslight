@@ -1,0 +1,170 @@
+{
+ "results": [
+  {
+   "name": "data-driven catalog loaded: 50 items, 30 nodes",
+   "ok": true,
+   "detail": "50 items, 30 nodes"
+  },
+  {
+   "name": "1. find a branch (hand)",
+   "ok": true,
+   "detail": "[[\"branch\",3]]"
+  },
+  {
+   "name": "gathering spends configured energy and time exactly once",
+   "ok": true,
+   "detail": "energy 98, clock 10.10 h"
+  },
+  {
+   "name": "2. gather a mushroom",
+   "ok": true,
+   "detail": "[[\"mushroom_brown\",1]]"
+  },
+  {
+   "name": "3. pick a flower",
+   "ok": true,
+   "detail": "[[\"daisy\",1]]"
+  },
+  {
+   "name": "4. collect stones",
+   "ok": true,
+   "detail": "[[\"stone\",3]]"
+  },
+  {
+   "name": "axe required: broken axe refuses the oak",
+   "ok": true,
+   "detail": "You need an axe for that."
+  },
+  {
+   "name": "5. use a tool: axe on the oak yields a log and wears the axe",
+   "ok": true,
+   "detail": "[[\"log\",1],[\"hardwood\",1]], durability 39"
+  },
+  {
+   "name": "pickaxe node refuses bare hands but auto-picks an owned compatible tool",
+   "ok": true,
+   "detail": "picked up pickaxe automatically: [[\"stone\",1],[\"copper_ore\",2]]"
+  },
+  {
+   "name": "knife node refused without a knife",
+   "ok": true,
+   "detail": "You need a knife to cut that."
+  },
+  {
+   "name": "knife node works with a knife",
+   "ok": true
+  },
+  {
+   "name": "stacks merge: one slot per item type so far",
+   "ok": true,
+   "detail": "[[\"branch\",3],[\"mushroom_brown\",1],[\"daisy\",1],[\"stone\",4],[\"log\",1],[\"hardwood\",1],[\"copper_ore\",2],[\"mint\",2]]"
+  },
+  {
+   "name": "stack limit 30 overflows into a second slot",
+   "ok": true,
+   "detail": "[30,3]"
+  },
+  {
+   "name": "split halves a stack",
+   "ok": true,
+   "detail": "[15,3,15]"
+  },
+  {
+   "name": "remove drops one",
+   "ok": true,
+   "detail": "32 stones"
+  },
+  {
+   "name": "6. inventory panel opens",
+   "ok": true
+  },
+  {
+   "name": "7. inspect: selected item has name, rarity, description",
+   "ok": true
+  },
+  {
+   "name": "8. journal records discoveries with progress",
+   "ok": true,
+   "detail": "8/50"
+  },
+  {
+   "name": "undiscovered entries are hidden as ???",
+   "ok": true
+  },
+  {
+   "name": "moondew unavailable by day",
+   "ok": true
+  },
+  {
+   "name": "9. moondew collectible at night",
+   "ok": true,
+   "detail": "[[\"moondew\",1]]"
+  },
+  {
+   "name": "ghostcap needs deep night AND recent rain (dry 22:30 → no)",
+   "ok": true
+  },
+  {
+   "name": "ghostcap appears at 01:00 in rain and can be picked",
+   "ok": true,
+   "detail": "[[\"ghostcap\",1]]"
+  },
+  {
+   "name": "deposit yields are limited and it depletes (no respawn)",
+   "ok": true,
+   "detail": "left 0, state depleted, moonstone hits 3 (night-only extra)"
+  },
+  {
+   "name": "10a. branch pile depletes after its yields",
+   "ok": true,
+   "detail": "{\"state\":\"depleted\",\"left\":0}"
+  },
+  {
+   "name": "10b. half-way: regrowing state",
+   "ok": true,
+   "detail": "{\"state\":\"regrow\",\"left\":0}"
+  },
+  {
+   "name": "10c. respawns after 12 game hours",
+   "ok": true,
+   "detail": "{\"state\":\"full\",\"left\":2}"
+  },
+  {
+   "name": "season-mode nodes regrow only when the season changes",
+   "ok": true,
+   "detail": "depleted→full"
+  },
+  {
+   "name": "unique keepsake (brass key) cannot be found twice",
+   "ok": true,
+   "detail": "keys in pack: 1, second attempt ok=false"
+  },
+  {
+   "name": "gathering refused at zero energy",
+   "ok": true,
+   "detail": "You are too exhausted for that. Rest first."
+  },
+  {
+   "name": "save/load restores inventory exactly (no loss, no duplication)",
+   "ok": true,
+   "detail": "16 stacks"
+  },
+  {
+   "name": "save/load restores journal and tool durability",
+   "ok": true,
+   "detail": "found 14, axe 39"
+  },
+  {
+   "name": "save/load keeps depleted nodes depleted",
+   "ok": true,
+   "detail": "deposit_ruin"
+  },
+  {
+   "name": "no page errors",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "passed": 34,
+ "total": 34
+}

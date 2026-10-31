@@ -1,0 +1,751 @@
+{
+ "nodes": [
+  {
+   "id": "branches_log",
+   "kind": "branch_pile",
+   "x": 462,
+   "y": 410,
+   "r": 20,
+   "label": "Gather branches",
+   "activity": "gather_branches",
+   "tool": "hand",
+   "drops": [
+    [
+     "branch",
+     2,
+     3
+    ]
+   ],
+   "yields": 2,
+   "respawn_hours": 12,
+   "respawn_mode": "time"
+  },
+  {
+   "id": "branches_oak",
+   "kind": "branch_pile",
+   "x": 190,
+   "y": 222,
+   "r": 20,
+   "label": "Gather branches",
+   "activity": "gather_branches",
+   "tool": "hand",
+   "drops": [
+    [
+     "branch",
+     1,
+     3
+    ],
+    [
+     "bark",
+     0,
+     1
+    ]
+   ],
+   "yields": 2,
+   "respawn_hours": 12,
+   "respawn_mode": "time"
+  },
+  {
+   "id": "branches_west",
+   "kind": "branch_pile",
+   "x": 150,
+   "y": 334,
+   "r": 20,
+   "label": "Gather branches",
+   "activity": "gather_branches",
+   "tool": "hand",
+   "drops": [
+    [
+     "branch",
+     1,
+     2
+    ]
+   ],
+   "yields": 1,
+   "respawn_hours": 18,
+   "respawn_mode": "time"
+  },
+  {
+   "id": "stones_outcrop",
+   "kind": "stone_pile",
+   "x": 338,
+   "y": 238,
+   "r": 22,
+   "label": "Gather stones",
+   "activity": "gather_stones",
+   "tool": "hand",
+   "drops": [
+    [
+     "stone",
+     2,
+     3
+    ],
+    [
+     "flint",
+     0,
+     1
+    ]
+   ],
+   "yields": 3,
+   "respawn_hours": 36,
+   "respawn_mode": "time"
+  },
+  {
+   "id": "stones_path",
+   "kind": "stone_pile",
+   "x": 520,
+   "y": 292,
+   "r": 18,
+   "label": "Gather stones",
+   "activity": "gather_stones",
+   "tool": "hand",
+   "drops": [
+    [
+     "stone",
+     1,
+     2
+    ]
+   ],
+   "yields": 2,
+   "respawn_hours": 36,
+   "respawn_mode": "time"
+  },
+  {
+   "id": "mush_log",
+   "kind": "mushroom",
+   "x": 500,
+   "y": 416,
+   "r": 16,
+   "label": "Pick mushrooms",
+   "activity": "pick_plant",
+   "tool": "hand",
+   "drops": [
+    [
+     "mushroom_brown",
+     1,
+     2
+    ]
+   ],
+   "yields": 1,
+   "respawn_hours": 48,
+   "respawn_mode": "time",
+   "seasons": "spring,autumn"
+  },
+  {
+   "id": "mush_north",
+   "kind": "mushroom",
+   "x": 432,
+   "y": 142,
+   "r": 16,
+   "label": "Pick mushrooms",
+   "activity": "pick_plant",
+   "tool": "hand",
+   "drops": [
+    [
+     "mushroom_brown",
+     1,
+     1
+    ],
+    [
+     "mushroom_red",
+     0,
+     1
+    ]
+   ],
+   "yields": 1,
+   "respawn_hours": 48,
+   "respawn_mode": "time",
+   "seasons": "spring,autumn"
+  },
+  {
+   "id": "daisies_s",
+   "kind": "flower_w",
+   "x": 386,
+   "y": 352,
+   "r": 16,
+   "label": "Pick daisies",
+   "activity": "pick_plant",
+   "tool": "hand",
+   "drops": [
+    [
+     "daisy",
+     1,
+     2
+    ]
+   ],
+   "yields": 2,
+   "respawn_hours": 72,
+   "respawn_mode": "season",
+   "seasons": "spring,summer",
+   "time": "day"
+  },
+  {
+   "id": "bells_e",
+   "kind": "flower_b",
+   "x": 470,
+   "y": 234,
+   "r": 16,
+   "label": "Pick bellflowers",
+   "activity": "pick_plant",
+   "tool": "hand",
+   "drops": [
+    [
+     "bellflower",
+     1,
+     2
+    ]
+   ],
+   "yields": 2,
+   "respawn_hours": 72,
+   "respawn_mode": "season",
+   "seasons": "spring,summer"
+  },
+  {
+   "id": "poppies_se",
+   "kind": "flower_r",
+   "x": 606,
+   "y": 372,
+   "r": 16,
+   "label": "Pick poppies",
+   "activity": "pick_plant",
+   "tool": "hand",
+   "drops": [
+    [
+     "poppy",
+     1,
+     2
+    ]
+   ],
+   "yields": 2,
+   "respawn_hours": 72,
+   "respawn_mode": "season",
+   "seasons": "summer",
+   "time": "day"
+  },
+  {
+   "id": "berries_hedge",
+   "kind": "berry_bush",
+   "x": 560,
+   "y": 440,
+   "r": 20,
+   "label": "Pick blackberries",
+   "activity": "pick_plant",
+   "tool": "hand",
+   "drops": [
+    [
+     "blackberry",
+     2,
+     4
+    ]
+   ],
+   "yields": 3,
+   "respawn_hours": 96,
+   "respawn_mode": "season",
+   "seasons": "summer,autumn"
+  },
+  {
+   "id": "rowan_berries",
+   "kind": "berry_rowan",
+   "x": 418,
+   "y": 184,
+   "r": 18,
+   "label": "Pick rowan berries",
+   "activity": "pick_plant",
+   "tool": "hand",
+   "drops": [
+    [
+     "rowan_berry",
+     2,
+     3
+    ]
+   ],
+   "yields": 2,
+   "respawn_hours": 120,
+   "respawn_mode": "season",
+   "seasons": "autumn"
+  },
+  {
+   "id": "mint_pond",
+   "kind": "herb",
+   "x": 600,
+   "y": 352,
+   "r": 16,
+   "label": "Cut wild mint",
+   "activity": "cut_herb",
+   "tool": "knife",
+   "drops": [
+    [
+     "mint",
+     1,
+     2
+    ]
+   ],
+   "yields": 2,
+   "respawn_hours": 48,
+   "respawn_mode": "time",
+   "seasons": "spring,summer,autumn"
+  },
+  {
+   "id": "fiber_reeds",
+   "kind": "herb",
+   "x": 690,
+   "y": 330,
+   "r": 18,
+   "label": "Cut reed fibre",
+   "activity": "cut_herb",
+   "tool": "knife",
+   "drops": [
+    [
+     "fiber",
+     2,
+     3
+    ]
+   ],
+   "yields": 3,
+   "respawn_hours": 24,
+   "respawn_mode": "time"
+  },
+  {
+   "id": "vines_ruin",
+   "kind": "vine",
+   "x": 556,
+   "y": 136,
+   "r": 18,
+   "label": "Cut vines",
+   "activity": "cut_herb",
+   "tool": "knife",
+   "drops": [
+    [
+     "vine",
+     1,
+     2
+    ]
+   ],
+   "yields": 2,
+   "respawn_hours": 72,
+   "respawn_mode": "time"
+  },
+  {
+   "id": "moss_stone",
+   "kind": "moss_pad",
+   "x": 352,
+   "y": 236,
+   "r": 14,
+   "label": "Gather moss",
+   "activity": "pick_plant",
+   "tool": "hand",
+   "drops": [
+    [
+     "moss",
+     1,
+     2
+    ]
+   ],
+   "yields": 2,
+   "respawn_hours": 72,
+   "respawn_mode": "time"
+  },
+  {
+   "id": "oak_wood",
+   "kind": "tree_marker",
+   "x": 216,
+   "y": 214,
+   "r": 22,
+   "label": "Chop the oak",
+   "activity": "cut_tree",
+   "tool": "axe",
+   "drops": [
+    [
+     "log",
+     1,
+     1
+    ],
+    [
+     "hardwood",
+     0,
+     1
+    ]
+   ],
+   "yields": 4,
+   "respawn_hours": 240,
+   "respawn_mode": "time"
+  },
+  {
+   "id": "deposit_ruin",
+   "kind": "deposit",
+   "x": 664,
+   "y": 146,
+   "r": 20,
+   "label": "Mine the deposit",
+   "activity": "mine",
+   "tool": "pickaxe",
+   "drops": [
+    [
+     "stone",
+     1,
+     1
+    ],
+    [
+     "copper_ore",
+     1,
+     2
+    ],
+    [
+     "quartz",
+     0,
+     1
+    ],
+    [
+     "coal",
+     0,
+     1
+    ]
+   ],
+   "yields": 5,
+   "respawn_hours": null,
+   "respawn_mode": "none",
+   "night_extra": [
+    [
+     "moonstone",
+     0,
+     1
+    ]
+   ]
+  },
+  {
+   "id": "deposit_west",
+   "kind": "deposit",
+   "x": 96,
+   "y": 352,
+   "r": 20,
+   "label": "Mine the deposit",
+   "activity": "mine",
+   "tool": "pickaxe",
+   "drops": [
+    [
+     "stone",
+     1,
+     2
+    ],
+    [
+     "iron_ore",
+     0,
+     1
+    ],
+    [
+     "amethyst",
+     0,
+     1
+    ],
+    [
+     "geode",
+     0,
+     1
+    ]
+   ],
+   "yields": 4,
+   "respawn_hours": null,
+   "respawn_mode": "none"
+  },
+  {
+   "id": "scrap_ruin",
+   "kind": "scrap_pile",
+   "x": 676,
+   "y": 112,
+   "r": 18,
+   "label": "Search the rubble",
+   "activity": "search",
+   "tool": "hand",
+   "drops": [
+    [
+     "scrap_metal",
+     1,
+     2
+    ],
+    [
+     "bolt",
+     0,
+     2
+    ],
+    [
+     "glass_shard",
+     0,
+     1
+    ],
+    [
+     "rusted_gear",
+     0,
+     1
+    ],
+    [
+     "battery",
+     0,
+     1
+    ]
+   ],
+   "yields": 3,
+   "respawn_hours": null,
+   "respawn_mode": "none"
+  },
+  {
+   "id": "scrap_beam",
+   "kind": "scrap_pile",
+   "x": 606,
+   "y": 130,
+   "r": 16,
+   "label": "Search under the beam",
+   "activity": "search",
+   "tool": "hand",
+   "drops": [
+    [
+     "wire",
+     0,
+     2
+    ],
+    [
+     "circuit",
+     0,
+     1
+    ],
+    [
+     "photo",
+     0,
+     1
+    ],
+    [
+     "tin_cup",
+     0,
+     1
+    ]
+   ],
+   "yields": 2,
+   "respawn_hours": null,
+   "respawn_mode": "none",
+   "unique": [
+    "photo",
+    "tin_cup"
+   ]
+  },
+  {
+   "id": "lintel_key",
+   "kind": "hidden",
+   "x": 612,
+   "y": 98,
+   "r": 14,
+   "label": "Feel along the lintel",
+   "activity": "search",
+   "tool": "hand",
+   "drops": [
+    [
+     "key_old",
+     1,
+     1
+    ]
+   ],
+   "yields": 1,
+   "respawn_hours": null,
+   "respawn_mode": "none",
+   "unique": [
+    "key_old"
+   ]
+  },
+  {
+   "id": "moondew_ruin",
+   "kind": "glowcap",
+   "x": 596,
+   "y": 134,
+   "r": 16,
+   "label": "Collect moondew",
+   "activity": "pick_plant",
+   "tool": "hand",
+   "drops": [
+    [
+     "moondew",
+     1,
+     1
+    ]
+   ],
+   "yields": 1,
+   "respawn_hours": 24,
+   "respawn_mode": "time",
+   "time": "night"
+  },
+  {
+   "id": "moondew_log",
+   "kind": "glowcap",
+   "x": 500,
+   "y": 408,
+   "r": 16,
+   "label": "Collect moondew",
+   "activity": "pick_plant",
+   "tool": "hand",
+   "drops": [
+    [
+     "moondew",
+     1,
+     1
+    ]
+   ],
+   "yields": 1,
+   "respawn_hours": 24,
+   "respawn_mode": "time",
+   "time": "night"
+  },
+  {
+   "id": "ghostcap_forest",
+   "kind": "ghostcap",
+   "x": 132,
+   "y": 214,
+   "r": 16,
+   "label": "Pick the ghostcap",
+   "activity": "pick_plant",
+   "tool": "hand",
+   "drops": [
+    [
+     "ghostcap",
+     1,
+     1
+    ]
+   ],
+   "yields": 1,
+   "respawn_hours": 72,
+   "respawn_mode": "time",
+   "time": "deep_night",
+   "weather": "after_rain,rain",
+   "seasons": "spring,autumn"
+  },
+  {
+   "id": "nightlily_pond",
+   "kind": "nightlily",
+   "x": 640,
+   "y": 300,
+   "r": 18,
+   "label": "Pick the night lily",
+   "activity": "pick_plant",
+   "tool": "hand",
+   "drops": [
+    [
+     "nightlily",
+     1,
+     1
+    ]
+   ],
+   "yields": 1,
+   "respawn_hours": 48,
+   "respawn_mode": "time",
+   "time": "night",
+   "seasons": "summer,autumn"
+  },
+  {
+   "id": "moth_lantern",
+   "kind": "moth",
+   "x": 244,
+   "y": 256,
+   "r": 16,
+   "label": "Catch the moth",
+   "activity": "pick_plant",
+   "tool": "hand",
+   "drops": [
+    [
+     "lantern_moth",
+     1,
+     1
+    ]
+   ],
+   "yields": 1,
+   "respawn_hours": 24,
+   "respawn_mode": "time",
+   "time": "night"
+  },
+  {
+   "id": "heartwood",
+   "kind": "hidden",
+   "x": 206,
+   "y": 216,
+   "r": 14,
+   "label": "Search among the roots",
+   "activity": "search",
+   "tool": "hand",
+   "drops": [
+    [
+     "heartwood_seed",
+     1,
+     1
+    ]
+   ],
+   "yields": 1,
+   "respawn_hours": null,
+   "respawn_mode": "none",
+   "time": "night",
+   "seasons": "autumn",
+   "weather": "after_rain",
+   "unique": [
+    "heartwood_seed"
+   ]
+  },
+  {
+   "id": "clay_bank",
+   "kind": "clay",
+   "x": 572,
+   "y": 222,
+   "r": 16,
+   "label": "Dig clay",
+   "activity": "gather_stones",
+   "tool": "hand",
+   "drops": [
+    [
+     "clay",
+     1,
+     2
+    ]
+   ],
+   "yields": 3,
+   "respawn_hours": 24,
+   "respawn_mode": "time",
+   "weather": "rain,after_rain"
+  },
+  {
+   "id": "feather_meadow",
+   "kind": "feather",
+   "x": 360,
+   "y": 120,
+   "r": 14,
+   "label": "Pick up the feather",
+   "activity": "search",
+   "tool": "hand",
+   "drops": [
+    [
+     "feather",
+     1,
+     1
+    ]
+   ],
+   "yields": 1,
+   "respawn_hours": 36,
+   "respawn_mode": "time"
+  }
+ ],
+ "activities_extra": {
+  "pick_plant": {
+   "label": "Pick",
+   "energy": 1,
+   "minutes": 4,
+   "heavy": false,
+   "anim": "gather"
+  },
+  "cut_herb": {
+   "label": "Cut",
+   "energy": 1,
+   "minutes": 5,
+   "heavy": false,
+   "anim": "gather"
+  },
+  "search": {
+   "label": "Search",
+   "energy": 1,
+   "minutes": 6,
+   "heavy": false,
+   "anim": "gather"
+  }
+ }
+}

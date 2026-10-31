@@ -431,6 +431,20 @@ gathering at dusk (string-light pools, wind, leaves), summer pond evening
   card on waking is parchment-dark and fades after a few seconds.
 * Reserved: a second row under the bar for health / hunger / status marks.
 
+## 7i. Item icons, resource nodes, panels (v0.7)
+
+* **Icons** are 12 × 12, in palette, one readable silhouette per item, the
+  darkest family rank as outline, lit from the upper-left like everything
+  else. Rarity is shown as a tiny coloured tick under the icon, never as a
+  glowing border.
+* **Resource nodes** are small sprites with three states (full, regrowing,
+  depleted) so the world shows what has been taken; nocturnal finds use the
+  emissive families and breathe faintly after dark.
+* **Panels** (pack, field guide) use the same parchment-on-dark card as the
+  HUD, with a thin inner rule, 9 px monospace, generous cell spacing, and a
+  one-line key hint at the bottom. The field guide shows unknown entries as
+  dim silhouettes with a question mark.
+
 ## 8. What is *not* acceptable
 
 * Flat single-colour tiles; visible tile grids; any 16-px repetition that the

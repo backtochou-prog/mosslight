@@ -1,0 +1,65 @@
+{
+ "tools": [
+  {
+   "id": "hand",
+   "name": "Bare hands",
+   "durability": null,
+   "compat": [
+    "hand"
+   ],
+   "efficiency": 1.0,
+   "upgrade": null,
+   "icon": "tool_hand",
+   "description": "Fingers and patience."
+  },
+  {
+   "id": "knife",
+   "name": "Gathering knife",
+   "durability": 60,
+   "compat": [
+    "hand",
+    "knife"
+   ],
+   "efficiency": 1.1,
+   "upgrade": "knife_steel",
+   "icon": "tool_knife",
+   "description": "A short, sharp blade for herbs, bark and fibre."
+  },
+  {
+   "id": "axe",
+   "name": "Basic axe",
+   "durability": 40,
+   "compat": [
+    "axe"
+   ],
+   "efficiency": 1.0,
+   "upgrade": "axe_copper",
+   "icon": "tool_axe",
+   "description": "A hatchet with a worn handle. For wood only."
+  },
+  {
+   "id": "pickaxe",
+   "name": "Pickaxe",
+   "durability": 40,
+   "compat": [
+    "pickaxe"
+   ],
+   "efficiency": 1.0,
+   "upgrade": "pickaxe_copper",
+   "icon": "tool_pickaxe",
+   "description": "Heavy, blunt, and the only way into rock."
+  },
+  {
+   "id": "rod",
+   "name": "Fishing rod (placeholder)",
+   "durability": 30,
+   "compat": [
+    "fishing"
+   ],
+   "efficiency": 1.0,
+   "upgrade": null,
+   "icon": "tool_rod",
+   "description": "A reed rod and a length of line. Fishing comes later."
+  }
+ ]
+}

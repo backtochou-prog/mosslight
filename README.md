@@ -63,6 +63,44 @@ stays the base scene's.
 Interactable Area2D component, touch controls). **Unvalidated**: Godot cannot
 run in the authoring environment.
 
+## Gathering, inventory, tools and the field guide
+
+`preview/gather.js` (loaded by `play.html`). Data in `assets/items/`:
+`items.json` (50 definitions: id, name, description, category, rarity,
+icon, stack, value, weight, gathering method, tool, seasons, time, weather,
+habitat, crafting relevance, collectible class), `tools.json` (hand, knife,
+axe, pickaxe, fishing rod placeholder: durability, compatibility, efficiency,
+upgrade target), `nodes.json` (30 world nodes: position, drop table, tool,
+yields, respawn mode/hours, season/time/weather conditions, unique
+keepsakes), 12 px original icons and node sprites with full / regrowing /
+depleted states. Rebuild with `python3 tools/build_items.py`.
+
+* **In the world**: 41 of the 50 items can actually be collected in the
+  clearing. Branch piles, stone piles, mushrooms, three flower patches,
+  blackberry hedge, rowan berries, mint, reed fibre, vines, moss, the big
+  oak (axe), two mineral deposits (pickaxe, limited, no respawn), rubble and
+  a beam to search, clay after rain, a feather, and nocturnal finds: moondew
+  on glow-caps at night, the ghostcap in deep night after rain (spring or
+  autumn), the night lily on the pond in summer/autumn nights, the lantern
+  moth, moonstone from the ruin deposit only at night, and the legendary
+  heartwood seed among the oak's roots on an autumn night after rain.
+* **Gathering** goes through the survival clock exactly once per action
+  (energy + minutes from `config.json`); tools are required where the node
+  says so, worn by one per use, and auto-selected when owned; nodes show
+  depleted and regrowing sprites and respawn by game hours or at a season
+  change; keepsakes are found once.
+* **Pack**: 24 slots, stack limits per item, merge, split (S), drop (X),
+  weight readout, inspect panel. **Field guide** (J): five categories,
+  silhouettes with ? for the unknown, rarity, habitat, season, time,
+  weather, first-found day and count. Tool bar: 1–4.
+* **Save/load** extends the survival snapshot: inventory, tool durability,
+  node states and timers, journal, stats.
+* Tests: `tests/gather_tests.js` (34 checks: the ten-step route, tool
+  compatibility and durability, stacking/split/remove, conditions by time
+  and weather, limited deposits, depletion → regrowth → respawn, season-mode
+  regrowth, keepsake uniqueness, zero-energy refusal, save/load, phone
+  layout). Godot port: `godot/gather/` (unvalidated).
+
 ## The survival clock (energy, exhaustion, sleep, daily rhythm)
 
 `preview/survival.js` (loaded by `play.html`) adds the first survival loop on

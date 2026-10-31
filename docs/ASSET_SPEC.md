@@ -120,3 +120,11 @@ To reach shipping quality the project needs:
 | HUD card, sun/moon arc, energy bar | O (canvas-drawn) | no bitmap icons yet; an icon strip for health/hunger/weather is M |
 | sleep fade + journal card | O | |
 | action animations used by activities | P (temporary player rows) | |
+
+## Items and nodes (Prompt 07)
+
+| Item | Status | Notes |
+|---|---|---|
+| 50 item icons (12 px) | O- | original and readable; the flower and herb icons are the weakest and would benefit from an artist pass |
+| 63 node sprites (21 kinds × states) | O- | in palette; the tree marker and hidden nodes are intentionally invisible |
+| items not yet placeable in the clearing (9) | catalog only | antler, eggshell, yarrow, burdock root, wild seeds, fern frond, resin, starshard, emberroot — defined, iconed, awaiting biomes/nodes |

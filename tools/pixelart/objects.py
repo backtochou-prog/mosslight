@@ -1175,3 +1175,103 @@ def build_library_extended(lib: dict) -> dict:
     for v in range(2): add(ice_hole(v)); add(stool(v)); add(string_light_post(v))
     add(bench())
     return lib
+
+
+# ===========================================================================
+# Prompt 07: resource node sprites (full / depleted / regrowing states)
+# ===========================================================================
+def node_sprites():
+    """Returns {kind: {state: Sprite}} for the world's gatherable nodes.
+    States: 'full', 'depleted', 'regrow'. Nocturnal kinds glow via emissive families."""
+    out = {}
+    def S(name, c, ox, oy, tags=()): return Sprite(name, c, ox, oy, shadow=None, tags=('node',) + tags)
+    w, st, pb, mo, g, sh, ss, gl, fw, fb, br, ll, rd, mt, mr, cv, mi = (R('wood'), R('stone'), R('pebble'), R('moss'), R('grass'), R('shroom'), R('shroom_stem'), R('glowshroom'), R('flower_w'), R('flower_b'), R('berry'), R('leaf_litter'), R('reed'), R('metal'), R('metal_rust'), R('canvas'), R('mist'))
+    # branch pile
+    c = Canvas(18, 10); c.line(2, 7, 14, 3, w[3]); c.line(2, 8, 14, 4, w[1]); c.line(4, 4, 15, 8, w[2]); c.line(5, 5, 16, 9, w[1]); c.line(8, 2, 10, 8, w[2]); c.outline_inside(w[0])
+    d = Canvas(18, 10); d.line(5, 7, 12, 5, w[2]); d.put(5, 8, w[1]); d.put(12, 6, w[1]); d.outline_inside(w[0])
+    out['branch_pile'] = {'full': S('node_branch_full', c, 9, 9), 'depleted': S('node_branch_dep', d, 9, 9), 'regrow': S('node_branch_dep', d, 9, 9)}
+    # stone pile
+    c = Canvas(16, 10); [c.ellipse(x, y, rx, ry, pb[1]) for (x, y, rx, ry) in ((4, 6, 3, 2), (9, 5, 3.5, 2.5), (12, 7, 2.5, 1.8), (7, 8, 2.5, 1.5))]; c.put(3, 5, pb[2]); c.put(8, 3, pb[2]); c.put(11, 6, pb[2]); c.outline_inside(pb[0])
+    d = Canvas(16, 10); d.ellipse(8, 7, 2.5, 1.5, pb[1]); d.put(7, 6, pb[2]); d.outline_inside(pb[0])
+    out['stone_pile'] = {'full': S('node_stone_full', c, 8, 9), 'depleted': S('node_stone_dep', d, 8, 9), 'regrow': S('node_stone_dep', d, 8, 9)}
+    # mushrooms (brown caps)
+    c = Canvas(14, 10); dc = R('dirt')
+    for (x, h, r) in ((3, 4, 2), (7, 5, 3), (11, 3, 2)): c.rect(x, 9 - h, 2, h, ss[1]); c.ellipse(x + 0.5, 9 - h - 0.5, r, 1.6, dc[4]); c.put(x, 9 - h - 1, dc[5]); c.put(x + 1, 9 - h + 1, dc[2])
+    c.outline_inside(dc[1])
+    d = Canvas(14, 10); d.put(4, 8, ss[0]); d.put(8, 8, ss[0]); d.put(9, 8, ss[0])
+    rg = Canvas(14, 10); rg.rect(7, 7, 2, 2, ss[1]); rg.ellipse(7.5, 6.5, 1.5, 1, dc[4]); rg.outline_inside(dc[1])
+    out['mushroom'] = {'full': S('node_mush_full', c, 7, 9), 'depleted': S('node_mush_dep', d, 7, 9), 'regrow': S('node_mush_regrow', rg, 7, 9)}
+    # flowers (three colours)
+    for kind, fam in (('flower_w', fw), ('flower_b', fb), ('flower_r', br)):
+        c = Canvas(16, 12)
+        for i, x in enumerate((3, 7, 11)):
+            top = 3 + (i % 2); c.vline(x, top + 1, 11, g[2]); c.put(x + 1, 9, g[3]); c.put(x, top, fam[1]); c.put(x - 1, top, fam[1]); c.put(x + 1, top, fam[0]); c.put(x, top - 1, fam[2]); c.put(x, top + 1, fam[0])
+            if kind == 'flower_w': c.put(x, top, R('flower_y')[1])
+        d = Canvas(16, 12); [d.vline(x, 8, 11, g[2]) for x in (3, 7, 11)]
+        rg = Canvas(16, 12); [rg.vline(x, 7, 11, g[2]) for x in (3, 7, 11)]; rg.put(7, 6, fam[0])
+        out[kind] = {'full': S(f'node_{kind}_full', c, 8, 11), 'depleted': S(f'node_{kind}_dep', d, 8, 11), 'regrow': S(f'node_{kind}_regrow', rg, 8, 11)}
+    # berry bush (blackberry) / rowan berries marker
+    base = shrub(2).c
+    c = base.copy(); rng = random.Random(7)
+    for _ in range(9):
+        x, y = rng.randint(6, 22), rng.randint(6, 16)
+        if c.a[y, x] != 0: c.put(x, y, R('flower_p')[0]); c.put(x + 1, y, R('flower_p')[1])
+    out['berry_bush'] = {'full': S('node_berry_full', c, 14, 20), 'depleted': S('node_berry_dep', base.copy(), 14, 20), 'regrow': S('node_berry_dep', base.copy(), 14, 20)}
+    c = Canvas(16, 10)
+    for (x, y) in ((4, 4), (8, 3), (12, 5), (6, 7), (10, 7)): c.put(x, y, br[1]); c.put(x + 1, y, br[0]); c.put(x, y - 1, br[2])
+    out['berry_rowan'] = {'full': S('node_rowan_full', c, 8, 8), 'depleted': S('node_rowan_dep', Canvas(16, 10), 8, 8), 'regrow': S('node_rowan_dep', Canvas(16, 10), 8, 8)}
+    # herb clump (mint / reed fibre) and vines
+    c = Canvas(14, 12)
+    for i in range(6): x = 2 + i * 2; h = 5 + (i % 3) * 2; c.vline(x, 11 - h, 11, mo[1] if i % 2 else mo[2]); c.put(x, 11 - h, mo[3]); c.put(x + 1, 11 - h + 2, mo[0])
+    d = Canvas(14, 12); [d.vline(2 + i * 2, 9, 11, mo[1]) for i in range(6)]
+    out['herb'] = {'full': S('node_herb_full', c, 7, 11), 'depleted': S('node_herb_dep', d, 7, 11), 'regrow': S('node_herb_dep', d, 7, 11)}
+    c = Canvas(14, 22); rng = random.Random(3)
+    for sx in (3, 7, 11):
+        x, y = sx, 20
+        for i in range(16): x += rng.choice((-1, 0, 0, 1)); y -= 1; c.put(max(0, min(13, x)), y, mo[1]); 
+        c.put(sx, 20, mo[0])
+    for _ in range(10): c.put(rng.randint(1, 12), rng.randint(2, 18), mo[2])
+    d = Canvas(14, 22); d.vline(7, 14, 20, mo[0]); d.put(6, 19, mo[1])
+    out['vine'] = {'full': S('node_vine_full', c, 7, 20), 'depleted': S('node_vine_dep', d, 7, 20), 'regrow': S('node_vine_dep', d, 7, 20)}
+    # moss pad
+    c = Canvas(14, 8); c.ellipse(7, 5, 6, 2.5, mo[1]); c.ellipse(5, 4, 3, 1.5, mo[2]); c.put(10, 6, mo[0]); c.outline_inside(mo[0])
+    d = Canvas(14, 8); d.ellipse(7, 5, 3, 1.5, mo[0])
+    out['moss_pad'] = {'full': S('node_moss_full', c, 7, 7), 'depleted': S('node_moss_dep', d, 7, 7), 'regrow': S('node_moss_dep', d, 7, 7)}
+    # tree marker (invisible: the oak itself is the visual; depleted shows chop marks at the base)
+    e = Canvas(2, 2); d = Canvas(14, 8); d.hline(3, 10, 4, w[4]); d.hline(4, 9, 5, w[3]); d.put(5, 3, w[4]); d.put(8, 3, w[4])
+    out['tree_marker'] = {'full': S('node_tree_full', e, 1, 1), 'depleted': S('node_tree_dep', d, 7, 7), 'regrow': S('node_tree_dep', d, 7, 7)}
+    # mineral deposit: full (ore flecks) / damaged / depleted
+    def deposit(stage):
+        c = Canvas(26, 18); shaded_blob(c, 13, 11, 11, 6, st, light=(-0.4, -0.5), ranks=(1, 2, 3, 4)); shaded_blob(c, 17, 7, 6, 5, st, light=(-0.4, -0.5), ranks=(1, 2, 3, 4))
+        m = _mask_of(c, ['stone']); rng = random.Random(11)
+        flecks = [(8, 10), (12, 8), (16, 12), (19, 9), (10, 14), (14, 13), (21, 13)][: (7 if stage == 'full' else 3 if stage == 'regrow' else 0)]
+        for (x, y) in flecks: c.put(x, y, mo[2]); c.put(x + 1, y, mo[1]); c.put(x, y + 1, R('flower_w')[2] if (x + y) % 3 == 0 else mo[1])
+        if stage != 'full':
+            for (x, y) in ((6, 9), (13, 6), (18, 12), (9, 13)): c.put(x, y, st[0]); c.put(x + 1, y + 1, st[1]); c.put(x + 2, y, st[0])
+            if stage == 'depleted': c.rect(10, 12, 7, 4, st[1]); c.put(11, 13, st[0]); c.put(15, 14, st[0])
+        c.outline_inside(st[0], mask=m); return c
+    out['deposit'] = {'full': S('node_deposit_full', deposit('full'), 13, 17, ('solid',)), 'depleted': S('node_deposit_dep', deposit('depleted'), 13, 17, ('solid',)), 'regrow': S('node_deposit_regrow', deposit('regrow'), 13, 17, ('solid',))}
+    # scrap pile / hidden / clay / feather
+    c = Canvas(18, 10); c.poly([(2, 7), (9, 3), (14, 5), (8, 9)], mr[1]); c.line(3, 7, 8, 4, mr[2]); c.rect(10, 6, 5, 3, mt[2]); c.put(10, 6, mt[3]); c.put(5, 8, mt[1]); c.put(13, 3, mt[2]); c.put(14, 3, mt[2]); c.outline_inside(mt[0])
+    d = Canvas(18, 10); d.rect(7, 7, 4, 2, mt[1]); d.put(7, 7, mt[2]); d.outline_inside(mt[0])
+    out['scrap_pile'] = {'full': S('node_scrap_full', c, 9, 9), 'depleted': S('node_scrap_dep', d, 9, 9), 'regrow': S('node_scrap_dep', d, 9, 9)}
+    out['hidden'] = {'full': S('node_hidden', Canvas(2, 2), 1, 1), 'depleted': S('node_hidden', Canvas(2, 2), 1, 1), 'regrow': S('node_hidden', Canvas(2, 2), 1, 1)}
+    c = Canvas(16, 8); md = R('mud'); c.ellipse(8, 5, 7, 2.5, md[2]); c.ellipse(6, 4, 3, 1.2, md[3]); c.put(11, 6, md[1]); c.outline_inside(md[0])
+    d = Canvas(16, 8); d.ellipse(8, 5, 7, 2.5, md[1]); d.ellipse(8, 5, 3, 1.3, md[0]); d.outline_inside(md[0])
+    out['clay'] = {'full': S('node_clay_full', c, 8, 7), 'depleted': S('node_clay_dep', d, 8, 7), 'regrow': S('node_clay_dep', d, 8, 7)}
+    c = Canvas(10, 8); c.line(1, 6, 7, 1, st[3]); c.poly([(2, 6), (7, 1), (8, 3), (5, 6)], st[4]); c.line(2, 6, 6, 2, st[2])
+    out['feather'] = {'full': S('node_feather_full', c, 5, 7), 'depleted': S('node_feather_dep', Canvas(2, 2), 1, 1), 'regrow': S('node_feather_dep', Canvas(2, 2), 1, 1)}
+    # nocturnal: glow caps with moondew beads, ghostcap, night lily, lantern moth
+    gc = mushrooms(0, glow=True).c.copy()
+    for (x, y) in ((3, 4), (8, 3), (11, 5)): gc.put(x, y, R('moonlight')[2])
+    out['glowcap'] = {'full': S('node_glowcap_full', gc, 7, 9), 'depleted': S('node_glowcap_dep', mushrooms(0, glow=True).c.copy(), 7, 9), 'regrow': S('node_glowcap_dep', mushrooms(0, glow=True).c.copy(), 7, 9)}
+    c = Canvas(12, 14); c.rect(5, 6, 2, 7, mi[2]); c.put(5, 6, mi[1]); c.ellipse(6, 5, 4.5, 3, mi[2]); c.ellipse(5, 4, 2.5, 1.5, R('moonlight')[2]); c.put(3, 7, mi[1]); c.put(9, 7, mi[1]); c.outline_inside(mi[0])
+    out['ghostcap'] = {'full': S('node_ghostcap_full', c, 6, 13), 'depleted': S('node_ghostcap_dep', Canvas(2, 2), 1, 1), 'regrow': S('node_ghostcap_dep', Canvas(2, 2), 1, 1)}
+    c = Canvas(14, 10); li = R('lily'); c.ellipse(7, 6, 6, 3, li[2]); c.put(11, 7, li[1]); c.put(6, 8, li[1])
+    for dx, dy in ((0, -2), (-2, 0), (2, 0), (0, 1)): c.put(6 + dx, 4 + dy, mi[2])
+    c.put(6, 4, R('moonlight')[2]); c.put(5, 3, R('moonlight')[1]); c.put(7, 3, R('moonlight')[1])
+    d = lily_pad(1).c.copy()
+    out['nightlily'] = {'full': S('node_nightlily_full', c, 7, 8), 'depleted': S('node_nightlily_dep', d, 5, 6), 'regrow': S('node_nightlily_dep', d, 5, 6)}
+    c = Canvas(12, 8); c.poly([(1, 2), (6, 4), (1, 7)], mi[2]); c.poly([(11, 2), (6, 4), (11, 7)], mi[2]); c.rect(5, 2, 2, 5, mi[1]); c.put(3, 4, R('moonlight')[2]); c.put(9, 4, R('moonlight')[2]); c.put(5, 1, mi[0]); c.put(7, 1, mi[0])
+    out['moth'] = {'full': S('node_moth_full', c, 6, 7), 'depleted': S('node_moth_dep', Canvas(2, 2), 1, 1), 'regrow': S('node_moth_dep', Canvas(2, 2), 1, 1)}
+    return out
