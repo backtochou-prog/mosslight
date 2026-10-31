@@ -506,6 +506,15 @@ bottom where the object sits.
 * Metal: bevel light on upper-left edges, rust as warm pitting clusters.
 * Luminous: contents two ranks brighter than their outline, one pale core.
 
+**Hi-res derivative (32 × 32).** The UI displays a 32 px set derived from the
+16 px grids by EPX (Scale2x) plus a cleanup pass: diagonals are smoothed,
+flat edges stay crisp, no colours are invented, lone pixels are absorbed.
+It doubles the apparent resolution of curves (cap domes, crystal facets,
+key bows) but it is a derivative, not new authorship: new detail still
+belongs in the 16 px grid, which remains the single editable source. When a
+pixel artist takes over, the 32 px files are the natural canvas to refine by
+hand, and the build will prefer a hand-edited `icons32/<id>.png` if present.
+
 **G. Checklist for every new asset (fish, insects, crops, furniture, tools,
 monsters, NPCs, props).** 1 silhouette test at 1×; 2 padding and bounds;
 3 five tones, material-correct; 4 outline from the material's family;

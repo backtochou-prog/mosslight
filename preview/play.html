@@ -90,9 +90,9 @@ async function boot() {
   Survival.init(DATA.survival, { WorldClock, SeasonState, Player, Interaction, DATA, keyframes: DATA.keyframes });
   const IT = '../assets/items/';
   const gdata = { items: await loadJSON(IT + 'items.json'), tools: await loadJSON(IT + 'tools.json'), nodes: await loadJSON(IT + 'nodes.json'), icons: await loadJSON(IT + 'icons.json'), natlas: await loadJSON(IT + 'nodes_atlas.json') };
-  const iconIdx = await loadIdx(IT + 'icons_idx.png'); const nodeIdx = await loadIdx(IT + 'nodes_idx.png');
+  const iconIdx = await loadIdx(IT + 'icons_idx.png'); const iconIdx32 = await loadIdx(IT + 'icons32_idx.png'); const nodeIdx = await loadIdx(IT + 'nodes_idx.png');
   DATA.nodeIdx = nodeIdx; DATA.nodeAtlasW = 6 * 28;
-  Gather.init(gdata, { Survival, WorldClock, SeasonState, WeatherState, Player, Camera, iconIdx, iconW: gdata.icons.cols * gdata.icons.size });
+  Gather.init(gdata, { Survival, WorldClock, SeasonState, WeatherState, Player, Camera, iconIdx, iconIdx32, iconW: gdata.icons.cols * gdata.icons.size });
   Survival.Dev.mount(document.getElementById('dev'));
   if (location.search.includes('dev=1')) { document.getElementById('dev').style.display = ''; document.getElementById('devtoggle').checked = true; }
   WorldClock.paused = false;

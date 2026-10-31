@@ -132,3 +132,9 @@ To reach shipping quality the project needs:
 ## Icon overhaul (Prompt 08)
 
 Finished (hand-authored, validated): all 50 items and 5 tools — `assets/items/icons/<id>.png`, atlas `icons_idx.png`, gallery `renders/icon_gallery.png`, before/after `renders/compare_p08_icons.png`. Placeholders: none. The build marks any item without a grid with an explicit "?" tile and lists it in `icons_validation.json`, so future additions cannot silently ship generic art.
+
+## 32 px icon set (resolution pass)
+
+| Item | Status | Notes |
+|---|---|---|
+| icons32/*.png (55) | derived (EPX + cleanup of the hand grids) | smoother curves, same palette; not hand-refined at 32 px yet — the honest next step for an artist |
