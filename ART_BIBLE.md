@@ -445,6 +445,75 @@ gathering at dusk (string-light pools, wind, leaves), summer pond evening
   one-line key hint at the bottom. The field guide shows unknown entries as
   dim silhouettes with a question mark.
 
+## 7j. ITEM AND OBJECT PIXEL-ART STANDARD (v0.8, mandatory for all future assets)
+
+**Why the previous icons looked generic.** The 12 × 12 sheet from Prompt 07
+was built from filled ellipses, lines and single highlight pixels with one
+generic shading rule for every material. Consequences: silhouettes were
+interchangeable (every flower a plus sign, every rock an oval), there was no
+internal structure (no gills, no facets, no grain), highlights were lone
+pixels instead of clusters, outlines were the same darkest rank everywhere,
+pale objects were under-defined and dark objects muddy, and 12 px left no
+room for a second shadow tone or a specular, so materials read as flat
+colour. A procedure cannot decide *where a berry's highlight should sit* –
+that decision is the art.
+
+**Pipeline.** Icons are **authored by hand as pixel grids** in
+`tools/icons/*.py` (one character per pixel, a per-icon legend mapping
+characters to palette family and rank). The grid is the artwork; the build
+(`tools/build_icons.py`) compiles it to individual transparent PNGs
+(`assets/items/icons/<id>.png`), an atlas, a gallery and a validation
+report. No image generation and no pixel editor exist in the authoring
+environment; if Aseprite becomes available, the PNGs are the hand-off and
+the grids remain the editable source.
+
+**A. Canvas and silhouette.** 16 × 16 logical pixels, at least 1 px of
+transparent padding left and right (tall objects such as flowers on stems
+may use all 16 rows); large objects fill about 12 × 12, small
+ones about 8 × 10 so scale stays plausible. Every object must be
+identifiable from its silhouette alone: cap-and-stem, bow-shank-bit, quill
+curve, bottle neck. No two items may share a silhouette.
+
+**B. Pixel clusters.** Detail is placed in clusters of 2–6 pixels that
+describe form (a facet, a gill row, a berry lobe, a tooth). No isolated
+noise pixels, no dithering inside an icon. One specular pixel is allowed
+only on glass, metal, wet fruit and crystal.
+
+**C. Colour depth.** Five tones minimum per material: base, shadow, deep
+accent/outline, main highlight, and a specular or distinctive detail where
+the material has one. Tones come from the family ramps (`palette.py`) so
+icons stay in harmony with the world; a second family is used for an
+embedded material (copper in rock, liquid in glass).
+
+**D. Outlines.** The outline is the material's own darkest rank: warm
+dark brown for wood and mushrooms, blue-grey for stone and glass, plum for
+berries and amethyst, dark cream for pale petals. Luminous objects outline
+in their cool dark tone and keep the light *inside*. Transparent materials
+outline the glass and let the contents show through with a highlight stripe.
+
+**E. Lighting.** One light, upper-left, for every icon: highlight cluster on
+the upper-left face, shadow on the lower-right, cast contact shade along the
+bottom where the object sits.
+
+**F. Texture by material.**
+* Wood: horizontal grain lines one rank darker, a knot, end grain as rings.
+* Stone: three facets at different ranks, one crack line.
+* Ore: stone body plus 2–3 vein clusters of the metal's colour with one glint.
+* Crystal: 2–3 facets split by a vertical ridge, lit facet pale, a white edge.
+* Mushroom: domed cap with a lit rim, a dark gill row, cream stem with one shadow side.
+* Fruit: round lobes with one highlight each, a leaf, a stem.
+* Glass: outline, a vertical reflection stripe, contents darker at the bottom.
+* Metal: bevel light on upper-left edges, rust as warm pitting clusters.
+* Luminous: contents two ranks brighter than their outline, one pale core.
+
+**G. Checklist for every new asset (fish, insects, crops, furniture, tools,
+monsters, NPCs, props).** 1 silhouette test at 1×; 2 padding and bounds;
+3 five tones, material-correct; 4 outline from the material's family;
+5 upper-left light; 6 clusters not noise; 7 compare against the gallery for
+consistency; 8 technical validation passes (`icons_validation.json`);
+9 placed in the UI at the real display size and looked at. Technical
+validation never substitutes for the visual check.
+
 ## 8. What is *not* acceptable
 
 * Flat single-colour tiles; visible tile grids; any 16-px repetition that the

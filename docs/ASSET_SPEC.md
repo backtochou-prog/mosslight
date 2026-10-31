@@ -125,6 +125,10 @@ To reach shipping quality the project needs:
 
 | Item | Status | Notes |
 |---|---|---|
-| 50 item icons (12 px) | O- | original and readable; the flower and herb icons are the weakest and would benefit from an artist pass |
+| 55 item + tool icons (16 px, hand-authored pixel grids in `tools/icons/`) | O | Prompt 08 overhaul: every icon individually designed, five tones per material, material-coloured outlines, upper-left light; validated (padding, uniqueness, references). Honest quality note: solid cozy-sim tier for mushrooms, berries, crystals, tools, bottle, key, gear; the plainer ones (clay, moss, seeds, bolt, circuit) are correct but would still gain from a professional artist's pass |
 | 63 node sprites (21 kinds × states) | O- | in palette; the tree marker and hidden nodes are intentionally invisible |
 | items not yet placeable in the clearing (9) | catalog only | antler, eggshell, yarrow, burdock root, wild seeds, fern frond, resin, starshard, emberroot — defined, iconed, awaiting biomes/nodes |
+
+## Icon overhaul (Prompt 08)
+
+Finished (hand-authored, validated): all 50 items and 5 tools — `assets/items/icons/<id>.png`, atlas `icons_idx.png`, gallery `renders/icon_gallery.png`, before/after `renders/compare_p08_icons.png`. Placeholders: none. The build marks any item without a grid with an explicit "?" tile and lists it in `icons_validation.json`, so future additions cannot silently ship generic art.

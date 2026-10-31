@@ -63,6 +63,17 @@ stays the base scene's.
 Interactable Area2D component, touch controls). **Unvalidated**: Godot cannot
 run in the authoring environment.
 
+## Icon art pipeline (Prompt 08)
+
+Item and tool icons are **hand-authored pixel grids** in `tools/icons/pilot.py`
+and `tools/icons/catalog.py` (one character per pixel, a legend of palette
+family + rank per icon). `python3 tools/build_icons.py` compiles them to
+`assets/items/icons/<id>.png` (16 × 16, transparent), the atlas and
+`icons.json`, writes `icons_validation.json` (dimensions, padding, uniqueness,
+every item has an icon) and renders `renders/icon_gallery.png` at 1×, 2× and
+4×. Any item without a grid gets an explicit "?" tile and is listed as a
+placeholder. The standard is in ART_BIBLE §7j.
+
 ## Gathering, inventory, tools and the field guide
 
 `preview/gather.js` (loaded by `play.html`). Data in `assets/items/`:

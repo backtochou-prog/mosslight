@@ -119,20 +119,20 @@ window.Gather = (() => {
     card(g, x, y, w, h) { g.fillStyle = 'rgba(40,34,26,0.94)'; g.fillRect(x, y, w, h); g.strokeStyle = 'rgba(222,220,180,0.5)'; g.lineWidth = 1; g.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1); g.strokeStyle = 'rgba(222,220,180,0.18)'; g.strokeRect(x + 3.5, y + 3.5, w - 7, h - 7); },
     draw(g, vw, vh, safe, table) {
       // tool bar (always): four small slots, active one lit
-      const tb = ['hand', 'knife', 'axe', 'pickaxe']; const tx0 = vw - 8 - safe - tb.length * 16, ty0 = 8 + safe;
-      tb.forEach((id, i) => { const x = tx0 + i * 16; g.fillStyle = Tools.active === id ? 'rgba(90,70,40,0.9)' : 'rgba(24,30,28,0.72)'; g.fillRect(x, ty0, 15, 15); g.strokeStyle = Tools.active === id ? '#ffd98a' : 'rgba(222,220,180,0.4)'; g.strokeRect(x + 0.5, ty0 + 0.5, 14, 14); this.drawIcon(g, 'tool_' + id, x + 1, ty0 + 1, 1, table);
-        const o = Tools.owned[id]; if (o && o.durability !== null) { g.fillStyle = 'rgba(0,0,0,0.5)'; g.fillRect(x + 2, ty0 + 13, 11, 1); g.fillStyle = o.durability > 10 ? '#8cc452' : '#c0392b'; g.fillRect(x + 2, ty0 + 13, Math.round(11 * o.durability / TOOLS[id].durability), 1); } });
+      const tb = ['hand', 'knife', 'axe', 'pickaxe']; const tx0 = vw - 8 - safe - tb.length * 20, ty0 = 8 + safe;
+      tb.forEach((id, i) => { const x = tx0 + i * 20; g.fillStyle = Tools.active === id ? 'rgba(90,70,40,0.9)' : 'rgba(24,30,28,0.72)'; g.fillRect(x, ty0, 19, 19); g.strokeStyle = Tools.active === id ? '#ffd98a' : 'rgba(222,220,180,0.4)'; g.strokeRect(x + 0.5, ty0 + 0.5, 18, 18); this.drawIcon(g, 'tool_' + id, x + 1, ty0 + 1, 1, table);
+        const o = Tools.owned[id]; if (o && o.durability !== null) { g.fillStyle = 'rgba(0,0,0,0.5)'; g.fillRect(x + 2, ty0 + 17, 15, 1); g.fillStyle = o.durability > 10 ? '#8cc452' : '#c0392b'; g.fillRect(x + 2, ty0 + 17, Math.round(15 * o.durability / TOOLS[id].durability), 1); } });
       // pickup pops
       for (const p of FX.pops) { g.globalAlpha = Math.min(1, 1.6 - p.t); g.font = '9px ui-monospace, monospace'; g.textAlign = 'center'; g.fillStyle = p.rare ? '#ffd98a' : '#eedcb0'; g.fillText(p.text, p.x - W.Camera.ix(), p.y - W.Camera.iy() - p.t * 14); g.globalAlpha = 1; }
       if (this.open === 'inventory') this.drawInventory(g, vw, vh, safe, table);
       if (this.open === 'journal') this.drawJournal(g, vw, vh, safe, table);
     },
     drawInventory(g, vw, vh, safe, table) {
-      const cols = 6, cell = 22, rows = Inventory.size / cols; const pw = cols * cell + 16 + 150, ph = rows * cell + 40; const x0 = Math.round(vw / 2 - pw / 2), y0 = Math.round(vh / 2 - ph / 2);
+      const cols = 6, cell = 24, rows = Inventory.size / cols; const pw = cols * cell + 16 + 150, ph = rows * cell + 40; const x0 = Math.round(vw / 2 - pw / 2), y0 = Math.round(vh / 2 - ph / 2);
       this.card(g, x0, y0, pw, ph); g.font = '9px ui-monospace, monospace'; g.textAlign = 'left'; g.fillStyle = '#eedcb0'; g.fillText('Pack', x0 + 10, y0 + 14); g.fillStyle = 'rgba(238,220,176,0.55)'; g.fillText(`${Inventory.slots.filter(Boolean).length}/${Inventory.size} · ${Inventory.weight().toFixed(1)} kg`, x0 + 40, y0 + 14);
       for (let i = 0; i < Inventory.size; i++) { const cx = x0 + 10 + (i % cols) * cell, cy = y0 + 22 + Math.floor(i / cols) * cell; const sel = i === this.cursor;
         g.fillStyle = sel ? 'rgba(90,70,40,0.9)' : 'rgba(24,30,28,0.6)'; g.fillRect(cx, cy, cell - 2, cell - 2); g.strokeStyle = sel ? '#ffd98a' : 'rgba(222,220,180,0.25)'; g.strokeRect(cx + 0.5, cy + 0.5, cell - 3, cell - 3);
-        const s = Inventory.slots[i]; if (s) { this.drawIcon(g, s.id, cx + 4, cy + 3, 1, table); g.fillStyle = RCOL[ITEMS[s.id].rarity]; g.fillRect(cx + 2, cy + cell - 5, 3, 1); if (s.qty > 1) { g.font = '8px ui-monospace, monospace'; g.textAlign = 'right'; g.fillStyle = '#eedcb0'; g.fillText(s.qty, cx + cell - 4, cy + cell - 4); } } }
+        const s = Inventory.slots[i]; if (s) { this.drawIcon(g, s.id, cx + 3, cy + 3, 1, table); g.fillStyle = RCOL[ITEMS[s.id].rarity]; g.fillRect(cx + 2, cy + cell - 4, 3, 1); if (s.qty > 1) { g.font = '8px ui-monospace, monospace'; g.textAlign = 'right'; g.fillStyle = '#eedcb0'; g.fillText(s.qty, cx + cell - 4, cy + cell - 4); } } }
       const dx = x0 + 10 + cols * cell + 6, dy = y0 + 22; const s = Inventory.slots[this.cursor];
       g.textAlign = 'left'; g.font = '9px ui-monospace, monospace';
       if (s) { const it = ITEMS[s.id]; this.drawIcon(g, s.id, dx, dy, 2, table); g.fillStyle = '#eedcb0'; g.fillText(it.name, dx + 30, dy + 10); g.fillStyle = RCOL[it.rarity]; g.fillText(it.rarity.replace('_', ' '), dx + 30, dy + 21); g.fillStyle = 'rgba(238,220,176,0.55)'; g.fillText(`${it.category} · ×${s.qty}`, dx + 30, dy + 32);
@@ -142,20 +142,20 @@ window.Gather = (() => {
     },
     wrap(g, text, x, y, w, lh, col) { g.fillStyle = col; const words = text.split(' '); let line = '', yy = y; for (const wd of words) { const t = line ? line + ' ' + wd : wd; if (g.measureText(t).width > w) { g.fillText(line, x, yy); line = wd; yy += lh; } else line = t; } if (line) g.fillText(line, x, yy); return yy; },
     drawJournal(g, vw, vh, safe, table) {
-      const pw = Math.min(vw - 20, 330), ph = Math.min(vh - 20, 170); const x0 = Math.round(vw / 2 - pw / 2), y0 = Math.round(vh / 2 - ph / 2);
+      const pw = Math.min(vw - 20, 340), ph = Math.min(vh - 20, 180); const x0 = Math.round(vw / 2 - pw / 2), y0 = Math.round(vh / 2 - ph / 2);
       this.card(g, x0, y0, pw, ph); g.font = '9px ui-monospace, monospace'; g.textAlign = 'left';
       const cat = this.cats[this.journalCat]; const items = DB.byCategory(cat); const [n, tot] = Journal.progress(cat); const [na, ta] = Journal.progress();
       g.fillStyle = '#eedcb0'; g.fillText('Field guide', x0 + 10, y0 + 14); g.fillStyle = 'rgba(238,220,176,0.55)'; g.fillText(`${na}/${ta} found`, x0 + 80, y0 + 14);
       this.cats.forEach((c, i) => { g.fillStyle = i === this.journalCat ? '#ffd98a' : 'rgba(238,220,176,0.5)'; g.fillText(c.replace('_', ' '), x0 + 10 + i * 62, y0 + 28); });
       g.fillStyle = 'rgba(222,220,180,0.3)'; g.fillRect(x0 + 10, y0 + 32, pw - 20, 1);
-      const cols = 7, cell = 20; items.forEach((it, i) => { const cx = x0 + 10 + (i % cols) * cell, cy = y0 + 38 + Math.floor(i / cols) * cell; const sel = i === this.journalCursor; const known = !!Journal.found[it.id];
+      const cols = 7, cell = 22; items.forEach((it, i) => { const cx = x0 + 10 + (i % cols) * cell, cy = y0 + 38 + Math.floor(i / cols) * cell; const sel = i === this.journalCursor; const known = !!Journal.found[it.id];
         g.fillStyle = sel ? 'rgba(90,70,40,0.9)' : 'rgba(24,30,28,0.5)'; g.fillRect(cx, cy, cell - 2, cell - 2); if (sel) { g.strokeStyle = '#ffd98a'; g.strokeRect(cx + 0.5, cy + 0.5, cell - 3, cell - 3); }
-        if (known) this.drawIcon(g, it.id, cx + 3, cy + 3, 1, table); else { g.globalAlpha = 0.25; this.drawIcon(g, it.id, cx + 3, cy + 3, 1, table.map(() => [60, 60, 70])); g.globalAlpha = 1; g.fillStyle = 'rgba(238,220,176,0.5)'; g.font = '8px ui-monospace, monospace'; g.fillText('?', cx + 7, cy + 13); g.font = '9px ui-monospace, monospace'; } });
+        if (known) this.drawIcon(g, it.id, cx + 2, cy + 2, 1, table); else { g.globalAlpha = 0.28; this.drawIcon(g, it.id, cx + 2, cy + 2, 1, table.map(() => [70, 66, 80])); g.globalAlpha = 1; g.fillStyle = 'rgba(238,220,176,0.6)'; g.font = '8px ui-monospace, monospace'; g.fillText('?', cx + 8, cy + 14); g.font = '9px ui-monospace, monospace'; } });
       const it = items[Math.min(this.journalCursor, items.length - 1)]; if (!it) return; const e = Journal.entry(it.id); const dx = x0 + 10 + cols * cell + 8, dy = y0 + 40; const dw = pw - (dx - x0) - 10;
       if (e.known) { this.drawIcon(g, it.id, dx, dy, 2, table); g.fillStyle = '#eedcb0'; g.fillText(e.name, dx + 30, dy + 10); g.fillStyle = RCOL[e.rarity]; g.fillText(e.rarity.replace('_', ' '), dx + 30, dy + 21);
         let yy = this.wrap(g, e.description, dx, dy + 36, dw, 10, '#d9cfae') + 14; g.fillStyle = 'rgba(238,220,176,0.6)';
         g.fillText('habitat: ' + (e.habitat || 'unknown'), dx, yy); yy += 10; g.fillText('season: ' + e.seasons + '   time: ' + e.time, dx, yy); yy += 10; if (e.weather !== 'any') { g.fillText('weather: ' + e.weather, dx, yy); yy += 10; }
-        g.fillText(`first found day ${e.first.day}, ${e.first.season}, ${e.first.phase.replace('_', ' ')} · ×${e.count}`, dx, yy); }
+        this.wrap(g, `first found day ${e.first.day}, ${e.first.season}, ${e.first.phase.replace('_', ' ')} · ×${e.count}`, dx, yy, dw, 10, 'rgba(238,220,176,0.6)'); }
       else { g.fillStyle = 'rgba(238,220,176,0.5)'; g.fillText('Not yet found.', dx, dy + 10); g.fillStyle = RCOL[e.rarity]; g.fillText(e.rarity.replace('_', ' '), dx, dy + 21); this.wrap(g, 'Keep looking. Some things show only in certain seasons, weather or hours.', dx, dy + 36, dw, 10, 'rgba(217,207,174,0.6)'); }
       g.fillStyle = 'rgba(238,220,176,0.45)'; g.font = '8px ui-monospace, monospace'; g.fillText('← → entries · Q/E category · J close', x0 + 10, y0 + ph - 8);
     },
