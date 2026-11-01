@@ -151,6 +151,7 @@ def forest_edge(ctx: Context, clearing_dist, species_by_band, n_cand=3000, spaci
         if d < min_edge or exclude(tx, ty): return None
         if ctx.mm.vertex_mat(tx, ty) >= SHALLOW: return None
         if ctx.on_path(tx * T, ty * T, margin=0.9): return None
+        if ctx.in_keepout(tx * T, ty * T): return None           # landmarks and their clusters stay clear of trees
         return d
     def sp(tx, ty):
         d = clearing_dist(tx, ty)

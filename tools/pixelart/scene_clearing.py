@@ -42,7 +42,7 @@ def build(lib) -> Scene:
         nb = sum(p[1 + dy:p.shape[0] - 1 + dy, 1 + dx:p.shape[1] - 1 + dx].astype(int) for dy in (-1, 0, 1) for dx in (-1, 0, 1) if (dx, dy) != (0, 0))
         mm.m[f & (nb <= 3)] = GRASS
     mm.metaball([(12, 10, 2.5)], FOREST)
-    mm.disc(17.5, 16.3, 2.6, WORN); mm.disc(19.6, 17, 1.9, WORN)
+    mm.disc(17.4, 16.4, 2.4, WORN); mm.disc(19.8, 17.2, 2.2, WORN); mm.disc(15.2, 15.2, 1.2, WORN)
     # paths: the main way to the dock (widening at the camp), the narrow climb to the ruin
     main = Path([(4.5, 30.5), (6.5, 27), (9.5, 24), (13.5, 21.5), (17.5, 19.5), (22, 18.6), (26.5, 19.2), (30, 18.4), (33, 17.2)],
                 width=[0.85, 0.9, 0.95, 1.0, 1.1, 1.0, 0.95, 0.9, 0.85], surface=DIRT, verge=WORN, verge_width=1.4, seed=3)
@@ -61,21 +61,44 @@ def build(lib) -> Scene:
         mm.litter_disc(x, y, r, 0.9)
 
     ctx = C.Context(sc, lib, seed=2026, paths=[main, branch],
-                    keepouts=[(272, 250, 44), (318, 270, 26), (560, 290, 40), (616, 100, 60), (418, 190, 16)])
+                    keepouts=[(272, 250, 48), (318, 276, 34), (560, 290, 40), (616, 100, 60), (418, 190, 18), (330, 224, 40), (470, 358, 44)])
 
-    # ------------------------------------------------------------------ landmarks (hand-placed)
-    for (nm, x, y, fl) in (('tent', 272, 244, False), ('campfire', 318, 270, False), ('log_seat', 296, 294, False), ('lantern_post', 236, 262, False),
-                           ('stump_0', 352, 306, False), ('oak_0', 216, 206, False), ('boulder_l0', 318, 214, False), ('boulder_mossy_m1', 352, 226, False),
-                           ('boulder_s0', 300, 230, False), ('dock', 540, 282, False), ('ruin_back', 616, 94, False), ('ruin_side', 560, 130, False),
-                           ('rubble_0', 672, 108, False), ('rubble_1', 548, 142, False), ('beam', 606, 126, False), ('rowan_1', 640, 118, False),
-                           ('dead_0', 700, 150, False), ('hollowlog_0', 480, 400, False), ('rowan_0', 418, 186, False), ('willow_0', 690, 232, True),
-                           ('boulder_mossy_l0', 610, 338, False), ('boulder_s1', 640, 346, False)):
+    # ------------------------------------------------------------------ landmarks, composed as clusters
+    # THE CAMP — a refuge someone lives in: the tent backs onto the big oak and the rock
+    # outcrop (shelter from the north), its mouth faces the fire; the fire pit sits on a
+    # worn patch between tent and path; firewood is stacked by the tent where it stays dry;
+    # the lantern post stands where it lights both the entrance and the fire; a flat stone
+    # is the step at the tent mouth; two seats face the fire.
+    for (nm, x, y, fl) in (('oak_0', 216, 206, False), ('tent', 272, 244, False), ('woodpile', 238, 228, False), ('flatstone_0', 282, 252, False),
+                           ('campfire', 318, 274, False), ('log_seat', 296, 296, False), ('log_seat', 346, 290, True), ('lantern_post', 236, 266, False), ('stump_0', 350, 310, False)):
         ctx.place(nm, x, y, flip=fl)
-    sc.add(lib['lantern_hanging'], 583, 262); sc.add(lib['lantern_hanging'], 612, 88)
-    sc.add(lib['glowshroom_0'], 596, 132); sc.add(lib['glowshroom_1'], 684, 122); sc.add(lib['glowshroom_0'], 500, 408)
-    sc.add(lib['fern_1'], 288, 236); sc.add(lib['fern_0'], 372, 236, flip=True); sc.add(lib['fern_2'], 512, 388)
-    sc.add(lib['shroom_1'], 456, 414); sc.add(lib['branch_0'], 150, 330); sc.add(lib['branch_1'], 420, 150, flip=True)
-    sc.add(lib['flowers_b1'], 440, 198); sc.add(lib['stone_0'], 400, 196)
+    # THE OUTCROP — one main boulder, a second leaning against it, two smaller stones at its
+    # foot, a flat slab in front, moss on the shaded side, ferns in its shade. Small stones gather
+    # around big ones; nothing stands alone.
+    for (nm, x, y, fl) in (('boulder_l0', 318, 214, False), ('boulder_mossy_m1', 346, 222, False), ('boulder_s0', 302, 224, False), ('stone_1', 360, 230, False),
+                           ('stone_0', 332, 232, False), ('flatstone_1', 326, 238, False), ('fern_1', 290, 236, False), ('fern_0', 372, 236, True), ('tuft_2', 356, 238, False)):
+        ctx.place(nm, x, y, flip=fl)
+    sc.decals.append(C.moss_patch(306, 222, 12, 5)); sc.decals.append(C.moss_patch(352, 230, 9, 4))
+    # THE POND — dock on the near bank at the path's end, willow on the far bank, a mossy
+    # boulder pair where the bank turns, reeds and lilies by rule.
+    for (nm, x, y, fl) in (('dock', 540, 282, False), ('willow_0', 690, 232, True), ('boulder_mossy_l0', 610, 338, False), ('boulder_s1', 640, 346, False), ('stone_1', 626, 350, False)):
+        ctx.place(nm, x, y, flip=fl)
+    sc.add(lib['lantern_hanging'], 583, 262)
+    # THE RUIN — two walls, rubble at the ends, a fallen beam, a young rowan growing inside,
+    # a dead tree beyond, glow-caps in the damp corner.
+    for (nm, x, y, fl) in (('ruin_back', 616, 94, False), ('ruin_side', 560, 130, False), ('rubble_0', 672, 108, False), ('rubble_1', 548, 142, False),
+                           ('beam', 606, 126, False), ('rowan_1', 640, 118, False), ('dead_0', 700, 150, False)):
+        ctx.place(nm, x, y, flip=fl)
+    sc.add(lib['lantern_hanging'], 612, 88); sc.add(lib['glowshroom_0'], 596, 132); sc.add(lib['glowshroom_1'], 684, 122)
+    # THE FALLEN TREE — hollow log with its torn roots, a snapped branch, moss, mushrooms in
+    # its shade and a fern: a quiet corner at the clearing's south-east.
+    for (nm, x, y, fl) in (('hollowlog_0', 470, 356, False), ('branch_1', 442, 372, False), ('fern_2', 502, 344, False), ('shroom_1', 446, 370, False)):
+        ctx.place(nm, x, y, flip=fl)
+    sc.add(lib['roots_1'], 490, 354, layer='ground', flip=True); sc.add(lib['glowshroom_0'], 490, 364)
+    sc.decals.append(C.moss_patch(460, 360, 14, 5)); sc.decals.append(C.leaf_litter(472, 366, 24, 14))
+    # THE LONE ROWAN — the meadow's landmark, with a flower ring at its foot
+    ctx.place('rowan_0', 418, 186); sc.add(lib['flowers_b1'], 440, 198); sc.add(lib['flowers_w0'], 400, 196); sc.add(lib['tuft_1'], 426, 194)
+    sc.add(lib['branch_0'], 196, 226)                                   # a branch under the big oak, where branches fall
 
     # ------------------------------------------------------------------ rules
     def species(band, tx, ty, r_):
@@ -92,20 +115,27 @@ def build(lib) -> Scene:
     C.pond_margin(ctx, keep=lambda x, y: not (500 < x < 600 and 250 < y < 310))
     trees = [(p.x, p.y) for p in sc.placements if 'tree' in p.sprite.tags and 'sapling' not in p.sprite.tags]
     C.path_decorate(ctx, trees)
-    C.sheltered_corner(ctx, 190, 232)              # under the big oak, beside the tent
+    C.sheltered_corner(ctx, 182, 236)              # under the big oak, beside the woodpile
     C.sheltered_corner(ctx, 112, 300)
     C.ruin_overgrowth(ctx, 556, 90, 680, 136)
     # sunny meadow: wildflowers in two loose drifts, none in the shade
-    C.vegetation_cluster(ctx, 400, 350, 70, [('flowers_w', 2, 3), ('flowers_b', 2, 2), ('flowers_y', 2, 1), ('tuft_', 3, 2)], spacing=16, n=9)
+    C.vegetation_cluster(ctx, 370, 352, 60, [('flowers_w', 2, 3), ('flowers_b', 2, 2), ('flowers_y', 2, 1), ('tuft_', 3, 2)], spacing=16, n=9)
     C.vegetation_cluster(ctx, 560, 380, 50, [('flowers_p', 2, 2), ('flowers_r', 2, 1), ('tallgrass_', 3, 2), ('tuft_', 3, 1)], spacing=16, n=6)
     C.vegetation_cluster(ctx, 170, 262, 36, [('flowers_w', 2, 2), ('shroom_', 2, 1), ('tuft_', 3, 1)], spacing=14, n=4)
     C.vegetation_cluster(ctx, 470, 150, 44, [('flowers_y', 2, 2), ('flowers_w', 2, 1), ('tuft_', 3, 1)], spacing=15, n=5)
     C.vegetation_cluster(ctx, 300, 150, 40, [('flowers_b', 2, 2), ('flowers_p', 2, 1), ('tallgrass_', 3, 1)], spacing=15, n=4)
     C.vegetation_cluster(ctx, 640, 400, 36, [('flowers_r', 2, 2), ('flowers_y', 2, 1)], spacing=14, n=3)
     C.foreground_frame(ctx)
-    for (x, y, rx, ry) in ((176, 192, 11, 6), (300, 190, 8, 4), (150, 110, 9, 5), (660, 380, 10, 6)):
+    for (x, y, rx, ry) in ((176, 192, 11, 6), (150, 110, 9, 5), (660, 380, 10, 6)):
         sc.decals.append(C.moss_patch(x, y, rx, ry))
     sc.decals.append(C.pebbles(520, 280, 22, 7)); sc.decals.append(C.pebbles(330, 318, 18, 5))
+    def scorch(c, r_):
+        m = c.ellipse_mask(318, 276, 16, 7); ok = np.isin(c.a, PAL.ramp('grass') + PAL.ramp('worn'))
+        ys, xs = np.nonzero(m & ok)
+        for k in range(len(xs)):
+            x, y = int(xs[k]), int(ys[k]); d = ((x - 318) / 16) ** 2 + ((y - 276) / 7) ** 2
+            if d < 0.45 or (d < 0.8 and (x + y) % 2 == 0) or (d < 1 and (x * 3 + y) % 5 == 0): c.put(x, y, PAL.i('earth', 1) if d < 0.45 else PAL.i('earth', 2))
+    sc.decals.append(scorch)
     sc.decals.append(distant_backdrop)
 
     # ------------------------------------------------------------------ night-only

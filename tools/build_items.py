@@ -83,12 +83,12 @@ TOOLS = [
 ]
 # ---- world resource nodes placed in the clearing. Each: visual kind + states, drop table, tool, conditions, respawn.
 NODES = [
- dict(id='branches_log', kind='branch_pile', x=462, y=410, r=20, label='Gather branches', activity='gather_branches', tool='hand', drops=[['branch',2,3]], yields=2, respawn_hours=12, respawn_mode='time'),
+ dict(id='branches_log', kind='branch_pile', x=452, y=366, r=20, label='Gather branches', activity='gather_branches', tool='hand', drops=[['branch',2,3]], yields=2, respawn_hours=12, respawn_mode='time'),
  dict(id='branches_oak', kind='branch_pile', x=190, y=222, r=20, label='Gather branches', activity='gather_branches', tool='hand', drops=[['branch',1,3],['bark',0,1]], yields=2, respawn_hours=12, respawn_mode='time'),
  dict(id='branches_west', kind='branch_pile', x=150, y=334, r=20, label='Gather branches', activity='gather_branches', tool='hand', drops=[['branch',1,2]], yields=1, respawn_hours=18, respawn_mode='time'),
  dict(id='stones_outcrop', kind='stone_pile', x=338, y=238, r=22, label='Gather stones', activity='gather_stones', tool='hand', drops=[['stone',2,3],['flint',0,1]], yields=3, respawn_hours=36, respawn_mode='time'),
  dict(id='stones_path', kind='stone_pile', x=520, y=292, r=18, label='Gather stones', activity='gather_stones', tool='hand', drops=[['stone',1,2]], yields=2, respawn_hours=36, respawn_mode='time'),
- dict(id='mush_log', kind='mushroom', x=500, y=416, r=16, label='Pick mushrooms', activity='pick_plant', tool='hand', drops=[['mushroom_brown',1,2]], yields=1, respawn_hours=48, respawn_mode='time', seasons='spring,autumn'),
+ dict(id='mush_log', kind='mushroom', x=490, y=372, r=16, label='Pick mushrooms', activity='pick_plant', tool='hand', drops=[['mushroom_brown',1,2]], yields=1, respawn_hours=48, respawn_mode='time', seasons='spring,autumn'),
  dict(id='mush_north', kind='mushroom', x=432, y=142, r=16, label='Pick mushrooms', activity='pick_plant', tool='hand', drops=[['mushroom_brown',1,1],['mushroom_red',0,1]], yields=1, respawn_hours=48, respawn_mode='time', seasons='spring,autumn'),
  dict(id='daisies_s', kind='flower_w', x=386, y=352, r=16, label='Pick daisies', activity='pick_plant', tool='hand', drops=[['daisy',1,2]], yields=2, respawn_hours=72, respawn_mode='season', seasons='spring,summer', time='day'),
  dict(id='bells_e', kind='flower_b', x=470, y=234, r=16, label='Pick bellflowers', activity='pick_plant', tool='hand', drops=[['bellflower',1,2]], yields=2, respawn_hours=72, respawn_mode='season', seasons='spring,summer'),
@@ -107,7 +107,7 @@ NODES = [
  dict(id='lintel_key', kind='hidden', x=612, y=98, r=14, label='Feel along the lintel', activity='search', tool='hand', drops=[['key_old',1,1]], yields=1, respawn_hours=None, respawn_mode='none', unique=['key_old']),
  # nocturnal / conditional
  dict(id='moondew_ruin', kind='glowcap', x=596, y=134, r=16, label='Collect moondew', activity='pick_plant', tool='hand', drops=[['moondew',1,1]], yields=1, respawn_hours=24, respawn_mode='time', time='night'),
- dict(id='moondew_log', kind='glowcap', x=500, y=408, r=16, label='Collect moondew', activity='pick_plant', tool='hand', drops=[['moondew',1,1]], yields=1, respawn_hours=24, respawn_mode='time', time='night'),
+ dict(id='moondew_log', kind='glowcap', x=490, y=364, r=16, label='Collect moondew', activity='pick_plant', tool='hand', drops=[['moondew',1,1]], yields=1, respawn_hours=24, respawn_mode='time', time='night'),
  dict(id='ghostcap_forest', kind='ghostcap', x=132, y=214, r=16, label='Pick the ghostcap', activity='pick_plant', tool='hand', drops=[['ghostcap',1,1]], yields=1, respawn_hours=72, respawn_mode='time', time='deep_night', weather='after_rain,rain', seasons='spring,autumn'),
  dict(id='nightlily_pond', kind='nightlily', x=640, y=300, r=18, label='Pick the night lily', activity='pick_plant', tool='hand', drops=[['nightlily',1,1]], yields=1, respawn_hours=48, respawn_mode='time', time='night', seasons='summer,autumn'),
  dict(id='moth_lantern', kind='moth', x=244, y=256, r=16, label='Catch the moth', activity='pick_plant', tool='hand', drops=[['lantern_moth',1,1]], yields=1, respawn_hours=24, respawn_mode='time', time='night'),

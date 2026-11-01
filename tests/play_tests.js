@@ -17,7 +17,7 @@ function check(name, ok, detail) { results.push({ name, ok: !!ok, detail }); con
   // 1. eight directions + 2. diagonal normalisation (open meadow, 90 fixed steps = 1.5 s)
   const dirs = { E: [1, 0], W: [-1, 0], N: [0, -1], S: [0, 1], NE: [0.7071, -0.7071], NW: [-0.7071, -0.7071], SE: [0.7071, 0.7071], SW: [-0.7071, 0.7071] };
   const dist = {};
-  for (const [k, ax] of Object.entries(dirs)) { await at(420, 300); await p.evaluate(a => SIM.step(a, 90), ax); const [x, y] = await pos(); dist[k] = Math.hypot(x - 420, y - 300); const sgn = Math.sign(x - 420) === Math.sign(ax[0]) && Math.sign(y - 300) === Math.sign(ax[1]); check(`moves ${k}`, dist[k] > 60 && sgn, `${dist[k].toFixed(1)} px`); }
+  for (const [k, ax] of Object.entries(dirs)) { await at(396, 262); await p.evaluate(a => SIM.step(a, 90), ax); const [x, y] = await pos(); dist[k] = Math.hypot(x - 396, y - 262); const sgn = Math.sign(x - 396) === Math.sign(ax[0]) && Math.sign(y - 262) === Math.sign(ax[1]); check(`moves ${k}`, dist[k] > 60 && sgn, `${dist[k].toFixed(1)} px`); }
   const card = (dist.E + dist.W + dist.N + dist.S) / 4, diag = (dist.NE + dist.NW + dist.SE + dist.SW) / 4;
   check('diagonal speed == cardinal speed', Math.abs(card - diag) < 1.5, `cardinal ${card.toFixed(1)} px, diagonal ${diag.toFixed(1)} px over 1.5 s`);
   // smooth stop: after releasing input the player stops within a few pixels
@@ -53,7 +53,7 @@ function check(name, ok, detail) { results.push({ name, ok: !!ok, detail }); con
   await at(272, 262); await p.evaluate(() => Interaction.update(0.016)); let cur = await p.evaluate(() => Interaction.current && Interaction.current.label); check('prompt near tent', cur === 'Rest until morning', `prompt: ${cur}`); await shot('prompt_tent');
   await at(400, 330); await p.evaluate(() => Interaction.update(0.016)); cur = await p.evaluate(() => Interaction.current); check('no prompt in the open meadow', cur === null);
   await at(246, 268); await p.evaluate(() => { Interaction.update(0.016); Input.actionPressed = true; Interaction.update(0.016); Input.actionPressed = false; Input._actionLatch = false; }); const msg = await p.evaluate(() => Interaction.message); check('interact shows the object text', !!msg && msg.includes('lantern'), msg); await shot('message_lantern');
-  for (const [id, x, y] of [['dock', 566, 296], ['ruin', 612, 118], ['lantern', 246, 268], ['campfire', 300, 280], ['log', 480, 412]]) { await at(x, y); await p.evaluate(() => Interaction.update(0.016)); cur = await p.evaluate(() => Interaction.current && Interaction.current.id); check(`prompt: ${id}`, cur === id, `got ${cur}`); }
+  for (const [id, x, y] of [['dock', 566, 296], ['ruin', 612, 118], ['lantern', 246, 268], ['campfire', 300, 280], ['log', 470, 368]]) { await at(x, y); await p.evaluate(() => Interaction.update(0.016)); cur = await p.evaluate(() => Interaction.current && Interaction.current.id); check(`prompt: ${id}`, cur === id, `got ${cur}`); }
   // 7. visibility day / night
   await at(262, 286); await p.evaluate(() => { setPreset(1); WorldClock.paused = true; }); await shot('day_at_camp');
   await p.evaluate(() => { setPreset(9); WorldClock.paused = true; }); await at(262, 286); await shot('night_at_camp');

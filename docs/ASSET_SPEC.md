@@ -138,3 +138,12 @@ Finished (hand-authored, validated): all 50 items and 5 tools — `assets/items/
 | Item | Status | Notes |
 |---|---|---|
 | icons32/*.png (55) | derived (EPX + cleanup of the hand grids) | smoother curves, same palette; not hand-refined at 32 px yet — the honest next step for an artist |
+
+## Composition and grounding pass (Prompt 09)
+
+| Item | Status | Notes |
+|---|---|---|
+| fire pit (burning / unlit / embers) | O | redesigned: nine-stone irregular ring, ash bed, log tripod, firelight on the front stones, scorch decal |
+| woodpile, flat slabs ×2 | O | new habitation props |
+| boulders (embedded base, crown moss) | O- | sit in the ground now; silhouettes still code-authored |
+| contact footprints + ground occlusion | O (renderer) | every solid sprite declares `contact`; rocks/logs/trunks declare `ground_blend` |

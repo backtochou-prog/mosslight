@@ -38,6 +38,31 @@ class Scene:
         return p
 
     # -- passes -------------------------------------------------------------
+    def draw_contact(self, c: Canvas, p: Placement):
+        """Ground contact: the footprint directly under the base is one rank darker
+        (two ranks at the very centre line) so the object presses on the ground."""
+        s = self.resolve(p.sprite)
+        if s is None or not getattr(s, 'contact', None): return
+        rx, ry = s.contact
+        m = c.ellipse_mask(p.x, p.y, rx, ry)
+        c.shade_mask(m)
+        core = c.ellipse_mask(p.x, p.y, rx * 0.6, max(0.6, ry * 0.5))
+        c.shade_mask(core)
+
+    def ground_blend(self, c: Canvas, p: Placement, ground):
+        """Grass blades overlap the base edge of rocks, logs, stumps and trunks
+        where the ground beneath is grass, so the object sits in, not on."""
+        s = self.resolve(p.sprite)
+        if s is None or not getattr(s, 'ground_blend', False): return
+        g = PAL.ramp('grass'); gset = set(g)
+        rx = s.contact[0] if s.contact else s.w // 3
+        rng = random.Random(p.x * 31 + p.y * 17)
+        for k in range(int(rx * 0.8)):
+            x = p.x + rng.randint(-int(rx), int(rx)); y = p.y + rng.randint(-1, 0)
+            if 0 <= x < c.w and 0 <= y < c.h and int(ground[y, x]) in gset and c.a[y, x] != 0 and c.a[y, x] not in gset:
+                c.put(x, y, g[3]); 
+                if y > 0 and c.a[y - 1, x] != 0 and rng.random() < 0.5: c.put(x, y - 1, g[4])
+
     def draw_shadow(self, c: Canvas, p: Placement):
         s = self.resolve(p.sprite)
         if s is None or not s.shadow: return
@@ -109,7 +134,10 @@ class Scene:
         for p in ground: self.draw_sprite(c, p)
         if self.shadows_baked:
             for p in ysort + fg: self.draw_shadow(c, p)
-        for p in sorted(ysort, key=lambda p: (p.y, p.x)): self.draw_sprite(c, p)
+        for p in ysort + fg: self.draw_contact(c, p)             # contact darkening is always baked: it is part of the object sitting there
+        groundcopy = c.a.copy()
+        for p in sorted(ysort, key=lambda p: (p.y, p.x)):
+            self.draw_sprite(c, p); self.ground_blend(c, p, groundcopy)
         for p in sorted(fg, key=lambda p: (p.y, p.x)): self.draw_sprite(c, p)
         if night:
             for (x, y, idx) in self.night_pixels: c.put(x, y, idx)

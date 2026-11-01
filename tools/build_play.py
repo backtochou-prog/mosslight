@@ -90,7 +90,7 @@ inter = [
     {'id': 'campfire', 'label': 'Tend the fire', 'x': 318, 'y': 272, 'r': 22, 'activity': 'tend_fire', 'text': 'You feed the fire a few sticks. The embers brighten.'},
     {'id': 'dock', 'label': 'Fish from the platform', 'x': 562, 'y': 288, 'r': 30, 'activity': 'fish_attempt', 'text': 'You cast from the weathered platform. Something stirs under the lily pads.'},
     {'id': 'ruin', 'label': 'Examine the ruins', 'x': 612, 'y': 108, 'r': 34, 'activity': 'inspect', 'text': 'Two walls and a lintel, taken back by moss. Someone hung a lantern here recently.'},
-    {'id': 'log', 'label': 'Gather branches', 'x': 480, 'y': 404, 'r': 22, 'activity': 'gather_branches', 'text': 'You pull dry branches from beside the hollow log.'},
+    {'id': 'log', 'label': 'Gather branches', 'x': 470, 'y': 360, 'r': 22, 'activity': 'gather_branches', 'text': 'You pull dry branches from beside the hollow log.'},
     {'id': 'rowan', 'label': 'Gather branches', 'x': 418, 'y': 188, 'r': 18, 'activity': 'gather_branches', 'text': 'You snap a few fallen rowan twigs. The berries can wait.'},
     {'id': 'outcrop', 'label': 'Gather stones', 'x': 326, 'y': 230, 'r': 26, 'activity': 'gather_stones', 'text': 'Loose stones around the mossy boulders. Good for a fire ring.'},
     {'id': 'oak', 'label': 'Cut the big oak', 'x': 216, 'y': 212, 'r': 22, 'activity': 'cut_tree', 'text': 'You work at the old oak for a while. It is far from done.'},

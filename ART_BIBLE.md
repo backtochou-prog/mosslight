@@ -543,6 +543,64 @@ pixel does, so three passes are now standard and run automatically in the build:
 What this cannot do: give a 16-px face or flower the detail of a 32-px
 sprite. That would be a tile-size milestone, planned separately.
 
+## 7l. ENVIRONMENTAL COMPOSITION AND OBJECT GROUNDING (v1.0, mandatory for every scene)
+
+**Ground contact (three layers, all baked by the renderer):**
+1. *Cast shadow* — one palette rank down, offset to the lower-right by the
+   object's height (trees 9 px, props 1–3 px), soft dithered rim on large
+   objects. Shape follows the object: long and low for logs, round for rocks,
+   a narrow ellipse for posts, none for flowers and mushrooms.
+2. *Contact footprint* — the ellipse directly under the base, no offset, one
+   rank down with a two-rank core. This is what stops objects floating. Every
+   sprite declares `contact=(rx, ry)` sized to its real footprint (a pebble
+   2.5 × 0.8, a large boulder ≈ 0.85 × its half-width × 1.5, a trunk the
+   root flare).
+3. *Ground occlusion* — rocks, logs, stumps and trunks declare
+   `ground_blend`; grass blades are drawn over their base edge wherever the
+   ground beneath is grass. Boulders also sit *into* the soil: the bottom row
+   is flattened with a soil line.
+All three use the single upper-left light. A shadow on the wrong side is a bug.
+
+**Rocks.** Pebbles (≤ 7 px, pairs), stones (12 px), boulders (medium 24,
+large 34), flat slabs (low, mostly buried, used as steps and seats), mossy
+variants (blanket on the crown and a fringe on the shaded side, never on the
+lit face). Rocks come in *formations*: one main boulder, a second leaning on
+it, two or three small stones at the foot on the downhill side, a slab in
+front, moss on the ground in its shade, ferns where it is damp. A single rock
+in open meadow needs a reason (a marker, a seat).
+
+**Fire pit.** Nine stones of three sizes in an irregular ring, the larger
+flat ones at the front; an ash bed with scorched ground outside the ring
+(`scorch` decal); three logs leaning in a tripod over the embers; flames with
+a hot core; firelight on the front stones. States: unlit, burning, embers.
+
+**Clusters, not scatter.** Every object belongs to a composition with a
+reason: *camp* (tent backs onto shelter, mouth faces the fire, woodpile where
+it stays dry, lantern where it lights both entrance and fire, seats facing the
+fire, a flat stone as the step, worn ground at the mouth and around the pit);
+*outcrop*; *pond edge* (dock at the path's end, reeds in the shallows of the
+far bank, lilies in sheltered water, a boulder pair where the bank turns);
+*ruin* (walls, rubble at the ends, a beam, a sapling inside, glow-caps in the
+damp corner); *fallen tree* (log, torn roots, a snapped branch, moss,
+mushrooms in its shade, a fern) placed in the open so it can be seen.
+
+**Hierarchy and negative space.** One primary focal point (the camp), one
+secondary (pond + dock), one tertiary (ruin), one landmark in the open
+meadow (the lone rowan). Keep-out zones around every cluster (trees,
+understorey and flowers never intrude). Open meadow is deliberate; density
+rises toward the forest edge and the shaded corners and falls in the sun.
+
+**Ecological placement.** Moss on crowns and shaded bases; mushrooms in
+shade near wood; reeds in standing water; litter under oaks; small stones
+around big ones; roots at trunk bases crossing paths; flowers in sun in
+patches with space between them; worn ground where feet go.
+
+**Scene recipe (future maps).** 1 carve the clearing from forest; 2 place
+the landmarks as clusters with keep-outs; 3 paths with aprons into the
+landmarks; 4 run forest_edge, understorey, pond_margin, path_decorate within
+the keep-outs; 5 one flower cluster per sunny pocket; 6 foreground frame;
+7 inspect at 1× and 4×: contact, shadow side, hierarchy, empty space.
+
 ## 8. What is *not* acceptable
 
 * Flat single-colour tiles; visible tile grids; any 16-px repetition that the

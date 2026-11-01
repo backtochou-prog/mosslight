@@ -22,6 +22,8 @@ class Sprite:
     shadow: tuple | None = None  # (rx, ry, dx, dy) relative to origin, None = no shadow
     soft_shadow: bool = False    # dither the outer ring of the shadow
     tags: tuple = ()
+    contact: tuple | None = None # (rx, ry) footprint darkened directly under the base: the object presses on the ground
+    ground_blend: bool = False   # grass may overlap the base edge (rocks, logs, stumps): the object sits IN the ground
 
     @property
     def w(self): return self.c.w
@@ -205,7 +207,7 @@ def tree_oak(variant=0) -> Sprite:
     c.outline_inside(oak[0], mask=m)
     for i in range(3):                          # leaves hanging over the trunk
         c.put(tx - 4 + i * 3, cy + 21 + (i % 2), oak[1])
-    return Sprite(f'oak_{variant}', c, tx, base_y, shadow=(28, 6, 9, -1), soft_shadow=True, tags=('tree', 'ysort'))
+    return Sprite(f'oak_{variant}', c, tx, base_y, shadow=(28, 6, 9, -1), soft_shadow=True, tags=('tree', 'ysort'), contact=(8, 1.6), ground_blend=True)
 
 def tree_birch(variant=0) -> Sprite:
     rng = random.Random(200 + variant)
@@ -238,7 +240,7 @@ def tree_birch(variant=0) -> Sprite:
     c.a[under] = b[0]
     sun_tips(c, rng, (c.a == b[4]), 6, b[5])
     c.outline_inside(b[0], mask=m)
-    return Sprite(f'birch_{variant}', c, tx, base_y, shadow=(16, 4, 6, -1), soft_shadow=True, tags=('tree', 'ysort'))
+    return Sprite(f'birch_{variant}', c, tx, base_y, shadow=(16, 4, 6, -1), soft_shadow=True, tags=('tree', 'ysort'), contact=(4, 1.2), ground_blend=True)
 
 def tree_pine(variant=0) -> Sprite:
     rng = random.Random(300 + variant)
@@ -277,7 +279,7 @@ def tree_pine(variant=0) -> Sprite:
     _speckle_in(c, rng, m, 18, p[1], clump=1)
     sun_tips(c, rng, (c.a == p[3]), 8, p[5])
     c.outline_inside(p[0], mask=m)
-    return Sprite(f'pine_{variant}', c, tx, base_y, shadow=(16, 5, 6, -1), soft_shadow=True, tags=('tree', 'ysort'))
+    return Sprite(f'pine_{variant}', c, tx, base_y, shadow=(16, 5, 6, -1), soft_shadow=True, tags=('tree', 'ysort'), contact=(5, 1.4), ground_blend=True)
 
 def tree_rowan(variant=0) -> Sprite:
     rng = random.Random(400 + variant)
@@ -299,7 +301,7 @@ def tree_rowan(variant=0) -> Sprite:
         if m[by, bx]:
             c.put(bx, by, berry[1]); c.put(bx + 1, by, berry[0]); c.put(bx, by + 1, berry[0]); c.put(bx + 1, by - 1, berry[2])
     c.outline_inside(r[0], mask=m)
-    return Sprite(f'rowan_{variant}', c, tx, base_y, shadow=(11, 3, 4, -1), soft_shadow=True, tags=('tree', 'ysort'))
+    return Sprite(f'rowan_{variant}', c, tx, base_y, shadow=(11, 3, 4, -1), soft_shadow=True, tags=('tree', 'ysort'), contact=(3.5, 1.2), ground_blend=True)
 
 def tree_dead(variant=0) -> Sprite:
     """Bare dead tree for the forest edge / ruin: silhouette interest."""
@@ -341,7 +343,7 @@ def shrub(variant=0, berries=False) -> Sprite:
             if m[by, bx]: c.put(bx, by, b[1]); c.put(bx + 1, by, b[0])
     sun_tips(c, rng, c.a == s[4], 5, s[5])
     c.outline_inside(s[0], mask=m)
-    return Sprite(f'shrub_{variant}{"b" if berries else ""}', c, 14, 20, shadow=(11, 3, 2, 1), tags=('plant', 'ysort'))
+    return Sprite(f'shrub_{variant}{"b" if berries else ""}', c, 14, 20, shadow=(11, 3, 2, 1), tags=('plant', 'ysort'), contact=(9, 1.2))
 
 def fern(variant=0) -> Sprite:
     """Six tapered fronds radiating from a crown; lit fronds face upper-left."""
@@ -455,7 +457,8 @@ def boulder(size='l', variant=0) -> Sprite:
         for i in range(rng.randint(3, 5)):
             if m[y0 + i, x0 + (i // 2)]: c.put(x0 + (i // 2), y0 + i, st[1])
     # moss on the shaded lower-left and on top (damp, mossy outcrop)
-    mm = (c.ellipse_mask(cx - rx * 0.4, cy + ry * 0.55, rx * 0.6, ry * 0.4) | c.ellipse_mask(cx - rx * 0.1, cy - ry * 0.7, rx * 0.5, ry * 0.3)) & m
+    # moss: a cap on the crown (damp, shaded by the canopy above) and a fringe low on the shaded right side
+    mm = (c.ellipse_mask(cx + rx * 0.1, cy - ry * 0.66, rx * 0.4, ry * 0.24) | c.ellipse_mask(cx + rx * 0.5, cy + ry * 0.4, rx * 0.3, ry * 0.26)) & m
     c.a[mm] = mo[1]
     ys, xs = np.nonzero(mm)
     for k in range(len(xs)):
@@ -464,19 +467,25 @@ def boulder(size='l', variant=0) -> Sprite:
     ring = grown[:, :] & ~mm & m
     ys, xs = np.nonzero(ring)
     for k in range(len(xs)):
-        if (xs[k] * 3 + ys[k]) % 2 == 0: c.put(int(xs[k]), int(ys[k]), mo[0])
-    # base contact: dark band where the rock meets the ground
-    base = c.ellipse_mask(cx + 1, cy + ry, rx * 0.9, 1.5) & m
-    c.a[base] = st[0]
+        if (xs[k] + ys[k] * 2) % 4 == 0: c.put(int(xs[k]), int(ys[k]), mo[0])       # a sparse, soft moss edge
+    # embedded: the bottom row is cut flat and a soil line runs along it, the rock sits IN the ground
+    cut = c.ellipse_mask(cx, cy + ry + 1.9, rx + 1, 1.6) & m      # only the very bottom row flattens: the rock sits a little into the soil
+    c.a[cut] = 0
+    m = _mask_of(c, ['stone'])
+    base = c.ellipse_mask(cx + 1, cy + ry - 0.6, rx * 0.7, 0.9) & m
+    c.a[base] = st[1]
+    ys, xs = np.nonzero(m); by = int(ys.max())
+    for x in range(int(xs.min()) + 1, int(xs.max())):
+        if m[by, x]: c.put(x, by, PAL.i('dirt', 1))
     c.outline_inside(st[0], mask=m)
-    return Sprite(f'boulder_{size}{variant}', c, cx, cy + ry, shadow=(rx, max(2, ry // 2), 2, 1), tags=('rock', 'ysort'))
+    return Sprite(f'boulder_{size}{variant}', c, cx, by, shadow=(rx, max(2, ry // 2), 3, 0), tags=('rock', 'ysort'), contact=(rx * 0.85, 1.5), ground_blend=True)
 
 def stone_small(variant=0) -> Sprite:
     rng = random.Random(1100 + variant)
     c = Canvas(7, 5); p = R('pebble')
     c.ellipse(3, 2.5, 3, 1.8, p[1]); c.put(2, 1, p[2]); c.put(1, 2, p[2]); c.hline(2, 4, 4, p[0]); c.put(5, 3, p[0])
     if variant % 2: c.put(2, 3, R('moss')[1])
-    return Sprite(f'stone_{variant}', c, 3, 4, tags=('rock', 'ysort'))
+    return Sprite(f'stone_{variant}', c, 3, 4, tags=('rock', 'ysort'), contact=(2.5, 0.8), ground_blend=True)
 
 def fallen_log(variant=0) -> Sprite:
     rng = random.Random(1200 + variant)
@@ -507,7 +516,7 @@ def fallen_log(variant=0) -> Sprite:
     # small mushrooms growing on the shaded side
     sh = mushrooms(variant, glow=False)
     c.blit(sh.c, 24, yc - 2)
-    return Sprite(f'log_{variant}', c, 20, yc + 5, shadow=(20, 3, 2, 1), tags=('prop', 'ysort'))
+    return Sprite(f'log_{variant}', c, 20, yc + 5, shadow=(19, 2.5, 2, 1), tags=('prop', 'ysort'), contact=(18, 1.4), ground_blend=True)
 
 def stump(variant=0) -> Sprite:
     c = Canvas(16, 14); w = R('wood'); mo = R('moss')
@@ -516,7 +525,7 @@ def stump(variant=0) -> Sprite:
     c.hline(2, 4, 12, w[1]); c.hline(11, 14, 12, w[0])
     c.put(4, 9, mo[1]); c.put(5, 10, mo[1]); c.put(4, 10, mo[2])
     c.outline_inside(w[0])
-    return Sprite(f'stump_{variant}', c, 8, 12, shadow=(6, 2, 1, 1), tags=('prop', 'ysort'))
+    return Sprite(f'stump_{variant}', c, 8, 12, shadow=(6, 2, 1, 1), tags=('prop', 'ysort'), contact=(5, 1.2), ground_blend=True)
 
 def fallen_branch(variant=0) -> Sprite:
     rng = random.Random(1300 + variant)
@@ -579,27 +588,67 @@ def tent() -> Sprite:
                              (rx - hw + 1, far_base - 1, rx - hw - 5, far_base - 4), (rx + hw - 1, far_base - 1, rx + hw + 5, far_base - 4)):
         c.line(ex, ey, px, py, rope[1]); c.put(px, py, wd[1]); c.put(px, py - 1, wd[2])
     c.outline_inside(cv[0], mask=_mask_of(c, ['canvas']))
-    return Sprite('tent', c, rx, near_base, shadow=(27, 5, 6, -1), soft_shadow=True, tags=('structure', 'ysort'))
+    return Sprite('tent', c, rx, near_base, shadow=(27, 5, 6, -1), soft_shadow=True, tags=('structure', 'ysort'), contact=(23, 1.6))
 
-def campfire() -> Sprite:
-    W, H = 26, 20
-    c = Canvas(W, H); st = R('stone'); pb = R('pebble'); em = R('ember'); w = R('wood'); f = R('fire')
-    cx, cy = 13, 13
-    c.ellipse(cx, cy, 8, 4.5, em[0]); c.ellipse(cx, cy, 5, 2.5, em[1])
-    # crossed logs
-    c.line(cx - 5, cy + 2, cx + 5, cy - 2, w[2]); c.line(cx - 5, cy + 3, cx + 5, cy - 1, w[1])
-    c.line(cx - 5, cy - 2, cx + 5, cy + 2, w[3]); c.line(cx - 5, cy - 1, cx + 5, cy + 3, w[1])
-    # low flame
-    c.poly([(cx, cy - 8), (cx + 3, cy - 2), (cx - 3, cy - 2)], f[1])
-    c.poly([(cx, cy - 6), (cx + 2, cy - 2), (cx - 2, cy - 2)], f[2])
-    c.put(cx, cy - 4, f[3]); c.put(cx + 2, cy - 6, f[1])
-    # stone ring
-    for i in range(9):
-        a = i / 9 * math.pi * 2
-        sx, sy = cx + math.cos(a) * 9, cy + math.sin(a) * 5
-        c.ellipse(sx, sy, 2.2, 1.6, st[3] if sy < cy else st[2]); c.put(int(sx) - 1, int(sy) - 1, st[4]); c.put(int(sx) + 1, int(sy) + 1, st[1])
+def campfire(state='burning') -> Sprite:
+    """A built fire pit: nine stones of different sizes set in an irregular
+    ring, two flat ones at the front; an ash bed; three logs in a leaning
+    tripod; flames with a hot core; embers. States: unlit, burning, embers."""
+    W, H = 34, 26
+    c = Canvas(W, H); st = R('stone'); em = R('ember'); w = R('wood'); f = R('fire'); md = R('mud')
+    cx, cy = 17, 17
+    # ash bed and scorched ring (ground discolouration inside the pit)
+    c.ellipse(cx, cy, 10, 5, md[1]); c.ellipse(cx, cy, 7.5, 3.6, st[1]); c.ellipse(cx - 1, cy, 5, 2.4, st[2] if state != 'unlit' else st[1])
+    if state == 'burning': c.ellipse(cx, cy + 0.5, 4, 1.8, em[1])
+    if state == 'embers': c.ellipse(cx, cy + 0.5, 4, 1.8, em[1]); c.put(cx - 2, cy, f[1]); c.put(cx + 1, cy + 1, f[1]); c.put(cx + 3, cy - 1, f[0])
+    # logs: two lean in from the left and right, one lies across the back
+    c.line(cx - 7, cy + 3, cx - 1, cy - 2, w[3]); c.line(cx - 7, cy + 4, cx - 1, cy - 1, w[2]); c.line(cx - 6, cy + 5, cx, cy, w[1])
+    c.line(cx + 7, cy + 3, cx + 1, cy - 2, w[3]); c.line(cx + 7, cy + 4, cx + 1, cy - 1, w[2]); c.line(cx + 6, cy + 5, cx, cy, w[1])
+    c.line(cx - 5, cy - 3, cx + 5, cy - 3, w[2]); c.line(cx - 5, cy - 2, cx + 5, cy - 2, w[1])
+    if state != 'unlit':
+        c.put(cx - 3, cy, em[1]); c.put(cx + 2, cy - 1, em[1])             # charred ends glow
+    # flames
+    if state == 'burning':
+        c.poly([(cx - 1, cy - 11), (cx + 3, cy - 4), (cx - 4, cy - 4)], f[1])
+        c.poly([(cx + 3, cy - 8), (cx + 5, cy - 4), (cx + 1, cy - 4)], f[1])
+        c.poly([(cx - 1, cy - 8), (cx + 2, cy - 4), (cx - 3, cy - 4)], f[2])
+        c.poly([(cx, cy - 6), (cx + 1, cy - 4), (cx - 1, cy - 4)], f[3])
+        c.put(cx + 3, cy - 10, f[1]); c.put(cx - 4, cy - 7, f[1]); c.put(cx + 1, cy - 7, f[3])
+    # the stone ring: (x, y, rx, ry, rank) hand-set, larger flat stones at the front, small ones at the back
+    ring = [(cx - 10, cy + 1, 3, 2.2, 3), (cx - 7, cy + 5, 3.4, 2.0, 3), (cx - 1, cy + 6, 3.6, 2.0, 4), (cx + 6, cy + 5, 3.2, 2.0, 3), (cx + 10, cy + 1, 2.8, 2.2, 3),
+            (cx + 8, cy - 3, 2.4, 1.8, 2), (cx + 3, cy - 5, 2.2, 1.6, 2), (cx - 4, cy - 5, 2.4, 1.6, 2), (cx - 9, cy - 3, 2.2, 1.8, 2)]
+    for (x, y, rx, ry, rank) in ring:
+        c.ellipse(x, y, rx, ry, st[rank]); c.ellipse(x - rx * 0.3, y - ry * 0.4, rx * 0.55, ry * 0.5, st[min(5, rank + 1)])
+        c.ellipse(x + rx * 0.2, y + ry * 0.5, rx * 0.7, ry * 0.4, st[max(0, rank - 1)]); c.put(int(x + rx * 0.5), int(y + ry * 0.6), st[0])
+        if state != 'unlit' and y > cy: c.put(int(x), int(y - ry * 0.6), f[2] if rank == 4 else st[min(5, rank + 1)])   # firelight on the front stones
     c.outline_inside(st[0], mask=_mask_of(c, ['stone']))
-    return Sprite('campfire', c, cx, cy + 5, shadow=(9, 3, 1, 1), tags=('prop', 'ysort', 'light'))
+    name = {'burning': 'campfire', 'unlit': 'campfire_unlit', 'embers': 'campfire_embers'}[state]
+    return Sprite(name, c, cx, cy + 7, shadow=None, tags=('prop', 'ysort', 'light', 'solid'), contact=(11, 1.4), ground_blend=True)
+
+def woodpile() -> Sprite:
+    """Split firewood stacked between two stakes: a sign that someone lives here."""
+    W, H = 26, 16
+    c = Canvas(W, H); w = R('wood'); cv = R('canvas')
+    for row, (y, n, x0) in enumerate(((11, 5, 2), (8, 4, 4), (5, 3, 6))):
+        for k in range(n):
+            x = x0 + k * 4
+            c.rect(x, y, 4, 3, w[3]); c.rect(x, y, 4, 1, w[4]); c.put(x + 3, y + 1, w[2]); c.put(x + 3, y + 2, w[1])
+            c.put(x + 1, y + 1, cv[3]); c.put(x + 2, y + 1, cv[2])          # pale split face
+    c.rect(1, 3, 1, 11, w[1]); c.rect(22, 5, 1, 9, w[1])                     # stakes
+    c.outline_inside(w[0])
+    return Sprite('woodpile', c, 12, 14, shadow=(11, 1.8, 2, 0), tags=('prop', 'ysort', 'solid'), contact=(10, 1.2), ground_blend=True)
+
+def flat_stone(variant=0) -> Sprite:
+    """A low flat slab, mostly buried: a step, a seat, a place to set a cup."""
+    rng = random.Random(3100 + variant)
+    W, H = 20, 9
+    c = Canvas(W, H); st = R('stone'); mo = R('moss')
+    c.ellipse(10, 5, 9, 3, st[2]); c.ellipse(9, 4, 7.5, 2, st[3]); c.ellipse(8, 3.5, 4, 1, st[4])
+    c.hline(3, 16, 7, st[1]); c.put(4, 6, st[1]); c.put(15, 6, st[1])
+    for _ in range(3): c.put(rng.randint(3, 16), rng.randint(2, 6), st[1])
+    c.put(14, 3, mo[1]); c.put(15, 3, mo[1]); c.put(4, 5, mo[1])
+    c.outline_inside(st[0])
+    return Sprite(f'flatstone_{variant}', c, 10, 7, shadow=None, tags=('rock', 'ysort'), contact=(8, 1.2), ground_blend=True)
 
 def log_seat() -> Sprite:
     c = Canvas(24, 10); w = R('wood')
@@ -609,7 +658,7 @@ def log_seat() -> Sprite:
     c.ellipse(21, 5, 2, 3, w[2]); c.ellipse(21, 5, 1, 1.6, w[3])
     c.hline(5, 9, 4, w[1]); c.hline(12, 15, 6, w[1])
     c.outline_inside(w[0])
-    return Sprite('log_seat', c, 12, 8, shadow=(10, 2, 1, 1), tags=('prop', 'ysort'))
+    return Sprite('log_seat', c, 12, 8, shadow=(10, 1.6, 1, 1), tags=('prop', 'ysort'), contact=(9, 1.2), ground_blend=True)
 
 def lantern_post() -> Sprite:
     W, H = 16, 34
@@ -625,7 +674,7 @@ def lantern_post() -> Sprite:
     c.vline(lx - 3, ly + 2, ly + 8, mt[1]); c.vline(lx + 3, ly + 2, ly + 8, mt[0])
     c.rect(lx - 3, ly + 9, 7, 1, mt[1]); c.put(lx, ly + 10, mt[0])
     c.outline_inside(w[0], mask=_mask_of(c, ['wood']))
-    return Sprite('lantern_post', c, px, 31, shadow=(3, 1.5, 1, 1), tags=('prop', 'ysort', 'light'))
+    return Sprite('lantern_post', c, px, 31, shadow=(3, 1.2, 1, 1), tags=('prop', 'ysort', 'light'), contact=(2.5, 0.8))
 
 def lantern_hanging() -> Sprite:
     """Small hanging lantern (for the ruin doorway / dock post)."""
@@ -808,7 +857,7 @@ def build_library() -> dict[str, Sprite]:
         for v in range(2): add(boulder(sz, v))
     for v in range(2): add(stone_small(v))
     add(fallen_log(0)); add(stump(0)); add(fallen_branch(0)); add(fallen_branch(1))
-    add(tent()); add(campfire()); add(log_seat()); add(lantern_post()); add(lantern_hanging()); add(fishing_dock())
+    add(tent()); add(campfire()); add(campfire('unlit')); add(campfire('embers')); add(woodpile()); add(flat_stone(0)); add(flat_stone(1)); add(log_seat()); add(lantern_post()); add(lantern_hanging()); add(fishing_dock())
     add(ruin_back_wall()); add(ruin_side_wall()); add(rubble(0)); add(rubble(1)); add(fallen_beam())
     add(mannequin())
     return lib
@@ -924,7 +973,7 @@ def hollow_log(variant=0) -> Sprite:
     c.outline_inside(wg[0], mask=c.mask())
     sh = mushrooms(variant + 1)
     c.blit(sh.c, 14, yc - 1)
-    return Sprite(f'hollowlog_{variant}', c, 20, yc + 5, shadow=(20, 3, 2, 1), tags=('prop', 'ysort', 'solid'))
+    return Sprite(f'hollowlog_{variant}', c, 20, yc + 5, shadow=(19, 2.5, 2, 1), tags=('prop', 'ysort', 'solid'), contact=(18, 1.4), ground_blend=True)
 
 def boulder_mossy(size='m', variant=0) -> Sprite:
     b = boulder(size, variant + 5)
@@ -941,7 +990,7 @@ def boulder_mossy(size='m', variant=0) -> Sprite:
     for k in range(len(xs)):
         if (xs[k] + ys[k]) % 2 == 0: c.put(int(xs[k]), int(ys[k]), mo[0])
     c.outline_inside(st[0], mask=m)
-    return Sprite(f'boulder_mossy_{size}{variant}', c, b.ox, b.oy, shadow=b.shadow, tags=('rock', 'ysort', 'solid'))
+    return Sprite(f'boulder_mossy_{size}{variant}', c, b.ox, b.oy, shadow=b.shadow, tags=('rock', 'ysort', 'solid'), contact=b.contact, ground_blend=True)
 
 def tree_willow(variant=0) -> Sprite:
     """Weeping crown: a dome of clusters with long hanging strands. Belongs at water."""
