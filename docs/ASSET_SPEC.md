@@ -171,3 +171,7 @@ Finished (hand-authored, validated): all 50 items and 5 tools — `assets/items/
 ## Third-party generated art (PixelLab)
 
 `tools/pixellab.py` generates images through the PixelLab API. Output lands in `assets/third_party/pixellab/` with a raw PNG, a world-palette index PNG and an entry in `provenance.json`. Nothing there is used by the game until it is deliberately adopted and reviewed against ART_BIBLE.md. The key is read from `PIXL_API_KEY` or `~/.config/mosslight/pixellab.env` and must never be committed.
+
+### Adopted PixelLab art
+
+`tools/pixelart/pl_assets.py` imports the generated sources in `assets/third_party/pixellab/`, cuts sheets apart, removes baked ground and maps each region onto chosen palette ramps, so seasons and night still apply. Adopted: tent, campfire, oak, birch, pine, willow and rowan trees, boulders, shrubs, ferns, flowers, reeds, lilies, logs, stump, woodpile, mushrooms, rubble, lantern post, ruin walls, footbridge. Winter versions are derived in code from the same drawings. Still code-drawn: terrain, water, banks, pier, signpost, player. The two generated tilesets were not used because they were noisier than the existing terrain. `provenance.json` records prompts and seeds.

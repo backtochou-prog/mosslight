@@ -212,30 +212,32 @@ def water_depth_pass(c: Canvas, rng_seed=9):
     return c
 
 
-def ice_pass(c: Canvas, seed=17):
-    """Winter: frozen water gets a pale rim where it meets the bank, a second
-    paler ring, and a few hairline cracks on the open ice."""
-    wr = PAL.ramp('water'); ice = PAL.ramp('ice')
-    water = np.isin(c.a, wr)
-    p = np.pad(water, 1)
-    inner = water & p[:-2, 1:-1] & p[2:, 1:-1] & p[1:-1, :-2] & p[1:-1, 2:]
-    rim1 = water & ~inner
-    q = np.pad(inner, 1)
-    inner2 = inner & q[:-2, 1:-1] & q[2:, 1:-1] & q[1:-1, :-2] & q[1:-1, 2:]
-    rim2 = inner & ~inner2
-    c.a[rim1] = ice[4]
-    idx = np.indices(c.a.shape)
-    c.a[rim2 & ((idx[0] + idx[1]) % 2 == 0)] = ice[3]
-    rng = random.Random(seed)
-    ys, xs = np.nonzero(inner2)
-    for _ in range(len(xs) // 90):
-        k = rng.randrange(len(xs)); x, y = int(xs[k]), int(ys[k])
-        dx, dy = rng.choice(((1, 0), (1, 1), (1, -1)))
-        for s in range(rng.randint(4, 9)):
-            if inner2[min(c.h - 1, max(0, y)), min(c.w - 1, max(0, x))]: c.put(x, y, ice[1])
-            x += dx; y += dy if s % 2 else 0
-    return c
-
+def ice_pass(c: Canvas):
+    """Winter water: one sheet of ice, long faint scratches and a few soft drifts. Stays in the water ramp so it remains water."""
+    wr = PAL.ramp('water'); half = PAL.ramp('water~'); m = np.isin(c.a, wr + half); c.a[m] = wr[3]
+    rng = random.Random(41); ys, xs = np.nonzero(m)
+    if not len(xs): return
+    for _ in range(26):
+        k = rng.randrange(len(xs)); x, y = int(xs[k]), int(ys[k]); L = rng.randint(8, 26)
+        for t in range(L):
+            X, Y = x + t, y + t // 3
+            if 0 <= X < c.w and 0 <= Y < c.h and m[Y, X]: c.a[Y, X] = wr[2]
+    for _ in range(9):
+        k = rng.randrange(len(xs)); x, y = int(xs[k]), int(ys[k]); e = c.ellipse_mask(x, y, rng.randint(10, 22), rng.randint(3, 6)) & m; c.a[e] = wr[5]
+def bank_pass(c: Canvas):
+    """Real banks instead of an outline: an earth cut face on north shores (land above water), damp mud on the other sides."""
+    wset = PAL.ramp('water') + PAL.ramp('water~'); w = np.isin(c.a, wset); h, W_ = w.shape; dr = PAL.ramp('dirt'); md = PAL.ramp('mud'); out = c.a.copy(); gr = PAL.ramp('grass')
+    def shift(a, dy, dx):
+        r = np.zeros_like(a); ys0, ys1 = max(0, dy), h + min(0, dy); xs0, xs1 = max(0, dx), W_ + min(0, dx); r[ys0:ys1, xs0:xs1] = a[ys0 - dy:ys1 - dy, xs0 - dx:xs1 - dx]; return r
+    land = ~w
+    near = np.zeros_like(w)
+    for dy in range(-2, 3):
+        for dx in range(-2, 3): near |= shift(w, dy, dx)
+    out[near & land] = md[2]
+    for k, col in ((1, dr[1]), (2, dr[2]), (3, dr[3]), (4, gr[2])):
+        out[shift(w, -k, 0) & land] = col
+    edge = shift(land, 1, 0) & w; out[edge] = wr_shade = PAL.ramp('water')[0]     # the bank's contact shadow on the water
+    c.a[:] = out
 
 def litter_pass(c: Canvas, mm: MaterialMap, season='spring', seed=41):
     """Leaf litter overlay on grass/forest/worn: clustered leaves, density per

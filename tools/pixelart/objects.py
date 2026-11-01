@@ -1227,6 +1227,8 @@ def build_library_extended(lib: dict) -> dict:
     add(bench())
     for s in lib.values():
         if 'debug' not in s.tags: refine(s.c)
+    from .pl_assets import apply
+    apply(lib)
     return lib
 
 

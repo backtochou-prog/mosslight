@@ -13,12 +13,12 @@
   {
    "name": "night ramps: early budget smaller than deep; creatures appear gradually",
    "ok": true,
-   "detail": "2,2,7,7,wanderer/burrower/luminous"
+   "detail": "2,2,7,7,wanderer/burrower/howler/stalker/luminous"
   },
   {
    "name": "dawn: creatures retreat gradually, not instantly",
    "ok": true,
-   "detail": "5,2.8,0"
+   "detail": "5,5.7,0"
   },
   {
    "name": "lantern extends how far you are seen",
@@ -37,7 +37,7 @@
   {
    "name": "Wanderer notices, approaches and hits",
    "ok": true,
-   "detail": "attack,76"
+   "detail": "attack,84"
   },
   {
    "name": "player outpaces a Wanderer",
@@ -47,7 +47,7 @@
   {
    "name": "Stalker will not enter campfire light to reach a player beside it",
    "ok": true,
-   "detail": "light,53"
+   "detail": "light,43"
   },
   {
    "name": "Stalker cycles stalk, pounce, attack, retreat",
@@ -67,7 +67,7 @@
   {
    "name": "Wanderer cannot walk through walls or hurt a sealed player",
    "ok": true,
-   "detail": "175,100,14"
+   "detail": "174,100,14"
   },
   {
    "name": "Brute breaks an actual wall by durability, not by walking through",
@@ -82,7 +82,7 @@
   {
    "name": "melee: hit, damage from the tool, wear, kill, drops",
    "ok": true,
-   "detail": "1,14,true,true,1"
+   "detail": "1,14,true,true,2"
   },
   {
    "name": "drops are collected into the pack and recorded",
@@ -166,12 +166,12 @@
   {
    "name": "AI cost with 12 creatures",
    "ok": true,
-   "detail": "0.05 ms/tick"
+   "detail": "0.02 ms/tick"
   },
   {
    "name": "frame time with creatures (software Chromium)",
    "ok": true,
-   "detail": "18.5 ms"
+   "detail": "16.6 ms"
   },
   {
    "name": "real keys: L lantern, F strike, K guide, Shift sneak",

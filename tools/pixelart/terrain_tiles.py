@@ -127,7 +127,7 @@ def grass_tile(variant: int, shade: str) -> Canvas:
     rng = random.Random(1000 + variant * 7 + hash(shade) % 97)
     c = Canvas(T, T); base = 3
     c.rect(0, 0, T, T, PAL.i('grass', base))
-    n_light = {'dark': 1, 'mid': 2, 'sun': 3}[shade]; n_dark = {'dark': 3, 'mid': 2, 'sun': 1}[shade]
+    n_light = {'dark': 0, 'mid': 1, 'sun': 2}[shade]; n_dark = {'dark': 2, 'mid': 1, 'sun': 0}[shade]   # calm ground: mown, not noisy; detail comes from placed plants
     for _ in range(n_light):                      # a tuft: three lit blade tips over a dark root
         x, y = rng.randrange(T), rng.randrange(T)
         c.put(x, (y - 1) % T, PAL.i('grass', base + 1)); c.put((x + 2) % T, (y - 1) % T, PAL.i('grass', base + 1))

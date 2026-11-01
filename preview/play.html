@@ -293,7 +293,7 @@ function frame(now) {
       // night-only pixels fade in with darkness
       const nidx = night[i]; if (nidx && nightShow > 0 && !(season === 'winter' && (CLS[nidx] & 16))) { const nc = tab[nidx]; r += (nc[0] - r) * nightShow; g += (nc[1] - g) * nightShow; b += (nc[2] - b) * nightShow; }
       // light pools: mix the DAY colour back in, tinted, so lamplight reveals true colour
-      const lw = LW[i]; if (lw > 0 && lightAmount > 0) { const L = LIGHTS[LI[i]]; if (L.kind === 'firefly' && season === 'winter') { } else { const w = lw * lightAmount * flick[LI[i]] * (L.kind === 'firefly' && ev && ev.fireflies ? ev.fireflies : 1); const dc = dayTab[ix];
+      const lw = LW[i]; if (lw > 0 && lightAmount > 0) { const L = LIGHTS[LI[i]]; if (L.kind === 'firefly' && season === 'winter') { } else { const w = lw * lightAmount * flick[LI[i]] * (L.kind === 'firefly' && ev && ev.fireflies ? ev.fireflies : 1); const dc0 = dayTab[ix]; const lum = dc0[0] * .3 + dc0[1] * .59 + dc0[2] * .11; const dc = [dc0[0] + (lum - dc0[0]) * .42, dc0[1] + (lum - dc0[1]) * .42, dc0[2] + (lum - dc0[2]) * .42];   // lamplight warms colour, it does not make grass neon
         r += (dc[0] * L.color[0] * 1.08 + 18 - r) * w; g += (dc[1] * L.color[1] * 1.08 + 18 - g) * w; b += (dc[2] * L.color[2] * 1.08 + 18 - b) * w; } }
       // rain: wet surfaces darken a little, water sparkles
       if (wetDark > 0 && (CLS[ix] & 2) && ((x * 7 + y * 13 + (T * 30 | 0)) % 97) < 2) { r += 40; g += 40; b += 40; }
@@ -312,6 +312,9 @@ function frame(now) {
       for (let yy = 0; yy < sp.h; yy++) for (let xx = 0; xx < sp.w; xx++) { const pi = nIdx[(sp.y + yy) * aw + sp.x + xx]; if (!pi) continue; const x = x0 + xx, y = y0 + yy; if (x < 0 || y < 0 || x >= W || y >= H) continue; const i = y * W + x; if (dep[i] > n.def.y || (pyBase < n.def.y && false)) continue;
         let c = tab[pi]; let r = c[0], g = c[1], b = c[2]; if (glow && darkness > 0.4) { const k = 0.35 + 0.15 * Math.sin(T * 2 + n.def.x); r += (200 - r) * k * 0.3; g += (255 - g) * k * 0.4; b += (230 - b) * k * 0.4; }
         const o = i * 4; d[o] = r; d[o + 1] = g; d[o + 2] = b; } } }
+  { // the fire is alive: flame pixels step through their own ramp, so it flickers in the palette at any hour
+    if (!window.FIREPX) { const fam = DATA.entries.entries; const rk = []; fam.forEach((e, i) => { if (e.family === 'fire') rk[e.rank] = i; }); window.FIRERK = rk; const pos = {}; rk.forEach((v, r) => pos[v] = r); window.FIREPX = []; const sp = DATA.idx.spring; for (let i = 0; i < W * H; i++) if (pos[sp[i]] !== undefined) FIREPX.push([i, pos[sp[i]], i % W, (i / W) | 0]); }
+    for (const [i, rk, x, y] of FIREPX) { if (!(CLS[idx[i]] !== undefined)) continue; const w = Math.sin(T * 13 + y * 1.1 + x * .6) + Math.sin(T * 7.1 - y * .8 + x * 1.7); const nr = Math.max(0, Math.min(FIRERK.length - 1, rk + Math.round(w))); const c = tab[FIRERK[nr]], o = i * 4; if (season === 'winter' && idx[i] !== DATA.idx.spring[i]) continue; d[o] = c[0]; d[o + 1] = c[1]; d[o + 2] = c[2]; } }
   buildCtx.idx = idx; Fishing.render.sign(buildCtx, tab); Monsters.render.lantern(buildCtx); Build.render.items(buildCtx, false); Monsters.render.items(buildCtx, false);
   // ---- player: y-sorted against the baked scene through the depth map, lit by the same table
   { const dep = DATA.depth[season === 'winter' ? 'winter' : 'spring']; const pm = DATA.player, pidx = DATA.pidx; const fw = pm.frame_w, fh = pm.frame_h;

@@ -65,8 +65,7 @@ for p in sc.placements:
     if not meta.get('solid') or p.layer == 'fg': continue
     tags = s.tags
     if nm == 'dock':
-        rect(p.x - 2, p.y - 18, p.x + 45, p.y - 2, 0)          # the deck is walkable, over water
-        rect(p.x + 41, p.y - 22, p.x + 45, p.y - 14, 1)          # mooring post
+        rect(p.x - 2, p.y - 20, p.x + 64, p.y - 3, 0)           # the pier deck is walkable, over water
         continue
     if 'tree' in tags:
         ellipse(p.x, p.y - 1, max(5, s.w // 9), 3)
@@ -78,6 +77,8 @@ for p in sc.placements:
         rect(p.x - 5, p.y - 48, p.x + 6, p.y + 1)
     elif s.shadow:
         rx, ry, dx, dy = s.shadow; ellipse(p.x + dx * 0.3, p.y - 1, max(3, rx * 0.85), max(2, ry))
+for p in sc.placements:
+    if p.sprite.name == 'bridge': rect(p.x - 59, p.y - 22, p.x + 59, p.y - 5, 0)   # the deck crosses the river; rails stay solid at the ends of nothing
 # world border: outside the playable rect is blocked
 px0, py0, pw, ph = sc.playable
 col[:py0, :] = 1; col[py0 + ph:, :] = 1; col[:, :px0] = 1; col[:, px0 + pw:] = 1
@@ -88,7 +89,7 @@ inter = [
     {'id': 'tent', 'label': 'Rest until morning', 'x': 272, 'y': 246, 'r': 30, 'sleep': True, 'text': 'A worn canvas tent. The flap is rolled back; your bedroll is inside.'},
     {'id': 'lantern', 'label': 'Inspect lantern', 'x': 240, 'y': 262, 'r': 18, 'activity': 'inspect', 'text': 'An oil lantern on a crooked post. It will burn through the night.'},
     {'id': 'campfire', 'label': 'Tend the fire', 'x': 318, 'y': 272, 'r': 22, 'activity': 'tend_fire', 'text': 'You feed the fire a few sticks. The embers brighten.'},
-    {'id': 'dock', 'label': 'Fish from the platform', 'x': 562, 'y': 288, 'r': 30, 'activity': 'fish_attempt', 'text': 'You cast from the weathered platform. Something stirs under the lily pads.'},
+    {'id': 'dock', 'label': 'Fish from the platform', 'x': 562, 'y': 278, 'r': 30, 'activity': 'fish_attempt', 'text': 'You cast from the weathered platform. Something stirs under the lily pads.'},
     {'id': 'ruin', 'label': 'Examine the ruins', 'x': 612, 'y': 108, 'r': 34, 'activity': 'inspect', 'text': 'Two walls and a lintel, taken back by moss. Someone hung a lantern here recently.'},
     {'id': 'log', 'label': 'Gather branches', 'x': 470, 'y': 360, 'r': 22, 'activity': 'gather_branches', 'text': 'You pull dry branches from beside the hollow log.'},
     {'id': 'rowan', 'label': 'Gather branches', 'x': 418, 'y': 188, 'r': 18, 'activity': 'gather_branches', 'text': 'You snap a few fallen rowan twigs. The berries can wait.'},

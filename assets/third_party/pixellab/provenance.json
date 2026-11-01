@@ -9,5 +9,465 @@
    "type": "generations",
    "generations": 1.0
   }
+ },
+ "a_ts_water_grass": {
+  "source": "PixelLab",
+  "spec": {
+   "kind": "tileset",
+   "lower": "clear blue river water with gentle ripples",
+   "upper": "lush green meadow grass with small soft tufts",
+   "trans": "earthy muddy bank",
+   "ts": 0.25,
+   "seed": 62
+  },
+  "usage": null
+ },
+ "b_rocks_1": {
+  "source": "PixelLab",
+  "spec": {
+   "kind": "image",
+   "w": 128,
+   "h": 96,
+   "prompt": "six separate warm light grey field boulders on empty background, one large, two medium, three small, chunky rounded facets with bright lit tops, no shadow, no ground, well spaced, not touching",
+   "fams": [
+    "stone",
+    "pebble",
+    "sand"
+   ],
+   "seed": 71
+  },
+  "usage": {
+   "type": "generations",
+   "generations": 1.0
+  }
+ },
+ "b_rocks_mossy": {
+  "source": "PixelLab",
+  "spec": {
+   "kind": "image",
+   "w": 128,
+   "h": 96,
+   "prompt": "six separate natural grey boulders with irregular patches of moss on one side, not a cap, one large, two medium, three small, no shadow, no ground, well spaced, not touching",
+   "fams": [
+    "stone",
+    "moss"
+   ],
+   "seed": 72
+  },
+  "usage": {
+   "type": "generations",
+   "generations": 1.0
+  }
+ },
+ "b_oak_2": {
+  "source": "PixelLab",
+  "spec": {
+   "kind": "image",
+   "w": 96,
+   "h": 104,
+   "prompt": "single broad oak tree, wide round billowing canopy of leaf clusters with deep shaded undersides, short thick trunk, no ground",
+   "fams": [
+    "oak",
+    "wood"
+   ],
+   "seed": 81
+  },
+  "usage": {
+   "type": "generations",
+   "generations": 1.0
+  }
+ },
+ "b_oak_3": {
+  "source": "PixelLab",
+  "spec": {
+   "kind": "image",
+   "w": 96,
+   "h": 104,
+   "prompt": "single leafy maple-like tree, tall oval canopy made of clumped foliage, brown trunk with a fork, no ground",
+   "fams": [
+    "oak",
+    "wood"
+   ],
+   "seed": 82
+  },
+  "usage": {
+   "type": "generations",
+   "generations": 1.0
+  }
+ },
+ "b_oak_4": {
+  "source": "PixelLab",
+  "spec": {
+   "kind": "image",
+   "w": 96,
+   "h": 104,
+   "prompt": "single old gnarled broadleaf tree, asymmetric canopy with several distinct leaf masses, twisted trunk, no ground",
+   "fams": [
+    "oak",
+    "wood"
+   ],
+   "seed": 83
+  },
+  "usage": {
+   "type": "generations",
+   "generations": 1.0
+  }
+ },
+ "b_birch_1": {
+  "source": "PixelLab",
+  "spec": {
+   "kind": "image",
+   "w": 64,
+   "h": 104,
+   "prompt": "single slender birch tree, white bark with black marks, light airy yellow-green canopy clumps, no ground",
+   "fams": [
+    "birch",
+    "bark_birch"
+   ],
+   "seed": 84
+  },
+  "usage": {
+   "type": "generations",
+   "generations": 1.0
+  }
+ },
+ "b_birch_2": {
+  "source": "PixelLab",
+  "spec": {
+   "kind": "image",
+   "w": 64,
+   "h": 104,
+   "prompt": "single young birch tree, white trunk leaning slightly, loose rounded light green foliage, no ground",
+   "fams": [
+    "birch",
+    "bark_birch"
+   ],
+   "seed": 85
+  },
+  "usage": {
+   "type": "generations",
+   "generations": 1.0
+  }
+ },
+ "b_pine_1": {
+  "source": "PixelLab",
+  "spec": {
+   "kind": "image",
+   "w": 64,
+   "h": 112,
+   "prompt": "single tall pine fir tree, dark blue-green layered tiered boughs, conical, small brown trunk, no ground",
+   "fams": [
+    "pine",
+    "wood"
+   ],
+   "seed": 86
+  },
+  "usage": {
+   "type": "generations",
+   "generations": 1.0
+  }
+ },
+ "b_pine_2": {
+  "source": "PixelLab",
+  "spec": {
+   "kind": "image",
+   "w": 64,
+   "h": 112,
+   "prompt": "single wide spruce tree, full drooping tiers of deep green needles with lit edges, no ground",
+   "fams": [
+    "pine",
+    "wood"
+   ],
+   "seed": 87
+  },
+  "usage": {
+   "type": "generations",
+   "generations": 1.0
+  }
+ },
+ "b_willow": {
+  "source": "PixelLab",
+  "spec": {
+   "kind": "image",
+   "w": 96,
+   "h": 104,
+   "prompt": "single weeping willow tree, long hanging curtains of green fronds, thick trunk, no ground",
+   "fams": [
+    "oak",
+    "wood"
+   ],
+   "seed": 88
+  },
+  "usage": {
+   "type": "generations",
+   "generations": 1.0
+  }
+ },
+ "b_rowan": {
+  "source": "PixelLab",
+  "spec": {
+   "kind": "image",
+   "w": 48,
+   "h": 64,
+   "prompt": "single small rowan sapling tree, rounded green crown with clusters of red berries, thin trunk, no ground",
+   "fams": [
+    "rowan",
+    "wood",
+    "berry"
+   ],
+   "seed": 89
+  },
+  "usage": {
+   "type": "generations",
+   "generations": 1.0
+  }
+ },
+ "b_shrubs": {
+  "source": "PixelLab",
+  "spec": {
+   "kind": "image",
+   "w": 128,
+   "h": 96,
+   "prompt": "six separate round leafy green bushes on empty background, different sizes, clumped leaves, a few with small berries, no shadow, well spaced, not touching",
+   "fams": [
+    "shrub",
+    "berry"
+   ],
+   "seed": 90
+  },
+  "usage": {
+   "type": "generations",
+   "generations": 1.0
+  }
+ },
+ "b_ferns": {
+  "source": "PixelLab",
+  "spec": {
+   "kind": "image",
+   "w": 128,
+   "h": 96,
+   "prompt": "separate small forest ground plants on empty background: three leafy ferns, two tall grass tufts, one clump of broad leaves, no ground, well spaced, not touching",
+   "fams": [
+    "fern",
+    "grass"
+   ],
+   "seed": 91
+  },
+  "usage": {
+   "type": "generations",
+   "generations": 1.0
+  }
+ },
+ "b_flowers": {
+  "source": "PixelLab",
+  "spec": {
+   "kind": "image",
+   "w": 128,
+   "h": 96,
+   "prompt": "separate small wildflower clumps on empty background: white daisies, yellow buttercups, blue bells, pink flowers, red poppies, each with green stems, no ground, well spaced, not touching",
+   "fams": [
+    "flower_w",
+    "flower_y",
+    "flower_b",
+    "flower_p",
+    "berry",
+    "grass"
+   ],
+   "seed": 92
+  },
+  "usage": {
+   "type": "generations",
+   "generations": 1.0
+  }
+ },
+ "b_reeds": {
+  "source": "PixelLab",
+  "spec": {
+   "kind": "image",
+   "w": 96,
+   "h": 96,
+   "prompt": "separate pond plants on empty background: two clumps of cattail reeds, two floating lily pads with one pink flower, well spaced, not touching",
+   "fams": [
+    "reed",
+    "lily",
+    "flower_p",
+    "wood"
+   ],
+   "seed": 93
+  },
+  "usage": {
+   "type": "generations",
+   "generations": 1.0
+  }
+ },
+ "b_logs": {
+  "source": "PixelLab",
+  "spec": {
+   "kind": "image",
+   "w": 128,
+   "h": 96,
+   "prompt": "separate wooden props on empty background: tree stump with rings, short log seat lying down, long hollow fallen log with moss, small stack of firewood, no ground, well spaced, not touching",
+   "fams": [
+    "wood",
+    "moss",
+    "canvas"
+   ],
+   "seed": 94
+  },
+  "usage": {
+   "type": "generations",
+   "generations": 1.0
+  }
+ },
+ "b_dock": {
+  "source": "PixelLab",
+  "spec": {
+   "kind": "image",
+   "w": 72,
+   "h": 48,
+   "prompt": "small weathered grey wooden fishing dock platform seen from above at an angle, planks running left to right, four mooring posts at the front edge, no water",
+   "fams": [
+    "wood_grey",
+    "wood"
+   ],
+   "seed": 95
+  },
+  "usage": {
+   "type": "generations",
+   "generations": 1.0
+  }
+ },
+ "b_bridge": {
+  "source": "PixelLab",
+  "spec": {
+   "kind": "image",
+   "w": 96,
+   "h": 48,
+   "prompt": "short wooden footbridge running left to right, plank deck, low log railings along the far and near edges, no water, no ground",
+   "fams": [
+    "wood",
+    "wood_grey"
+   ],
+   "seed": 96
+  },
+  "usage": {
+   "type": "generations",
+   "generations": 1.0
+  }
+ },
+ "b_lantern": {
+  "source": "PixelLab",
+  "spec": {
+   "kind": "image",
+   "w": 32,
+   "h": 48,
+   "prompt": "wooden lantern post with a hanging iron lantern glowing warm yellow",
+   "fams": [
+    "wood",
+    "metal",
+    "lantern_glass"
+   ],
+   "seed": 97
+  },
+  "usage": {
+   "type": "generations",
+   "generations": 1.0
+  }
+ },
+ "b_ruin_1": {
+  "source": "PixelLab",
+  "spec": {
+   "kind": "image",
+   "w": 128,
+   "h": 64,
+   "prompt": "broken ancient mossy stone brick wall, crumbling top edge, arched window opening, moss and ivy, no ground",
+   "fams": [
+    "ruin",
+    "moss"
+   ],
+   "seed": 98
+  },
+  "usage": {
+   "type": "generations",
+   "generations": 1.0
+  }
+ },
+ "b_ruin_2": {
+  "source": "PixelLab",
+  "spec": {
+   "kind": "image",
+   "w": 64,
+   "h": 64,
+   "prompt": "short ruined corner of old stone brick wall with moss, crumbling, no ground",
+   "fams": [
+    "ruin",
+    "moss"
+   ],
+   "seed": 99
+  },
+  "usage": {
+   "type": "generations",
+   "generations": 1.0
+  }
+ },
+ "b_rubble": {
+  "source": "PixelLab",
+  "spec": {
+   "kind": "image",
+   "w": 96,
+   "h": 64,
+   "prompt": "separate piles of broken stone blocks and rubble on empty background, three piles, some moss, no shadow, well spaced, not touching",
+   "fams": [
+    "rubble",
+    "ruin",
+    "moss"
+   ],
+   "seed": 100
+  },
+  "usage": {
+   "type": "generations",
+   "generations": 1.0
+  }
+ },
+ "b_tent_winter_ref": {
+  "source": "PixelLab",
+  "spec": {
+   "kind": "image",
+   "w": 72,
+   "h": 72,
+   "prompt": "canvas camping tent with a wooden ridge pole, cream fabric, open dark entrance flap, soft white snow lying on top of the canvas and around the base",
+   "fams": [
+    "canvas",
+    "wood",
+    "rope",
+    "tent_interior",
+    "snow"
+   ],
+   "seed": 21
+  },
+  "usage": {
+   "type": "generations",
+   "generations": 1.0
+  }
+ },
+ "b_mushrooms": {
+  "source": "PixelLab",
+  "spec": {
+   "kind": "image",
+   "w": 96,
+   "h": 64,
+   "prompt": "separate forest floor details on empty background: red capped mushrooms, brown mushrooms, a pile of autumn leaves, fallen twigs, well spaced, not touching",
+   "fams": [
+    "shroom",
+    "shroom_stem",
+    "leaf_litter",
+    "wood"
+   ],
+   "seed": 101
+  },
+  "usage": {
+   "type": "generations",
+   "generations": 1.0
+  }
  }
 }

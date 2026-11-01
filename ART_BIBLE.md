@@ -656,3 +656,7 @@ Fish use their own indexed plate palette in `tools/pixelart/fish.py`, because th
 Each water has one idea. Pond: lilies and reflections, read live from the frame. Stream: broken bright water over boulders, a gravel bar underfoot. Marsh: tea-black water, cattails, drowned snags. Lake: snow peaks mirrored in cold water, a rock shelf. Reservoir: brick vault, standing columns, fungus and one shaft of light, always on the night table. No water may be a recolour of another.
 
 The field book is parchment and ink in a serif face, with silhouettes for fish not yet met. Fishing UI stays in a corner or a thin strip so the water remains visible.
+
+## The river and adopted art (v1.2)
+
+The river enters from the east, feeds the pond and leaves south under the footbridge, and its banks stay clear of trees so it reads as one channel. North shores show an earth cut face, other shores damp mud. Generated sprites must be mapped by region: leaves only to a foliage ramp, emissive ramps only on hand-picked glass, doorway and flame pixels. Props are sized against the 16x32 player.

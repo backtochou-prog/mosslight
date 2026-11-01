@@ -34,7 +34,7 @@ TACKLE = {
 RARITY = dict(common=dict(weight=30, tier=0, wait=1), uncommon=dict(weight=12, tier=0, wait=1.25), rare=dict(weight=4.5, tier=1, wait=1.5), very_rare=dict(weight=2.2, tier=2, wait=1.7), exceptional=dict(weight=1.4, tier=3, wait=1.8), legendary=dict(weight=1, tier=3, wait=2))
 for h, mk in V.ALL.items(): Image.fromarray(mk().a, 'L').save(os.path.join(OUT, f'vista_{h}_idx.png'))
 c, ox, oy = V.trail_sign(); Image.fromarray(c.a, 'L').save(os.path.join(OUT, 'trail_sign_idx.png'))
-json.dump(dict(version=1, fish=FD.RECORDS, habitats=HABITATS, behaviors=BEHAVIORS, tackle=TACKLE, rarity=RARITY, sign=dict(x=470, y=322, ox=ox, oy=oy, w=c.w, h=c.h), vista=dict(w=V.W, h=V.H, stand=[400, 318])), open(os.path.join(OUT, 'fishing.json'), 'w'), indent=0)
+json.dump(dict(version=1, fish=FD.RECORDS, habitats=HABITATS, behaviors=BEHAVIORS, tackle=TACKLE, rarity=RARITY, pond=dict(x=630, y=268, r=78), sign=dict(x=454, y=338, ox=ox, oy=oy, w=c.w, h=c.h), vista=dict(w=V.W, h=V.H, stand=[400, 318])), open(os.path.join(OUT, 'fishing.json'), 'w'), indent=0)
 lut = PAL.day
 for h, mk in V.ALL.items(): mk().save(os.path.join(ROOT, f'renders/vista_{h}.png'), lut=lut)
 print(len(FD.RECORDS), 'species', len(HABITATS), 'habitats')

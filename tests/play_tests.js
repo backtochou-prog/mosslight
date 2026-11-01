@@ -29,8 +29,8 @@ function check(name, ok, detail) { results.push({ name, ok: !!ok, detail }); con
   await at(272, 300); await p.evaluate(() => SIM.step([0, -1], 240)); let [, y] = await pos(); check('blocked by tent', y > 240 && y < 262, `stopped at y=${y.toFixed(1)} (tent base 244)`);
   await at(640, 150); await p.evaluate(() => SIM.step([0, -1], 240)); [, y] = await pos(); check('blocked by ruin wall', y > 92, `stopped at y=${y.toFixed(1)} (wall base 94)`);
   // walks onto the dock (walkable over water) and along the path through the junction
-  await at(518, 274); await p.evaluate(() => SIM.step([1, 0], 180)); [x] = await pos(); check('dock is walkable (stops at the mooring post)', x > 565 && x < 585, `reached x=${x.toFixed(1)} on the deck`);
-  await at(300, 318); await p.evaluate(() => { SIM.step([1, 0], 300); SIM.step([0.7071, -0.7071], 200); }); const [jx, jy] = await pos(); check('path junction traversable', jx > 430 && jy < 300, `ended at (${jx.toFixed(0)}, ${jy.toFixed(0)})`);
+  await at(518, 274); await p.evaluate(() => SIM.step([1, 0], 180)); [x] = await pos(); check('dock is walkable (stops at the end of the deck)', x > 565 && x < 598, `reached x=${x.toFixed(1)} on the deck`);
+  await at(300, 318); await p.evaluate(() => { SIM.step([1, 0], 200); SIM.step([0.7071, -0.7071], 200); }); const [jx, jy] = await pos(); check('path junction traversable', jx > 430 && jy < 300, `ended at (${jx.toFixed(0)}, ${jy.toFixed(0)})`);
   // dense vegetation: the north path branch threads between edge trees to the ruin; a gap in the west forest edge
   await at(440, 300); await p.evaluate(() => { SIM.step([0.45, -0.89], 420); }); let [vx, vy] = await pos(); check('passes between edge trees on the ruin path', vy < 160 && vx > 540, `reached (${vx.toFixed(0)}, ${vy.toFixed(0)}) heading for the ruin`);
   await at(150, 262); await p.evaluate(() => SIM.step([-1, 0], 200)); [vx] = await pos(); check('walks between forest trunks, stops at the playable border (x=32)', vx >= 32 && vx < 44, `stopped at x=${vx.toFixed(0)}`);
@@ -40,7 +40,7 @@ function check(name, ok, detail) { results.push({ name, ok: !!ok, detail }); con
   // 4. depth sorting: behind the oak trunk vs in front; behind foreground canopy; in front of lily pads
   const vis = async () => p.evaluate(() => { const dep = DATA.depth.spring, pm = DATA.player, pidx = DATA.pidx; const fw = pm.frame_w, fh = pm.frame_h; const row = pm.facings.indexOf(Player.facing), col = Player.frame(); let tot = 0, shown = 0; const px0 = Math.round(Player.x) - pm.origin[0], py0 = Math.round(Player.y) - pm.origin[1];
     for (let yy = 0; yy < fh; yy++) for (let xx = 0; xx < fw; xx++) { const pi = pidx[(row * fh + yy) * (fw * pm.frames.length) + col * fw + xx]; if (!pi) continue; tot++; const i = (py0 + yy) * 768 + px0 + xx; if (dep[i] <= Math.round(Player.y)) shown++; } return shown / tot; });
-  await at(222, 198); let v = await vis(); check('behind oak trunk: partially hidden', v > 0.2 && v < 0.9, `${(v * 100).toFixed(0)}% of player visible`); await shot('depth_behind_trunk');
+  await at(232, 198); let v = await vis(); check('behind oak trunk: partially hidden', v > 0.2 && v < 0.9, `${(v * 100).toFixed(0)}% of player visible`); await shot('depth_behind_trunk');
   await at(222, 214); v = await vis(); check('in front of oak trunk: fully visible', v > 0.98, `${(v * 100).toFixed(0)}% visible`); await shot('depth_in_front_of_trunk');
   await at(130, 440); v = await vis(); check('behind foreground canopy: hidden', v < 0.6, `${(v * 100).toFixed(0)}% visible under the framing oak`);
   await at(224, 232); v = await vis(); check('under the oak canopy, in front of trunk base: visible', v > 0.9, `${(v * 100).toFixed(0)}%`);

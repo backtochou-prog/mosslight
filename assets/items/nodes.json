@@ -617,8 +617,8 @@
   {
    "id": "nightlily_pond",
    "kind": "nightlily",
-   "x": 640,
-   "y": 300,
+   "x": 604,
+   "y": 316,
    "r": 18,
    "label": "Pick the night lily",
    "activity": "pick_plant",

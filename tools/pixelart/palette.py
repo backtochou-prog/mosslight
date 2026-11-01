@@ -30,7 +30,7 @@ def clamp8(c):
 FAMILIES: dict[str, list[str]] = {
     # terrain
     'grass':      ['1b3826', '2a5531', '3b733c', '539a44', '72b64c', '96cc58', 'bde06a'],
-    'forest':     ['16302a', '20412f', '2c5736', '3a6e3d', '4a8446'],          # shaded forest floor
+    'forest':     ['1c3f2a', '285533', '35703a', '428541', '509848'],          # shaded forest floor
     'worn':       ['4b6a38', '63893f', '7ea249', '97b656', 'b0c865'],            # trampled dry grass
     'dirt':       ['3a2619', '5b3e28', '7b5736', '9b7349', 'b88f60', 'd2ad7c'],
     'stone':      ['2b2d38', '444854', '606473', '7f838f', '9ea2ac', 'bdc0c6'],
@@ -185,6 +185,11 @@ HALF_FAMILIES = ['oak', 'birch', 'pine', 'shrub', 'wood', 'stone', 'water']
 for _f in HALF_FAMILIES:
     _r = FAMILIES[_f]
     FAMILIES[_f + '~'] = [''.join('%02x' % ((a + b) // 2) for a, b in zip(_hex(_r[i]), _hex(_r[i + 1]))) for i in range(len(_r) - 1)]
+
+FAMILIES['oak_b'] = list(FAMILIES['oak'])     # same tree in spring and summer; a redder sibling in autumn so a wood is not one orange
+SEASON_OVERRIDES['autumn']['oak_b'] = ['3a1612', '6a221a', '962f20', 'b84428', 'cf6030', 'e08540', 'eeaa58']
+SEASON_OVERRIDES['winter']['oak_b'] = list(SEASON_OVERRIDES['winter']['oak'])
+SEASON_OVERRIDES['summer']['oak_b'] = list(SEASON_OVERRIDES['summer']['oak'])
 
 def _mid(a, b): return tuple((a[i] + b[i]) // 2 for i in range(3))
 

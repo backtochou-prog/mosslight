@@ -18,8 +18,10 @@ def key():
 def call(path, body=None):
     req = urllib.request.Request(BASE + path, data=json.dumps(body).encode() if body is not None else None, headers={'Authorization': 'Bearer ' + key(), 'Content-Type': 'application/json', 'User-Agent': 'mosslight-tools'})
     try:
-        with urllib.request.urlopen(req, timeout=180) as r: return json.load(r)
-    except urllib.error.HTTPError as e: sys.exit(f'PixelLab {path}: HTTP {e.code} {e.read()[:300].decode(errors="replace")}')
+        with urllib.request.urlopen(req, timeout=420) as r: return json.load(r)
+    except urllib.error.HTTPError as e:
+        if e.code == 423: return dict(pending=True)
+        sys.exit(f'PixelLab {path}: HTTP {e.code} {e.read()[:300].decode(errors="replace")}')
 def to_world_palette(im):
     """Nearest world-palette index per pixel, so day, night and season tables grade the art like everything else."""
     from pixelart.palette import PAL

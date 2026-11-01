@@ -120,6 +120,9 @@ class Scene:
         refine(c, families={'water', 'stone'})
         if season == 'winter': ice_pass(c)
         meadow_tone_pass(c)
+        if season != 'winter':
+            from .terrain_render import bank_pass
+            bank_pass(c)
         litter_pass(c, self.mm, season)
         rng = random.Random(77)
         for d in self.decals:

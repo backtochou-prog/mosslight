@@ -301,6 +301,7 @@ def season_sprite(lib: dict, name: str, season: str):
     if season == 'summer':
         swap = {'flowers_w0': 'flowers_y0', 'flowers_w1': 'flowers_y1', 'flowers_b0': 'flowers_r0', 'flowers_b1': 'flowers_r1', 'hedge_0': 'hedge_1'}
         return lib[swap.get(name, name)]
+    if season == 'autumn' and name.startswith(('flowers_w', 'flowers_b', 'flowers_p')): return None   # meadow flowers are over by autumn
     if season != 'winter': return lib[name]
     if name.startswith(('flowers_', 'lily_', 'arrowhead_', 'shroom_')): return None   # gone under snow / ice
     if name + '_winter' in lib: return lib[name + '_winter']

@@ -185,11 +185,12 @@ def reservoir():
 ALL = dict(stream=stream, marsh=marsh, lake=lake, reservoir=reservoir)
 
 def trail_sign():
-    """Signpost at the head of the trail: an old finger-post with four boards."""
-    c = Canvas(20, 30); w = R('wood'); g = R('wood_grey'); c.rect(9, 3, 3, 26, w[2]); c.vline(9, 3, 28, w[3]); c.vline(11, 3, 28, w[1]); c.hline(7, 13, 28, w[0])
-    for k, (x, y, l) in enumerate([(2, 4, 16), (5, 10, 14), (1, 15, 15), (6, 21, 12)]):
-        c.rect(x, y, l, 4, g[2]); c.hline(x, x + l - 1, y, g[3]); c.hline(x, x + l - 1, y + 3, g[0]); c.put(x + 2, y + 1, g[0]); c.hline(x + 4, x + l - 4, y + 2, g[1])
-    c.put(3, 6, R('moss')[2]); c.rect(9, 25, 3, 3, R('moss')[1]); return (c, 10, 29)
+    """Finger-post at the head of the trail: one solid post, two warm boards."""
+    c = Canvas(24, 30); w = R('wood'); c.rect(10, 2, 4, 27, w[2]); c.vline(10, 2, 28, w[4]); c.vline(13, 2, 28, w[1]); c.hline(8, 15, 28, w[0]); c.rect(10, 1, 4, 2, w[5])
+    for (x, y, l, d) in ((1, 5, 21, 1), (3, 13, 19, -1)):
+        c.rect(x, y, l, 6, w[3]); c.hline(x, x + l - 1, y, w[5]); c.hline(x, x + l - 1, y + 5, w[1]); c.hline(x + 3, x + l - 4, y + 2, w[1]); c.hline(x + 5, x + l - 6, y + 3, w[2])
+        tip = x + l if d > 0 else x - 1; c.vline(tip, y + 1, y + 4, w[2])
+    c.put(9, 27, R('moss')[2]); c.put(14, 27, R('moss')[1]); return (c, 12, 29)
 def worm_bed():
     c = Canvas(18, 10); e = R('dirt'); c.ellipse(9, 6, 8, 3.4, e[1]); c.ellipse(8, 5, 6, 2.4, e[2]); c.put(5, 4, e[3]); c.put(11, 6, e[3]); pk = R('flower_p'); c.line(6, 6, 9, 5, pk[1]); c.put(9, 4, pk[2]); c.line(12, 4, 14, 6, pk[1]); return c
 def worm_empty():
