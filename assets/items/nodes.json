@@ -759,6 +759,91 @@
    "respawn_mode": "time"
   },
   {
+   "id": "starshard_moon",
+   "kind": "starshard",
+   "x": 250,
+   "y": 128,
+   "r": 16,
+   "label": "Chip the starshard",
+   "activity": "mine",
+   "tool": "pickaxe",
+   "drops": [
+    [
+     "starshard",
+     1,
+     1
+    ]
+   ],
+   "yields": 1,
+   "respawn_hours": 96,
+   "respawn_mode": "time",
+   "time": "night",
+   "weather": "clear"
+  },
+  {
+   "id": "nightglass_bank",
+   "kind": "nightglass",
+   "x": 548,
+   "y": 222,
+   "r": 16,
+   "label": "Lift the nightglass",
+   "activity": "mine",
+   "tool": "pickaxe",
+   "drops": [
+    [
+     "nightglass",
+     1,
+     1
+    ]
+   ],
+   "yields": 1,
+   "respawn_hours": 72,
+   "respawn_mode": "time",
+   "time": "deep_night"
+  },
+  {
+   "id": "ember_vent",
+   "kind": "ember_vent",
+   "x": 694,
+   "y": 120,
+   "r": 16,
+   "label": "Dig emberroot",
+   "activity": "cut_herb",
+   "tool": "knife",
+   "drops": [
+    [
+     "emberroot",
+     1,
+     1
+    ]
+   ],
+   "yields": 1,
+   "respawn_hours": 48,
+   "respawn_mode": "time",
+   "time": "night"
+  },
+  {
+   "id": "spore_patch",
+   "kind": "spore_patch",
+   "x": 150,
+   "y": 300,
+   "r": 16,
+   "label": "Shake the spores loose",
+   "activity": "pick_plant",
+   "tool": "hand",
+   "drops": [
+    [
+     "luminous_spores",
+     1,
+     2
+    ]
+   ],
+   "yields": 1,
+   "respawn_hours": 24,
+   "respawn_mode": "time",
+   "time": "night"
+  },
+  {
    "id": "clay_bank",
    "kind": "clay",
    "x": 572,

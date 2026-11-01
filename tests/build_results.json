@@ -1,9 +1,9 @@
 {
  "results": [
   {
-   "name": "data loaded; journal total still 50 gathered entries",
+   "name": "data loaded; journal total 52 gathered entries",
    "ok": true,
-   "detail": "38 recipes, 56 components, 87 items"
+   "detail": "41 recipes, 58 components, 97 items"
   },
   {
    "name": "crafting refused without ingredients",

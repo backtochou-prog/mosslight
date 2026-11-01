@@ -288,6 +288,11 @@ def table_lantern():
     c.rect(3, 0, 4, 2, m[2]); c.rect(2, 2, 6, 2, m[1]); c.rect(2, 4, 6, 7, g[1]); c.rect(3, 5, 4, 5, g[2]); c.rect(4, 6, 2, 3, g[3]); c.vline(2, 4, 10, m[1]); c.vline(7, 4, 10, m[0]); c.rect(1, 11, 8, 2, m[1]); c.hline(1, 8, 11, m[2])
     return (c, 5, 12)
 
+def spore_jar():
+    i, g = R('ice'), R('glowshroom'); c = Canvas(10, 14)
+    c.rect(3, 0, 4, 2, R('wood')[3]); c.rect(1, 2, 8, 10, i[2]); c.vline(1, 3, 10, i[3]); c.rect(2, 4, 6, 7, g[1]); c.rect(3, 5, 3, 4, g[2]); c.put(4, 6, R('moonlight')[2]); c.hline(2, 7, 12, i[0])
+    return _spr(c, 5, 12, i[0])
+
 def potted():
     f = R('fern'); d = R('dirt'); c = Canvas(16, 20)
     for (x0, y0, x1, y1) in ((8, 11, 2, 4), (8, 11, 5, 1), (8, 11, 11, 1), (8, 11, 14, 5), (8, 11, 3, 8), (8, 11, 13, 9)):
@@ -415,7 +420,7 @@ def furniture():
         'bed_rustic': bed('wood', 'moss'), 'bed_rustic_side': bed('wood', 'moss', side=True), 'bed_cottage': bed('canvas', 'flower_p'), 'bed_cottage_side': bed('canvas', 'flower_p', side=True),
         'table_rustic': table('wood'), 'table_stone': table('wood', top=st), 'table_industrial': table('metal', top=R('wood_grey')), 'table_cottage': table('wood', top=cv),
         'chair_rustic': chair('wood'), 'chair_cottage': chair('wood', seat=R('flower_b')), 'shelf': shelf(), 'bookshelf': shelf(True), 'cabinet': cabinet(),
-        'rug_woven': rug('berry', 'flower_y'), 'rug_moss': rug('moss', 'flower_b'), 'floor_lamp': floor_lamp(), 'table_lantern': table_lantern(), 'potted_fern': potted(),
+        'rug_woven': rug('berry', 'flower_y'), 'rug_moss': rug('moss', 'flower_b'), 'floor_lamp': floor_lamp(), 'table_lantern': table_lantern(), 'potted_fern': potted(), 'spore_jar': spore_jar(),
         'painting': painting(), 'wall_shelf': wall_shelf(), 'stove': stove(), 'counter': counter(), 'garden_bed': garden(),
         'barricade': barricade(), 'spikes': spikes(), 'watch_platform': platform(), 'torch_post': torch(), 'stone_steps': steps(), 'roof_support': post(),
     }

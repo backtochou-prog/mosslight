@@ -226,6 +226,21 @@
    "stage": 3
   },
   {
+   "id": "window_nightglass",
+   "name": "Nightglass window",
+   "cat": "Opening",
+   "layer": "opening",
+   "kind": "window",
+   "cost": {
+    "plank": 1,
+    "nightglass": 1
+   },
+   "minutes": 20,
+   "energy": 1,
+   "durability": 200,
+   "stage": 4
+  },
+  {
    "id": "roof_thatch",
    "name": "Thatch roof",
    "cat": "Roof",
@@ -813,6 +828,29 @@
     4
    ],
    "durability": 60
+  },
+  {
+   "id": "spore_jar",
+   "name": "Spore jar",
+   "cat": "Home",
+   "layer": "object",
+   "item": "spore_jar",
+   "sprite": "spore_jar",
+   "foot": [
+    6,
+    3
+   ],
+   "durability": 60,
+   "light": {
+    "radius": 30,
+    "color": [
+     0.55,
+     0.95,
+     1.0
+    ],
+    "intensity": 0.7,
+    "kind": "glow"
+   }
   },
   {
    "id": "painting",

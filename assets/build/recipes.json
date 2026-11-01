@@ -742,6 +742,66 @@
    "icon": "counter"
   },
   {
+   "id": "healing_tonic",
+   "name": "Moondew tonic",
+   "description": "Mint steeped in moondew. Restores a good deal of health.",
+   "station": "hand",
+   "ingredients": {
+    "moondew": 1,
+    "mint": 1
+   },
+   "minutes": 6,
+   "energy": 0,
+   "result": "healing_tonic",
+   "qty": 1,
+   "unlock": {
+    "type": "item",
+    "id": "moondew"
+   },
+   "category": "medicine",
+   "icon": "healing_tonic"
+  },
+  {
+   "id": "ghost_salve",
+   "name": "Ghostcap salve",
+   "description": "Cold on the skin, then nothing hurts for a while. Restores all health.",
+   "station": "workbench",
+   "ingredients": {
+    "ghostcap": 1,
+    "moss": 2
+   },
+   "minutes": 12,
+   "energy": 0,
+   "result": "ghost_salve",
+   "qty": 1,
+   "unlock": {
+    "type": "item",
+    "id": "ghostcap"
+   },
+   "category": "medicine",
+   "icon": "ghost_salve"
+  },
+  {
+   "id": "spore_jar",
+   "name": "Spore jar",
+   "description": "Cold light that never needs oil. Stalkers do not mind it, but you might.",
+   "station": "workbench",
+   "ingredients": {
+    "luminous_spores": 2,
+    "glass_shard": 1
+   },
+   "minutes": 15,
+   "energy": 0,
+   "result": "spore_jar",
+   "qty": 1,
+   "unlock": {
+    "type": "item",
+    "id": "luminous_spores"
+   },
+   "category": "lighting",
+   "icon": "spore_jar"
+  },
+  {
    "id": "garden_bed",
    "name": "Raised garden bed",
    "description": "Ready for planting when seeds can be sown.",

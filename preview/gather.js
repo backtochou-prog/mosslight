@@ -53,7 +53,7 @@ window.Gather = (() => {
       if (d.time === 'day' && !['dawn', 'day', 'sunset'].includes(phase)) return false;
       if (d.weather) { const ok = d.weather.split(','); const rainy = wx === 'light_rain' || wx === 'heavy_rain'; const after = W.WeatherState.recentRainHours < 6; if (!(ok.includes(wx) || (ok.includes('rain') && rainy) || (ok.includes('after_rain') && (after || rainy)))) return false; }
       return true; },
-    visible(n) { return n.def.kind !== 'hidden' && (this.conditionsMet(n) || !['glowcap', 'ghostcap', 'nightlily', 'moth'].includes(n.def.kind)); },
+    visible(n) { return n.def.kind !== 'hidden' && (this.conditionsMet(n) || !['glowcap', 'ghostcap', 'nightlily', 'moth', 'starshard', 'nightglass', 'ember_vent', 'spore_patch'].includes(n.def.kind)); },
     tick() {   // respawn by elapsed game hours (time mode) or at a season change (season mode)
       const h = W.Survival.Clock.day * 24 + W.WorldClock.hour();
       for (const n of this.list) {
@@ -101,7 +101,7 @@ window.Gather = (() => {
     found: {},    // id -> {first: {day, hour, season, weather, nodeKind}, count}
     record(id, n) { const f = this.found[id]; const ctx = { day: W.Survival.Clock.day, hour: Math.round(W.WorldClock.hour() * 10) / 10, season: W.SeasonState.season, weather: W.WeatherState.kind, phase: W.Survival.Clock.phase(), node: n ? n.def.kind : null };
       if (!f) { this.found[id] = { first: ctx, count: 1 }; emit('discovered', id, ctx); } else f.count += 1; },
-    progress(cat) { const items = cat ? DB.byCategory(cat) : DB.all().filter(i => i.category !== 'crafted'); const n = items.filter(i => this.found[i.id]).length; return [n, items.length]; },
+    progress(cat) { const items = cat ? DB.byCategory(cat) : DB.all().filter(i => i.category !== 'crafted' && i.category !== 'creature'); const n = items.filter(i => this.found[i.id]).length; return [n, items.length]; },
     entry(id) { const it = ITEMS[id]; const f = this.found[id]; if (!f) return { id, known: false, name: '???', rarity: it.rarity, category: it.category };
       return { id, known: true, name: it.name, description: it.description, rarity: it.rarity, category: it.category, habitat: it.habitat, seasons: it.seasons, time: it.time, weather: it.weather, first: f.first, count: f.count }; },
   };
@@ -140,7 +140,7 @@ window.Gather = (() => {
       if (s) { const it = ITEMS[s.id]; this.drawIcon(g, s.id, dx, dy, 3, table); g.fillStyle = '#eedcb0'; g.fillText(it.name, dx + 54, dy + 10); g.fillStyle = RCOL[it.rarity]; g.fillText(it.rarity.replace('_', ' '), dx + 54, dy + 21); g.fillStyle = 'rgba(238,220,176,0.55)'; g.fillText(`${it.category} · ×${s.qty}`, dx + 54, dy + 32);
         const yy = this.wrap(g, it.description, dx, dy + 58, 150, 10, '#d9cfae'); g.fillStyle = 'rgba(238,220,176,0.55)'; this.wrap(g, 'found: ' + (it.habitat || '—'), dx, yy + 14, 150, 10, 'rgba(238,220,176,0.55)'); }
       else { g.fillStyle = 'rgba(238,220,176,0.45)'; g.fillText('empty slot', dx, dy + 10); }
-      g.fillStyle = 'rgba(238,220,176,0.45)'; g.font = '8px ui-monospace, monospace'; g.fillText('arrows move · S split · X drop · 1-4 tools · I close', x0 + 10, y0 + ph - 8);
+      g.fillStyle = 'rgba(238,220,176,0.45)'; g.font = '8px ui-monospace, monospace'; g.fillText('arrows · S split · X drop · U use · I close', x0 + 10, y0 + ph - 8);
     },
     wrap(g, text, x, y, w, lh, col) { g.fillStyle = col; const words = text.split(' '); let line = '', yy = y; for (const wd of words) { const t = line ? line + ' ' + wd : wd; if (g.measureText(t).width > w) { g.fillText(line, x, yy); line = wd; yy += lh; } else line = t; } if (line) g.fillText(line, x, yy); return yy; },
     drawJournal(g, vw, vh, safe, table) {
@@ -165,7 +165,7 @@ window.Gather = (() => {
       if (k === 'i') { this.toggle('inventory'); return true; } if (k === 'j') { this.toggle('journal'); return true; }
       if (['1', '2', '3', '4'].includes(k)) { Tools.select(['hand', 'knife', 'axe', 'pickaxe'][+k - 1]); return true; }
       if (this.open === 'inventory') { const cols = 6; if (k === 'arrowleft') this.cursor = Math.max(0, this.cursor - 1); if (k === 'arrowright') this.cursor = Math.min(Inventory.size - 1, this.cursor + 1); if (k === 'arrowup') this.cursor = Math.max(0, this.cursor - cols); if (k === 'arrowdown') this.cursor = Math.min(Inventory.size - 1, this.cursor + cols);
-        if (k === 's') Inventory.split(this.cursor); if (k === 'x') Inventory.remove(this.cursor, 1); if (k === 'escape') this.open = null; return true; }
+        if (k === 'u') { const sl = Inventory.slots[this.cursor]; const it = sl && ITEMS[sl.id]; if (it && it.use && W.onUse && W.onUse(it)) Inventory.remove(this.cursor, 1); } if (k === 's') Inventory.split(this.cursor); if (k === 'x') Inventory.remove(this.cursor, 1); if (k === 'escape') this.open = null; return true; }
       if (this.open === 'journal') { const items = DB.byCategory(this.cats[this.journalCat]); if (k === 'arrowleft') this.journalCursor = Math.max(0, this.journalCursor - 1); if (k === 'arrowright') this.journalCursor = Math.min(items.length - 1, this.journalCursor + 1); if (k === 'q') { this.journalCat = (this.journalCat + 4) % 5; this.journalCursor = 0; } if (k === 'e') { this.journalCat = (this.journalCat + 1) % 5; this.journalCursor = 0; } if (k === 'escape') this.open = null; return true; }
       return false; },
   };
@@ -194,5 +194,5 @@ window.Gather = (() => {
   function tick(dt) { FX.tick(dt); const h = W.Survival.Clock.day * 24 + W.WorldClock.hour(); if (lastHour === null) lastHour = h; const dh = h - lastHour; lastHour = h;
     const wx = W.WeatherState.kind; if ((wx === 'light_rain' || wx === 'heavy_rain') && W.WeatherState.intensity > 0.3) W.WeatherState.recentRainHours = 0; else W.WeatherState.recentRainHours = Math.min(99, W.WeatherState.recentRainHours + Math.max(0, dh));
     Nodes.tick(); }
-  return { init, tick, on, DB, Inventory, Tools, Nodes, Gathering, Journal, UI, FX, Stats, Save, nodeSprite, RCOL, items: () => ITEMS };
+  return { setUse: f => { W.onUse = f; }, init, tick, on, DB, Inventory, Tools, Nodes, Gathering, Journal, UI, FX, Stats, Save, nodeSprite, RCOL, items: () => ITEMS };
 })();

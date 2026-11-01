@@ -3,7 +3,7 @@
   {
    "name": "data-driven catalog loaded: 50 gathered + crafted items, 33 nodes",
    "ok": true,
-   "detail": "87 items, 33 nodes"
+   "detail": "97 items, 37 nodes"
   },
   {
    "name": "1. find a branch (hand)",
@@ -85,7 +85,7 @@
   {
    "name": "8. journal records discoveries with progress",
    "ok": true,
-   "detail": "8/50"
+   "detail": "8/52"
   },
   {
    "name": "undiscovered entries are hidden as ???",

@@ -234,3 +234,12 @@ Read `docs/ASSET_SPEC.md` for the per-asset list. In short: all art is
 original and in-palette, but it is **code-authored pixel art**, not
 hand-drawn. It is a coherent, deliberate foundation that a pixel artist should
 polish, not a finished product.
+
+
+## Nights and creatures (Prompt 11)
+
+Controls: **F** strike with the active tool, **Shift** sneak, **L** lantern, **K** creature field guide, **U** use a tonic in the pack. The sound slider is in the header.
+
+Data lives in `assets/monsters/monsters.json` (stats, phases, weather, spawn sites, drops, journal text). Rebuild art with `python3 tools/build_monsters.py`. Code is `preview/monsters.js`. Tests are `tests/night_tests.js`, with screenshots in `renders/night_*.png`.
+
+Status: the browser build is the tested one. The Godot port does not include this system. Sounds are synthesised placeholders and have not been judged by ear.

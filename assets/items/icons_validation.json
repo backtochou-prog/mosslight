@@ -59,6 +59,15 @@
   "glass_pane",
   "hinge",
   "cloth",
+  "luminous_spores",
+  "nightglass",
+  "rot_fiber",
+  "stalker_lens",
+  "burrower_plate",
+  "howler_sac",
+  "brute_hide",
+  "healing_tonic",
+  "ghost_salve",
   "tool_hand",
   "tool_knife",
   "tool_axe",
@@ -96,6 +105,7 @@
   "wall_shelf",
   "stove",
   "counter",
+  "spore_jar",
   "garden_bed"
  ]
 }

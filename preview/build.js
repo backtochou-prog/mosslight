@@ -107,6 +107,9 @@ window.Build = (() => {
   function damage(e, n) { e.dur = Math.max(0, e.dur - n); }   // hook for the future monster milestone
   function repair(e) { const d = COMP[e.type]; const max = d.durability || 60; if (e.dur >= max) return { ok: false, reason: 'It is sound.' }; const first = Object.entries(costOf(d) || {})[0]; const c = d.item ? { plank: 1 } : { [first[0]]: 1 }; if (!have(c)) return { ok: false, reason: 'Still need ' + missing(c).join(', ') + '.' };
     const a = W.Survival.Activities.performCustom('build:repair', { label: 'Repair', heavy: false, energy: CFG.repair.energy, minutes: CFG.repair.minutes, anim: 'build' }); if (!a.ok) return a; take(c); e.dur = Math.min(max, e.dur + max * CFG.repair.amount); return { ok: true }; }
+  // structures under attack: a broken piece comes down with no refund
+  function structureAt(x, y) { const k = key(Math.floor(x / T), Math.floor(y / T)); const w = S.Wl.get(k); if (w && !(w.open)) return w; const n = S.N.get(k); if (n && !n.open) return n; return S.list.find(e => { const d = COMP[e.type]; if (d.layer !== 'object' || d.ground || d.mount || !d.foot[0]) return false; const r = footRect(e, d); return x >= r[0] - 3 && x <= r[2] + 3 && y >= r[1] - 3 && y <= r[3] + 3; }) || null; }
+  function hit(e, n) { e.dur -= n; if (e.dur > 0) return false; if (e.opening && COMP[e.opening].kind === 'door') { e.opening = null; e.dur = 20; rebuild(); FX.say('Something broke through a door.'); return true; } for (const o of S.list.filter(o => COMP[o.type].mount && o.cx === e.cx && o.cy === e.cy)) S.list.splice(S.list.indexOf(o), 1); if (e.slots) for (const s of e.slots) if (s) inv().add(s.id, s.qty); S.list.splice(S.list.indexOf(e), 1); FX.say(COMP[e.type].name + ' was destroyed.'); rebuild(); return true; }
   const lights = () => S.list.filter(e => COMP[e.type].light && finished(e) && e.on !== false).map(e => Object.assign({ x: e.x, y: e.y - 12 }, COMP[e.type].light));
 
   // ---------------- interaction: the objects say what they do
@@ -214,5 +217,5 @@ window.Build = (() => {
   function init(data, world) { W = world; A = data.atlas; AW = A.width; IDX = data.idx; CFG = data.components; data.components.components.forEach(c => COMP[c.id] = c); RECIPES = data.recipes.recipes; STN = data.recipes.stations; baseCol = W.DATA.col.slice(); Craft.check(); rebuild(); W.Gather.on('inventory', () => Craft.check());
     const SS = W.Survival.SaveState, snap_ = SS.snapshot.bind(SS), load = SS.load.bind(SS); SS.snapshot = () => Object.assign(snap_(), { build: Save.snapshot() }); SS.load = s => { s = s || JSON.parse(localStorage.getItem(SS.KEY) || 'null'); const ok = load(s); if (ok && s.build) Save.restore(s.build); return ok; }; }
   function tick(dt) { if (!W) return; if (FX.t > 0) FX.t -= dt; Craft.tick(dt); }
-  return { init, tick, on: null, S, Craft, UI, FX, Storage, Save, place, remove, move, validate, work, damage, repair, nearest, lights, rebuild, render: R, comp: () => COMP, recipes: () => RECIPES, snap, baseY, have };
+  return { init, tick, on: null, structureAt, hit, S, Craft, UI, FX, Storage, Save, place, remove, move, validate, work, damage, repair, nearest, lights, rebuild, render: R, comp: () => COMP, recipes: () => RECIPES, snap, baseY, have };
 })();

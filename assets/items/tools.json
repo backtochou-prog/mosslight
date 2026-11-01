@@ -1,6 +1,7 @@
 {
  "tools": [
   {
+   "damage": 4,
    "id": "hand",
    "name": "Bare hands",
    "durability": null,
@@ -13,6 +14,7 @@
    "description": "Fingers and patience."
   },
   {
+   "damage": 8,
    "id": "knife",
    "name": "Gathering knife",
    "durability": 60,
@@ -26,6 +28,7 @@
    "description": "A short, sharp blade for herbs, bark and fibre."
   },
   {
+   "damage": 14,
    "id": "axe",
    "name": "Basic axe",
    "durability": 40,
@@ -38,6 +41,7 @@
    "description": "A hatchet with a worn handle. For wood only."
   },
   {
+   "damage": 11,
    "id": "pickaxe",
    "name": "Pickaxe",
    "durability": 40,
@@ -50,6 +54,7 @@
    "description": "Heavy, blunt, and the only way into rock."
   },
   {
+   "damage": 2,
    "id": "rod",
    "name": "Fishing rod (placeholder)",
    "durability": 30,

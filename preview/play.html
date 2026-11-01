@@ -37,13 +37,15 @@
   <label>cam smooth <input type="range" id="camsmooth" min="1" max="20" value="8" style="width:70px"></label>
   <span class="presets" id="presets"></span>
   <span id="dev" class="presets" style="display:none"></span>
+  <label>sound <input type="range" id="vol" min="0" max="100" value="70" style="width:60px"></label>
   <label><input type="checkbox" id="devtoggle"> dev tools</label>
-  <span class="hint">WASD move · E interact · I pack · J field guide · C craft · B build · 1-4 tools · space pause · [ ] time</span>
+  <span class="hint">WASD move · E interact · I pack · J field guide · C craft · B build · F strike · Shift sneak · L lantern · K creatures · 1-4 tools · space pause · [ ] time</span>
 </header>
 <main><canvas id="c"></canvas></main>
 <script src="survival.js"></script>
 <script src="gather.js"></script>
 <script src="build.js"></script>
+<script src="monsters.js"></script>
 <script>
 // ---------------------------------------------------------------- modules
 // WorldClock: game time, configurable scale, pause/advance.  (mirrors godot/WorldClock.gd)
@@ -96,6 +98,10 @@ async function boot() {
   Gather.init(gdata, { Survival, WorldClock, SeasonState, WeatherState, Player, Camera, iconIdx, iconIdx32, iconW: gdata.icons.cols * gdata.icons.size });
   const BL = '../assets/build/';
   Build.init({ atlas: await loadJSON(BL + 'build_atlas.json'), idx: await loadIdx(BL + 'build_idx.png'), recipes: await loadJSON(BL + 'recipes.json'), components: await loadJSON(BL + 'components.json') }, { Survival, Gather, WorldClock, SeasonState, Player, Camera, DATA, relight: () => buildLightMap(EventState.current ? EventState.current.extra_lights : []) });
+  Monsters.init({ cfg: await loadJSON('../assets/monsters/monsters.json'), atlas: await loadJSON('../assets/monsters/monsters_atlas.json'), idx: await loadIdx('../assets/monsters/monsters_idx.png') }, { Survival, Gather, Build, WorldClock, SeasonState, WeatherState, Player, Camera, DATA, Input,
+    isWater: (x, y) => CLS[DATA.idx[SeasonState.season][y * 768 + x]] & 2,
+    lightAt: (x, y) => { if (x < 0 || y < 0 || x >= 768 || y >= 480) return 0; const i = y * 768 + x; if (!LW[i] || LIGHTS[LI[i]].kind === 'firefly' || LIGHTS[LI[i]].kind === 'glow') return 0; return LW[i] * Math.max(0, Math.min(1, (tableAt(SeasonState.season, WorldClock.hour()).darkness - .08) / .6)); },
+    foliageAt: (x, y) => { x = Math.round(x); y = Math.round(y); if (x < 0 || y < 0 || x >= 768 || y >= 480) return false; return DATA.depth[SeasonState.season === 'winter' ? 'winter' : 'spring'][y * 768 + x] > y; } });
   Survival.Dev.mount(document.getElementById('dev'));
   if (location.search.includes('dev=1')) { document.getElementById('dev').style.display = ''; document.getElementById('devtoggle').checked = true; }
   WorldClock.paused = false;
@@ -176,7 +182,7 @@ const Input = {
     const L = Math.hypot(x, y); return L > 1 ? [x / L, y / L] : [x, y]; },   // diagonal never faster than cardinal
   consumeAction() { const p = this.actionPressed && !this._actionLatch; this._actionLatch = this.actionPressed; return p; },
 };
-addEventListener('keydown', e => { const k = e.key.toLowerCase(); if (window.Build && Build.UI.key(k)) { e.preventDefault(); return; } if (window.Gather && Gather.UI.key(k)) { e.preventDefault(); return; } Input.keys[k] = true; if (k === 'e' || k === 'enter') Input.actionPressed = true; if (['arrowup','arrowdown','arrowleft','arrowright',' '].includes(k)) e.preventDefault(); });
+addEventListener('keydown', e => { const k = e.key.toLowerCase(); if (window.Monsters && Monsters.key(k)) { e.preventDefault(); return; } if (window.Build && Build.UI.key(k)) { e.preventDefault(); return; } if (window.Gather && Gather.UI.key(k)) { e.preventDefault(); return; } Input.keys[k] = true; if (k === 'e' || k === 'enter') Input.actionPressed = true; if (['arrowup','arrowdown','arrowleft','arrowright',' '].includes(k)) e.preventDefault(); });
 addEventListener('keyup', e => { const k = e.key.toLowerCase(); Input.keys[k] = false; if (k === 'e' || k === 'enter') Input.actionPressed = false; });
 
 // ---------------------------------------------------------------- Player (movement only; mirrors godot/play/Player.gd)
@@ -189,7 +195,7 @@ const Player = {
       if (xx < 0 || yy < 0 || xx >= W || yy >= H) return true; if (col[yy * W + xx]) return true; } return false; },
   step(dt, axis) {                                   // fixed-step; called 60x per second
     const [ix, iy] = axis; const c = this.cfg;
-    const tx = ix * c.speed, ty = iy * c.speed;
+    const sp = c.speed * (c.speedMul || 1); const tx = ix * sp, ty = iy * sp;
     const a = (ix || iy) ? c.accel : c.decel;
     this.vx += Math.max(-a * dt, Math.min(a * dt, tx - this.vx)); this.vy += Math.max(-a * dt, Math.min(a * dt, ty - this.vy));
     if (!ix && Math.abs(this.vx) < 2) this.vx = 0; if (!iy && Math.abs(this.vy) < 2) this.vy = 0;
@@ -218,6 +224,7 @@ const Camera = { x: 0, y: 0, smooth: 8, deadzone: 0.25, vw: 640, vh: 360, init: 
 const Interaction = { current: null, message: null, msgT: 0,
   update(dt) { let best = null, bd = 1e9; for (const it of DATA.play.interactables) { const d = Math.hypot(it.x - Player.x, it.y - Player.y); if (d < it.r && d < bd) { best = it; bd = d; } }
     const node = Gather.Nodes.nearest(Player.x, Player.y); if (node && (!best || Math.hypot(node.def.x - Player.x, node.def.y - Player.y) <= bd)) best = { id: 'node:' + node.def.id, label: node.def.label + (Gather.Tools.bestFor(node.def.tool) ? '' : ' (needs ' + node.def.tool + ')'), node, x: node.def.x, y: node.def.y, r: node.def.r };
+    const mn = Monsters.nearest(Player.x, Player.y); if (mn && !best) best = mn;
     const bn = Build.nearest(Player.x, Player.y); if (bn && (!best || Math.hypot(bn.x - Player.x, bn.y - Player.y) < Math.hypot(best.x - Player.x, best.y - Player.y))) best = bn;
     this.current = best; if (this.msgT > 0) this.msgT -= dt; else this.message = null;
     if (Input.consumeAction() && best && !Survival.Sleep.sleeping) {
@@ -247,7 +254,7 @@ const off = document.createElement('canvas'); off.width = W; off.height = H; con
 const cv = document.getElementById('c'), ctx = cv.getContext('2d');
 let last = performance.now(), T = 0, state = { zoom: 3, viewport: true, ox: 60, oy: 90 }, simAcc = 0;
 const SIM_DT = 1 / 60;
-function simulate(dt) { simAcc += dt; let n = 0; const ax = (Survival.Sleep.sleeping || Survival.Activities.current || Gather.UI.open || Build.UI.busy()) ? [0, 0] : Input.axis(); while (simAcc >= SIM_DT && n < 5) { Player.step(SIM_DT, ax); simAcc -= SIM_DT; n++; } Camera.update(dt); Interaction.update(dt); Survival.tick(dt, WorldClock.paused ? 0 : dt * WorldClock.scale / 60, Player.moving); Gather.tick(dt); Build.tick(dt); }
+function simulate(dt) { simAcc += dt; let n = 0; const ax = (Survival.Sleep.sleeping || Survival.Activities.current || Gather.UI.open || Build.UI.busy() || Monsters.Journal.open) ? [0, 0] : Input.axis(); while (simAcc >= SIM_DT && n < 5) { Player.step(SIM_DT, ax); simAcc -= SIM_DT; n++; } Camera.update(dt); Interaction.update(dt); Survival.tick(dt, WorldClock.paused ? 0 : dt * WorldClock.scale / 60, Player.moving); Gather.tick(dt); Build.tick(dt); if (!Gather.UI.open && !Build.UI.open && !Monsters.Journal.open) Monsters.tick(dt); }
 function frame(now) {
   const dt = Math.min(0.1, (now - last) / 1000); last = now; T += dt;
   WorldClock.tick(dt); WeatherState.tick(dt); tickParticles(dt, T); simulate(dt);
@@ -295,11 +302,11 @@ function frame(now) {
   Build.render.ground(buildCtx);
   // ---- resource nodes: live sprites from the atlas, hidden when their conditions fail, sorted against the player by base y
   { const dep = DATA.depth[season === 'winter' ? 'winter' : 'spring']; const nIdx = DATA.nodeIdx; const aw = DATA.nodeAtlasW; const pyBase = Math.round(Player.y);
-    for (const n of Gather.Nodes.list) { if (!Gather.Nodes.visible(n)) continue; const sp = Gather.nodeSprite(n); if (!sp) continue; const x0 = n.def.x - sp.ox, y0 = n.def.y - sp.oy; const glow = ['glowcap', 'ghostcap', 'nightlily', 'moth'].includes(n.def.kind) && n.state === 'full';
+    for (const n of Gather.Nodes.list) { if (!Gather.Nodes.visible(n)) continue; const sp = Gather.nodeSprite(n); if (!sp) continue; const x0 = n.def.x - sp.ox, y0 = n.def.y - sp.oy; const glow = ['glowcap', 'ghostcap', 'nightlily', 'moth', 'starshard', 'nightglass', 'ember_vent', 'spore_patch'].includes(n.def.kind) && n.state === 'full';
       for (let yy = 0; yy < sp.h; yy++) for (let xx = 0; xx < sp.w; xx++) { const pi = nIdx[(sp.y + yy) * aw + sp.x + xx]; if (!pi) continue; const x = x0 + xx, y = y0 + yy; if (x < 0 || y < 0 || x >= W || y >= H) continue; const i = y * W + x; if (dep[i] > n.def.y || (pyBase < n.def.y && false)) continue;
         let c = tab[pi]; let r = c[0], g = c[1], b = c[2]; if (glow && darkness > 0.4) { const k = 0.35 + 0.15 * Math.sin(T * 2 + n.def.x); r += (200 - r) * k * 0.3; g += (255 - g) * k * 0.4; b += (230 - b) * k * 0.4; }
         const o = i * 4; d[o] = r; d[o + 1] = g; d[o + 2] = b; } } }
-  Build.render.items(buildCtx, false);
+  buildCtx.idx = idx; Monsters.render.lantern(buildCtx); Build.render.items(buildCtx, false); Monsters.render.items(buildCtx, false);
   // ---- player: y-sorted against the baked scene through the depth map, lit by the same table
   { const dep = DATA.depth[season === 'winter' ? 'winter' : 'spring']; const pm = DATA.player, pidx = DATA.pidx; const fw = pm.frame_w, fh = pm.frame_h;
     const act = Survival.Activities.current; const row = pm.facings.indexOf(act && act.anim ? act.anim : Player.facing), colf = Player.frame(); const px0 = Math.round(Player.x) - pm.origin[0], py0 = Math.round(Player.y) - pm.origin[1];
@@ -313,7 +320,7 @@ function frame(now) {
   { const nIdx = DATA.nodeIdx; const aw = DATA.nodeAtlasW; const pyBase = Math.round(Player.y);   // nodes nearer the camera than the player overdraw the player
     for (const n of Gather.Nodes.list) { if (n.def.y <= pyBase || !Gather.Nodes.visible(n)) continue; const sp = Gather.nodeSprite(n); if (!sp) continue; if (Math.abs(n.def.x - Player.x) > 24 || n.def.y - pyBase > 30) continue; const x0 = n.def.x - sp.ox, y0 = n.def.y - sp.oy;
       for (let yy = 0; yy < sp.h; yy++) for (let xx = 0; xx < sp.w; xx++) { const pi = nIdx[(sp.y + yy) * aw + sp.x + xx]; if (!pi) continue; const x = x0 + xx, y = y0 + yy; if (x < 0 || y < 0 || x >= W || y >= H) continue; const i = y * W + x; const c = tab[pi]; const o = i * 4; d[o] = c[0]; d[o + 1] = c[1]; d[o + 2] = c[2]; } } }
-  Build.render.items(buildCtx, true); Build.render.roofs(buildCtx); Build.render.ghost(buildCtx);
+  Build.render.items(buildCtx, true); Monsters.render.items(buildCtx, true); Build.render.roofs(buildCtx); Build.render.ghost(buildCtx);
   og.putImageData(img, 0, 0);
   // particles drawn in palette-ish colours, 1-2 px, no blur
   og.fillStyle = 'rgba(190,205,215,0.55)'; for (const p of P.rain) { og.fillRect(p.x | 0, p.y | 0, 1, p.near ? 5 : 3); if (p.near) og.fillRect((p.x | 0) + 1, (p.y | 0) + 2, 1, 2); }
@@ -331,7 +338,7 @@ function frame(now) {
   if (Interaction.message) { ctx.font = '10px ui-monospace, monospace'; const tw = Math.min(vw - 40, ctx.measureText(Interaction.message).width + 16);
     ctx.fillStyle = 'rgba(24,30,28,0.86)'; const sf = Camera.safe; ctx.fillRect(Math.round(vw / 2 - tw / 2), vh - 64 - sf, Math.round(tw), 30); ctx.strokeStyle = 'rgba(222,220,180,0.55)'; ctx.strokeRect(Math.round(vw / 2 - tw / 2) + 0.5, vh - 63.5 - sf, Math.round(tw) - 1, 29);
     ctx.fillStyle = '#eedcb0'; ctx.textAlign = 'center'; ctx.fillText(Interaction.message, vw / 2, vh - 45 - sf); }
-  Touch.draw(ctx, vw, vh); Survival.HUD.draw(ctx, vw, vh, Camera.safe, T); Gather.UI.draw(ctx, vw, vh, Camera.safe, tab); Build.UI.draw(ctx, vw, vh, Camera.safe, tab); ctx.restore();
+  Touch.draw(ctx, vw, vh); Survival.HUD.draw(ctx, vw, vh, Camera.safe, T); Gather.UI.draw(ctx, vw, vh, Camera.safe, tab); Monsters.render.overlay(ctx, vw, vh, Camera.safe, tab); Build.UI.draw(ctx, vw, vh, Camera.safe, tab); ctx.restore();
   document.getElementById('clock').textContent = `${WorldClock.label()} · day ${Survival.Clock.day} · ${season} · ${Survival.Clock.phase()} · ${WeatherState.kind} ${(WeatherState.intensity * 100) | 0}%`;
   if (!WorldClock.paused) document.getElementById('time').value = WorldClock.minutes | 0;
   requestAnimationFrame(frame);
@@ -345,7 +352,7 @@ $('season').onchange = e => { SeasonState.season = e.target.value; };
 $('weather').onchange = e => WeatherState.set(e.target.value, $('intensity').value / 100);
 $('intensity').oninput = e => WeatherState.set(WeatherState.kind, e.target.value / 100);
 $('zoom').onchange = e => state.zoom = +e.target.value; $('viewport').onchange = e => state.viewport = e.target.checked;
-$('touch').onchange = e => Touch.enabled = e.target.checked; $('devtoggle').onchange = e => $('dev').style.display = e.target.checked ? '' : 'none'; $('aspect').onchange = e => { const [w, h] = e.target.value.split('x').map(Number); Camera.vw = w; Camera.vh = h; }; $('safe').oninput = e => Camera.safe = +e.target.value; $('camsmooth').oninput = e => Camera.smooth = +e.target.value;
+$('vol').oninput = e => { Monsters.Audio.vol.master = e.target.value / 100; if (Monsters.Audio.master) Monsters.Audio.master.gain.value = Monsters.Audio.vol.master; }; $('touch').onchange = e => Touch.enabled = e.target.checked; $('devtoggle').onchange = e => $('dev').style.display = e.target.checked ? '' : 'none'; $('aspect').onchange = e => { const [w, h] = e.target.value.split('x').map(Number); Camera.vw = w; Camera.vh = h; }; $('safe').oninput = e => Camera.safe = +e.target.value; $('camsmooth').oninput = e => Camera.smooth = +e.target.value;
 if ('ontouchstart' in window) { Touch.enabled = true; $('touch').checked = true; }
 Touch.attach(cv);
 { const lp = e => { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * cv.width / state.zoom, (e.clientY - r.top) / r.height * cv.height / state.zoom]; };

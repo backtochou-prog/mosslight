@@ -157,3 +157,8 @@ Finished (hand-authored, validated): all 50 items and 5 tools — `assets/items/
 | 8 material icons | O | hand-authored grids |
 | 29 placeable icons | derived | the object's own sprite |
 | north-south doors and windows, true elevation, side-view furniture beyond beds | M | beds have side views; other furniture mirrors when rotated |
+
+
+## Creature assets (Prompt 11)
+
+`assets/monsters/monsters_idx.png` + `monsters_atlas.json`: 27 indexed sprites, feet at the origin. Status: code-authored, in use, no human artist pass. Sound: WebAudio synthesis recipes in `preview/monsters.js`, placeholders. Night nodes starshard, nightglass, ember_vent and spore_patch are in `assets/items/nodes_idx.png`.

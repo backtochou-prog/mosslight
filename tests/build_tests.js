@@ -5,7 +5,7 @@ function check(n, ok, d) { results.push({ name: n, ok: !!ok, detail: d }); conso
   await p.goto(`http://127.0.0.1:${PORT}/preview/play.html?dev=1`); await p.waitForFunction(() => window.Build && Build.comp().wall_wood && document.getElementById('clock').textContent.includes(':'), { timeout: 30000 });
   const ev = (f, a) => p.evaluate(f, a); const shot = async n => { await p.waitForTimeout(350); await (await p.$('#c')).screenshot({ path: `/root/mosslight/renders/build_${n}.png` }); };
   await ev(() => { setPreset(1); WorldClock.paused = true; Survival.Clock.setHour(9); Survival.Energy.set(100); window.fill = () => Survival.Energy.set(100); window.give = o => { for (const k in o) Gather.Inventory.add(k, o[k]); }; window.at = (x, y) => Build.snap(x * 16 + 8, y * 16 + 8); });
-  const n = await ev(() => [Build.recipes().length, Object.keys(Build.comp()).length, Object.keys(Gather.items()).length, Gather.Journal.progress()[1]]); check('data loaded; journal total still 50 gathered entries', n[3] === 50, `${n[0]} recipes, ${n[1]} components, ${n[2]} items`);
+  const n = await ev(() => [Build.recipes().length, Object.keys(Build.comp()).length, Object.keys(Gather.items()).length, Gather.Journal.progress()[1]]); check('data loaded; journal total 52 gathered entries', n[3] === 52, `${n[0]} recipes, ${n[1]} components, ${n[2]} items`);
   // crafting
   let r = await ev(() => Build.Craft.start('workbench', 'hand')); check('crafting refused without ingredients', !r.ok, r.reason);
   await ev(() => give({ branch: 30, stone: 40, fiber: 30, log: 12, scrap_metal: 8, bolt: 4, moss: 8, clay: 8, glass_shard: 6, poppy: 2, daisy: 1, cord: 30 }));

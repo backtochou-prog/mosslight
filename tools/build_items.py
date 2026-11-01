@@ -69,17 +69,17 @@ ITEMS = [
  # ---- rare discoveries
  item('moondew','Moondew','rare_find','very_rare','A luminous liquid that beads on glow-cap gills after dark. Fades by morning unless bottled.',('drop','glowshroom'),stack=10,value=35,weight=0.1,method='hand',time='night',habitat='glowing mushrooms after dark',craft='lamp oil, night tonics',kind='rare'),
  item('ghostcap','Ghostcap','rare_find','exceptional','A translucent mushroom that rises only in damp woods after midnight and is gone by dawn.',('mushroom','mist'),stack=5,value=60,weight=0.05,method='hand',time='deep_night',weather='after_rain,rain',seasons='autumn,spring',habitat='damp forest floor, after midnight, after rain',craft='rare remedies',kind='rare'),
- item('starshard','Starshard','rare_find','exceptional','A splinter of black mineral full of pinprick lights. Cold even in the sun.',('crystal','eyes'),stack=5,value=80,weight=0.3,method='pickaxe',tool='pickaxe',time='night',habitat='deposits under moonlight (caves, later)',craft='navigation, charms',kind='rare'),
- item('emberroot','Emberroot','rare_find','rare','A knotted root that stays warm in the hand. Grows where the ground is heated from below.',('root','fire'),stack=10,value=30,weight=0.3,method='knife',tool='knife',habitat='geothermal ground (future biome)',craft='warming salves, fuel',kind='rare'),
+ item('starshard','Starshard','rare_find','exceptional','A splinter of black mineral full of pinprick lights. Cold even in the sun.',('crystal','eyes'),stack=5,value=80,weight=0.3,method='pickaxe',tool='pickaxe',time='night',weather='clear', habitat='thin rock that only shows under a clear moon',craft='navigation, charms',kind='rare'),
+ item('emberroot','Emberroot','rare_find','rare','A knotted root that stays warm in the hand. Grows where the ground is heated from below.',('root','fire'),stack=10,value=30,weight=0.3,method='knife',tool='knife',time='night', habitat='warm vents near the ruin, after dark',craft='warming salves, fuel',kind='rare'),
  item('lantern_moth','Lantern moth','rare_find','rare','A large pale moth drawn to lantern light. Its wing dust glows faintly.',('moth','mist'),stack=5,value=20,weight=0.01,method='hand',time='night',habitat='around lanterns at night',craft='glowing ink',kind='rare'),
  item('heartwood_seed','Heartwood seed','rare_find','legendary','A single seed from the oldest oak, found once in a lifetime among its roots. Plant it, and wait.',('seed','oak'),stack=1,value=0,weight=0.05,method='hand',seasons='autumn',time='night',weather='after_rain',habitat='roots of the great oak, one autumn night after rain',craft='a tree that remembers',kind='rare'),
 ]
 TOOLS = [
- dict(id='hand', name='Bare hands', durability=None, compat=['hand'], efficiency=1.0, upgrade=None, icon=('hand','canvas'), description='Fingers and patience.'),
- dict(id='knife', name='Gathering knife', durability=60, compat=['hand','knife'], efficiency=1.1, upgrade='knife_steel', icon=('knife','metal'), description='A short, sharp blade for herbs, bark and fibre.'),
- dict(id='axe', name='Basic axe', durability=40, compat=['axe'], efficiency=1.0, upgrade='axe_copper', icon=('axe','wood'), description='A hatchet with a worn handle. For wood only.'),
- dict(id='pickaxe', name='Pickaxe', durability=40, compat=['pickaxe'], efficiency=1.0, upgrade='pickaxe_copper', icon=('pickaxe','metal'), description='Heavy, blunt, and the only way into rock.'),
- dict(id='rod', name='Fishing rod (placeholder)', durability=30, compat=['fishing'], efficiency=1.0, upgrade=None, icon=('rod','wood'), description='A reed rod and a length of line. Fishing comes later.'),
+ dict(damage=4, id='hand', name='Bare hands', durability=None, compat=['hand'], efficiency=1.0, upgrade=None, icon=('hand','canvas'), description='Fingers and patience.'),
+ dict(damage=8, id='knife', name='Gathering knife', durability=60, compat=['hand','knife'], efficiency=1.1, upgrade='knife_steel', icon=('knife','metal'), description='A short, sharp blade for herbs, bark and fibre.'),
+ dict(damage=14, id='axe', name='Basic axe', durability=40, compat=['axe'], efficiency=1.0, upgrade='axe_copper', icon=('axe','wood'), description='A hatchet with a worn handle. For wood only.'),
+ dict(damage=11, id='pickaxe', name='Pickaxe', durability=40, compat=['pickaxe'], efficiency=1.0, upgrade='pickaxe_copper', icon=('pickaxe','metal'), description='Heavy, blunt, and the only way into rock.'),
+ dict(damage=2, id='rod', name='Fishing rod (placeholder)', durability=30, compat=['fishing'], efficiency=1.0, upgrade=None, icon=('rod','wood'), description='A reed rod and a length of line. Fishing comes later.'),
 ]
 # ---- world resource nodes placed in the clearing. Each: visual kind + states, drop table, tool, conditions, respawn.
 NODES = [
@@ -115,6 +115,10 @@ NODES = [
  dict(id='oak_north', kind='tree_marker', x=419, y=102, r=20, label='Chop the oak', activity='cut_tree', tool='axe', drops=[['log',1,2],['bark',0,1]], yields=3, respawn_hours=72, respawn_mode='time'),
  dict(id='oak_northeast', kind='tree_marker', x=493, y=111, r=20, label='Chop the oak', activity='cut_tree', tool='axe', drops=[['log',1,2],['hardwood',0,1]], yields=3, respawn_hours=72, respawn_mode='time'),
  dict(id='birch_west', kind='tree_marker', x=129, y=147, r=20, label='Chop the birch', activity='cut_tree', tool='axe', drops=[['log',1,1],['bark',1,2]], yields=3, respawn_hours=72, respawn_mode='time'),
+ dict(id='starshard_moon', kind='starshard', x=250, y=128, r=16, label='Chip the starshard', activity='mine', tool='pickaxe', drops=[['starshard',1,1]], yields=1, respawn_hours=96, respawn_mode='time', time='night', weather='clear'),
+ dict(id='nightglass_bank', kind='nightglass', x=548, y=222, r=16, label='Lift the nightglass', activity='mine', tool='pickaxe', drops=[['nightglass',1,1]], yields=1, respawn_hours=72, respawn_mode='time', time='deep_night'),
+ dict(id='ember_vent', kind='ember_vent', x=694, y=120, r=16, label='Dig emberroot', activity='cut_herb', tool='knife', drops=[['emberroot',1,1]], yields=1, respawn_hours=48, respawn_mode='time', time='night'),
+ dict(id='spore_patch', kind='spore_patch', x=150, y=300, r=16, label='Shake the spores loose', activity='pick_plant', tool='hand', drops=[['luminous_spores',1,2]], yields=1, respawn_hours=24, respawn_mode='time', time='night'),
  dict(id='clay_bank', kind='clay', x=572, y=222, r=16, label='Dig clay', activity='gather_stones', tool='hand', drops=[['clay',1,2]], yields=3, respawn_hours=24, respawn_mode='time', weather='rain,after_rain'),
  dict(id='feather_meadow', kind='feather', x=360, y=120, r=14, label='Pick up the feather', activity='search', tool='hand', drops=[['feather',1,1]], yields=1, respawn_hours=36, respawn_mode='time'),
 ]
@@ -182,13 +186,13 @@ def build():
     ITEMS.extend(CD.CRAFTED_ITEMS)
     names = [i['id'] for i in ITEMS] + ['tool_' + t['id'] for t in TOOLS]
     sheet = Canvas(12 * 10, 12 * ((len(names) + 9) // 10)); index = {}
-    for k, (nm, ic) in enumerate([(i['id'], i['icon']) for i in ITEMS if i['category'] != 'crafted'] + [('tool_' + t['id'], t['icon']) for t in TOOLS]):
+    for k, (nm, ic) in enumerate([(i['id'], i['icon']) for i in ITEMS if not isinstance(i.get('icon'), str) and i['category'] != 'crafted'] + [('tool_' + t['id'], t['icon']) for t in TOOLS]):
         c = icon(*ic); x, y = (k % 10) * 12, (k // 10) * 12; sheet.blit(c, x, y); index[nm] = [x, y]
     Image.fromarray(sheet.a, 'L').save(os.path.join(OUT, 'icons_idx.png')); sheet.save(os.path.join(OUT, 'icons_preview.png'), scale=1)
     json.dump({'size': 12, 'cols': 10, 'index': index}, open(os.path.join(OUT, 'icons.json'), 'w'))
     for it in ITEMS: it['icon'] = it['id']
     for t in TOOLS: t['icon'] = 'tool_' + t['id']
-    json.dump({'version': 1, 'rarities': RARITY, 'categories': ['natural', 'geological', 'botanical', 'abandoned', 'rare_find', 'crafted'], 'items': ITEMS}, open(os.path.join(OUT, 'items.json'), 'w'), indent=1)
+    json.dump({'version': 1, 'rarities': RARITY, 'categories': ['natural', 'geological', 'botanical', 'abandoned', 'rare_find', 'creature', 'crafted'], 'items': ITEMS}, open(os.path.join(OUT, 'items.json'), 'w'), indent=1)
     json.dump({'tools': TOOLS}, open(os.path.join(OUT, 'tools.json'), 'w'), indent=1)
     json.dump({'nodes': NODES, 'activities_extra': {'pick_plant': {'label': 'Pick', 'energy': 1, 'minutes': 4, 'heavy': False, 'anim': 'gather'},
                'cut_herb': {'label': 'Cut', 'energy': 1, 'minutes': 5, 'heavy': False, 'anim': 'gather'}, 'search': {'label': 'Search', 'energy': 1, 'minutes': 6, 'heavy': False, 'anim': 'gather'}}},

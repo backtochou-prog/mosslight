@@ -642,3 +642,8 @@ the keep-outs; 5 one flower cluster per sunny pocket; 6 foreground frame;
 * Objects without shadows or base contact; floating lanterns; trees on a grid.
 * Mixed outline styles, black outlines, pure white highlights, neon colours.
 * Any asset outside the palette, or a night look made by darkening the day.
+
+
+## Creatures (Prompt 11)
+
+Each archetype must read by silhouette alone: low hunched Wanderer, long-legged Stalker with three eyes, ringed Burrower behind a mound, very tall thin Howler, wide stone Brute with a tree on its back, drifting bell-shaped Luminous. Creatures use the indexed palette and the world's night tables; only eyes and Luminous bodies use emissive families. Attack warnings are a pose change and a soft lift, never a flash. No gore. Gallery: `renders/gallery_creatures_{day,night}.png`.
