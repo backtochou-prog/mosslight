@@ -56,7 +56,7 @@
   {
    "damage": 2,
    "id": "rod",
-   "name": "Fishing rod (placeholder)",
+   "name": "Primitive rod",
    "durability": 30,
    "compat": [
     "fishing"
@@ -64,7 +64,7 @@
    "efficiency": 1.0,
    "upgrade": null,
    "icon": "tool_rod",
-   "description": "A reed rod and a length of line. Fishing comes later."
+   "description": "A reed, a length of cord, a bone hook. It catches fish, mostly small ones."
   }
  ]
 }

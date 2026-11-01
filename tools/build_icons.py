@@ -8,6 +8,8 @@ from pixelart.palette import PAL
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, 'assets/items'); ICO = os.path.join(OUT, 'icons'); ICO32 = os.path.join(OUT, 'icons32'); os.makedirs(ICO, exist_ok=True); os.makedirs(ICO32, exist_ok=True)
 S = 16
+import fish_data as _FD
+PLATES = {f['id'] for f in _FD.RECORDS}   # fish are plates in their own atlas, not 16 px grids
 
 def load_grids():
     grids = {}
@@ -65,7 +67,7 @@ def main():
     BSPR = _B.all_sprites(); sprite_icon = {i['id']: i['sprite'] for i in items if i.get('sprite')}
     wanted = [i['id'] for i in items] + ['tool_' + t['id'] for t in tools]
     report = {'size': S, 'finished': [], 'placeholder': [], 'errors': []}
-    cols = 10; names = wanted
+    cols = 10; names = [n for n in wanted if not n in PLATES]
     sheet = Canvas(cols * S, S * ((len(names) + cols - 1) // cols)); index = {}
     sheet32 = Canvas(cols * S * 2, S * 2 * ((len(names) + cols - 1) // cols))
     for k, nm in enumerate(names):

@@ -844,6 +844,48 @@
    "time": "night"
   },
   {
+   "id": "worm_bed",
+   "kind": "worm_bed",
+   "x": 526,
+   "y": 318,
+   "r": 16,
+   "label": "Dig for worms",
+   "activity": "pick_plant",
+   "tool": "hand",
+   "drops": [
+    [
+     "worm",
+     2,
+     4
+    ]
+   ],
+   "yields": 2,
+   "respawn_hours": 12,
+   "respawn_mode": "time"
+  },
+  {
+   "id": "reed_insects",
+   "kind": "reed_insects",
+   "x": 612,
+   "y": 212,
+   "r": 16,
+   "label": "Catch insects",
+   "activity": "pick_plant",
+   "tool": "hand",
+   "seasons": "spring,summer,autumn",
+   "drops": [
+    [
+     "insect_bait",
+     2,
+     3
+    ]
+   ],
+   "yields": 2,
+   "respawn_hours": 8,
+   "respawn_mode": "time",
+   "time": "day"
+  },
+  {
    "id": "clay_bank",
    "kind": "clay",
    "x": 572,

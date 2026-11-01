@@ -1,0 +1,3993 @@
+{
+"version": 1,
+"fish": [
+{
+"id": "minnow",
+"name": "Minnow",
+"latin": "Phoxinus silvanus",
+"rarity": "common",
+"habitat": "pond",
+"depth": "surface",
+"periods": [
+"dawn",
+"day",
+"dusk"
+],
+"seasons": [
+"any"
+],
+"weather": [
+"any"
+],
+"bait": [
+"worm",
+"dough",
+"insect"
+],
+"difficulty": 1,
+"behavior": "calm",
+"cm": [
+4,
+9
+],
+"kg": [
+0.003,
+0.02
+],
+"value": 2,
+"uses": [
+"bait",
+"food"
+],
+"clue": "Shoals at the surface wherever the sun is on the water.",
+"note": "Crafts into live baitfish.",
+"description": "Hardly a mouthful, and always in company. Where these flicker, larger things are watching."
+},
+{
+"id": "perch",
+"name": "Perch",
+"latin": "Perca barrata",
+"rarity": "common",
+"habitat": "pond",
+"depth": "mid",
+"periods": [
+"dawn",
+"day",
+"dusk"
+],
+"seasons": [
+"any"
+],
+"weather": [
+"any"
+],
+"bait": [
+"worm",
+"baitfish"
+],
+"difficulty": 2,
+"behavior": "quick",
+"cm": [
+12,
+32
+],
+"kg": [
+0.05,
+0.7
+],
+"value": 6,
+"uses": [
+"food"
+],
+"clue": "Hunts minnows at the edge of the lilies in daylight.",
+"note": "Spines are sharp. Mind your thumb.",
+"description": "Banded like shade under reeds, with fins the colour of a warning."
+},
+{
+"id": "roach",
+"name": "Roach",
+"latin": "Rutilus rubens",
+"rarity": "common",
+"habitat": "pond",
+"depth": "mid",
+"periods": [
+"any"
+],
+"seasons": [
+"any"
+],
+"weather": [
+"any"
+],
+"bait": [
+"dough",
+"worm"
+],
+"difficulty": 1,
+"behavior": "calm",
+"cm": [
+10,
+28
+],
+"kg": [
+0.04,
+0.5
+],
+"value": 4,
+"uses": [
+"food",
+"bait"
+],
+"clue": "Bites nearly always, if politely asked.",
+"note": "A red eye is how you tell it from a rudd.",
+"description": "A steady silver fish with a red-rimmed eye. Most anglers start here and some never leave."
+},
+{
+"id": "rudd",
+"name": "Rudd",
+"latin": "Scardinius aureus",
+"rarity": "common",
+"habitat": "pond",
+"depth": "surface",
+"periods": [
+"day",
+"dusk"
+],
+"seasons": [
+"spring",
+"summer",
+"autumn"
+],
+"weather": [
+"any"
+],
+"bait": [
+"insect",
+"dough"
+],
+"difficulty": 2,
+"behavior": "surface",
+"cm": [
+12,
+30
+],
+"kg": [
+0.05,
+0.6
+],
+"value": 5,
+"uses": [
+"food"
+],
+"clue": "Takes insects off the top on warm afternoons.",
+"note": "Upturned mouth, surface feeder.",
+"description": "Brass flanks and scarlet fins. It looks up for its dinner, so you see the swirl before the fish."
+},
+{
+"id": "gudgeon",
+"name": "Gudgeon",
+"latin": "Gobio arenarius",
+"rarity": "common",
+"habitat": "pond",
+"depth": "bottom",
+"periods": [
+"dawn",
+"day",
+"dusk"
+],
+"seasons": [
+"any"
+],
+"weather": [
+"any"
+],
+"bait": [
+"worm"
+],
+"difficulty": 1,
+"behavior": "calm",
+"cm": [
+8,
+16
+],
+"kg": [
+0.01,
+0.08
+],
+"value": 3,
+"uses": [
+"food",
+"bait"
+],
+"clue": "Noses along the bottom in sandy shallows.",
+"note": "One small barbel at each corner of the mouth.",
+"description": "A speckled bottom-grubber with one small whisker. It will bite anything, and looks surprised after."
+},
+{
+"id": "bleak",
+"name": "Bleak",
+"latin": "Alburnus clarus",
+"rarity": "common",
+"habitat": "pond",
+"depth": "surface",
+"periods": [
+"day",
+"dusk"
+],
+"seasons": [
+"summer",
+"autumn"
+],
+"weather": [
+"any"
+],
+"bait": [
+"insect",
+"dough"
+],
+"difficulty": 2,
+"behavior": "quick",
+"cm": [
+8,
+16
+],
+"kg": [
+0.01,
+0.05
+],
+"value": 3,
+"uses": [
+"bait"
+],
+"clue": "A flash high in the water, gone in the same moment.",
+"note": "Scales were once used to pearl glass beads.",
+"description": "Narrow as a blade and just as bright. Shoals scatter at a shadow."
+},
+{
+"id": "ruffe",
+"name": "Ruffe",
+"latin": "Gymnocephalus aspera",
+"rarity": "common",
+"habitat": "pond",
+"depth": "bottom",
+"periods": [
+"any"
+],
+"seasons": [
+"autumn",
+"winter",
+"spring"
+],
+"weather": [
+"any"
+],
+"bait": [
+"worm"
+],
+"difficulty": 2,
+"behavior": "cautious",
+"cm": [
+7,
+16
+],
+"kg": [
+0.01,
+0.08
+],
+"value": 3,
+"uses": [
+"bait"
+],
+"clue": "A cold-water nibbler on the mud.",
+"note": "Coated in slime, all spines.",
+"description": "A rough little perch-cousin with a saw for a back and a blue-ringed eye."
+},
+{
+"id": "bitterling",
+"name": "Bitterling",
+"latin": "Rhodeus amarus",
+"rarity": "common",
+"habitat": "pond",
+"depth": "shallow",
+"periods": [
+"day"
+],
+"seasons": [
+"spring",
+"summer"
+],
+"weather": [
+"clear"
+],
+"bait": [
+"dough"
+],
+"difficulty": 2,
+"behavior": "quick",
+"cm": [
+4,
+8
+],
+"kg": [
+0.002,
+0.012
+],
+"value": 6,
+"uses": [
+"bait"
+],
+"clue": "Shows its colours among the shallows in bright spring sun.",
+"note": "Lays its eggs inside mussels. Truly.",
+"description": "The smallest jewel in the pond: rose flanks and one aqua stroke."
+},
+{
+"id": "common_carp",
+"name": "Common carp",
+"latin": "Cyprinus silvae",
+"rarity": "common",
+"habitat": "pond",
+"depth": "bottom",
+"periods": [
+"dusk",
+"night",
+"dawn"
+],
+"seasons": [
+"spring",
+"summer",
+"autumn"
+],
+"weather": [
+"any"
+],
+"bait": [
+"dough",
+"worm"
+],
+"difficulty": 4,
+"behavior": "strong",
+"cm": [
+30,
+75
+],
+"kg": [
+0.8,
+9
+],
+"value": 10,
+"uses": [
+"food"
+],
+"clue": "Bubbles at the lily roots toward evening.",
+"note": "Scale-covered, unlike the mirror.",
+"description": "An olive-gold grazer. Slow to take and in no hurry to leave."
+},
+{
+"id": "whisker_cat",
+"name": "Whiskered catfish",
+"latin": "Silurus barbatus",
+"rarity": "common",
+"habitat": "pond",
+"depth": "bottom",
+"periods": [
+"night",
+"deep"
+],
+"seasons": [
+"spring",
+"summer",
+"autumn"
+],
+"weather": [
+"any"
+],
+"bait": [
+"worm",
+"baitfish"
+],
+"difficulty": 3,
+"behavior": "nocturnal",
+"cm": [
+25,
+70
+],
+"kg": [
+0.3,
+5
+],
+"value": 9,
+"uses": [
+"food"
+],
+"clue": "Feels its way along the bottom once it is dark.",
+"note": "Tastes with its whole skin.",
+"description": "Flat-headed and mottled, with long whiskers for a night that it cannot see through."
+},
+{
+"id": "jewel_sunfish",
+"name": "Jewel sunfish",
+"latin": "Lepomis gemma",
+"rarity": "uncommon",
+"habitat": "pond",
+"depth": "shallow",
+"periods": [
+"day"
+],
+"seasons": [
+"summer"
+],
+"weather": [
+"clear"
+],
+"bait": [
+"insect",
+"worm"
+],
+"difficulty": 3,
+"behavior": "quick",
+"cm": [
+9,
+20
+],
+"kg": [
+0.04,
+0.25
+],
+"value": 14,
+"uses": [
+"food",
+"gift"
+],
+"clue": "Guards a nest in the warm shallows at midsummer.",
+"note": "Black ear flag with a red rim.",
+"description": "Orange, teal and lemon, as if the pond had been saving up. It will charge your float."
+},
+{
+"id": "pumpkinseed",
+"name": "Pumpkinseed",
+"latin": "Lepomis pepo",
+"rarity": "uncommon",
+"habitat": "pond",
+"depth": "shallow",
+"periods": [
+"day",
+"dusk"
+],
+"seasons": [
+"summer",
+"autumn"
+],
+"weather": [
+"any"
+],
+"bait": [
+"worm",
+"insect"
+],
+"difficulty": 2,
+"behavior": "quick",
+"cm": [
+8,
+18
+],
+"kg": [
+0.03,
+0.2
+],
+"value": 11,
+"uses": [
+"food"
+],
+"clue": "Round as a coin, among warm-weather weed.",
+"note": "Blue worm-lines all over the cheeks.",
+"description": "Blue-scribbled cheeks and a belly like an autumn gourd."
+},
+{
+"id": "tench",
+"name": "Tench",
+"latin": "Tinca viridis",
+"rarity": "uncommon",
+"habitat": "pond",
+"depth": "bottom",
+"periods": [
+"dawn",
+"dusk"
+],
+"seasons": [
+"summer"
+],
+"weather": [
+"any"
+],
+"bait": [
+"worm",
+"dough"
+],
+"difficulty": 4,
+"behavior": "strong",
+"cm": [
+20,
+50
+],
+"kg": [
+0.3,
+3
+],
+"value": 16,
+"uses": [
+"food"
+],
+"clue": "Rises with tiny bubbles at dawn in summer.",
+"note": "The old books call it the doctor fish.",
+"description": "Thick, dark and slippery, with a tiny red eye and rounded paddles for fins."
+},
+{
+"id": "bream",
+"name": "Bronze bream",
+"latin": "Abramis cuprea",
+"rarity": "uncommon",
+"habitat": "pond",
+"depth": "bottom",
+"periods": [
+"dusk",
+"night"
+],
+"seasons": [
+"summer",
+"autumn"
+],
+"weather": [
+"any"
+],
+"bait": [
+"dough",
+"worm"
+],
+"difficulty": 3,
+"behavior": "calm",
+"cm": [
+30,
+60
+],
+"kg": [
+0.6,
+4
+],
+"value": 15,
+"uses": [
+"food"
+],
+"clue": "Slabs roll at the surface before they feed at dusk.",
+"note": "Hump-backed, tall and flat.",
+"description": "A tall bronze plate of a fish that comes up like a wet doormat."
+},
+{
+"id": "silver_bream",
+"name": "Silver bream",
+"latin": "Blicca argentea",
+"rarity": "uncommon",
+"habitat": "pond",
+"depth": "mid",
+"periods": [
+"dawn",
+"dusk"
+],
+"seasons": [
+"spring",
+"summer"
+],
+"weather": [
+"any"
+],
+"bait": [
+"dough"
+],
+"difficulty": 3,
+"behavior": "cautious",
+"cm": [
+15,
+30
+],
+"kg": [
+0.1,
+0.6
+],
+"value": 13,
+"uses": [
+"food"
+],
+"clue": "Mouths bait and spits it out. Wait for it.",
+"note": "Larger eye and smaller size than the bronze.",
+"description": "Smaller, brighter, warier than its bronze cousin, with an eye too large for its head."
+},
+{
+"id": "crucian",
+"name": "Crucian carp",
+"latin": "Carassius lacus",
+"rarity": "uncommon",
+"habitat": "pond",
+"depth": "mid",
+"periods": [
+"day",
+"dusk"
+],
+"seasons": [
+"spring",
+"summer"
+],
+"weather": [
+"any"
+],
+"bait": [
+"dough"
+],
+"difficulty": 3,
+"behavior": "cautious",
+"cm": [
+12,
+30
+],
+"kg": [
+0.1,
+0.9
+],
+"value": 14,
+"uses": [
+"food"
+],
+"clue": "The float barely trembles when these feed.",
+"note": "Tolerates water nothing else can.",
+"description": "A round, buttery fish with a thumbprint at the tail. Its bite is a rumour."
+},
+{
+"id": "mirror_carp",
+"name": "Mirror carp",
+"latin": "Cyprinus speculum",
+"rarity": "uncommon",
+"habitat": "pond",
+"depth": "bottom",
+"periods": [
+"dusk",
+"night"
+],
+"seasons": [
+"summer"
+],
+"weather": [
+"any"
+],
+"bait": [
+"dough"
+],
+"difficulty": 5,
+"behavior": "strong",
+"cm": [
+35,
+85
+],
+"kg": [
+1,
+14
+],
+"value": 24,
+"uses": [
+"food",
+"gift"
+],
+"clue": "Great mirrored flanks turn over at summer dusk.",
+"note": "Each pattern of large scales is as unique as a face.",
+"description": "A deep, humped body with a few huge scales like old coins set in leather."
+},
+{
+"id": "pike",
+"name": "Pike",
+"latin": "Esox silvarum",
+"rarity": "uncommon",
+"habitat": "pond",
+"depth": "mid",
+"periods": [
+"dawn",
+"day",
+"dusk"
+],
+"seasons": [
+"autumn",
+"winter",
+"spring"
+],
+"weather": [
+"any"
+],
+"bait": [
+"baitfish",
+"lure_spinner"
+],
+"difficulty": 6,
+"behavior": "strong",
+"cm": [
+40,
+100
+],
+"kg": [
+0.8,
+9
+],
+"value": 28,
+"uses": [
+"food"
+],
+"clue": "Hangs in cold water, waiting for something small.",
+"note": "Teeth angled backward. Use a wire line.",
+"description": "A long-jawed green ambush, freckled in gold. It looks like it has already decided."
+},
+{
+"id": "weather_loach",
+"name": "Weather loach",
+"latin": "Misgurnus tempestas",
+"rarity": "uncommon",
+"habitat": "pond",
+"depth": "bottom",
+"periods": [
+"any"
+],
+"seasons": [
+"any"
+],
+"weather": [
+"rain"
+],
+"bait": [
+"worm"
+],
+"difficulty": 3,
+"behavior": "erratic",
+"cm": [
+12,
+28
+],
+"kg": [
+0.02,
+0.12
+],
+"value": 15,
+"uses": [
+"food",
+"bait"
+],
+"clue": "Stirs only when a storm comes in.",
+"note": "Gulps air and swims wildly as pressure falls.",
+"description": "Country folk keep one in a jar. It thrashes before rain, and it has never yet been wrong."
+},
+{
+"id": "lily_darter",
+"name": "Lily darter",
+"latin": "Etheostoma nymphaeae",
+"rarity": "rare",
+"habitat": "pond",
+"depth": "shallow",
+"periods": [
+"day"
+],
+"seasons": [
+"spring"
+],
+"weather": [
+"after_rain"
+],
+"bait": [
+"insect"
+],
+"difficulty": 4,
+"behavior": "erratic",
+"cm": [
+4,
+8
+],
+"kg": [
+0.003,
+0.01
+],
+"value": 30,
+"uses": [
+"gift"
+],
+"clue": "Perches on lily stems after spring rain.",
+"note": "Props itself up on its fins like a small dog.",
+"description": "Barely a finger long, barred in moss and lemon, with a cobalt sail for courting."
+},
+{
+"id": "moth_gar",
+"name": "Moth gar",
+"latin": "Lepisosteus phalaena",
+"rarity": "rare",
+"habitat": "pond",
+"depth": "surface",
+"periods": [
+"night",
+"deep"
+],
+"seasons": [
+"summer"
+],
+"weather": [
+"any"
+],
+"bait": [
+"night",
+"lure_moth"
+],
+"difficulty": 6,
+"behavior": "surface",
+"cm": [
+45,
+90
+],
+"kg": [
+0.5,
+3
+],
+"value": 55,
+"uses": [
+"gift",
+"crafting"
+],
+"clue": "Hangs under the surface after dark, under the moths.",
+"note": "Two false eyes on its side, like a moth wing.",
+"description": "Long-beaked and armoured, with moth-eye marks along the flank. It strikes at wings on the water."
+},
+{
+"id": "golden_carp",
+"name": "Golden carp",
+"latin": "Cyprinus aurifer",
+"rarity": "rare",
+"habitat": "pond",
+"depth": "mid",
+"periods": [
+"day"
+],
+"seasons": [
+"summer",
+"autumn"
+],
+"weather": [
+"clear"
+],
+"bait": [
+"dough"
+],
+"difficulty": 6,
+"behavior": "strong",
+"cm": [
+35,
+70
+],
+"kg": [
+1,
+7
+],
+"value": 80,
+"uses": [
+"gift",
+"collection"
+],
+"clue": "A coin of light moving under still water, clear afternoons only.",
+"note": "Keep this one, if only for a while.",
+"description": "A carp entirely the colour of late sun. Nobody has seen one young."
+},
+{
+"id": "albino_cat",
+"name": "Albino catfish",
+"latin": "Silurus niveus",
+"rarity": "rare",
+"habitat": "pond",
+"depth": "bottom",
+"periods": [
+"deep"
+],
+"seasons": [
+"autumn",
+"winter"
+],
+"weather": [
+"any"
+],
+"bait": [
+"night",
+"baitfish"
+],
+"difficulty": 5,
+"behavior": "nocturnal",
+"cm": [
+30,
+65
+],
+"kg": [
+0.5,
+4
+],
+"value": 70,
+"uses": [
+"collection",
+"gift"
+],
+"clue": "A pale shape, deep in the coldest hours.",
+"note": "Pink eye, no pigment at all.",
+"description": "The same fish as the whiskered cat, minus every trace of night. It should not last a week, and yet."
+},
+{
+"id": "giant_pike",
+"name": "Old Scarjaw pike",
+"latin": "Esox antiquus",
+"rarity": "very_rare",
+"habitat": "pond",
+"depth": "deep",
+"periods": [
+"dusk",
+"dawn"
+],
+"seasons": [
+"autumn",
+"winter"
+],
+"weather": [
+"fog"
+],
+"bait": [
+"baitfish",
+"lure_spinner"
+],
+"difficulty": 8,
+"behavior": "deep",
+"cm": [
+100,
+150
+],
+"kg": [
+9,
+22
+],
+"value": 160,
+"uses": [
+"collection"
+],
+"clue": "Some autumn fogs, ducks vanish from the middle of the pond.",
+"note": "Heavy bars, not spots. A very old fish.",
+"description": "Barred, black-backed, older than the dock. Its jaw has healed around at least two hooks."
+},
+{
+"id": "ghost_koi",
+"name": "Ghost koi",
+"latin": "Cyprinus spectrum",
+"rarity": "exceptional",
+"habitat": "pond",
+"depth": "shallow",
+"periods": [
+"deep"
+],
+"seasons": [
+"spring"
+],
+"weather": [
+"fog"
+],
+"bait": [
+"night",
+"lure_moth"
+],
+"difficulty": 8,
+"behavior": "cautious",
+"cm": [
+40,
+70
+],
+"kg": [
+1,
+4
+],
+"value": 300,
+"uses": [
+"collection"
+],
+"clue": "Pale ribbons of fin under spring fog, in the deepest part of the night.",
+"note": "Nothing in the pond admits to having seen it.",
+"description": "Almost see-through in the lamplight, flowing fins trailing mist. It leaves no wake at all."
+},
+{
+"id": "moonfin",
+"name": "Moonfin",
+"latin": "Selenichthys lunaris",
+"rarity": "legendary",
+"habitat": "pond",
+"depth": "deep",
+"periods": [
+"deep"
+],
+"seasons": [
+"autumn"
+],
+"weather": [
+"clear"
+],
+"bait": [
+"night",
+"lure_glow"
+],
+"difficulty": 9,
+"behavior": "deep",
+"cm": [
+50,
+80
+],
+"kg": [
+2,
+6
+],
+"value": 700,
+"uses": [
+"collection"
+],
+"clue": "On the clearest autumn nights, a crescent shows in the water that is not the moon.",
+"note": "Every angler knows the story. Almost none have the fish.",
+"description": "Sickle fins that glow from their edges inward, and a blue eye-shape on each flank, always looking up."
+},
+{
+"id": "brook_trout",
+"name": "Brook trout",
+"latin": "Salvelinus rivulus",
+"rarity": "common",
+"habitat": "stream",
+"depth": "mid",
+"periods": [
+"dawn",
+"dusk"
+],
+"seasons": [
+"spring",
+"summer",
+"autumn"
+],
+"weather": [
+"any"
+],
+"bait": [
+"insect",
+"worm",
+"lure_fly"
+],
+"difficulty": 3,
+"behavior": "quick",
+"cm": [
+15,
+35
+],
+"kg": [
+0.1,
+0.8
+],
+"value": 12,
+"uses": [
+"food"
+],
+"clue": "Holds behind stones in cold moving water.",
+"note": "Worm tracks on the back, jewels on the side.",
+"description": "Worm-tracked and flecked red and gold, with white-edged fins bright as a thumbnail."
+},
+{
+"id": "river_minnow",
+"name": "River minnow",
+"latin": "Notropis fluvialis",
+"rarity": "common",
+"habitat": "stream",
+"depth": "surface",
+"periods": [
+"dawn",
+"day",
+"dusk"
+],
+"seasons": [
+"any"
+],
+"weather": [
+"any"
+],
+"bait": [
+"worm",
+"dough"
+],
+"difficulty": 1,
+"behavior": "calm",
+"cm": [
+4,
+9
+],
+"kg": [
+0.003,
+0.015
+],
+"value": 2,
+"uses": [
+"bait"
+],
+"clue": "Darts in the shallows where the stream bends.",
+"note": "Good bait, if you can stand to.",
+"description": "Barred and red-bellied in spring, it hangs in current like a leaf that has changed its mind."
+},
+{
+"id": "dace",
+"name": "Dace",
+"latin": "Leuciscus lucidus",
+"rarity": "common",
+"habitat": "stream",
+"depth": "surface",
+"periods": [
+"dawn",
+"day",
+"dusk"
+],
+"seasons": [
+"spring",
+"summer",
+"autumn"
+],
+"weather": [
+"any"
+],
+"bait": [
+"insect",
+"dough"
+],
+"difficulty": 2,
+"behavior": "quick",
+"cm": [
+12,
+26
+],
+"kg": [
+0.03,
+0.3
+],
+"value": 5,
+"uses": [
+"food"
+],
+"clue": "Rises for anything that falls in fast water.",
+"note": "Forked tail, narrow head.",
+"description": "Small, silver and punctual: it dimples the same patch of water all afternoon."
+},
+{
+"id": "chub",
+"name": "Chub",
+"latin": "Squalius robustus",
+"rarity": "common",
+"habitat": "stream",
+"depth": "mid",
+"periods": [
+"any"
+],
+"seasons": [
+"any"
+],
+"weather": [
+"any"
+],
+"bait": [
+"worm",
+"dough",
+"insect"
+],
+"difficulty": 3,
+"behavior": "strong",
+"cm": [
+20,
+50
+],
+"kg": [
+0.2,
+2.5
+],
+"value": 8,
+"uses": [
+"food"
+],
+"clue": "Lies under overhanging branches and eats whatever drops.",
+"note": "Eats almost anything, including small mice.",
+"description": "Big-headed and broad-mouthed, with black-edged scales. Bolder than it is clever."
+},
+{
+"id": "stone_loach",
+"name": "Stone loach",
+"latin": "Barbatula saxatilis",
+"rarity": "common",
+"habitat": "stream",
+"depth": "bottom",
+"periods": [
+"night",
+"deep"
+],
+"seasons": [
+"any"
+],
+"weather": [
+"any"
+],
+"bait": [
+"worm"
+],
+"difficulty": 1,
+"behavior": "calm",
+"cm": [
+6,
+12
+],
+"kg": [
+0.005,
+0.02
+],
+"value": 3,
+"uses": [
+"bait"
+],
+"clue": "Comes out from under stones after dark.",
+"note": "Six barbels and not one good idea.",
+"description": "A mottled pencil of a fish that lives under rocks, and resents being asked."
+},
+{
+"id": "bullhead",
+"name": "Bullhead",
+"latin": "Cottus truncatus",
+"rarity": "common",
+"habitat": "stream",
+"depth": "bottom",
+"periods": [
+"dusk",
+"night"
+],
+"seasons": [
+"any"
+],
+"weather": [
+"any"
+],
+"bait": [
+"worm"
+],
+"difficulty": 2,
+"behavior": "erratic",
+"cm": [
+6,
+14
+],
+"kg": [
+0.01,
+0.05
+],
+"value": 4,
+"uses": [
+"bait"
+],
+"clue": "Hides in gravel where the water runs fast.",
+"note": "Wide fins, sits flat as a stone.",
+"description": "All head and fan-fins, sitting on gravel like a small angry frog."
+},
+{
+"id": "spined_loach",
+"name": "Spined loach",
+"latin": "Cobitis spinosa",
+"rarity": "common",
+"habitat": "stream",
+"depth": "bottom",
+"periods": [
+"dusk",
+"night"
+],
+"seasons": [
+"spring",
+"summer",
+"autumn"
+],
+"weather": [
+"any"
+],
+"bait": [
+"worm"
+],
+"difficulty": 2,
+"behavior": "erratic",
+"cm": [
+6,
+12
+],
+"kg": [
+0.004,
+0.02
+],
+"value": 4,
+"uses": [
+"bait"
+],
+"clue": "Buries itself in silt with only its head out.",
+"note": "Hides a spine beneath each eye.",
+"description": "Sandy and row-spotted, with a tiny folding spine beneath its eye."
+},
+{
+"id": "bluestone_chubling",
+"name": "Bluestone chubling",
+"latin": "Squalius caeruleus",
+"rarity": "common",
+"habitat": "stream",
+"depth": "mid",
+"periods": [
+"day"
+],
+"seasons": [
+"spring",
+"summer"
+],
+"weather": [
+"after_rain",
+"clear"
+],
+"bait": [
+"worm",
+"insect"
+],
+"difficulty": 2,
+"behavior": "calm",
+"cm": [
+8,
+14
+],
+"kg": [
+0.01,
+0.05
+],
+"value": 6,
+"uses": [
+"food",
+"bait"
+],
+"clue": "Comes out in numbers when rain clears.",
+"note": "Local to these hills.",
+"description": "Slate-blue with aqua flecks: the colour of the wet stones it lives between."
+},
+{
+"id": "brown_trout",
+"name": "Brown trout",
+"latin": "Salmo fuscus",
+"rarity": "uncommon",
+"habitat": "stream",
+"depth": "mid",
+"periods": [
+"dawn",
+"dusk"
+],
+"seasons": [
+"spring",
+"autumn"
+],
+"weather": [
+"any"
+],
+"bait": [
+"insect",
+"lure_fly",
+"baitfish"
+],
+"difficulty": 5,
+"behavior": "quick",
+"cm": [
+25,
+60
+],
+"kg": [
+0.3,
+3
+],
+"value": 26,
+"uses": [
+"food"
+],
+"clue": "Takes in the half-light when the hatch is on.",
+"note": "Halos around its red spots.",
+"description": "Butter and umber with haloed spots, as handsome as a fish gets without trying."
+},
+{
+"id": "rainbow_trout",
+"name": "Rainbow trout",
+"latin": "Oncorhynchus iris",
+"rarity": "uncommon",
+"habitat": "stream",
+"depth": "mid",
+"periods": [
+"day"
+],
+"seasons": [
+"spring",
+"summer"
+],
+"weather": [
+"any"
+],
+"bait": [
+"insect",
+"lure_fly",
+"lure_spinner"
+],
+"difficulty": 5,
+"behavior": "surface",
+"cm": [
+25,
+55
+],
+"kg": [
+0.3,
+2.5
+],
+"value": 24,
+"uses": [
+"food"
+],
+"clue": "Leaps in the sunlit runs.",
+"note": "A pink road from gill to tail.",
+"description": "Rose-striped and peppered. Strikes, leaps, reconsiders, leaps again."
+},
+{
+"id": "salmon_parr",
+"name": "Salmon parr",
+"latin": "Salmo juvenalis",
+"rarity": "uncommon",
+"habitat": "stream",
+"depth": "mid",
+"periods": [
+"dawn",
+"day"
+],
+"seasons": [
+"summer"
+],
+"weather": [
+"any"
+],
+"bait": [
+"insect"
+],
+"difficulty": 3,
+"behavior": "quick",
+"cm": [
+10,
+20
+],
+"kg": [
+0.02,
+0.1
+],
+"value": 12,
+"uses": [
+"gift"
+],
+"clue": "Young ones in the riffles, barred with thumbprints.",
+"note": "Release one, and its children may return.",
+"description": "A young fish on its way to somewhere enormous, with a row of dark thumbprints along its side."
+},
+{
+"id": "barbel",
+"name": "Barbel",
+"latin": "Barbus flumineus",
+"rarity": "uncommon",
+"habitat": "stream",
+"depth": "bottom",
+"periods": [
+"dusk",
+"night"
+],
+"seasons": [
+"summer",
+"autumn"
+],
+"weather": [
+"any"
+],
+"bait": [
+"worm",
+"dough"
+],
+"difficulty": 6,
+"behavior": "deep",
+"cm": [
+35,
+85
+],
+"kg": [
+0.5,
+7
+],
+"value": 30,
+"uses": [
+"food"
+],
+"clue": "Grubs in fast gravel water through the warm dusk.",
+"note": "Underslung mouth, four whiskers.",
+"description": "Copper-finned, shovel-snouted and built to hold its place in a flood. It fights the same way."
+},
+{
+"id": "riffle_dart",
+"name": "Riffle darter",
+"latin": "Etheostoma torrens",
+"rarity": "uncommon",
+"habitat": "stream",
+"depth": "bottom",
+"periods": [
+"day"
+],
+"seasons": [
+"spring"
+],
+"weather": [
+"clear",
+"after_rain"
+],
+"bait": [
+"insect"
+],
+"difficulty": 3,
+"behavior": "erratic",
+"cm": [
+4,
+8
+],
+"kg": [
+0.002,
+0.01
+],
+"value": 18,
+"uses": [
+"gift"
+],
+"clue": "In spring, the fast water glitters with orange and blue.",
+"note": "Courts in the hardest water it can find.",
+"description": "An orange and cobalt scrap that rests on stones with its elbows out."
+},
+{
+"id": "brook_lamprey",
+"name": "Brook lamprey",
+"latin": "Lampetra lapidaria",
+"rarity": "uncommon",
+"habitat": "stream",
+"depth": "bottom",
+"periods": [
+"night"
+],
+"seasons": [
+"spring"
+],
+"weather": [
+"any"
+],
+"bait": [
+"worm"
+],
+"difficulty": 4,
+"behavior": "erratic",
+"cm": [
+10,
+22
+],
+"kg": [
+0.01,
+0.04
+],
+"value": 16,
+"uses": [
+"crafting"
+],
+"clue": "Night spawners, carrying pebbles in their mouths.",
+"note": "No jaw. It holds on with a sucker disc.",
+"description": "An ancient, jawless thread with seven gill-holes and no opinions. Older than bones."
+},
+{
+"id": "grayling",
+"name": "Grayling",
+"latin": "Thymallus velifer",
+"rarity": "rare",
+"habitat": "stream",
+"depth": "mid",
+"periods": [
+"day"
+],
+"seasons": [
+"autumn",
+"winter"
+],
+"weather": [
+"clear"
+],
+"bait": [
+"insect",
+"lure_fly"
+],
+"difficulty": 6,
+"behavior": "cautious",
+"cm": [
+25,
+50
+],
+"kg": [
+0.2,
+1.5
+],
+"value": 60,
+"uses": [
+"gift",
+"collection"
+],
+"clue": "Cold clean water, a sail of violet in the low autumn sun.",
+"note": "It smells faintly of thyme.",
+"description": "A silver fish carrying an enormous violet sail, edged crimson. The lady of the stream."
+},
+{
+"id": "kingfisher_shiner",
+"name": "Kingfisher shiner",
+"latin": "Notropis halcyon",
+"rarity": "rare",
+"habitat": "stream",
+"depth": "surface",
+"periods": [
+"day"
+],
+"seasons": [
+"summer"
+],
+"weather": [
+"clear"
+],
+"bait": [
+"insect"
+],
+"difficulty": 5,
+"behavior": "quick",
+"cm": [
+9,
+16
+],
+"kg": [
+0.01,
+0.04
+],
+"value": 48,
+"uses": [
+"gift"
+],
+"clue": "A streak of blue over midsummer runs.",
+"note": "Beaked, unlike any other shiner.",
+"description": "Cobalt above and orange below, with a little beak. It feeds as the bird does, by dropping in."
+},
+{
+"id": "fallen_leaf_fish",
+"name": "Fallen leaf",
+"latin": "Monocirrhus folium",
+"rarity": "rare",
+"habitat": "stream",
+"depth": "surface",
+"periods": [
+"dusk"
+],
+"seasons": [
+"autumn"
+],
+"weather": [
+"any"
+],
+"bait": [
+"baitfish"
+],
+"difficulty": 5,
+"behavior": "cautious",
+"cm": [
+7,
+12
+],
+"kg": [
+0.01,
+0.03
+],
+"value": 65,
+"uses": [
+"gift",
+"collection"
+],
+"clue": "Not every leaf on the autumn water is drifting downstream.",
+"note": "A single barbel for a leaf stem.",
+"description": "A leaf with a midrib, veins, a stem and an appetite. It drifts sideways toward minnows."
+},
+{
+"id": "ember_trout",
+"name": "Ember trout",
+"latin": "Salmo pyrrhos",
+"rarity": "very_rare",
+"habitat": "stream",
+"depth": "mid",
+"periods": [
+"night"
+],
+"seasons": [
+"autumn"
+],
+"weather": [
+"clear",
+"after_rain"
+],
+"bait": [
+"night",
+"lure_glow"
+],
+"difficulty": 7,
+"behavior": "quick",
+"cm": [
+25,
+50
+],
+"kg": [
+0.3,
+2
+],
+"value": 150,
+"uses": [
+"collection"
+],
+"clue": "Late autumn: sparks under the bank, after dark.",
+"note": "Warm to the touch. Actually warm.",
+"description": "Black and crimson with spots like a fanned coal. The water near it is a little warmer."
+},
+{
+"id": "moss_eel",
+"name": "Moss eel",
+"latin": "Anguilla muscosa",
+"rarity": "common",
+"habitat": "marsh",
+"depth": "bottom",
+"periods": [
+"dusk",
+"night"
+],
+"seasons": [
+"spring",
+"summer",
+"autumn"
+],
+"weather": [
+"any"
+],
+"bait": [
+"worm",
+"baitfish"
+],
+"difficulty": 4,
+"behavior": "deep",
+"cm": [
+40,
+90
+],
+"kg": [
+0.2,
+1.8
+],
+"value": 18,
+"uses": [
+"food"
+],
+"clue": "Slips between the reed roots at dusk.",
+"note": "Crosses wet grass on rainy nights.",
+"description": "Green as the water it lives in. Its one straight line is the one you pull it in on."
+},
+{
+"id": "mudfish",
+"name": "Mudfish",
+"latin": "Dallia limosa",
+"rarity": "common",
+"habitat": "marsh",
+"depth": "bottom",
+"periods": [
+"any"
+],
+"seasons": [
+"any"
+],
+"weather": [
+"any"
+],
+"bait": [
+"worm"
+],
+"difficulty": 2,
+"behavior": "calm",
+"cm": [
+10,
+30
+],
+"kg": [
+0.04,
+0.4
+],
+"value": 6,
+"uses": [
+"food",
+"bait"
+],
+"clue": "Lies buried in soft black peat.",
+"note": "Can live in nearly no water.",
+"description": "Brown, blunt and patient. Dries out for months, and wakes up cross."
+},
+{
+"id": "peat_perch",
+"name": "Peat perch",
+"latin": "Perca turfosa",
+"rarity": "common",
+"habitat": "marsh",
+"depth": "mid",
+"periods": [
+"dawn",
+"day",
+"dusk"
+],
+"seasons": [
+"any"
+],
+"weather": [
+"any"
+],
+"bait": [
+"worm",
+"insect"
+],
+"difficulty": 3,
+"behavior": "quick",
+"cm": [
+12,
+26
+],
+"kg": [
+0.05,
+0.4
+],
+"value": 7,
+"uses": [
+"food"
+],
+"clue": "Rust-dark hunters of tea-coloured water.",
+"note": "Colour comes from the peat it lives in.",
+"description": "Stained the colour of bog tea, with spines to match. Bites first."
+},
+{
+"id": "fen_stickleback",
+"name": "Fen stickleback",
+"latin": "Gasterosteus palustris",
+"rarity": "common",
+"habitat": "marsh",
+"depth": "shallow",
+"periods": [
+"day"
+],
+"seasons": [
+"spring",
+"summer"
+],
+"weather": [
+"any"
+],
+"bait": [
+"insect",
+"worm"
+],
+"difficulty": 1,
+"behavior": "erratic",
+"cm": [
+3,
+6
+],
+"kg": [
+0.001,
+0.005
+],
+"value": 3,
+"uses": [
+"bait"
+],
+"clue": "Red-chested males guard tiny nests in reed roots.",
+"note": "Three spines, no fear.",
+"description": "Thumb-sized, red-breasted and three-spined. Picks fights with fish a hundred times its size."
+},
+{
+"id": "pygmy_blackspot",
+"name": "Pygmy blackspot",
+"latin": "Elassoma nigrum",
+"rarity": "common",
+"habitat": "marsh",
+"depth": "shallow",
+"periods": [
+"dawn",
+"day",
+"dusk"
+],
+"seasons": [
+"summer",
+"autumn"
+],
+"weather": [
+"any"
+],
+"bait": [
+"insect"
+],
+"difficulty": 2,
+"behavior": "calm",
+"cm": [
+2,
+4
+],
+"kg": [
+0.001,
+0.003
+],
+"value": 4,
+"uses": [
+"bait"
+],
+"clue": "Hovers, barely moving, in the shade of duckweed.",
+"note": "Aqua freckles when courting.",
+"description": "The smallest fish in the book. Its whole ambition is one black spot on its tail."
+},
+{
+"id": "reed_pipe",
+"name": "Reed pipefish",
+"latin": "Syngnathus arundinis",
+"rarity": "uncommon",
+"habitat": "marsh",
+"depth": "shallow",
+"periods": [
+"day"
+],
+"seasons": [
+"summer"
+],
+"weather": [
+"any"
+],
+"bait": [
+"insect"
+],
+"difficulty": 3,
+"behavior": "cautious",
+"cm": [
+12,
+22
+],
+"kg": [
+0.003,
+0.01
+],
+"value": 18,
+"uses": [
+"gift"
+],
+"clue": "Sways upright among the reeds, pretending to be one.",
+"note": "Father carries the young.",
+"description": "A jointed yellow straw with a tiny mouth at one end, swaying when the reeds sway."
+},
+{
+"id": "marsh_catfish",
+"name": "Marsh catfish",
+"latin": "Clarias palustris",
+"rarity": "uncommon",
+"habitat": "marsh",
+"depth": "bottom",
+"periods": [
+"night",
+"deep"
+],
+"seasons": [
+"summer",
+"autumn"
+],
+"weather": [
+"any"
+],
+"bait": [
+"baitfish",
+"night"
+],
+"difficulty": 5,
+"behavior": "nocturnal",
+"cm": [
+30,
+70
+],
+"kg": [
+0.4,
+4
+],
+"value": 28,
+"uses": [
+"food"
+],
+"clue": "Grunts from the shallows on hot nights.",
+"note": "Walks on its fins across wet ground.",
+"description": "Black and striped, with a skull like a helmet. It breathes air and walks when it has to."
+},
+{
+"id": "bowfin",
+"name": "Bowfin",
+"latin": "Amia silvatica",
+"rarity": "uncommon",
+"habitat": "marsh",
+"depth": "mid",
+"periods": [
+"dusk",
+"night"
+],
+"seasons": [
+"spring",
+"summer",
+"autumn"
+],
+"weather": [
+"any"
+],
+"bait": [
+"baitfish",
+"lure_spinner"
+],
+"difficulty": 6,
+"behavior": "strong",
+"cm": [
+35,
+75
+],
+"kg": [
+0.5,
+4
+],
+"value": 32,
+"uses": [
+"food"
+],
+"clue": "A long-backed fish with an eye on its tail.",
+"note": "An ocellus to confuse things that bite tails.",
+"description": "A living fossil with one long wave of a dorsal fin and a false eye at the tail."
+},
+{
+"id": "needle_gar",
+"name": "Needle gar",
+"latin": "Lepisosteus acus",
+"rarity": "uncommon",
+"habitat": "marsh",
+"depth": "surface",
+"periods": [
+"day",
+"dusk"
+],
+"seasons": [
+"summer"
+],
+"weather": [
+"any"
+],
+"bait": [
+"baitfish",
+"lure_spinner"
+],
+"difficulty": 5,
+"behavior": "surface",
+"cm": [
+35,
+70
+],
+"kg": [
+0.2,
+1.2
+],
+"value": 30,
+"uses": [
+"food",
+"crafting"
+],
+"clue": "Lies like a floating stick at the surface.",
+"note": "Beak full of needles.",
+"description": "Thin as a walking stick with a beak like tweezers. Armour instead of scales."
+},
+{
+"id": "lungfish",
+"name": "Lungfish",
+"latin": "Protopterus fossor",
+"rarity": "uncommon",
+"habitat": "marsh",
+"depth": "bottom",
+"periods": [
+"dusk",
+"night"
+],
+"seasons": [
+"summer"
+],
+"weather": [
+"rain"
+],
+"bait": [
+"worm"
+],
+"difficulty": 4,
+"behavior": "nocturnal",
+"cm": [
+40,
+80
+],
+"kg": [
+0.5,
+3
+],
+"value": 35,
+"uses": [
+"gift",
+"crafting"
+],
+"clue": "Rain wakes them from the dried mud.",
+"note": "Sleeps a whole dry season in a mud cocoon.",
+"description": "Long whip fins like two forgotten legs. Breathes, and sleeps out droughts inside the ground."
+},
+{
+"id": "shellback_mud",
+"name": "Shellback mudfish",
+"latin": "Callichthys scutatus",
+"rarity": "uncommon",
+"habitat": "marsh",
+"depth": "bottom",
+"periods": [
+"dusk"
+],
+"seasons": [
+"spring",
+"summer"
+],
+"weather": [
+"any"
+],
+"bait": [
+"worm"
+],
+"difficulty": 4,
+"behavior": "strong",
+"cm": [
+10,
+20
+],
+"kg": [
+0.05,
+0.2
+],
+"value": 26,
+"uses": [
+"crafting"
+],
+"clue": "Hump-backed, plated, slow.",
+"note": "Plates are prized for toolmaking.",
+"description": "A small armoured loaf, all overlapping plates and a low, offended stare."
+},
+{
+"id": "reed_mudskip",
+"name": "Reed mudskipper",
+"latin": "Periophthalmus arundinis",
+"rarity": "rare",
+"habitat": "marsh",
+"depth": "surface",
+"periods": [
+"day"
+],
+"seasons": [
+"summer"
+],
+"weather": [
+"clear"
+],
+"bait": [
+"insect"
+],
+"difficulty": 4,
+"behavior": "erratic",
+"cm": [
+10,
+20
+],
+"kg": [
+0.02,
+0.08
+],
+"value": 40,
+"uses": [
+"gift"
+],
+"clue": "Something climbs the wet reed bases on sunny days.",
+"note": "Eyes on top, sail on its back.",
+"description": "Walks on its elbows, eyes on the top of its head, flying a blue sail to anyone who looks."
+},
+{
+"id": "frogmouth",
+"name": "Marsh frogmouth",
+"latin": "Batrachus palustris",
+"rarity": "rare",
+"habitat": "marsh",
+"depth": "bottom",
+"periods": [
+"night"
+],
+"seasons": [
+"spring",
+"autumn"
+],
+"weather": [
+"fog"
+],
+"bait": [
+"baitfish",
+"night"
+],
+"difficulty": 6,
+"behavior": "cautious",
+"cm": [
+20,
+40
+],
+"kg": [
+0.3,
+2
+],
+"value": 65,
+"uses": [
+"collection"
+],
+"clue": "Sits where it sits. In fog, sometimes, that is your bait.",
+"note": "Its mouth is wider than its body.",
+"description": "A warty green purse with a door in it. Waits so long that weed grows on it."
+},
+{
+"id": "ribbon_eel",
+"name": "Ribbon eel",
+"latin": "Anguilla taenia",
+"rarity": "very_rare",
+"habitat": "marsh",
+"depth": "mid",
+"periods": [
+"deep"
+],
+"seasons": [
+"summer"
+],
+"weather": [
+"rain"
+],
+"bait": [
+"night",
+"lure_glow"
+],
+"difficulty": 7,
+"behavior": "erratic",
+"cm": [
+60,
+120
+],
+"kg": [
+0.3,
+1.5
+],
+"value": 170,
+"uses": [
+"collection"
+],
+"clue": "Rain on the marsh, midsummer, past midnight. Violet loops.",
+"note": "Holds itself in a knot when resting.",
+"description": "A knotted thread of violet with bright aqua rings. Always seems to be untying itself."
+},
+{
+"id": "marsh_lungeel",
+"name": "Rare marsh eel",
+"latin": "Anguilla pulmonata",
+"rarity": "rare",
+"habitat": "marsh",
+"depth": "bottom",
+"periods": [
+"night"
+],
+"seasons": [
+"autumn"
+],
+"weather": [
+"rain",
+"fog"
+],
+"bait": [
+"worm",
+"night"
+],
+"difficulty": 6,
+"behavior": "deep",
+"cm": [
+50,
+100
+],
+"kg": [
+0.4,
+2
+],
+"value": 85,
+"uses": [
+"food",
+"collection"
+],
+"clue": "Autumn rain brings them over the bank.",
+"note": "Gold-flecked. Not many left.",
+"description": "Char-black with gold flecks, thicker than the moss eel. Bites like a closing door."
+},
+{
+"id": "bogwisp",
+"name": "Bogwisp",
+"latin": "Lucifuga paludis",
+"rarity": "exceptional",
+"habitat": "marsh",
+"depth": "surface",
+"periods": [
+"deep"
+],
+"seasons": [
+"autumn"
+],
+"weather": [
+"fog"
+],
+"bait": [
+"night",
+"lure_glow"
+],
+"difficulty": 8,
+"behavior": "erratic",
+"cm": [
+10,
+18
+],
+"kg": [
+0.01,
+0.04
+],
+"value": 280,
+"uses": [
+"collection"
+],
+"clue": "Lights on the marsh in autumn fog, past midnight. You have been warned about those.",
+"note": "Follow it away from the path at your peril.",
+"description": "Glowing green glass with a tail like a whip. Old stories say it leads you away. It does."
+},
+{
+"id": "smelt",
+"name": "Smelt",
+"latin": "Osmerus alpinus",
+"rarity": "common",
+"habitat": "lake",
+"depth": "mid",
+"periods": [
+"dawn",
+"dusk"
+],
+"seasons": [
+"any"
+],
+"weather": [
+"any"
+],
+"bait": [
+"worm",
+"insect"
+],
+"difficulty": 1,
+"behavior": "quick",
+"cm": [
+8,
+18
+],
+"kg": [
+0.01,
+0.05
+],
+"value": 4,
+"uses": [
+"food",
+"bait"
+],
+"clue": "Rises in shoals at first light.",
+"note": "Smells faintly of cucumber.",
+"description": "Slim and clear with a bright side stripe. Cold water makes it silver and sweet."
+},
+{
+"id": "vendace",
+"name": "Vendace",
+"latin": "Coregonus albula",
+"rarity": "common",
+"habitat": "lake",
+"depth": "mid",
+"periods": [
+"dawn",
+"day",
+"dusk"
+],
+"seasons": [
+"autumn",
+"winter"
+],
+"weather": [
+"any"
+],
+"bait": [
+"insect",
+"worm"
+],
+"difficulty": 2,
+"behavior": "cautious",
+"cm": [
+12,
+25
+],
+"kg": [
+0.03,
+0.15
+],
+"value": 8,
+"uses": [
+"food"
+],
+"clue": "A silver flicker over deep water in the cold months.",
+"note": "Upturned chin, small adipose.",
+"description": "A pale aqua-backed whitefish of deep cold lakes, once a whole village's winter food."
+},
+{
+"id": "lake_trout",
+"name": "Lake trout",
+"latin": "Salvelinus namaycush",
+"rarity": "common",
+"habitat": "lake",
+"depth": "deep",
+"periods": [
+"dawn",
+"day",
+"dusk"
+],
+"seasons": [
+"any"
+],
+"weather": [
+"any"
+],
+"bait": [
+"baitfish",
+"lure_spinner"
+],
+"difficulty": 4,
+"behavior": "deep",
+"cm": [
+40,
+90
+],
+"kg": [
+0.8,
+8
+],
+"value": 18,
+"uses": [
+"food"
+],
+"clue": "Lives below where the sun gives up.",
+"note": "Light spots on dark, the reverse of a brown.",
+"description": "Pale spots on grey like snow on rock. It sounds deep and stays there."
+},
+{
+"id": "alpine_sculpin",
+"name": "Alpine sculpin",
+"latin": "Cottus montanus",
+"rarity": "common",
+"habitat": "lake",
+"depth": "bottom",
+"periods": [
+"any"
+],
+"seasons": [
+"any"
+],
+"weather": [
+"any"
+],
+"bait": [
+"worm"
+],
+"difficulty": 2,
+"behavior": "erratic",
+"cm": [
+6,
+15
+],
+"kg": [
+0.01,
+0.06
+],
+"value": 5,
+"uses": [
+"bait"
+],
+"clue": "Sits among the cold stones of the shelf.",
+"note": "Grey as its gravel.",
+"description": "A spiny-headed grey lump with big fan fins, sitting on the lake floor like it paid for it."
+},
+{
+"id": "arctic_char",
+"name": "Arctic char",
+"latin": "Salvelinus aurorae",
+"rarity": "uncommon",
+"habitat": "lake",
+"depth": "deep",
+"periods": [
+"dawn",
+"dusk"
+],
+"seasons": [
+"winter",
+"spring"
+],
+"weather": [
+"any"
+],
+"bait": [
+"baitfish",
+"lure_spinner"
+],
+"difficulty": 5,
+"behavior": "deep",
+"cm": [
+30,
+70
+],
+"kg": [
+0.4,
+4
+],
+"value": 32,
+"uses": [
+"food"
+],
+"clue": "Comes shallow at dusk when the ice is thin.",
+"note": "Colours deepen as the water chills.",
+"description": "A blue-grey back, a belly like a winter sunset, and white-edged fins."
+},
+{
+"id": "frost_perch",
+"name": "Frost perch",
+"latin": "Perca glacialis",
+"rarity": "uncommon",
+"habitat": "lake",
+"depth": "mid",
+"periods": [
+"dawn",
+"day",
+"dusk"
+],
+"seasons": [
+"winter"
+],
+"weather": [
+"snow"
+],
+"bait": [
+"worm",
+"baitfish"
+],
+"difficulty": 4,
+"behavior": "quick",
+"cm": [
+12,
+28
+],
+"kg": [
+0.08,
+0.5
+],
+"value": 30,
+"uses": [
+"food",
+"gift"
+],
+"clue": "Snow on the lake, and something is taking through it.",
+"note": "Slightly antifreeze blooded.",
+"description": "Pale aqua, frost-speckled, with white-tipped spines. It feels cold even for a fish."
+},
+{
+"id": "burbot",
+"name": "Burbot",
+"latin": "Lota borealis",
+"rarity": "uncommon",
+"habitat": "lake",
+"depth": "bottom",
+"periods": [
+"night",
+"deep"
+],
+"seasons": [
+"winter"
+],
+"weather": [
+"any"
+],
+"bait": [
+"baitfish",
+"night"
+],
+"difficulty": 5,
+"behavior": "nocturnal",
+"cm": [
+30,
+80
+],
+"kg": [
+0.4,
+4
+],
+"value": 28,
+"uses": [
+"food"
+],
+"clue": "Spawns under the ice at midwinter, in the dark.",
+"note": "The only cod that gave up the sea.",
+"description": "Marbled like old cheese, with a single chin barbel and an eel's long tail."
+},
+{
+"id": "steelhead",
+"name": "Steelhead",
+"latin": "Oncorhynchus viaticus",
+"rarity": "uncommon",
+"habitat": "lake",
+"depth": "mid",
+"periods": [
+"dawn"
+],
+"seasons": [
+"spring",
+"autumn"
+],
+"weather": [
+"rain"
+],
+"bait": [
+"lure_spinner",
+"insect",
+"baitfish"
+],
+"difficulty": 6,
+"behavior": "surface",
+"cm": [
+45,
+85
+],
+"kg": [
+1,
+6
+],
+"value": 36,
+"uses": [
+"food"
+],
+"clue": "Moves in with the rain.",
+"note": "A trout that went to see the world.",
+"description": "A rainbow trout that has seen the ocean and is unimpressed by you."
+},
+{
+"id": "red_kokanee",
+"name": "Red kokanee",
+"latin": "Oncorhynchus nerka",
+"rarity": "rare",
+"habitat": "lake",
+"depth": "mid",
+"periods": [
+"day"
+],
+"seasons": [
+"autumn"
+],
+"weather": [
+"any"
+],
+"bait": [
+"insect",
+"lure_spinner"
+],
+"difficulty": 5,
+"behavior": "strong",
+"cm": [
+25,
+50
+],
+"kg": [
+0.3,
+1.5
+],
+"value": 55,
+"uses": [
+"gift",
+"collection"
+],
+"clue": "In one autumn fortnight, the shallows run scarlet.",
+"note": "Hump-backed and hook-jawed at spawning.",
+"description": "Crimson with a green head and a hooked jaw, dying on purpose and beautifully."
+},
+{
+"id": "paddlefish",
+"name": "Paddlefish",
+"latin": "Polyodon spatula",
+"rarity": "rare",
+"habitat": "lake",
+"depth": "mid",
+"periods": [
+"dawn",
+"day",
+"dusk"
+],
+"seasons": [
+"summer"
+],
+"weather": [
+"any"
+],
+"bait": [
+"lure_spinner"
+],
+"difficulty": 7,
+"behavior": "strong",
+"cm": [
+70,
+150
+],
+"kg": [
+5,
+20
+],
+"value": 90,
+"uses": [
+"collection"
+],
+"clue": "Something huge moves through, feeding on nothing visible.",
+"note": "That paddle senses living things.",
+"description": "A shark's body with a canoe paddle on its nose. It filters water with its mouth wide open."
+},
+{
+"id": "silver_ghost_char",
+"name": "Silver ghost char",
+"latin": "Salvelinus phantasma",
+"rarity": "rare",
+"habitat": "lake",
+"depth": "deep",
+"periods": [
+"deep"
+],
+"seasons": [
+"winter"
+],
+"weather": [
+"clear"
+],
+"bait": [
+"night",
+"lure_glow"
+],
+"difficulty": 6,
+"behavior": "cautious",
+"cm": [
+30,
+60
+],
+"kg": [
+0.4,
+2.5
+],
+"value": 90,
+"uses": [
+"collection"
+],
+"clue": "On still winter nights a pale char rises under the ice.",
+"note": "Ribs show faintly through the side.",
+"description": "Thin-skinned and moon-pale, with long trailing fins. You can almost count its ribs."
+},
+{
+"id": "sturgeon",
+"name": "Lake sturgeon",
+"latin": "Acipenser montis",
+"rarity": "very_rare",
+"habitat": "lake",
+"depth": "bottom",
+"periods": [
+"dusk",
+"night"
+],
+"seasons": [
+"spring"
+],
+"weather": [
+"any"
+],
+"bait": [
+"worm",
+"baitfish"
+],
+"difficulty": 8,
+"behavior": "deep",
+"cm": [
+90,
+200
+],
+"kg": [
+8,
+60
+],
+"value": 200,
+"uses": [
+"collection"
+],
+"clue": "Armoured shapes cruise the spring gravel in the evening.",
+"note": "Could be a century old.",
+"description": "Rows of bony shields and a shovel nose. Older than the ruin, in family and quite possibly in person."
+},
+{
+"id": "abyss_lurker",
+"name": "Abyss lurker",
+"latin": "Melanocetus alpinus",
+"rarity": "very_rare",
+"habitat": "lake",
+"depth": "deep",
+"periods": [
+"deep"
+],
+"seasons": [
+"autumn",
+"winter"
+],
+"weather": [
+"any"
+],
+"bait": [
+"night",
+"lure_glow"
+],
+"difficulty": 7,
+"behavior": "deep",
+"cm": [
+25,
+50
+],
+"kg": [
+0.5,
+4
+],
+"value": 190,
+"uses": [
+"collection"
+],
+"clue": "In the deepest water, a small green light that is not a star.",
+"note": "Should not be in a lake. Nobody knows how.",
+"description": "All mouth and shadow, with needle teeth and one green lamp on a stalk. Comes up slowly."
+},
+{
+"id": "starry_trout",
+"name": "Starry trout",
+"latin": "Salmo sidereus",
+"rarity": "legendary",
+"habitat": "lake",
+"depth": "surface",
+"periods": [
+"deep"
+],
+"seasons": [
+"summer",
+"winter"
+],
+"weather": [
+"clear"
+],
+"bait": [
+"lure_fly",
+"lure_glow"
+],
+"difficulty": 9,
+"behavior": "surface",
+"cm": [
+40,
+70
+],
+"kg": [
+1,
+4
+],
+"value": 650,
+"uses": [
+"collection"
+],
+"clue": "The lake holds the whole night sky. On clear nights, a few stars leave.",
+"note": "No two skies alike.",
+"description": "An indigo night sky in the shape of a trout. The stars on it are not any you can name."
+},
+{
+"id": "deepwater_warden",
+"name": "Deepwater Warden",
+"latin": "Custos profundi",
+"rarity": "legendary",
+"habitat": "lake",
+"depth": "bottom",
+"periods": [
+"deep"
+],
+"seasons": [
+"winter"
+],
+"weather": [
+"fog",
+"snow"
+],
+"bait": [
+"baitfish",
+"lure_glow"
+],
+"difficulty": 10,
+"behavior": "deep",
+"cm": [
+130,
+260
+],
+"kg": [
+30,
+120
+],
+"value": 900,
+"uses": [
+"collection"
+],
+"clue": "Fog or snow, the coldest deep of night, the lake floor: it patrols.",
+"note": "Do not assume you caught it. It may be allowing this.",
+"description": "An armoured giant, plated like a door, bearded with cold whiskers, with one ember for an eye."
+},
+{
+"id": "blind_cavefish",
+"name": "Blind cavefish",
+"latin": "Amblyopsis obscura",
+"rarity": "common",
+"habitat": "reservoir",
+"depth": "mid",
+"periods": [
+"dawn",
+"day",
+"dusk",
+"night",
+"deep"
+],
+"seasons": [
+"any"
+],
+"weather": [
+"any"
+],
+"bait": [
+"worm",
+"dough"
+],
+"difficulty": 2,
+"behavior": "cautious",
+"cm": [
+6,
+14
+],
+"kg": [
+0.01,
+0.05
+],
+"value": 8,
+"uses": [
+"food",
+"crafting"
+],
+"clue": "Pale things that turn toward vibration.",
+"note": "Eyes skinned over long ago.",
+"description": "Flesh-pink, eyeless, unbothered. It feels the world along a line of tiny pits."
+},
+{
+"id": "cave_loach",
+"name": "Cave loach",
+"latin": "Nemacheilus speleus",
+"rarity": "common",
+"habitat": "reservoir",
+"depth": "bottom",
+"periods": [
+"dawn",
+"day",
+"dusk",
+"night",
+"deep"
+],
+"seasons": [
+"any"
+],
+"weather": [
+"any"
+],
+"bait": [
+"worm"
+],
+"difficulty": 1,
+"behavior": "calm",
+"cm": [
+7,
+12
+],
+"kg": [
+0.005,
+0.02
+],
+"value": 6,
+"uses": [
+"bait"
+],
+"clue": "Long whiskers feel across the silt.",
+"note": "Whiskers longer than its head.",
+"description": "A bone-coloured line of fish with whiskers doing the work of everything else."
+},
+{
+"id": "rust_carp",
+"name": "Rust carp",
+"latin": "Cyprinus ferrugo",
+"rarity": "common",
+"habitat": "reservoir",
+"depth": "bottom",
+"periods": [
+"dawn",
+"day",
+"dusk",
+"night",
+"deep"
+],
+"seasons": [
+"any"
+],
+"weather": [
+"any"
+],
+"bait": [
+"dough",
+"worm"
+],
+"difficulty": 4,
+"behavior": "strong",
+"cm": [
+30,
+60
+],
+"kg": [
+0.8,
+5
+],
+"value": 14,
+"uses": [
+"crafting"
+],
+"clue": "Grows where old pipes weep into the water.",
+"note": "Eats the rust itself.",
+"description": "Rivet-spotted and pitted, coloured exactly like the pipes it grazes on."
+},
+{
+"id": "drain_eel",
+"name": "Drain eel",
+"latin": "Anguilla cloacae",
+"rarity": "common",
+"habitat": "reservoir",
+"depth": "bottom",
+"periods": [
+"dawn",
+"day",
+"dusk",
+"night",
+"deep"
+],
+"seasons": [
+"any"
+],
+"weather": [
+"any"
+],
+"bait": [
+"baitfish",
+"worm"
+],
+"difficulty": 4,
+"behavior": "deep",
+"cm": [
+40,
+80
+],
+"kg": [
+0.2,
+1.2
+],
+"value": 14,
+"uses": [
+"food"
+],
+"clue": "Sleeps coiled in culverts.",
+"note": "Yellow eye, ring-marked body.",
+"description": "Black, ringed in steel-grey and curled like the pipe it lives in."
+},
+{
+"id": "tallow_catfish",
+"name": "Tallow catfish",
+"latin": "Ictalurus sebum",
+"rarity": "uncommon",
+"habitat": "reservoir",
+"depth": "bottom",
+"periods": [
+"dawn",
+"day",
+"dusk",
+"night",
+"deep"
+],
+"seasons": [
+"any"
+],
+"weather": [
+"any"
+],
+"bait": [
+"worm",
+"baitfish"
+],
+"difficulty": 4,
+"behavior": "nocturnal",
+"cm": [
+25,
+55
+],
+"kg": [
+0.3,
+2
+],
+"value": 26,
+"uses": [
+"crafting"
+],
+"clue": "A waxy shape along the old tank wall.",
+"note": "Its fat burns, and it was once used for lamps.",
+"description": "Wax-yellow and blind, soft as candle fat. Workers once fed them for the lamp oil."
+},
+{
+"id": "echo_fish",
+"name": "Echo fish",
+"latin": "Sonichthys resonans",
+"rarity": "uncommon",
+"habitat": "reservoir",
+"depth": "mid",
+"periods": [
+"dawn",
+"day",
+"dusk",
+"night",
+"deep"
+],
+"seasons": [
+"any"
+],
+"weather": [
+"any"
+],
+"bait": [
+"dough",
+"insect"
+],
+"difficulty": 5,
+"behavior": "cautious",
+"cm": [
+15,
+30
+],
+"kg": [
+0.1,
+0.6
+],
+"value": 34,
+"uses": [
+"gift"
+],
+"clue": "Tap the wall and something taps back.",
+"note": "It answers sounds with a little drum of its bladder.",
+"description": "Grey, with ripple rings across its side, like something you dropped in the water a long time ago."
+},
+{
+"id": "coin_carp",
+"name": "Coin carp",
+"latin": "Cyprinus nummus",
+"rarity": "uncommon",
+"habitat": "reservoir",
+"depth": "mid",
+"periods": [
+"dawn",
+"day",
+"dusk",
+"night",
+"deep"
+],
+"seasons": [
+"any"
+],
+"weather": [
+"any"
+],
+"bait": [
+"dough"
+],
+"difficulty": 4,
+"behavior": "strong",
+"cm": [
+25,
+50
+],
+"kg": [
+0.5,
+3
+],
+"value": 40,
+"uses": [
+"gift",
+"trade"
+],
+"clue": "Someone threw wishes down here once. Something ate them.",
+"note": "The scales are almost round enough to spend.",
+"description": "Stamped all over in dark rings like old money, and as heavy as it looks."
+},
+{
+"id": "pale_olm",
+"name": "Pale olm",
+"latin": "Proteus albus",
+"rarity": "rare",
+"habitat": "reservoir",
+"depth": "bottom",
+"periods": [
+"dawn",
+"day",
+"dusk",
+"night",
+"deep"
+],
+"seasons": [
+"any"
+],
+"weather": [
+"any"
+],
+"bait": [
+"worm"
+],
+"difficulty": 4,
+"behavior": "calm",
+"cm": [
+15,
+30
+],
+"kg": [
+0.01,
+0.04
+],
+"value": 75,
+"uses": [
+"collection",
+"gift"
+],
+"clue": "A pink finger with little legs, deep under everything. Not a fish, and it is in the book anyway.",
+"note": "Lives a hundred years. May wait ten without food.",
+"description": "Pink gills like a flower, tiny legs, no eyes to speak of. An amphibian that never agreed to grow up."
+},
+{
+"id": "ink_lamprey",
+"name": "Ink lamprey",
+"latin": "Petromyzon atramentum",
+"rarity": "rare",
+"habitat": "reservoir",
+"depth": "bottom",
+"periods": [
+"night",
+"deep"
+],
+"seasons": [
+"any"
+],
+"weather": [
+"any"
+],
+"bait": [
+"night",
+"worm"
+],
+"difficulty": 6,
+"behavior": "erratic",
+"cm": [
+30,
+60
+],
+"kg": [
+0.1,
+0.6
+],
+"value": 70,
+"uses": [
+"crafting"
+],
+"clue": "Black water that is black for a reason.",
+"note": "It stains your hands for a week.",
+"description": "A dripping ink-black loop with a line of faint gill-lights and one pale eye."
+},
+{
+"id": "lantern_tetra",
+"name": "Lantern tetra",
+"latin": "Hyphessobrycon lucerna",
+"rarity": "rare",
+"habitat": "reservoir",
+"depth": "mid",
+"periods": [
+"night",
+"deep"
+],
+"seasons": [
+"any"
+],
+"weather": [
+"any"
+],
+"bait": [
+"night",
+"lure_glow"
+],
+"difficulty": 4,
+"behavior": "quick",
+"cm": [
+4,
+9
+],
+"kg": [
+0.003,
+0.01
+],
+"value": 60,
+"uses": [
+"collection",
+"crafting"
+],
+"clue": "Tiny lights turn together where the dark is deepest.",
+"note": "Keeps its light even when dried.",
+"description": "An indigo fish with a row of cyan lamps. A shoal looks like a small town seen from far off."
+},
+{
+"id": "spore_gourami",
+"name": "Spore gourami",
+"latin": "Trichopodus sporifer",
+"rarity": "rare",
+"habitat": "reservoir",
+"depth": "surface",
+"periods": [
+"night",
+"deep"
+],
+"seasons": [
+"any"
+],
+"weather": [
+"any"
+],
+"bait": [
+"dough",
+"night"
+],
+"difficulty": 5,
+"behavior": "cautious",
+"cm": [
+10,
+18
+],
+"kg": [
+0.03,
+0.1
+],
+"value": 80,
+"uses": [
+"crafting",
+"gift"
+],
+"clue": "Feeds where luminous fungus drops into the water.",
+"note": "Long feeler fin, tasting the water ahead.",
+"description": "Fungus-green, glowing in patches, with one long feeler it holds out like a candle."
+},
+{
+"id": "silt_ray",
+"name": "Silt ray",
+"latin": "Potamotrygon limi",
+"rarity": "very_rare",
+"habitat": "reservoir",
+"depth": "bottom",
+"periods": [
+"dawn",
+"day",
+"dusk",
+"night",
+"deep"
+],
+"seasons": [
+"any"
+],
+"weather": [
+"any"
+],
+"bait": [
+"baitfish",
+"night"
+],
+"difficulty": 7,
+"behavior": "deep",
+"cm": [
+30,
+60
+],
+"kg": [
+1,
+8
+],
+"value": 180,
+"uses": [
+"collection"
+],
+"clue": "The silt floor has an outline. It moved.",
+"note": "Tail spine. Careful.",
+"description": "A flat disc of silt with spots for stars and a whip for a tail. Never a fish you notice first."
+},
+{
+"id": "glassscale",
+"name": "Glassscale",
+"latin": "Vitrichthys pellucidus",
+"rarity": "exceptional",
+"habitat": "reservoir",
+"depth": "mid",
+"periods": [
+"deep"
+],
+"seasons": [
+"any"
+],
+"weather": [
+"clear"
+],
+"bait": [
+"lure_glow"
+],
+"difficulty": 9,
+"behavior": "cautious",
+"cm": [
+20,
+35
+],
+"kg": [
+0.2,
+0.8
+],
+"value": 420,
+"uses": [
+"collection"
+],
+"clue": "On quiet nights the reservoir water has a part with a fish-shaped absence.",
+"note": "You can see its heart beat.",
+"description": "A body like poured glass, with spine, ribs and a small ember of a heart all on show."
+},
+{
+"id": "hollow_serpent",
+"name": "The Hollow Serpent",
+"latin": "Ophis vacuus",
+"rarity": "legendary",
+"habitat": "reservoir",
+"depth": "deep",
+"periods": [
+"deep"
+],
+"seasons": [
+"autumn",
+"winter"
+],
+"weather": [
+"clear",
+"fog"
+],
+"bait": [
+"lure_glow"
+],
+"difficulty": 10,
+"behavior": "erratic",
+"cm": [
+180,
+320
+],
+"kg": [
+10,
+35
+],
+"value": 1000,
+"uses": [
+"collection"
+],
+"clue": "Something ate through the bottom of the reservoir. It has not stopped. Bring your strongest line and do not go in autumn alone.",
+"note": "It has ribs on the outside.",
+"description": "A coiled thing all black, with bone showing in rungs through its back and a thin cold light running down the middle."
+}
+],
+"habitats": {
+"pond": {
+"name": "Woodland pond",
+"world": true,
+"description": "Still, lily-edged water beside the camp. The platform reaches the deep heart of it.",
+"night_risk": 0
+},
+"stream": {
+"name": "Forest stream",
+"travel_hours": 1,
+"travel_energy": 2,
+"deep": false,
+"grade": "season",
+"night_risk": 0.15,
+"description": "Bright, broken water over stones through the birches. Everything here holds against the current.",
+"anim": {
+"flow": [
+26,
+4
+],
+"glint": "water",
+"glints": 70,
+"foam": true
+},
+"float_y": [
+160,
+250
+]
+},
+"marsh": {
+"name": "Peat marsh",
+"travel_hours": 2,
+"travel_energy": 6,
+"deep": false,
+"grade": "season",
+"night_risk": 0.5,
+"description": "Tea-black water under cattails and drowned snags. Most of what lives here can breathe air.",
+"anim": {
+"flow": [
+1,
+0
+],
+"glint": "moss",
+"glints": 18,
+"foam": false,
+"mist": true
+},
+"float_y": [
+180,
+250
+]
+},
+"lake": {
+"name": "Alpine lake",
+"travel_hours": 4,
+"travel_energy": 12,
+"deep": true,
+"grade": "season",
+"night_risk": 0.2,
+"description": "A cold turquoise bowl beneath snow peaks. The shelf drops away very suddenly.",
+"anim": {
+"flow": [
+3,
+0
+],
+"glint": "ice",
+"glints": 60,
+"foam": false
+},
+"float_y": [
+150,
+255
+]
+},
+"reservoir": {
+"name": "Sunken reservoir",
+"travel_hours": 3,
+"travel_energy": 10,
+"deep": true,
+"grade": "night",
+"requires": {
+"found": "key_old",
+"text": "An old iron door, locked. Somewhere there is a key."
+},
+"night_risk": 0.6,
+"description": "A flooded brick vault below the ruin. It has never heard of the seasons.",
+"anim": {
+"flow": [
+0,
+0
+],
+"glint": "moonlight",
+"glints": 14,
+"foam": false,
+"drips": true
+},
+"float_y": [
+175,
+255
+]
+}
+},
+"behaviors": {
+"calm": {
+"label": "calm",
+"every": [
+6,
+9
+],
+"len": [
+0.8,
+1.2
+],
+"force": 0.55,
+"tell": 1.0,
+"drift": 0.03,
+"gain": 0.8,
+"limit": 1.0,
+"slip": 4.5,
+"nibbles": 1,
+"window": 1.6
+},
+"quick": {
+"label": "quick",
+"every": [
+2.4,
+3.6
+],
+"len": [
+0.5,
+0.9
+],
+"force": 1.0,
+"tell": 0.6,
+"drift": 0.05,
+"gain": 1.0,
+"limit": 1.0,
+"slip": 3.4,
+"nibbles": 1,
+"window": 1.1
+},
+"erratic": {
+"label": "erratic",
+"every": [
+1.8,
+3.2
+],
+"len": [
+0.35,
+0.8
+],
+"force": 0.85,
+"tell": 0.5,
+"drift": 0.07,
+"gain": 1.05,
+"limit": 1.0,
+"slip": 3.2,
+"nibbles": 2,
+"window": 1.1,
+"jink": true
+},
+"strong": {
+"label": "strong",
+"every": [
+4,
+6
+],
+"len": [
+1.6,
+2.4
+],
+"force": 1.5,
+"tell": 0.95,
+"drift": 0.07,
+"gain": 1.2,
+"limit": 1.0,
+"slip": 4,
+"nibbles": 2,
+"window": 1.4
+},
+"deep": {
+"label": "deep-diving",
+"every": [
+5,
+7
+],
+"len": [
+2.2,
+3.2
+],
+"force": 1.05,
+"tell": 0.9,
+"drift": 0.08,
+"gain": 1.05,
+"limit": 1.0,
+"slip": 4,
+"nibbles": 1,
+"window": 1.3,
+"dive": true
+},
+"cautious": {
+"label": "cautious",
+"every": [
+6,
+9
+],
+"len": [
+0.7,
+1.1
+],
+"force": 0.8,
+"tell": 0.9,
+"drift": 0.04,
+"gain": 0.95,
+"limit": 0.68,
+"slip": 2.6,
+"nibbles": 3,
+"window": 1.2
+},
+"surface": {
+"label": "surface-feeding",
+"every": [
+3.6,
+5.4
+],
+"len": [
+0.7,
+0.9
+],
+"force": 0.7,
+"tell": 0.8,
+"drift": 0.05,
+"gain": 1.0,
+"limit": 1.0,
+"slip": 3.5,
+"nibbles": 1,
+"window": 1.3,
+"leap": true
+},
+"nocturnal": {
+"label": "nocturnal",
+"every": [
+3.5,
+5.5
+],
+"len": [
+1,
+1.6
+],
+"force": 1.0,
+"tell": 0.85,
+"drift": 0.05,
+"gain": 1.0,
+"limit": 1.0,
+"slip": 3.8,
+"nibbles": 2,
+"window": 1.5,
+"dim": true
+}
+},
+"tackle": {
+"rods": [
+{
+"id": "rod",
+"tool": true,
+"name": "Primitive rod",
+"tier": 0,
+"control": 1.0,
+"reach": 0
+},
+{
+"id": "rod_wooden",
+"name": "Basic wooden rod",
+"tier": 1,
+"control": 1.15,
+"reach": 4
+},
+{
+"id": "rod_improved",
+"name": "Improved rod",
+"tier": 2,
+"control": 1.35,
+"reach": 8
+},
+{
+"id": "rod_reinforced",
+"name": "Reinforced rod",
+"tier": 3,
+"control": 1.6,
+"reach": 10
+},
+{
+"id": "rod_specialist",
+"name": "Specialist rod",
+"tier": 4,
+"control": 1.9,
+"reach": 14
+}
+],
+"lines": [
+{
+"id": null,
+"name": "Plain cord",
+"strength": 1.0
+},
+{
+"id": "line_braided",
+"name": "Braided line",
+"strength": 1.25
+},
+{
+"id": "line_wire",
+"name": "Wire trace",
+"strength": 1.6
+}
+],
+"hooks": [
+{
+"id": null,
+"name": "Bone hook",
+"grip": 1.0
+},
+{
+"id": "hook_iron",
+"name": "Iron hook",
+"grip": 1.35
+},
+{
+"id": "hook_barbed",
+"name": "Barbed hook",
+"grip": 1.7
+}
+],
+"floats": [
+{
+"id": null,
+"name": "Cork float",
+"sense": 0
+},
+{
+"id": "float_quill",
+"name": "Quill float",
+"sense": 0.45
+}
+],
+"baits": [
+{
+"id": null,
+"kind": null,
+"name": "Bare hook"
+},
+{
+"id": "worm",
+"kind": "worm",
+"name": "Worms"
+},
+{
+"id": "insect_bait",
+"kind": "insect",
+"name": "Insects"
+},
+{
+"id": "baitfish",
+"kind": "baitfish",
+"name": "Baitfish"
+},
+{
+"id": "dough_bait",
+"kind": "dough",
+"name": "Plant dough"
+},
+{
+"id": "night_bait",
+"kind": "night",
+"name": "Night bait"
+},
+{
+"id": "lure_spinner",
+"kind": "lure_spinner",
+"lure": true,
+"name": "Spinner lure",
+"better_in": [
+"rain",
+"stream",
+"lake"
+]
+},
+{
+"id": "lure_fly",
+"kind": "lure_fly",
+"lure": true,
+"name": "Tied fly",
+"better_in": [
+"clear",
+"stream"
+]
+},
+{
+"id": "lure_moth",
+"kind": "lure_moth",
+"lure": true,
+"name": "Moth lure"
+},
+{
+"id": "lure_glow",
+"kind": "lure_glow",
+"lure": true,
+"name": "Glow lure",
+"better_in": [
+"fog",
+"reservoir"
+]
+}
+]
+},
+"rarity": {
+"common": {
+"weight": 30,
+"tier": 0,
+"wait": 1
+},
+"uncommon": {
+"weight": 12,
+"tier": 0,
+"wait": 1.25
+},
+"rare": {
+"weight": 4.5,
+"tier": 1,
+"wait": 1.5
+},
+"very_rare": {
+"weight": 2.2,
+"tier": 2,
+"wait": 1.7
+},
+"exceptional": {
+"weight": 1.4,
+"tier": 3,
+"wait": 1.8
+},
+"legendary": {
+"weight": 1,
+"tier": 3,
+"wait": 2
+}
+},
+"sign": {
+"x": 470,
+"y": 322,
+"ox": 10,
+"oy": 29,
+"w": 20,
+"h": 30
+},
+"vista": {
+"w": 800,
+"h": 360,
+"stand": [
+400,
+318
+]
+}
+}

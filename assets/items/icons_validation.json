@@ -68,6 +68,24 @@
   "brute_hide",
   "healing_tonic",
   "ghost_salve",
+  "rod_wooden",
+  "rod_improved",
+  "rod_reinforced",
+  "rod_specialist",
+  "line_braided",
+  "line_wire",
+  "hook_iron",
+  "hook_barbed",
+  "float_quill",
+  "worm",
+  "insect_bait",
+  "baitfish",
+  "dough_bait",
+  "night_bait",
+  "lure_spinner",
+  "lure_fly",
+  "lure_moth",
+  "lure_glow",
   "tool_hand",
   "tool_knife",
   "tool_axe",
@@ -107,5 +125,10 @@
   "counter",
   "spore_jar",
   "garden_bed"
+ ],
+ "warnings": [
+  "rod_improved: uses all 16 rows (tall object)",
+  "rod_specialist: uses all 16 rows (tall object)",
+  "lure_spinner: uses all 16 rows (tall object)"
  ]
 }

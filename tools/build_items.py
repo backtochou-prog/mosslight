@@ -79,7 +79,7 @@ TOOLS = [
  dict(damage=8, id='knife', name='Gathering knife', durability=60, compat=['hand','knife'], efficiency=1.1, upgrade='knife_steel', icon=('knife','metal'), description='A short, sharp blade for herbs, bark and fibre.'),
  dict(damage=14, id='axe', name='Basic axe', durability=40, compat=['axe'], efficiency=1.0, upgrade='axe_copper', icon=('axe','wood'), description='A hatchet with a worn handle. For wood only.'),
  dict(damage=11, id='pickaxe', name='Pickaxe', durability=40, compat=['pickaxe'], efficiency=1.0, upgrade='pickaxe_copper', icon=('pickaxe','metal'), description='Heavy, blunt, and the only way into rock.'),
- dict(damage=2, id='rod', name='Fishing rod (placeholder)', durability=30, compat=['fishing'], efficiency=1.0, upgrade=None, icon=('rod','wood'), description='A reed rod and a length of line. Fishing comes later.'),
+ dict(damage=2, id='rod', name='Primitive rod', durability=30, compat=['fishing'], efficiency=1.0, upgrade=None, icon=('rod','wood'), description='A reed, a length of cord, a bone hook. It catches fish, mostly small ones.'),
 ]
 # ---- world resource nodes placed in the clearing. Each: visual kind + states, drop table, tool, conditions, respawn.
 NODES = [
@@ -119,6 +119,8 @@ NODES = [
  dict(id='nightglass_bank', kind='nightglass', x=548, y=222, r=16, label='Lift the nightglass', activity='mine', tool='pickaxe', drops=[['nightglass',1,1]], yields=1, respawn_hours=72, respawn_mode='time', time='deep_night'),
  dict(id='ember_vent', kind='ember_vent', x=694, y=120, r=16, label='Dig emberroot', activity='cut_herb', tool='knife', drops=[['emberroot',1,1]], yields=1, respawn_hours=48, respawn_mode='time', time='night'),
  dict(id='spore_patch', kind='spore_patch', x=150, y=300, r=16, label='Shake the spores loose', activity='pick_plant', tool='hand', drops=[['luminous_spores',1,2]], yields=1, respawn_hours=24, respawn_mode='time', time='night'),
+ dict(id='worm_bed', kind='worm_bed', x=526, y=318, r=16, label='Dig for worms', activity='pick_plant', tool='hand', drops=[['worm',2,4]], yields=2, respawn_hours=12, respawn_mode='time'),
+ dict(id='reed_insects', kind='reed_insects', x=612, y=212, r=16, label='Catch insects', activity='pick_plant', tool='hand', seasons='spring,summer,autumn', drops=[['insect_bait',2,3]], yields=2, respawn_hours=8, respawn_mode='time', time='day'),
  dict(id='clay_bank', kind='clay', x=572, y=222, r=16, label='Dig clay', activity='gather_stones', tool='hand', drops=[['clay',1,2]], yields=3, respawn_hours=24, respawn_mode='time', weather='rain,after_rain'),
  dict(id='feather_meadow', kind='feather', x=360, y=120, r=14, label='Pick up the feather', activity='search', tool='hand', drops=[['feather',1,1]], yields=1, respawn_hours=36, respawn_mode='time'),
 ]
@@ -192,7 +194,7 @@ def build():
     json.dump({'size': 12, 'cols': 10, 'index': index}, open(os.path.join(OUT, 'icons.json'), 'w'))
     for it in ITEMS: it['icon'] = it['id']
     for t in TOOLS: t['icon'] = 'tool_' + t['id']
-    json.dump({'version': 1, 'rarities': RARITY, 'categories': ['natural', 'geological', 'botanical', 'abandoned', 'rare_find', 'creature', 'crafted'], 'items': ITEMS}, open(os.path.join(OUT, 'items.json'), 'w'), indent=1)
+    json.dump({'version': 1, 'rarities': RARITY, 'categories': ['natural', 'geological', 'botanical', 'abandoned', 'rare_find', 'creature', 'crafted', 'fish', 'bait', 'tackle'], 'items': ITEMS}, open(os.path.join(OUT, 'items.json'), 'w'), indent=1)
     json.dump({'tools': TOOLS}, open(os.path.join(OUT, 'tools.json'), 'w'), indent=1)
     json.dump({'nodes': NODES, 'activities_extra': {'pick_plant': {'label': 'Pick', 'energy': 1, 'minutes': 4, 'heavy': False, 'anim': 'gather'},
                'cut_herb': {'label': 'Cut', 'energy': 1, 'minutes': 5, 'heavy': False, 'anim': 'gather'}, 'search': {'label': 'Search', 'energy': 1, 'minutes': 6, 'heavy': False, 'anim': 'gather'}}},

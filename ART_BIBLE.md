@@ -647,3 +647,12 @@ the keep-outs; 5 one flower cluster per sunny pocket; 6 foreground frame;
 ## Creatures (Prompt 11)
 
 Each archetype must read by silhouette alone: low hunched Wanderer, long-legged Stalker with three eyes, ringed Burrower behind a mound, very tall thin Howler, wide stone Brute with a tree on its back, drifting bell-shaped Luminous. Creatures use the indexed palette and the world's night tables; only eyes and Luminous bodies use emissive families. Attack warnings are a pose change and a soft lift, never a flash. No gore. Gallery: `renders/gallery_creatures_{day,night}.png`.
+
+
+## Fish plates and waters (Prompt 12)
+
+Fish use their own indexed plate palette in `tools/pixelart/fish.py`, because the world palette is full. Plates are not graded by time of day: they are specimens in a book. Every species is an individual anatomical description in a 32 px cell, facing left: spine, back and belly profiles, fins, tail type, jaw, barbels, markings placed in body coordinates. A species that only differs by colour is not acceptable; `assets/fishing/fish_art_report.json` lists the closest pairs by silhouette and colour. Near relatives must differ in a named feature, such as the bream's hump or the barbel's underslung mouth.
+
+Each water has one idea. Pond: lilies and reflections, read live from the frame. Stream: broken bright water over boulders, a gravel bar underfoot. Marsh: tea-black water, cattails, drowned snags. Lake: snow peaks mirrored in cold water, a rock shelf. Reservoir: brick vault, standing columns, fungus and one shaft of light, always on the night table. No water may be a recolour of another.
+
+The field book is parchment and ink in a serif face, with silhouettes for fish not yet met. Fishing UI stays in a corner or a thin strip so the water remains visible.

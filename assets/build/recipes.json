@@ -802,6 +802,326 @@
    "icon": "spore_jar"
   },
   {
+   "id": "rod_wooden",
+   "name": "Basic wooden rod",
+   "description": "A straight ash pole with a proper tip ring. Better control than the reed.",
+   "station": "hand",
+   "ingredients": {
+    "branch": 3,
+    "cord": 2
+   },
+   "minutes": 15,
+   "energy": 1,
+   "result": "rod_wooden",
+   "qty": 1,
+   "unlock": {
+    "type": "start"
+   },
+   "category": "tackle",
+   "icon": "rod_wooden"
+  },
+  {
+   "id": "rod_improved",
+   "name": "Improved rod",
+   "description": "Jointed, with wire guides. It bends where it should.",
+   "station": "workbench",
+   "ingredients": {
+    "plank": 2,
+    "cord": 3,
+    "wire": 1
+   },
+   "minutes": 30,
+   "energy": 2,
+   "result": "rod_improved",
+   "qty": 1,
+   "unlock": {
+    "type": "station",
+    "id": "workbench"
+   },
+   "category": "tackle",
+   "icon": "rod_improved"
+  },
+  {
+   "id": "rod_reinforced",
+   "name": "Reinforced rod",
+   "description": "Iron-sleeved at the butt. It will not be the first thing to give.",
+   "station": "workbench",
+   "ingredients": {
+    "plank": 2,
+    "iron_ingot": 1,
+    "wire": 2,
+    "resin": 1
+   },
+   "minutes": 45,
+   "energy": 3,
+   "result": "rod_reinforced",
+   "qty": 1,
+   "unlock": {
+    "type": "item",
+    "id": "iron_ingot"
+   },
+   "category": "tackle",
+   "icon": "rod_reinforced"
+  },
+  {
+   "id": "rod_specialist",
+   "name": "Specialist rod",
+   "description": "Resin-laid strips and a moonstone tip guide. For the fish in the stories.",
+   "station": "adv_bench",
+   "ingredients": {
+    "hardwood": 2,
+    "resin": 3,
+    "moonstone": 1,
+    "iron_ingot": 2
+   },
+   "minutes": 90,
+   "energy": 5,
+   "result": "rod_specialist",
+   "qty": 1,
+   "unlock": {
+    "type": "item",
+    "id": "moonstone"
+   },
+   "category": "tackle",
+   "icon": "rod_specialist"
+  },
+  {
+   "id": "line_braided",
+   "name": "Braided line",
+   "description": "Three cords laid as one. Survives a strong run.",
+   "station": "hand",
+   "ingredients": {
+    "cord": 3
+   },
+   "minutes": 8,
+   "energy": 0,
+   "result": "line_braided",
+   "qty": 1,
+   "unlock": {
+    "type": "start"
+   },
+   "category": "tackle",
+   "icon": "line_braided"
+  },
+  {
+   "id": "line_wire",
+   "name": "Wire trace",
+   "description": "Fine wire above the hook. Teeth do not bother it.",
+   "station": "workbench",
+   "ingredients": {
+    "wire": 2,
+    "cord": 1
+   },
+   "minutes": 12,
+   "energy": 0,
+   "result": "line_wire",
+   "qty": 1,
+   "unlock": {
+    "type": "item",
+    "id": "wire"
+   },
+   "category": "tackle",
+   "icon": "line_wire"
+  },
+  {
+   "id": "hook_iron",
+   "name": "Iron hook",
+   "description": "Holds better in a soft mouth.",
+   "station": "workbench",
+   "ingredients": {
+    "scrap_metal": 1
+   },
+   "minutes": 6,
+   "energy": 0,
+   "result": "hook_iron",
+   "qty": 1,
+   "unlock": {
+    "type": "station",
+    "id": "workbench"
+   },
+   "category": "tackle",
+   "icon": "hook_iron"
+  },
+  {
+   "id": "hook_barbed",
+   "name": "Barbed hook",
+   "description": "Once in, it stays in. A slack line will not lose the fish so easily.",
+   "station": "workbench",
+   "ingredients": {
+    "iron_ingot": 1
+   },
+   "minutes": 10,
+   "energy": 0,
+   "result": "hook_barbed",
+   "qty": 1,
+   "unlock": {
+    "type": "item",
+    "id": "iron_ingot"
+   },
+   "category": "tackle",
+   "icon": "hook_barbed"
+  },
+  {
+   "id": "float_quill",
+   "name": "Quill float",
+   "description": "Feather-light. Gives you longer to answer a bite.",
+   "station": "hand",
+   "ingredients": {
+    "feather": 1,
+    "cord": 1
+   },
+   "minutes": 4,
+   "energy": 0,
+   "result": "float_quill",
+   "qty": 1,
+   "unlock": {
+    "type": "item",
+    "id": "feather"
+   },
+   "category": "tackle",
+   "icon": "float_quill"
+  },
+  {
+   "id": "baitfish",
+   "name": "Baitfish",
+   "description": "A small fish on a big hook, for predators.",
+   "station": "hand",
+   "ingredients": {
+    "minnow": 1
+   },
+   "minutes": 2,
+   "energy": 0,
+   "result": "baitfish",
+   "qty": 2,
+   "unlock": {
+    "type": "item",
+    "id": "minnow"
+   },
+   "category": "tackle",
+   "icon": "baitfish"
+  },
+  {
+   "id": "dough_bait",
+   "name": "Plant dough",
+   "description": "Seed meal and mushroom, kneaded. Carp cannot resist it.",
+   "station": "hand",
+   "ingredients": {
+    "seeds_wild": 1,
+    "mushroom_brown": 1
+   },
+   "minutes": 4,
+   "energy": 0,
+   "result": "dough_bait",
+   "qty": 4,
+   "unlock": {
+    "type": "item",
+    "id": "seeds_wild"
+   },
+   "category": "tackle",
+   "icon": "dough_bait"
+  },
+  {
+   "id": "night_bait",
+   "name": "Night bait",
+   "description": "Worm rolled in moondew. It shines faintly, and strange things come to it.",
+   "station": "hand",
+   "ingredients": {
+    "worm": 2,
+    "moondew": 1
+   },
+   "minutes": 4,
+   "energy": 0,
+   "result": "night_bait",
+   "qty": 3,
+   "unlock": {
+    "type": "item",
+    "id": "moondew"
+   },
+   "category": "tackle",
+   "icon": "night_bait"
+  },
+  {
+   "id": "lure_spinner",
+   "name": "Spinner lure",
+   "description": "A flashing blade. Predators and bad weather love it. Not eaten, but a snapped line loses it.",
+   "station": "workbench",
+   "ingredients": {
+    "scrap_metal": 1,
+    "wire": 1
+   },
+   "minutes": 15,
+   "energy": 1,
+   "result": "lure_spinner",
+   "qty": 1,
+   "unlock": {
+    "type": "item",
+    "id": "wire"
+   },
+   "category": "tackle",
+   "icon": "lure_spinner"
+  },
+  {
+   "id": "lure_fly",
+   "name": "Tied fly",
+   "description": "Feather and thread. Delicate fish take it on clear days.",
+   "station": "hand",
+   "ingredients": {
+    "feather": 2,
+    "cord": 1
+   },
+   "minutes": 10,
+   "energy": 0,
+   "result": "lure_fly",
+   "qty": 1,
+   "unlock": {
+    "type": "item",
+    "id": "feather"
+   },
+   "category": "tackle",
+   "icon": "lure_fly"
+  },
+  {
+   "id": "lure_moth",
+   "name": "Moth lure",
+   "description": "Wings of dust and a real moth body, for the things that rise at night.",
+   "station": "workbench",
+   "ingredients": {
+    "lantern_moth": 1,
+    "wire": 1
+   },
+   "minutes": 15,
+   "energy": 1,
+   "result": "lure_moth",
+   "qty": 1,
+   "unlock": {
+    "type": "item",
+    "id": "lantern_moth"
+   },
+   "category": "tackle",
+   "icon": "lure_moth"
+  },
+  {
+   "id": "lure_glow",
+   "name": "Glow lure",
+   "description": "Spores set in nightglass. It is the only thing some fish have ever looked at.",
+   "station": "workbench",
+   "ingredients": {
+    "luminous_spores": 2,
+    "nightglass": 1,
+    "wire": 1
+   },
+   "minutes": 25,
+   "energy": 2,
+   "result": "lure_glow",
+   "qty": 1,
+   "unlock": {
+    "type": "item",
+    "id": "nightglass"
+   },
+   "category": "tackle",
+   "icon": "lure_glow"
+  },
+  {
    "id": "garden_bed",
    "name": "Raised garden bed",
    "description": "Ready for planting when seeds can be sown.",

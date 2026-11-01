@@ -16,7 +16,8 @@ for nm, (c, _, _) in spr.items(): sheet.blit(c, pos[nm]['x'], pos[nm]['y'])
 Image.fromarray(sheet.a, 'L').save(os.path.join(OUT, 'monsters_idx.png')); json.dump({'width': AW, 'index': pos}, open(os.path.join(OUT, 'monsters_atlas.json'), 'w'))
 # node atlas
 ns = node_sprites(); cols, cw, ch = 6, 28, 24; ent = [(k, st, s.c, s.ox, s.oy, 'solid' in s.tags) for k, sts in ns.items() for st, s in sts.items()]
-for k, (c, e, ox, oy) in M.nodes().items(): ent += [(k, 'full', c, ox, oy, False), (k, 'depleted', e, ox, oy, False), (k, 'regrow', e, ox, oy, False)]
+from pixelart.vistas import nodes as fnodes
+for k, (c, e, ox, oy) in {**M.nodes(), **fnodes()}.items(): ent += [(k, 'full', c, ox, oy, False), (k, 'depleted', e, ox, oy, False), (k, 'regrow', e, ox, oy, False)]
 nsheet = Canvas(cols * cw, ((len(ent) + cols - 1) // cols) * ch); idx = {}
 for i, (k, st, c, ox, oy, sol) in enumerate(ent):
     px, py = (i % cols) * cw, (i // cols) * ch; nsheet.blit(c, px, py); idx[f'{k}:{st}'] = dict(x=px, y=py, w=c.w, h=c.h, ox=ox, oy=oy, solid=sol)

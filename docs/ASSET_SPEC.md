@@ -162,3 +162,8 @@ Finished (hand-authored, validated): all 50 items and 5 tools — `assets/items/
 ## Creature assets (Prompt 11)
 
 `assets/monsters/monsters_idx.png` + `monsters_atlas.json`: 27 indexed sprites, feet at the origin. Status: code-authored, in use, no human artist pass. Sound: WebAudio synthesis recipes in `preview/monsters.js`, placeholders. Night nodes starshard, nightglass, ember_vent and spore_patch are in `assets/items/nodes_idx.png`.
+
+
+## Fishing assets (Prompt 12)
+
+`assets/fishing/fish_idx.png` + `fish_atlas.json`: 89 fish plates, 32x32, plate palette in the atlas. Status: all 89 finished as code-authored art, no human artist pass. `vista_*_idx.png`: four 800x360 scenes in the world palette. `trail_sign_idx.png`: signpost. Tackle and bait icons are 16 px hand grids in `tools/icons/catalog.py`. Worm bed and reed insect nodes are in the node atlas.

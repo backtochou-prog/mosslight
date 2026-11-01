@@ -1,0 +1,229 @@
+{
+ "results": [
+  {
+   "name": "casting from the platform lands the float on water",
+   "ok": true,
+   "detail": "Fish from the platform,platform,true,true,casting,surface/shallow/mid"
+  },
+  {
+   "name": "the pond can be fished in every season, including through winter ice",
+   "ok": true,
+   "detail": "{\"summer\":true,\"autumn\":true,\"winter\":true,\"spring\":true}"
+  },
+  {
+   "name": "casting from the shore reaches shallow water only; deep needs the platform",
+   "ok": true,
+   "detail": "shore true surface/shallow mid/deep/bottom"
+  },
+  {
+   "name": "no fishing prompt away from water",
+   "ok": true
+  },
+  {
+   "name": "bait selection lists what you own and shifts the odds",
+   "ok": true,
+   "detail": "Bare hook/Worms/Insects/Plant dough/Spinner lure {\"worm\":\"perch:27\",\"dough_bait\":\"roach:60\",\"lure_spinner\":\"pike:41\",\"null\":\"perch:25\"}"
+  },
+  {
+   "name": "bait is consumed when a fish takes it",
+   "ok": true,
+   "detail": "3,2"
+  },
+  {
+   "name": "float nibbles, then a real bite with a limited window; missing it loses the fish",
+   "ok": true,
+   "detail": "{\"roach\":[true,3.6,1.6,\"panel\"],\"bream\":[true,3.3,1.6,\"panel\"],\"crucian\":[true,6.1,1.2,\"panel\"]}"
+  },
+  {
+   "name": "striking during a nibble spooks the fish",
+   "ok": true,
+   "detail": "early,panel"
+  },
+  {
+   "name": "a bare hook can still catch something ordinary",
+   "ok": true,
+   "detail": "true,common"
+  },
+  {
+   "name": "skilled play lands an easy fish fast and a hard fish in much longer",
+   "ok": true,
+   "detail": "{\"minnow\":[12,4.6],\"pike\":[12,18.2]}"
+  },
+  {
+   "name": "just holding reel works on a minnow, snaps on a pike with a basic rod",
+   "ok": true,
+   "detail": "{\"minnow\":[10,\"{}\"],\"pike\":[0,\"{\\\"snapped\\\":10}\"]}"
+  },
+  {
+   "name": "never reeling loses the fish",
+   "ok": true,
+   "detail": 6
+  },
+  {
+   "name": "eight fighting behaviours produce different fights",
+   "ok": true,
+   "detail": "{\"calm\":{\"id\":\"minnow\",\"runsPerMin\":0,\"runShare\":0,\"maxDist\":1,\"res\":\"landed\"},\"quick\":{\"id\":\"perch\",\"runsPerMin\":15.1,\"runShare\":0.14,\"maxDist\":1,\"res\":\"landed\"},\"erratic\":{\"id\":\"weather_loach\",\"runsPerMin\":14.3,\"runShare\":0.14,\"maxDist\":1,\"res\":\"landed\"},\"strong\":{\"id\":\"common_carp\",\"runsPerMin\":5.4,\"runShare\":0.2,\"maxDist\":1,\"res\":\"landed\"},\"deep\":{\"id\":\"giant_pike\",\"runsPerMin\":6.1,\"runShare\":0.29,\"maxDist\":1,\"res\":\"landed\"},\"cautious\":{\"id\":\"ruffe\",\"runsPerMin\":0,\"runShare\":0,\"maxDist\":1,\"res\":\"landed\"},\"surface\":{\"id\":\"rudd\",\"runsPerMin\":8.5,\"runShare\":0.12,\"maxDist\":1,\"res\":\"landed\"},\"nocturnal\":{\"id\":\"whisker_cat\",\"runsPerMin\":6.9,\"runShare\":0.17,\"maxDist\":1,\"res\":\"landed\"}}"
+  },
+  {
+   "name": "cautious fish tear free under tension; leapers throw the hook on a tight line",
+   "ok": true,
+   "detail": "torn,thrown"
+  },
+  {
+   "name": "accessibility: relaxed pace and the assist are genuinely easier",
+   "ok": true,
+   "detail": "{\"relaxed\":2,\"demanding\":0,\"assistPike\":8}"
+  },
+  {
+   "name": "each better rod lands a pike faster",
+   "ok": true,
+   "detail": "{\"rod\":[12,30.4],\"rod_wooden\":[12,26.8],\"rod_improved\":[12,21.3],\"rod_reinforced\":[12,18.2],\"rod_specialist\":[12,16]}"
+  },
+  {
+   "name": "rare fish need better tackle, and early fishing still has plenty",
+   "ok": true,
+   "detail": "false,true,2"
+  },
+  {
+   "name": "tackle is craftable through the existing crafting",
+   "ok": true,
+   "detail": " true Basic wooden rod"
+  },
+  {
+   "name": "worms can be dug beside the pond",
+   "ok": true,
+   "detail": "true,true,0,255"
+  },
+  {
+   "name": "all species can appear under their own conditions (89 species)",
+   "ok": true,
+   "detail": "missing: "
+  },
+  {
+   "name": "all species can be landed by skilled play with top tackle",
+   "ok": true,
+   "detail": "89/89 not: "
+  },
+  {
+   "name": "seasonal availability: midsummer sunfish, not winter",
+   "ok": true,
+   "detail": "false,true,false,false"
+  },
+  {
+   "name": "weather: the weather loach bites only in rain",
+   "ok": true,
+   "detail": "false,true"
+  },
+  {
+   "name": "nocturnal: the moonfin only in deep clear autumn night; catfish after dark",
+   "ok": true,
+   "detail": "false,true,false,true,5"
+  },
+  {
+   "name": "legendary needs several conditions at once",
+   "ok": true,
+   "detail": "true,false,false,false"
+  },
+  {
+   "name": "far waters: walking takes time, the reservoir needs its key",
+   "ok": true,
+   "detail": "false,true,lake,4,true,reservoir"
+  },
+  {
+   "name": "night fishing at far waters carries a real risk",
+   "ok": true,
+   "detail": 8
+  },
+  {
+   "name": "fish enter the one inventory; rare catches keep their own measurements",
+   "ok": true,
+   "detail": "2,2,true,50,true,2"
+  },
+  {
+   "name": "letting one go still counts for the book",
+   "ok": true,
+   "detail": "0,1"
+  },
+  {
+   "name": "field book: entries have first date, sizes, count; every cell is tappable",
+   "ok": true,
+   "detail": "true,true,true,89,true,6"
+  },
+  {
+   "name": "undiscovered fish show as silhouettes without their names",
+   "ok": true,
+   "detail": "0,true"
+  },
+  {
+   "name": "sizes stay inside each species range, weight tracks length",
+   "ok": true,
+   "detail": "{\"minnow\":[4,9.4,0.003,0.02,true],\"pike\":[40,104.5,0.738,11.22,true],\"common_carp\":[30,78.3,0.737,10.96,true]}"
+  },
+  {
+   "name": "personal records: new, broken, largest, heaviest, smallest",
+   "ok": true,
+   "detail": "true,true,false,30,0.5,20,3,perch"
+  },
+  {
+   "name": "a catch event exists for later tournaments and quests",
+   "ok": true
+  },
+  {
+   "name": "save and load: records, tackle and pack restored; no fish frozen mid-fight; repeat loads do not duplicate",
+   "ok": true,
+   "detail": "idle,,true,true,true,relaxed,worm,true,true"
+  },
+  {
+   "name": "saves from before fishing still load",
+   "ok": true,
+   "detail": "true,true,0"
+  },
+  {
+   "name": "real keys: open, choose bait, cast, strike, hold to reel",
+   "ok": true,
+   "detail": "panel,worm,casting,fight,true,true,false"
+  },
+  {
+   "name": "keep and walk away ends fishing",
+   "ok": true,
+   "detail": "idle,"
+  },
+  {
+   "name": "walking still works after fishing",
+   "ok": true,
+   "detail": "420→444.09999999999997"
+  },
+  {
+   "name": "touch: open, tap cast, tap strike, hold to reel, release, tap keep",
+   "ok": true,
+   "detail": "panel,casting,fight,true,false,panel,1"
+  },
+  {
+   "name": "touch: tapping a book cell selects it",
+   "ok": true,
+   "detail": 1
+  },
+  {
+   "name": "early game: worms and a primitive rod catch something at the pond in every season, hour and weather",
+   "ok": true,
+   "detail": "96 cases, empty: "
+  },
+  {
+   "name": "frame time with water pass (software Chromium)",
+   "ok": true,
+   "detail": "17.0 ms"
+  },
+  {
+   "name": "no two plates share both silhouette and colour",
+   "ok": true,
+   "detail": "[0.89,0.67,\"dace\",\"vendace\"]"
+  },
+  {
+   "name": "no page errors",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "passed": 45,
+ "total": 45
+}

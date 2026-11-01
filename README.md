@@ -243,3 +243,12 @@ Controls: **F** strike with the active tool, **Shift** sneak, **L** lantern, **K
 Data lives in `assets/monsters/monsters.json` (stats, phases, weather, spawn sites, drops, journal text). Rebuild art with `python3 tools/build_monsters.py`. Code is `preview/monsters.js`. Tests are `tests/night_tests.js`, with screenshots in `renders/night_*.png`.
 
 Status: the browser build is the tested one. The Godot port does not include this system. Sounds are synthesised placeholders and have not been judged by ear.
+
+
+## Fishing (Prompt 12)
+
+Walk to the pond and press **E** to open the tackle panel. Choose rod, bait, near or far cast, pace and assist with the arrows, then press **E** to cast. Press **E** when the float goes under, then hold **E** or the screen to reel and let go when the fish runs. **N** opens the field book. The signpost south of the path leads to the far waters. On touch screens every step is a tap or a hold.
+
+Data: `assets/fishing/fishing.json`, written by `tools/build_fishing.py` from `tools/fish_data.py`. Plates: `tools/pixelart/fish_species.py`, built by `tools/build_fish.py`. Scenes: `tools/pixelart/vistas.py`. Engine: `preview/fishing.js`, which names no species. To add a fish, add one art entry and one data record. Tests: `tests/fishing_tests.js`.
+
+The Godot port does not include this system. Fish art is code-drawn with no human artist pass. Sounds reuse the Prompt 11 synthesised placeholders.

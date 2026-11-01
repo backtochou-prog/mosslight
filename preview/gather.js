@@ -101,7 +101,7 @@ window.Gather = (() => {
     found: {},    // id -> {first: {day, hour, season, weather, nodeKind}, count}
     record(id, n) { const f = this.found[id]; const ctx = { day: W.Survival.Clock.day, hour: Math.round(W.WorldClock.hour() * 10) / 10, season: W.SeasonState.season, weather: W.WeatherState.kind, phase: W.Survival.Clock.phase(), node: n ? n.def.kind : null };
       if (!f) { this.found[id] = { first: ctx, count: 1 }; emit('discovered', id, ctx); } else f.count += 1; },
-    progress(cat) { const items = cat ? DB.byCategory(cat) : DB.all().filter(i => i.category !== 'crafted' && i.category !== 'creature'); const n = items.filter(i => this.found[i.id]).length; return [n, items.length]; },
+    progress(cat) { const items = cat ? DB.byCategory(cat) : DB.all().filter(i => !['crafted', 'creature', 'fish', 'bait', 'tackle'].includes(i.category)); const n = items.filter(i => this.found[i.id]).length; return [n, items.length]; },
     entry(id) { const it = ITEMS[id]; const f = this.found[id]; if (!f) return { id, known: false, name: '???', rarity: it.rarity, category: it.category };
       return { id, known: true, name: it.name, description: it.description, rarity: it.rarity, category: it.category, habitat: it.habitat, seasons: it.seasons, time: it.time, weather: it.weather, first: f.first, count: f.count }; },
   };
@@ -114,7 +114,7 @@ window.Gather = (() => {
   const UI = {
     open: null, cursor: 0, journalCat: 0, journalCursor: 0, cats: ['natural', 'geological', 'botanical', 'abandoned', 'rare_find'],
     toggle(which) { this.open = this.open === which ? null : which; },
-    drawIcon(g, id, x, y, scale = 1, table, hi = true) { const pos = ICON.index[id]; if (!pos) return;
+    drawIcon(g, id, x, y, scale = 1, table, hi = true) { if (W.extraIcon && W.extraIcon(g, id, x, y, scale)) return; const pos = ICON.index[id]; if (!pos) return;
       // hi-res (32 px) art by default; the 16 px grid remains the editable source
       const s = hi && W.iconIdx32 ? ICON.size * 2 : ICON.size; const src = hi && W.iconIdx32 ? W.iconIdx32 : W.iconIdx; const px0 = hi && W.iconIdx32 ? pos[0] * 2 : pos[0], py0 = hi && W.iconIdx32 ? pos[1] * 2 : pos[1]; const k = hi && W.iconIdx32 ? scale / 2 : scale;
       for (let yy = 0; yy < s; yy++) for (let xx = 0; xx < s; xx++) { const pi = src[(py0 + yy) * (ICON.cols * s) + px0 + xx]; if (!pi) continue; const c = table[pi]; g.fillStyle = `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`; g.fillRect(x + xx * k, y + yy * k, k, k); } },
@@ -138,7 +138,7 @@ window.Gather = (() => {
       const dx = x0 + 10 + cols * cell + 6, dy = y0 + 22; const s = Inventory.slots[this.cursor];
       g.textAlign = 'left'; g.font = '9px ui-monospace, monospace';
       if (s) { const it = ITEMS[s.id]; this.drawIcon(g, s.id, dx, dy, 3, table); g.fillStyle = '#eedcb0'; g.fillText(it.name, dx + 54, dy + 10); g.fillStyle = RCOL[it.rarity]; g.fillText(it.rarity.replace('_', ' '), dx + 54, dy + 21); g.fillStyle = 'rgba(238,220,176,0.55)'; g.fillText(`${it.category} · ×${s.qty}`, dx + 54, dy + 32);
-        const yy = this.wrap(g, it.description, dx, dy + 58, 150, 10, '#d9cfae'); g.fillStyle = 'rgba(238,220,176,0.55)'; this.wrap(g, 'found: ' + (it.habitat || '—'), dx, yy + 14, 150, 10, 'rgba(238,220,176,0.55)'); }
+        if (s.meta && s.meta.cm) { g.fillStyle = '#ffd98a'; g.fillText(`${s.meta.cm} cm, ${s.meta.kg} kg, ${s.meta.quality}`, dx + 54, dy + 32); } const yy = this.wrap(g, it.description, dx, dy + 58, 150, 10, '#d9cfae'); g.fillStyle = 'rgba(238,220,176,0.55)'; this.wrap(g, 'found: ' + (it.habitat || '—'), dx, yy + 14, 150, 10, 'rgba(238,220,176,0.55)'); }
       else { g.fillStyle = 'rgba(238,220,176,0.45)'; g.fillText('empty slot', dx, dy + 10); }
       g.fillStyle = 'rgba(238,220,176,0.45)'; g.font = '8px ui-monospace, monospace'; g.fillText('arrows · S split · X drop · U use · I close', x0 + 10, y0 + ph - 8);
     },
@@ -194,5 +194,5 @@ window.Gather = (() => {
   function tick(dt) { FX.tick(dt); const h = W.Survival.Clock.day * 24 + W.WorldClock.hour(); if (lastHour === null) lastHour = h; const dh = h - lastHour; lastHour = h;
     const wx = W.WeatherState.kind; if ((wx === 'light_rain' || wx === 'heavy_rain') && W.WeatherState.intensity > 0.3) W.WeatherState.recentRainHours = 0; else W.WeatherState.recentRainHours = Math.min(99, W.WeatherState.recentRainHours + Math.max(0, dh));
     Nodes.tick(); }
-  return { setUse: f => { W.onUse = f; }, init, tick, on, DB, Inventory, Tools, Nodes, Gathering, Journal, UI, FX, Stats, Save, nodeSprite, RCOL, items: () => ITEMS };
+  return { setUse: f => { W.onUse = f; }, setExtraIcon: f => { W.extraIcon = f; }, init, tick, on, DB, Inventory, Tools, Nodes, Gathering, Journal, UI, FX, Stats, Save, nodeSprite, RCOL, items: () => ITEMS };
 })();

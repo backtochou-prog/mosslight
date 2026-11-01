@@ -3,7 +3,7 @@
   {
    "name": "data loaded; journal total 52 gathered entries",
    "ok": true,
-   "detail": "41 recipes, 58 components, 97 items"
+   "detail": "57 recipes, 58 components, 204 items"
   },
   {
    "name": "crafting refused without ingredients",
@@ -61,7 +61,7 @@
   {
    "name": "station recipes work after unlock",
    "ok": true,
-   "detail": "planks 48, nails 36, unlocked 18"
+   "detail": "planks 48, nails 36, unlocked 22"
   },
   {
    "name": "foundation laid (30 cells)",
