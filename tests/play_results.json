@@ -3,7 +3,7 @@
   {
    "name": "moves E",
    "ok": true,
-   "detail": "92.6 px"
+   "detail": "93.4 px"
   },
   {
    "name": "moves W",
@@ -13,17 +13,17 @@
   {
    "name": "moves N",
    "ok": true,
-   "detail": "94.1 px"
+   "detail": "92.6 px"
   },
   {
    "name": "moves S",
    "ok": true,
-   "detail": "94.1 px"
+   "detail": "93.4 px"
   },
   {
    "name": "moves NE",
    "ok": true,
-   "detail": "95.0 px"
+   "detail": "94.5 px"
   },
   {
    "name": "moves NW",
@@ -33,7 +33,7 @@
   {
    "name": "moves SE",
    "ok": true,
-   "detail": "95.0 px"
+   "detail": "93.7 px"
   },
   {
    "name": "moves SW",
@@ -43,7 +43,7 @@
   {
    "name": "diagonal speed == cardinal speed",
    "ok": true,
-   "detail": "cardinal 93.3 px, diagonal 93.3 px over 1.5 s"
+   "detail": "cardinal 93.0 px, diagonal 92.9 px over 1.5 s"
   },
   {
    "name": "stops without sliding",
@@ -83,7 +83,7 @@
   {
    "name": "passes between edge trees on the ruin path",
    "ok": true,
-   "detail": "reached (640, 50) heading for the ruin"
+   "detail": "reached (551, 107) heading for the ruin"
   },
   {
    "name": "walks between forest trunks, stops at the playable border (x=32)",
@@ -177,7 +177,7 @@
   {
    "name": "frame cost (software Chromium, 640x360 at 3x)",
    "ok": true,
-   "detail": "17.5 ms/frame"
+   "detail": "20.5 ms/frame"
   },
   {
    "name": "no page errors",

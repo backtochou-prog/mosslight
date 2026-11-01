@@ -89,6 +89,7 @@ def build(lib) -> Scene:
     for (nm, x, y, fl) in (('willow_0', 730, 306, True), ('boulder_mossy_l0', 596, 340, False), ('boulder_s1', 576, 348, False), ('stone_1', 590, 352, False)):
         ctx.place(nm, x, y, flip=fl)
     sc.add(lib['dock'], 528, 290, layer='ground'); sc.add(lib['lantern_hanging'], 592, 268)
+    if 'ruin_wall' in lib: sc.add(lib['ruin_wall'], 512, 104)
     if 'bridge' in lib: sc.add(lib['bridge'], 654, 390, layer='ground')
     # THE RUIN — two walls, rubble at the ends, a fallen beam, a young rowan growing inside,
     # a dead tree beyond, glow-caps in the damp corner.

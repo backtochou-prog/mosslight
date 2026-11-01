@@ -469,5 +469,99 @@
    "type": "generations",
    "generations": 1.0
   }
+ },
+ "c_shrubs_side": {
+  "source": "PixelLab",
+  "spec": {
+   "kind": "image",
+   "w": 128,
+   "h": 96,
+   "prompt": "six separate leafy forest bushes seen from the front at ground level, rounded mound shapes with clumped leaves, darker at the base, lit at the top, some with red berries, no shadow, no ground, well spaced, not touching",
+   "fams": [
+    "shrub",
+    "berry"
+   ],
+   "seed": 110
+  },
+  "usage": {
+   "type": "generations",
+   "generations": 1.0
+  }
+ },
+ "c_ferns_clean": {
+  "source": "PixelLab",
+  "spec": {
+   "kind": "image",
+   "w": 128,
+   "h": 96,
+   "prompt": "six separate arching forest ferns and tall grass clumps seen from the front at ground level, drooping fronds, no ground, no soil, no shadow, well spaced, not touching",
+   "fams": [
+    "fern",
+    "grass"
+   ],
+   "seed": 111
+  },
+  "usage": {
+   "type": "generations",
+   "generations": 1.0
+  }
+ },
+ "c_flowers_clean": {
+  "source": "PixelLab",
+  "spec": {
+   "kind": "image",
+   "w": 128,
+   "h": 96,
+   "prompt": "six separate tiny wildflower clumps seen from the front: white daisies, yellow buttercups, blue bells, pink cosmos, red poppies, purple clover, thin green stems, no ground, no soil, no shadow, well spaced, not touching",
+   "fams": [
+    "flower_w",
+    "flower_y",
+    "flower_b",
+    "flower_p",
+    "berry",
+    "grass"
+   ],
+   "seed": 112
+  },
+  "usage": {
+   "type": "generations",
+   "generations": 1.0
+  }
+ },
+ "c_rocks_round": {
+  "source": "PixelLab",
+  "spec": {
+   "kind": "image",
+   "w": 128,
+   "h": 96,
+   "prompt": "six separate smooth rounded warm grey boulders on empty background, one very large, two medium, three small pebbles, soft round tops with bright highlights and cool shadow side, no ground, no shadow, well spaced, not touching",
+   "fams": [
+    "stone",
+    "sand"
+   ],
+   "seed": 113
+  },
+  "usage": {
+   "type": "generations",
+   "generations": 1.0
+  }
+ },
+ "c_wall_long": {
+  "source": "PixelLab",
+  "spec": {
+   "kind": "image",
+   "w": 128,
+   "h": 64,
+   "prompt": "long crumbling ancient stone brick garden wall seen from the front, broken jagged top, moss and hanging ivy, no arch, no ground, no plants at the base",
+   "fams": [
+    "ruin",
+    "moss"
+   ],
+   "seed": 114
+  },
+  "usage": {
+   "type": "generations",
+   "generations": 1.0
+  }
  }
 }

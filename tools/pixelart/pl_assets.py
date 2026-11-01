@@ -182,7 +182,7 @@ def apply(lib):
     big = lambda o: -(o[:, :, 3] > 128).sum()
     sheet('c_rocks_round' if rgba('c_rocks_round') is not None else 'a_rocks_1', ['boulder_l0', 'boulder_l1', 'boulder_m0', 'boulder_m1', 'boulder_s0', 'boulder_s1'], ['stone', 'pebble'], order=big, widths=[40, 38, 28, 26, 18, 16], gain=1.0 if rgba('c_rocks_round') is not None else 1.75, lift=0 if rgba('c_rocks_round') is not None else 14)
     sheet('b_rocks_mossy', ['boulder_mossy_l0', 'boulder_mossy_l1', 'boulder_mossy_m0', 'boulder_mossy_m1'], ['stone', 'moss'], order=big, ground=(.25,), widths=[40, 36, 28, 26], gain=1.1)
-    sheet('c_shrubs_side' if rgba('c_shrubs_side') is not None else 'b_shrubs', ['shrub_0', 'shrub_1', 'shrub_2', 'shrub_3b', 'hedge_0', 'hedge_1'], ['shrub', 'berry'], widths=[28, 26, 24, 30, 28, 26])
+    sheet('c_shrubs_side' if rgba('c_shrubs_side') is not None else 'b_shrubs', ['shrub_0', 'shrub_1', 'shrub_2', 'shrub_3b', 'hedge_0', 'hedge_1'], ['shrub', 'berry'], ground=(.24, lambda r, g, b: r > g), widths=[28, 26, 24, 30, 28, 26])
     sheet('c_ferns_clean' if rgba('c_ferns_clean') is not None else 'b_ferns', ['fern_0', 'fern_1', 'fern_2'], ['fern', 'grass'], order=big, widths=[26, 22, 20])
     fl = 'c_flowers_clean' if rgba('c_flowers_clean') is not None else 'b_flowers'
     sheet(fl, ['flowers_w0', 'flowers_y0', 'flowers_b0', 'flowers_p0', 'flowers_r0', 'flowers_b1'], ['flower_w', 'flower_y', 'flower_b', 'flower_p', 'berry', 'grass'], widths=[11, 9, 9, 10, 9, 9], ground=(.28, lambda r, g, b: (b > g) | (r < 80)))
@@ -213,6 +213,10 @@ def apply(lib):
         if n in ADOPTED: wn = n + '_winter'; lib[wn] = copy.copy(lib[n]); lib[wn].name = wn; lib[wn].c = bare(lib[n].c, fam, len(n) + int(n[-1]) * 5)
     for n in ('pine_0', 'pine_1'):
         if n in ADOPTED: wn = n + '_winter'; lib[wn] = copy.copy(lib[n]); lib[wn].name = wn; lib[wn].c = pine_snow(lib[n].c)
+    w = rgba('c_wall_long')
+    if w is not None:
+        from .objects import Sprite
+        w = strip_ground(trim(w), .14); c = to_families(shrink(w, 92), ['ruin', 'moss', 'oak']); x, y = base_x(c); lib['ruin_wall'] = Sprite('ruin_wall', c, c.w // 2, c.h - 2, shadow=(40, 3, 3, 1), tags=('structure', 'ysort')); lib['ruin_wall_winter'] = copy.copy(lib['ruin_wall']); lib['ruin_wall_winter'].name = 'ruin_wall_winter'; lib['ruin_wall_winter'].c = snowcap(c)
     b = lib.get('bridge')
     br = rgba('b_bridge')
     if br is not None:

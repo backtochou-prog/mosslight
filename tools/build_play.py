@@ -78,6 +78,7 @@ for p in sc.placements:
     elif s.shadow:
         rx, ry, dx, dy = s.shadow; ellipse(p.x + dx * 0.3, p.y - 1, max(3, rx * 0.85), max(2, ry))
 for p in sc.placements:
+    if p.sprite.name == 'ruin_wall': rect(p.x - 44, p.y - 10, p.x + 44, p.y + 1)
     if p.sprite.name == 'bridge': rect(p.x - 59, p.y - 22, p.x + 59, p.y - 5, 0)   # the deck crosses the river; rails stay solid at the ends of nothing
 # world border: outside the playable rect is blocked
 px0, py0, pw, ph = sc.playable
