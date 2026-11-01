@@ -3,7 +3,7 @@
   {
    "name": "moves E",
    "ok": true,
-   "detail": "92.6 px"
+   "detail": "93.4 px"
   },
   {
    "name": "moves W",
@@ -13,7 +13,7 @@
   {
    "name": "moves N",
    "ok": true,
-   "detail": "92.6 px"
+   "detail": "93.4 px"
   },
   {
    "name": "moves S",
@@ -33,7 +33,7 @@
   {
    "name": "moves SE",
    "ok": true,
-   "detail": "94.5 px"
+   "detail": "93.7 px"
   },
   {
    "name": "moves SW",
@@ -43,12 +43,12 @@
   {
    "name": "diagonal speed == cardinal speed",
    "ok": true,
-   "detail": "cardinal 93.0 px, diagonal 92.8 px over 1.5 s"
+   "detail": "cardinal 93.4 px, diagonal 92.6 px over 1.5 s"
   },
   {
    "name": "stops without sliding",
    "ok": true,
-   "detail": "slid 0.7 px after release"
+   "detail": "slid 2.2 px after release"
   },
   {
    "name": "blocked by oak trunk",
@@ -177,7 +177,7 @@
   {
    "name": "frame cost (software Chromium, 640x360 at 3x)",
    "ok": true,
-   "detail": "16.9 ms/frame"
+   "detail": "19.8 ms/frame"
   },
   {
    "name": "no page errors",

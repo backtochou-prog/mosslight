@@ -61,6 +61,8 @@ def refine32(a):
 def main():
     grids = load_grids()
     items = json.load(open(os.path.join(OUT, 'items.json')))['items']; tools = json.load(open(os.path.join(OUT, 'tools.json')))['tools']
+    from pixelart import building as _B
+    BSPR = _B.all_sprites(); sprite_icon = {i['id']: i['sprite'] for i in items if i.get('sprite')}
     wanted = [i['id'] for i in items] + ['tool_' + t['id'] for t in tools]
     report = {'size': S, 'finished': [], 'placeholder': [], 'errors': []}
     cols = 10; names = wanted
@@ -68,6 +70,14 @@ def main():
     sheet32 = Canvas(cols * S * 2, S * 2 * ((len(names) + cols - 1) // cols))
     for k, nm in enumerate(names):
         x, y = (k % cols) * S, (k // cols) * S; index[nm] = [x, y]
+        spname = sprite_icon.get(nm)
+        if spname and nm not in grids:
+            # placeable items: the icon IS the object's own sprite, centred in 32 px (halved if larger)
+            sc, _, _ = BSPR[spname]; a = sc.a
+            while a.shape[0] > 32 or a.shape[1] > 32: a = a[::2, ::2]
+            b = Canvas(S * 2, S * 2); yo, xo = (32 - a.shape[0]) // 2, (32 - a.shape[1]) // 2; b.a[yo:yo + a.shape[0], xo:xo + a.shape[1]] = a
+            c = Canvas(S, S); c.a = b.a[::2, ::2].copy(); report.setdefault('from_sprite', []).append(nm)
+            c.save(os.path.join(ICO, nm + '.png')); sheet.blit(c, x, y); b.save(os.path.join(ICO32, nm + '.png')); sheet32.blit(b, x * 2, y * 2); continue
         if nm in grids:
             c = compile_icon(*grids[nm]); report['finished'].append(nm)
             # technical validation: bounds, transparency, padding (at least 1 px empty on each side), uniqueness

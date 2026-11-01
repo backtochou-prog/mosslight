@@ -63,6 +63,16 @@ stays the base scene's.
 Interactable Area2D component, touch controls). **Unvalidated**: Godot cannot
 run in the authoring environment.
 
+## Crafting and construction (Prompt 10)
+
+`preview/build.js`. **C** crafts by hand; **E** at a station opens its recipes. **B**
+opens the build menu. While placing: WASD walks, arrows nudge, **R** rotates, **E** places,
+**M** moves furniture, **X** takes down (half the material back), **Esc** finishes. Mouse
+and tap also work (tap a cell, tap again to confirm). Balance data lives in
+`tools/build_craft_data.py`; art in `tools/pixelart/building.py`. Rebuild with
+`python3 tools/build_construction.py && python3 tools/build_items.py && python3 tools/build_icons.py && python3 tools/build_play.py`.
+Tests: `tests/build_tests.js`. The Godot port does not cover this milestone yet.
+
 ## Icon art pipeline (Prompt 08)
 
 Item and tool icons are **hand-authored pixel grids** in `tools/icons/pilot.py`

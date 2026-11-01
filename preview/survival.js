@@ -70,6 +70,13 @@ window.Survival = (() => {
       this.current = { id, anim: act.anim, t: 0, dur: Math.min(1.6, 0.4 + act.minutes / 30) };
       emit('activity', id, act, source); return { ok: true, act, night, efficiency: Energy.efficiency() };
     },
+    performCustom(id, act, source) {      // same path as perform(), for costs defined outside the activity table (crafting, construction)
+      if (!Energy.canDo(act)) return { ok: false, reason: Energy.current <= 0 ? 'You are too exhausted for that. Rest first.' : 'You are too tired for heavy work right now.' };
+      const night = Clock.isNight();
+      Energy.spend(act.energy, id); Clock.advance(act.minutes); Record.activity(id, Object.assign({ label: act.label || id }, act), night);
+      if (act.anim) this.current = { id, anim: act.anim, t: 0, dur: Math.min(1.2, 0.4 + act.minutes / 60) };
+      emit('activity', id, act, source); return { ok: true, act, night, efficiency: Energy.efficiency() };
+    },
     enqueue(id, source) { this.queue.push({ id, source }); },       // prepared for future action queues
     tick(dt) { if (this.current) { this.current.t += dt; if (this.current.t >= this.current.dur) this.current = null; } },
   };
@@ -87,7 +94,7 @@ window.Survival = (() => {
     summary(c) {   // only from fields that hold data; reads as a journal line, never a dashboard
       const lines = [`Day ${c.day}, ${c.season}.`];
       const names = Object.keys(c.activities);
-      if (c.count) lines.push(names.map(id => `${c.activities[id]}× ${(CFG.activities[id] || {}).label || id}`.toLowerCase()).join(', ') + '.');
+      if (c.count) lines.push(names.map(id => `${c.activities[id]}× ${(CFG.activities[id] || {}).label || id.replace(/^(craft|build):/, '').replace(/_/g, ' ')}`.toLowerCase()).join(', ') + '.');
       else lines.push('A quiet day of walking and looking.');
       const hAwake = Math.round(c.minutesAwake / 60);
       if (hAwake) lines.push(`About ${hAwake} hour${hAwake > 1 ? 's' : ''} outside` + (c.minutesAfterDark >= 30 ? `, ${Math.round(c.minutesAfterDark / 60 * 10) / 10} of them after dark.` : '.'));

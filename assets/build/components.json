@@ -1,0 +1,909 @@
+{
+ "components": [
+  {
+   "id": "fnd_wood",
+   "name": "Wooden foundation",
+   "cat": "Foundation",
+   "layer": "foundation",
+   "mat": "wood",
+   "cost": {
+    "plank": 1,
+    "branch": 1
+   },
+   "minutes": 10,
+   "energy": 1,
+   "durability": 120,
+   "stage": 2
+  },
+  {
+   "id": "fnd_reinforced",
+   "name": "Reinforced foundation",
+   "cat": "Foundation",
+   "layer": "foundation",
+   "mat": "reinforced",
+   "cost": {
+    "plank": 2,
+    "nails": 2
+   },
+   "minutes": 15,
+   "energy": 2,
+   "durability": 200,
+   "stage": 3
+  },
+  {
+   "id": "fnd_stone",
+   "name": "Stone foundation",
+   "cat": "Foundation",
+   "layer": "foundation",
+   "mat": "stone",
+   "cost": {
+    "stone": 2,
+    "clay": 1
+   },
+   "minutes": 25,
+   "energy": 3,
+   "durability": 400,
+   "stage": 4
+  },
+  {
+   "id": "floor_plank",
+   "name": "Plank floor",
+   "cat": "Floor",
+   "layer": "floor",
+   "sprite": "floor_plank",
+   "cost": {
+    "plank": 1
+   },
+   "minutes": 6,
+   "energy": 1,
+   "durability": 80,
+   "stage": 2
+  },
+  {
+   "id": "floor_flag",
+   "name": "Flagstone floor",
+   "cat": "Floor",
+   "layer": "floor",
+   "sprite": "floor_flag",
+   "cost": {
+    "stone_block": 1
+   },
+   "minutes": 12,
+   "energy": 2,
+   "durability": 200,
+   "stage": 3
+  },
+  {
+   "id": "floor_tile",
+   "name": "Cottage tile floor",
+   "cat": "Floor",
+   "layer": "floor",
+   "sprite": "floor_tile",
+   "cost": {
+    "clay": 1,
+    "plank": 1
+   },
+   "minutes": 12,
+   "energy": 1,
+   "durability": 120,
+   "stage": 3
+  },
+  {
+   "id": "wall_wood",
+   "name": "Wooden wall",
+   "cat": "Wall",
+   "layer": "wall",
+   "mat": "wood",
+   "cost": {
+    "plank": 2,
+    "nails": 1
+   },
+   "minutes": 15,
+   "energy": 2,
+   "durability": 150,
+   "stage": 2
+  },
+  {
+   "id": "wall_cottage",
+   "name": "Timber-frame wall",
+   "cat": "Wall",
+   "layer": "wall",
+   "mat": "cottage",
+   "cost": {
+    "plank": 2,
+    "clay": 1
+   },
+   "minutes": 25,
+   "energy": 2,
+   "durability": 170,
+   "stage": 3
+  },
+  {
+   "id": "wall_reinforced",
+   "name": "Reinforced wall",
+   "cat": "Wall",
+   "layer": "wall",
+   "mat": "reinforced",
+   "cost": {
+    "plank": 3,
+    "nails": 2,
+    "scrap_metal": 1
+   },
+   "minutes": 40,
+   "energy": 4,
+   "durability": 300,
+   "stage": 4
+  },
+  {
+   "id": "wall_stone",
+   "name": "Stone wall",
+   "cat": "Wall",
+   "layer": "wall",
+   "mat": "stone",
+   "cost": {
+    "stone_block": 2,
+    "clay": 1
+   },
+   "minutes": 90,
+   "energy": 6,
+   "durability": 500,
+   "stage": 4
+  },
+  {
+   "id": "wall_metal",
+   "name": "Metal-plated wall",
+   "cat": "Wall",
+   "layer": "wall",
+   "mat": "metal",
+   "cost": {
+    "plank": 2,
+    "scrap_metal": 2,
+    "bolt": 2
+   },
+   "minutes": 70,
+   "energy": 6,
+   "durability": 450,
+   "stage": 5
+  },
+  {
+   "id": "door",
+   "name": "Plank door",
+   "cat": "Opening",
+   "layer": "opening",
+   "kind": "door",
+   "cost": {
+    "plank": 2,
+    "cord": 2
+   },
+   "minutes": 15,
+   "energy": 1,
+   "durability": 80,
+   "stage": 2
+  },
+  {
+   "id": "door_hinged",
+   "name": "Hinged door",
+   "cat": "Opening",
+   "layer": "opening",
+   "kind": "door",
+   "cost": {
+    "plank": 3,
+    "hinge": 2
+   },
+   "minutes": 20,
+   "energy": 1,
+   "durability": 160,
+   "stage": 3
+  },
+  {
+   "id": "window",
+   "name": "Shuttered window",
+   "cat": "Opening",
+   "layer": "opening",
+   "kind": "window",
+   "cost": {
+    "plank": 1,
+    "glass_shard": 1
+   },
+   "minutes": 15,
+   "energy": 1,
+   "durability": 60,
+   "stage": 2
+  },
+  {
+   "id": "window_pane",
+   "name": "Glazed window",
+   "cat": "Opening",
+   "layer": "opening",
+   "kind": "window",
+   "cost": {
+    "plank": 1,
+    "glass_pane": 1
+   },
+   "minutes": 15,
+   "energy": 1,
+   "durability": 90,
+   "stage": 3
+  },
+  {
+   "id": "roof_thatch",
+   "name": "Thatch roof",
+   "cat": "Roof",
+   "layer": "roof",
+   "mat": "thatch",
+   "cost": {
+    "fiber": 2,
+    "branch": 1
+   },
+   "minutes": 12,
+   "energy": 2,
+   "durability": 70,
+   "stage": 2
+  },
+  {
+   "id": "roof_shingle",
+   "name": "Shingle roof",
+   "cat": "Roof",
+   "layer": "roof",
+   "mat": "shingle",
+   "cost": {
+    "plank": 2,
+    "nails": 1
+   },
+   "minutes": 20,
+   "energy": 3,
+   "durability": 140,
+   "stage": 3
+  },
+  {
+   "id": "roof_slate",
+   "name": "Slate roof",
+   "cat": "Roof",
+   "layer": "roof",
+   "mat": "slate",
+   "cost": {
+    "stone_block": 1,
+    "plank": 1
+   },
+   "minutes": 40,
+   "energy": 4,
+   "durability": 320,
+   "stage": 4
+  },
+  {
+   "id": "roof_support",
+   "name": "Roof support",
+   "cat": "Roof",
+   "layer": "object",
+   "sprite": "roof_support",
+   "foot": [
+    6,
+    4
+   ],
+   "cost": {
+    "plank": 2
+   },
+   "minutes": 10,
+   "energy": 1,
+   "durability": 120,
+   "stage": 2,
+   "support": true
+  },
+  {
+   "id": "fence",
+   "name": "Post-and-rail fence",
+   "cat": "Defense",
+   "layer": "fence",
+   "cost": {
+    "branch": 2,
+    "cord": 1
+   },
+   "minutes": 8,
+   "energy": 1,
+   "durability": 60,
+   "stage": 3
+  },
+  {
+   "id": "gate",
+   "name": "Field gate",
+   "cat": "Defense",
+   "layer": "fence",
+   "kind": "gate",
+   "sprite": "gate",
+   "cost": {
+    "plank": 2,
+    "cord": 1
+   },
+   "minutes": 12,
+   "energy": 1,
+   "durability": 70,
+   "stage": 3
+  },
+  {
+   "id": "gate_reinforced",
+   "name": "Reinforced gate",
+   "cat": "Defense",
+   "layer": "fence",
+   "kind": "gate",
+   "sprite": "rgate",
+   "cost": {
+    "plank": 4,
+    "scrap_metal": 2,
+    "hinge": 2
+   },
+   "minutes": 45,
+   "energy": 4,
+   "durability": 260,
+   "stage": 4
+  },
+  {
+   "id": "barricade",
+   "name": "Barricade",
+   "cat": "Defense",
+   "layer": "object",
+   "sprite": "barricade",
+   "foot": [
+    26,
+    6
+   ],
+   "cost": {
+    "log": 2,
+    "cord": 2
+   },
+   "minutes": 25,
+   "energy": 4,
+   "durability": 180,
+   "stage": 4
+  },
+  {
+   "id": "spikes",
+   "name": "Spiked barrier",
+   "cat": "Defense",
+   "layer": "object",
+   "sprite": "spikes",
+   "foot": [
+    26,
+    5
+   ],
+   "cost": {
+    "branch": 6,
+    "cord": 2
+   },
+   "minutes": 25,
+   "energy": 3,
+   "durability": 120,
+   "stage": 4
+  },
+  {
+   "id": "watch_platform",
+   "name": "Watch platform",
+   "cat": "Defense",
+   "layer": "object",
+   "sprite": "watch_platform",
+   "foot": [
+    28,
+    8
+   ],
+   "cost": {
+    "log": 4,
+    "plank": 6,
+    "nails": 6
+   },
+   "minutes": 240,
+   "energy": 14,
+   "durability": 250,
+   "stage": 4
+  },
+  {
+   "id": "torch_post",
+   "name": "Torch post",
+   "cat": "Defense",
+   "layer": "object",
+   "sprite": "torch_post",
+   "foot": [
+    4,
+    3
+   ],
+   "cost": {
+    "branch": 2,
+    "bark": 1
+   },
+   "minutes": 6,
+   "energy": 0,
+   "durability": 30,
+   "stage": 3,
+   "light": {
+    "radius": 50,
+    "color": [
+     1.0,
+     0.72,
+     0.42
+    ],
+    "intensity": 0.95,
+    "kind": "fire"
+   }
+  },
+  {
+   "id": "stone_steps",
+   "name": "Stone steps",
+   "cat": "Floor",
+   "layer": "object",
+   "ground": true,
+   "sprite": "stone_steps",
+   "foot": [
+    0,
+    0
+   ],
+   "cost": {
+    "stone": 3
+   },
+   "minutes": 15,
+   "energy": 2,
+   "durability": 300,
+   "stage": 3
+  },
+  {
+   "id": "workbench",
+   "name": "Workbench",
+   "cat": "Home",
+   "layer": "object",
+   "item": "workbench",
+   "sprite": "workbench",
+   "foot": [
+    28,
+    6
+   ],
+   "durability": 60,
+   "station": "workbench"
+  },
+  {
+   "id": "stone_station",
+   "name": "Stoneworking block",
+   "cat": "Home",
+   "layer": "object",
+   "item": "stone_station",
+   "sprite": "stone_station",
+   "foot": [
+    26,
+    6
+   ],
+   "durability": 60,
+   "station": "stone_station"
+  },
+  {
+   "id": "wood_station",
+   "name": "Sawhorses",
+   "cat": "Home",
+   "layer": "object",
+   "item": "wood_station",
+   "sprite": "wood_station",
+   "foot": [
+    28,
+    5
+   ],
+   "durability": 60,
+   "station": "wood_station"
+  },
+  {
+   "id": "furnace",
+   "name": "Smelting furnace",
+   "cat": "Home",
+   "layer": "object",
+   "item": "furnace",
+   "sprite": "furnace",
+   "foot": [
+    24,
+    8
+   ],
+   "durability": 60,
+   "station": "furnace",
+   "light": {
+    "radius": 38,
+    "color": [
+     1.0,
+     0.66,
+     0.36
+    ],
+    "intensity": 0.9,
+    "kind": "fire"
+   }
+  },
+  {
+   "id": "adv_bench",
+   "name": "Advanced workbench",
+   "cat": "Home",
+   "layer": "object",
+   "item": "adv_bench",
+   "sprite": "adv_bench",
+   "foot": [
+    28,
+    6
+   ],
+   "durability": 60,
+   "station": "adv_bench"
+  },
+  {
+   "id": "crate",
+   "name": "Crate",
+   "cat": "Home",
+   "layer": "object",
+   "item": "crate",
+   "sprite": "crate",
+   "foot": [
+    12,
+    5
+   ],
+   "durability": 60,
+   "storage": {
+    "slots": 8
+   }
+  },
+  {
+   "id": "chest",
+   "name": "Chest",
+   "cat": "Home",
+   "layer": "object",
+   "item": "chest",
+   "sprite": "chest",
+   "foot": [
+    14,
+    6
+   ],
+   "durability": 60,
+   "storage": {
+    "slots": 16
+   }
+  },
+  {
+   "id": "chest_big",
+   "name": "Large chest",
+   "cat": "Home",
+   "layer": "object",
+   "item": "chest_big",
+   "sprite": "chest_big",
+   "foot": [
+    18,
+    6
+   ],
+   "durability": 60,
+   "storage": {
+    "slots": 32
+   }
+  },
+  {
+   "id": "bed_rustic",
+   "name": "Moss-stuffed bed",
+   "cat": "Home",
+   "layer": "object",
+   "item": "bed_rustic",
+   "sprite": "bed_rustic",
+   "foot": [
+    16,
+    18
+   ],
+   "durability": 60,
+   "sleep": true,
+   "side": "bed_rustic_side",
+   "side_foot": [
+    26,
+    8
+   ]
+  },
+  {
+   "id": "bed_cottage",
+   "name": "Cottage bed",
+   "cat": "Home",
+   "layer": "object",
+   "item": "bed_cottage",
+   "sprite": "bed_cottage",
+   "foot": [
+    16,
+    18
+   ],
+   "durability": 60,
+   "sleep": true,
+   "side": "bed_cottage_side",
+   "side_foot": [
+    26,
+    8
+   ]
+  },
+  {
+   "id": "table_rustic",
+   "name": "Rustic table",
+   "cat": "Home",
+   "layer": "object",
+   "item": "table_rustic",
+   "sprite": "table_rustic",
+   "foot": [
+    20,
+    6
+   ],
+   "durability": 60
+  },
+  {
+   "id": "table_stone",
+   "name": "Stone-top table",
+   "cat": "Home",
+   "layer": "object",
+   "item": "table_stone",
+   "sprite": "table_stone",
+   "foot": [
+    20,
+    6
+   ],
+   "durability": 60
+  },
+  {
+   "id": "table_industrial",
+   "name": "Salvage table",
+   "cat": "Home",
+   "layer": "object",
+   "item": "table_industrial",
+   "sprite": "table_industrial",
+   "foot": [
+    20,
+    6
+   ],
+   "durability": 60
+  },
+  {
+   "id": "table_cottage",
+   "name": "Cottage table",
+   "cat": "Home",
+   "layer": "object",
+   "item": "table_cottage",
+   "sprite": "table_cottage",
+   "foot": [
+    20,
+    6
+   ],
+   "durability": 60
+  },
+  {
+   "id": "chair_rustic",
+   "name": "Ladderback chair",
+   "cat": "Home",
+   "layer": "object",
+   "item": "chair_rustic",
+   "sprite": "chair_rustic",
+   "foot": [
+    8,
+    5
+   ],
+   "durability": 60
+  },
+  {
+   "id": "chair_cottage",
+   "name": "Cushioned chair",
+   "cat": "Home",
+   "layer": "object",
+   "item": "chair_cottage",
+   "sprite": "chair_cottage",
+   "foot": [
+    8,
+    5
+   ],
+   "durability": 60
+  },
+  {
+   "id": "shelf",
+   "name": "Shelves",
+   "cat": "Home",
+   "layer": "object",
+   "item": "shelf",
+   "sprite": "shelf",
+   "foot": [
+    16,
+    5
+   ],
+   "durability": 60
+  },
+  {
+   "id": "bookshelf",
+   "name": "Bookshelf",
+   "cat": "Home",
+   "layer": "object",
+   "item": "bookshelf",
+   "sprite": "bookshelf",
+   "foot": [
+    16,
+    5
+   ],
+   "durability": 60
+  },
+  {
+   "id": "cabinet",
+   "name": "Cabinet",
+   "cat": "Home",
+   "layer": "object",
+   "item": "cabinet",
+   "sprite": "cabinet",
+   "foot": [
+    16,
+    5
+   ],
+   "durability": 60
+  },
+  {
+   "id": "rug_woven",
+   "name": "Woven rug",
+   "cat": "Home",
+   "layer": "object",
+   "item": "rug_woven",
+   "sprite": "rug_woven",
+   "foot": [
+    0,
+    0
+   ],
+   "durability": 60,
+   "ground": true
+  },
+  {
+   "id": "rug_moss",
+   "name": "Moss-green rug",
+   "cat": "Home",
+   "layer": "object",
+   "item": "rug_moss",
+   "sprite": "rug_moss",
+   "foot": [
+    0,
+    0
+   ],
+   "durability": 60,
+   "ground": true
+  },
+  {
+   "id": "floor_lamp",
+   "name": "Floor lamp",
+   "cat": "Home",
+   "layer": "object",
+   "item": "floor_lamp",
+   "sprite": "floor_lamp",
+   "foot": [
+    6,
+    4
+   ],
+   "durability": 60,
+   "light": {
+    "radius": 46,
+    "color": [
+     1.0,
+     0.82,
+     0.55
+    ],
+    "intensity": 0.95,
+    "kind": "lantern"
+   },
+   "toggle": true
+  },
+  {
+   "id": "table_lantern",
+   "name": "Small lantern",
+   "cat": "Home",
+   "layer": "object",
+   "item": "table_lantern",
+   "sprite": "table_lantern",
+   "foot": [
+    6,
+    3
+   ],
+   "durability": 60,
+   "light": {
+    "radius": 34,
+    "color": [
+     1.0,
+     0.82,
+     0.55
+    ],
+    "intensity": 0.95,
+    "kind": "lantern"
+   },
+   "toggle": true
+  },
+  {
+   "id": "potted_fern",
+   "name": "Potted fern",
+   "cat": "Home",
+   "layer": "object",
+   "item": "potted_fern",
+   "sprite": "potted_fern",
+   "foot": [
+    8,
+    4
+   ],
+   "durability": 60
+  },
+  {
+   "id": "painting",
+   "name": "Painted landscape",
+   "cat": "Home",
+   "layer": "object",
+   "item": "painting",
+   "sprite": "painting",
+   "foot": [
+    0,
+    0
+   ],
+   "durability": 60,
+   "mount": true
+  },
+  {
+   "id": "wall_shelf",
+   "name": "Wall shelf",
+   "cat": "Home",
+   "layer": "object",
+   "item": "wall_shelf",
+   "sprite": "wall_shelf",
+   "foot": [
+    0,
+    0
+   ],
+   "durability": 60,
+   "mount": true
+  },
+  {
+   "id": "stove",
+   "name": "Cookstove",
+   "cat": "Home",
+   "layer": "object",
+   "item": "stove",
+   "sprite": "stove",
+   "foot": [
+    18,
+    8
+   ],
+   "durability": 60,
+   "light": {
+    "radius": 34,
+    "color": [
+     1.0,
+     0.66,
+     0.36
+    ],
+    "intensity": 0.8,
+    "kind": "fire"
+   }
+  },
+  {
+   "id": "counter",
+   "name": "Kitchen counter",
+   "cat": "Home",
+   "layer": "object",
+   "item": "counter",
+   "sprite": "counter",
+   "foot": [
+    20,
+    6
+   ],
+   "durability": 60
+  },
+  {
+   "id": "garden_bed",
+   "name": "Raised garden bed",
+   "cat": "Home",
+   "layer": "object",
+   "item": "garden_bed",
+   "sprite": "garden_bed",
+   "foot": [
+    26,
+    8
+   ],
+   "durability": 60
+  }
+ ],
+ "stages": {
+  "1": "Temporary campsite",
+  "2": "Woodland shelter",
+  "3": "Established homestead",
+  "4": "Reinforced residence",
+  "5": "Fortified woodland estate"
+ },
+ "session_minutes": 60,
+ "demolish_refund": 0.5,
+ "repair": {
+  "minutes": 20,
+  "energy": 1,
+  "amount": 0.5
+ }
+}

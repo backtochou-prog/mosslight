@@ -1,0 +1,773 @@
+{
+ "recipes": [
+  {
+   "id": "cord",
+   "name": "Cord",
+   "description": "Plant fibre twisted until it holds.",
+   "station": "hand",
+   "ingredients": {
+    "fiber": 2
+   },
+   "minutes": 4,
+   "energy": 0,
+   "result": "cord",
+   "qty": 1,
+   "unlock": {
+    "type": "start"
+   },
+   "category": "material",
+   "icon": "cord"
+  },
+  {
+   "id": "plank",
+   "name": "Plank",
+   "description": "A split board, still smelling of the tree.",
+   "station": "workbench",
+   "ingredients": {
+    "log": 1
+   },
+   "minutes": 10,
+   "energy": 2,
+   "result": "plank",
+   "qty": 4,
+   "unlock": {
+    "type": "item",
+    "id": "log"
+   },
+   "category": "material",
+   "icon": "plank"
+  },
+  {
+   "id": "plank_fine",
+   "name": "Plank (sawn)",
+   "description": "A saw wastes less than an axe.",
+   "station": "wood_station",
+   "ingredients": {
+    "log": 1
+   },
+   "minutes": 8,
+   "energy": 1,
+   "result": "plank",
+   "qty": 6,
+   "unlock": {
+    "type": "station",
+    "id": "wood_station"
+   },
+   "category": "material",
+   "icon": "plank"
+  },
+  {
+   "id": "nails",
+   "name": "Nails",
+   "description": "Cut from old scrap and hammered straight.",
+   "station": "workbench",
+   "ingredients": {
+    "scrap_metal": 1
+   },
+   "minutes": 8,
+   "energy": 1,
+   "result": "nails",
+   "qty": 6,
+   "unlock": {
+    "type": "item",
+    "id": "scrap_metal"
+   },
+   "category": "material",
+   "icon": "nails"
+  },
+  {
+   "id": "stone_block",
+   "name": "Stone block",
+   "description": "Squared on four faces, near enough.",
+   "station": "stone_station",
+   "ingredients": {
+    "stone": 2
+   },
+   "minutes": 12,
+   "energy": 2,
+   "result": "stone_block",
+   "qty": 1,
+   "unlock": {
+    "type": "station",
+    "id": "stone_station"
+   },
+   "category": "material",
+   "icon": "stone_block"
+  },
+  {
+   "id": "iron_ingot",
+   "name": "Iron ingot",
+   "description": "Rough, dark and honest.",
+   "station": "furnace",
+   "ingredients": {
+    "iron_ore": 2,
+    "coal": 1
+   },
+   "minutes": 40,
+   "energy": 3,
+   "result": "iron_ingot",
+   "qty": 1,
+   "unlock": {
+    "type": "item",
+    "id": "iron_ore"
+   },
+   "category": "material",
+   "icon": "iron_ingot"
+  },
+  {
+   "id": "glass_pane",
+   "name": "Glass pane",
+   "description": "Old glass melted and poured flat. A little wavy.",
+   "station": "furnace",
+   "ingredients": {
+    "glass_shard": 2,
+    "branch": 2
+   },
+   "minutes": 25,
+   "energy": 1,
+   "result": "glass_pane",
+   "qty": 1,
+   "unlock": {
+    "type": "station",
+    "id": "furnace"
+   },
+   "category": "material",
+   "icon": "glass_pane"
+  },
+  {
+   "id": "hinge",
+   "name": "Hinge",
+   "description": "Two leaves and a pin. It makes a door a door.",
+   "station": "workbench",
+   "ingredients": {
+    "scrap_metal": 1,
+    "bolt": 1
+   },
+   "minutes": 8,
+   "energy": 1,
+   "result": "hinge",
+   "qty": 2,
+   "unlock": {
+    "type": "item",
+    "id": "bolt"
+   },
+   "category": "material",
+   "icon": "hinge"
+  },
+  {
+   "id": "cloth",
+   "name": "Woven cloth",
+   "description": "Coarse, warm, and yours.",
+   "station": "workbench",
+   "ingredients": {
+    "cord": 3
+   },
+   "minutes": 20,
+   "energy": 1,
+   "result": "cloth",
+   "qty": 1,
+   "unlock": {
+    "type": "item",
+    "id": "fiber"
+   },
+   "category": "material",
+   "icon": "cloth"
+  },
+  {
+   "id": "crate",
+   "name": "Crate",
+   "description": "Rough slats lashed tight. Holds what you cannot carry.",
+   "station": "hand",
+   "ingredients": {
+    "branch": 6,
+    "cord": 2
+   },
+   "minutes": 15,
+   "energy": 2,
+   "result": "crate",
+   "qty": 1,
+   "unlock": {
+    "type": "start"
+   },
+   "category": "storage",
+   "icon": "crate"
+  },
+  {
+   "id": "workbench",
+   "name": "Workbench",
+   "description": "A plank top, a vise, and the first real tool you own.",
+   "station": "hand",
+   "ingredients": {
+    "branch": 6,
+    "stone": 2,
+    "cord": 2
+   },
+   "minutes": 30,
+   "energy": 4,
+   "result": "workbench",
+   "qty": 1,
+   "unlock": {
+    "type": "start"
+   },
+   "category": "station",
+   "icon": "workbench"
+  },
+  {
+   "id": "stone_station",
+   "name": "Stoneworking block",
+   "description": "A low boulder dressed flat, for squaring stone.",
+   "station": "workbench",
+   "ingredients": {
+    "stone": 8,
+    "plank": 2
+   },
+   "minutes": 30,
+   "energy": 5,
+   "result": "stone_station",
+   "qty": 1,
+   "unlock": {
+    "type": "station",
+    "id": "workbench"
+   },
+   "category": "station",
+   "icon": "stone_station"
+  },
+  {
+   "id": "wood_station",
+   "name": "Sawhorses",
+   "description": "Two trestles and a saw: boards come cleaner here.",
+   "station": "workbench",
+   "ingredients": {
+    "plank": 6,
+    "nails": 4,
+    "scrap_metal": 1
+   },
+   "minutes": 30,
+   "energy": 4,
+   "result": "wood_station",
+   "qty": 1,
+   "unlock": {
+    "type": "station",
+    "id": "workbench"
+   },
+   "category": "station",
+   "icon": "wood_station"
+  },
+  {
+   "id": "furnace",
+   "name": "Smelting furnace",
+   "description": "A stone dome and a hot mouth. Ore goes in, metal comes out.",
+   "station": "stone_station",
+   "ingredients": {
+    "stone_block": 8,
+    "branch": 4
+   },
+   "minutes": 60,
+   "energy": 6,
+   "result": "furnace",
+   "qty": 1,
+   "unlock": {
+    "type": "station",
+    "id": "stone_station"
+   },
+   "category": "station",
+   "icon": "furnace"
+  },
+  {
+   "id": "adv_bench",
+   "name": "Advanced workbench",
+   "description": "Salvaged drawers, a working gear train, and a lamp that still glows.",
+   "station": "wood_station",
+   "ingredients": {
+    "plank": 8,
+    "iron_ingot": 2,
+    "rusted_gear": 1
+   },
+   "minutes": 60,
+   "energy": 6,
+   "result": "adv_bench",
+   "qty": 1,
+   "unlock": {
+    "type": "item",
+    "id": "iron_ingot"
+   },
+   "category": "station",
+   "icon": "adv_bench"
+  },
+  {
+   "id": "chest",
+   "name": "Chest",
+   "description": "Iron-strapped, with a lock that mostly works.",
+   "station": "workbench",
+   "ingredients": {
+    "plank": 6,
+    "nails": 4,
+    "hinge": 1
+   },
+   "minutes": 25,
+   "energy": 2,
+   "result": "chest",
+   "qty": 1,
+   "unlock": {
+    "type": "station",
+    "id": "workbench"
+   },
+   "category": "storage",
+   "icon": "chest"
+  },
+  {
+   "id": "chest_big",
+   "name": "Large chest",
+   "description": "For a household, not a camp.",
+   "station": "adv_bench",
+   "ingredients": {
+    "plank": 10,
+    "iron_ingot": 1,
+    "hinge": 2
+   },
+   "minutes": 40,
+   "energy": 3,
+   "result": "chest_big",
+   "qty": 1,
+   "unlock": {
+    "type": "station",
+    "id": "adv_bench"
+   },
+   "category": "storage",
+   "icon": "chest_big"
+  },
+  {
+   "id": "bed_rustic",
+   "name": "Moss-stuffed bed",
+   "description": "A real frame and a soft mattress of dried moss.",
+   "station": "workbench",
+   "ingredients": {
+    "plank": 6,
+    "moss": 4,
+    "cord": 2
+   },
+   "minutes": 40,
+   "energy": 3,
+   "result": "bed_rustic",
+   "qty": 1,
+   "unlock": {
+    "type": "station",
+    "id": "workbench"
+   },
+   "category": "furniture",
+   "icon": "bed_rustic"
+  },
+  {
+   "id": "bed_cottage",
+   "name": "Cottage bed",
+   "description": "A quilt, at last.",
+   "station": "wood_station",
+   "ingredients": {
+    "plank": 6,
+    "cloth": 3
+   },
+   "minutes": 45,
+   "energy": 3,
+   "result": "bed_cottage",
+   "qty": 1,
+   "unlock": {
+    "type": "item",
+    "id": "cloth"
+   },
+   "category": "furniture",
+   "icon": "bed_cottage"
+  },
+  {
+   "id": "table_rustic",
+   "name": "Rustic table",
+   "description": "Planks and pegs.",
+   "station": "workbench",
+   "ingredients": {
+    "plank": 4,
+    "nails": 2
+   },
+   "minutes": 20,
+   "energy": 2,
+   "result": "table_rustic",
+   "qty": 1,
+   "unlock": {
+    "type": "station",
+    "id": "workbench"
+   },
+   "category": "furniture",
+   "icon": "table_rustic"
+  },
+  {
+   "id": "table_stone",
+   "name": "Stone-top table",
+   "description": "Cold in the morning, solid forever.",
+   "station": "stone_station",
+   "ingredients": {
+    "stone_block": 2,
+    "plank": 2
+   },
+   "minutes": 25,
+   "energy": 3,
+   "result": "table_stone",
+   "qty": 1,
+   "unlock": {
+    "type": "station",
+    "id": "stone_station"
+   },
+   "category": "furniture",
+   "icon": "table_stone"
+  },
+  {
+   "id": "table_industrial",
+   "name": "Salvage table",
+   "description": "A steel frame with a weathered top.",
+   "station": "adv_bench",
+   "ingredients": {
+    "scrap_metal": 3,
+    "plank": 2,
+    "bolt": 2
+   },
+   "minutes": 25,
+   "energy": 2,
+   "result": "table_industrial",
+   "qty": 1,
+   "unlock": {
+    "type": "station",
+    "id": "adv_bench"
+   },
+   "category": "furniture",
+   "icon": "table_industrial"
+  },
+  {
+   "id": "table_cottage",
+   "name": "Cottage table",
+   "description": "A cloth makes it a home.",
+   "station": "wood_station",
+   "ingredients": {
+    "plank": 4,
+    "cloth": 1
+   },
+   "minutes": 25,
+   "energy": 2,
+   "result": "table_cottage",
+   "qty": 1,
+   "unlock": {
+    "type": "item",
+    "id": "cloth"
+   },
+   "category": "furniture",
+   "icon": "table_cottage"
+  },
+  {
+   "id": "chair_rustic",
+   "name": "Ladderback chair",
+   "description": "Honest and slightly crooked.",
+   "station": "workbench",
+   "ingredients": {
+    "plank": 2,
+    "nails": 1
+   },
+   "minutes": 12,
+   "energy": 1,
+   "result": "chair_rustic",
+   "qty": 1,
+   "unlock": {
+    "type": "station",
+    "id": "workbench"
+   },
+   "category": "furniture",
+   "icon": "chair_rustic"
+  },
+  {
+   "id": "chair_cottage",
+   "name": "Cushioned chair",
+   "description": "A little blue cushion.",
+   "station": "wood_station",
+   "ingredients": {
+    "plank": 2,
+    "cloth": 1
+   },
+   "minutes": 15,
+   "energy": 1,
+   "result": "chair_cottage",
+   "qty": 1,
+   "unlock": {
+    "type": "item",
+    "id": "cloth"
+   },
+   "category": "furniture",
+   "icon": "chair_cottage"
+  },
+  {
+   "id": "shelf",
+   "name": "Shelves",
+   "description": "A place for jars and small finds.",
+   "station": "workbench",
+   "ingredients": {
+    "plank": 5,
+    "nails": 3
+   },
+   "minutes": 20,
+   "energy": 2,
+   "result": "shelf",
+   "qty": 1,
+   "unlock": {
+    "type": "station",
+    "id": "workbench"
+   },
+   "category": "furniture",
+   "icon": "shelf"
+  },
+  {
+   "id": "bookshelf",
+   "name": "Bookshelf",
+   "description": "For what you write down and what you rescue.",
+   "station": "wood_station",
+   "ingredients": {
+    "plank": 6,
+    "nails": 3,
+    "feather": 1
+   },
+   "minutes": 30,
+   "energy": 2,
+   "result": "bookshelf",
+   "qty": 1,
+   "unlock": {
+    "type": "station",
+    "id": "wood_station"
+   },
+   "category": "furniture",
+   "icon": "bookshelf"
+  },
+  {
+   "id": "cabinet",
+   "name": "Cabinet",
+   "description": "Two panelled doors on proper hinges.",
+   "station": "wood_station",
+   "ingredients": {
+    "plank": 6,
+    "hinge": 2
+   },
+   "minutes": 30,
+   "energy": 2,
+   "result": "cabinet",
+   "qty": 1,
+   "unlock": {
+    "type": "station",
+    "id": "wood_station"
+   },
+   "category": "furniture",
+   "icon": "cabinet"
+  },
+  {
+   "id": "rug_woven",
+   "name": "Woven rug",
+   "description": "Red and gold, dyed with poppies.",
+   "station": "workbench",
+   "ingredients": {
+    "cloth": 3,
+    "poppy": 1
+   },
+   "minutes": 30,
+   "energy": 1,
+   "result": "rug_woven",
+   "qty": 1,
+   "unlock": {
+    "type": "item",
+    "id": "cloth"
+   },
+   "category": "furniture",
+   "icon": "rug_woven"
+  },
+  {
+   "id": "rug_moss",
+   "name": "Moss-green rug",
+   "description": "Quiet colours from the woods.",
+   "station": "workbench",
+   "ingredients": {
+    "cloth": 2,
+    "moss": 3
+   },
+   "minutes": 25,
+   "energy": 1,
+   "result": "rug_moss",
+   "qty": 1,
+   "unlock": {
+    "type": "item",
+    "id": "cloth"
+   },
+   "category": "furniture",
+   "icon": "rug_moss"
+  },
+  {
+   "id": "floor_lamp",
+   "name": "Floor lamp",
+   "description": "Warm light behind a cloth shade.",
+   "station": "workbench",
+   "ingredients": {
+    "plank": 2,
+    "cloth": 1,
+    "glass_shard": 1
+   },
+   "minutes": 20,
+   "energy": 1,
+   "result": "floor_lamp",
+   "qty": 1,
+   "unlock": {
+    "type": "item",
+    "id": "cloth"
+   },
+   "category": "lighting",
+   "icon": "floor_lamp"
+  },
+  {
+   "id": "table_lantern",
+   "name": "Small lantern",
+   "description": "A little flame in old glass.",
+   "station": "workbench",
+   "ingredients": {
+    "scrap_metal": 1,
+    "glass_shard": 1
+   },
+   "minutes": 15,
+   "energy": 1,
+   "result": "table_lantern",
+   "qty": 1,
+   "unlock": {
+    "type": "item",
+    "id": "glass_shard"
+   },
+   "category": "lighting",
+   "icon": "table_lantern"
+  },
+  {
+   "id": "potted_fern",
+   "name": "Potted fern",
+   "description": "A piece of the forest indoors.",
+   "station": "hand",
+   "ingredients": {
+    "clay": 1,
+    "moss": 1
+   },
+   "minutes": 8,
+   "energy": 0,
+   "result": "potted_fern",
+   "qty": 1,
+   "unlock": {
+    "type": "item",
+    "id": "clay"
+   },
+   "category": "decor",
+   "icon": "potted_fern"
+  },
+  {
+   "id": "painting",
+   "name": "Painted landscape",
+   "description": "Your clearing, more or less.",
+   "station": "workbench",
+   "ingredients": {
+    "plank": 1,
+    "cloth": 1,
+    "daisy": 1
+   },
+   "minutes": 20,
+   "energy": 0,
+   "result": "painting",
+   "qty": 1,
+   "unlock": {
+    "type": "item",
+    "id": "cloth"
+   },
+   "category": "decor",
+   "icon": "painting"
+  },
+  {
+   "id": "wall_shelf",
+   "name": "Wall shelf",
+   "description": "Hangs on a wall face.",
+   "station": "workbench",
+   "ingredients": {
+    "plank": 2,
+    "nails": 2
+   },
+   "minutes": 10,
+   "energy": 1,
+   "result": "wall_shelf",
+   "qty": 1,
+   "unlock": {
+    "type": "station",
+    "id": "workbench"
+   },
+   "category": "decor",
+   "icon": "wall_shelf"
+  },
+  {
+   "id": "stove",
+   "name": "Cookstove",
+   "description": "Stone body, iron flue. Cooking comes later; the warmth is now.",
+   "station": "stone_station",
+   "ingredients": {
+    "stone_block": 6,
+    "scrap_metal": 2
+   },
+   "minutes": 45,
+   "energy": 4,
+   "result": "stove",
+   "qty": 1,
+   "unlock": {
+    "type": "station",
+    "id": "stone_station"
+   },
+   "category": "kitchen",
+   "icon": "stove"
+  },
+  {
+   "id": "counter",
+   "name": "Kitchen counter",
+   "description": "Stone top on a wooden base.",
+   "station": "wood_station",
+   "ingredients": {
+    "plank": 4,
+    "stone_block": 1
+   },
+   "minutes": 25,
+   "energy": 2,
+   "result": "counter",
+   "qty": 1,
+   "unlock": {
+    "type": "station",
+    "id": "wood_station"
+   },
+   "category": "kitchen",
+   "icon": "counter"
+  },
+  {
+   "id": "garden_bed",
+   "name": "Raised garden bed",
+   "description": "Ready for planting when seeds can be sown.",
+   "station": "workbench",
+   "ingredients": {
+    "plank": 4,
+    "clay": 2
+   },
+   "minutes": 25,
+   "energy": 3,
+   "result": "garden_bed",
+   "qty": 1,
+   "unlock": {
+    "type": "station",
+    "id": "workbench"
+   },
+   "category": "garden",
+   "icon": "garden_bed"
+  }
+ ],
+ "stations": {
+  "hand": "By hand",
+  "workbench": "Workbench",
+  "stone_station": "Stoneworking block",
+  "wood_station": "Sawhorses",
+  "furnace": "Smelting furnace",
+  "adv_bench": "Advanced workbench"
+ }
+}

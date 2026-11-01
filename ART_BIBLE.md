@@ -612,6 +612,27 @@ landmarks; 4 run forest_edge, understorey, pond_margin, path_decorate within
 the keep-outs; 5 one flower cluster per sunny pocket; 6 foreground frame;
 7 inspect at 1× and 4×: contact, shadow side, hierarchy, empty space.
 
+## 7m. CONSTRUCTION AND FURNITURE (v1.1)
+
+* **Wall geometry.** A wall cell's ground centre is sprite row 35, its cap sits
+  24 px above that, its south face ends at row 38. Connections come from a
+  16-mask set per material; faces use 16-px periodic patterns so runs have no seams.
+  Materials read differently: staggered logs, strapped logs, coursed stone,
+  riveted plate, plaster in timber frame.
+* **Openings** belong to east-west walls and replace the wall sprite, so frames
+  and sills are part of the wall. Window glass uses `tent_interior`: dark by day,
+  glowing at night, with no extra logic.
+* **Grounding.** Foundations carry a lit edge, a south lip and a soil line.
+  Walls shade 3 px of ground below them and floors shade 5 px below a north wall.
+  Eaves shade the top of the wall face. Furniture gets a contact footprint plus a
+  lower-right cast shadow.
+* **Roofs** rise from the wall tops (34 px offset), have north slope, ridge, south
+  slope and a fascia with rafter tails, tuck in at the top corners, and lift as one
+  group when the player stands under them. Winter lays snow on them.
+* **Furniture** is built from material ramps with a dark own-family outline and
+  half-step smoothing. Styles: rustic, cottage, stone, salvage. An item's icon is
+  its own sprite.
+
 ## 8. What is *not* acceptable
 
 * Flat single-colour tiles; visible tile grids; any 16-px repetition that the

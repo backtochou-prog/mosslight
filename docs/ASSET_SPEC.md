@@ -147,3 +147,13 @@ Finished (hand-authored, validated): all 50 items and 5 tools — `assets/items/
 | woodpile, flat slabs ×2 | O | new habitation props |
 | boulders (embedded base, crown moss) | O- | sit in the ground now; silhouettes still code-authored |
 | contact footprints + ground occlusion | O (renderer) | every solid sprite declares `contact`; rocks/logs/trunks declare `ground_blend` |
+
+## Construction (Prompt 10)
+
+| Item | Status | Notes |
+|---|---|---|
+| walls ×5 materials (16 masks), doors, windows, foundations ×3, floors ×3, roofs ×3 | O | seamless in the test house; code-authored |
+| 31 furniture and station sprites, fence set, gates, barricade, spikes, watch platform, torch, steps | O- | correct and in palette; side bed views and the platform are the plainest |
+| 8 material icons | O | hand-authored grids |
+| 29 placeable icons | derived | the object's own sprite |
+| north-south doors and windows, true elevation, side-view furniture beyond beds | M | beds have side views; other furniture mirrors when rotated |

@@ -1,9 +1,9 @@
 {
  "results": [
   {
-   "name": "data-driven catalog loaded: 50 items, 30 nodes",
+   "name": "data-driven catalog loaded: 50 gathered + crafted items, 33 nodes",
    "ok": true,
-   "detail": "50 items, 30 nodes"
+   "detail": "87 items, 33 nodes"
   },
   {
    "name": "1. find a branch (hand)",

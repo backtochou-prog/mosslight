@@ -484,8 +484,8 @@
     ]
    ],
    "yields": 3,
-   "respawn_hours": null,
-   "respawn_mode": "none"
+   "respawn_hours": 240,
+   "respawn_mode": "time"
   },
   {
    "id": "scrap_beam",
@@ -682,6 +682,81 @@
    "unique": [
     "heartwood_seed"
    ]
+  },
+  {
+   "id": "oak_north",
+   "kind": "tree_marker",
+   "x": 419,
+   "y": 102,
+   "r": 20,
+   "label": "Chop the oak",
+   "activity": "cut_tree",
+   "tool": "axe",
+   "drops": [
+    [
+     "log",
+     1,
+     2
+    ],
+    [
+     "bark",
+     0,
+     1
+    ]
+   ],
+   "yields": 3,
+   "respawn_hours": 72,
+   "respawn_mode": "time"
+  },
+  {
+   "id": "oak_northeast",
+   "kind": "tree_marker",
+   "x": 493,
+   "y": 111,
+   "r": 20,
+   "label": "Chop the oak",
+   "activity": "cut_tree",
+   "tool": "axe",
+   "drops": [
+    [
+     "log",
+     1,
+     2
+    ],
+    [
+     "hardwood",
+     0,
+     1
+    ]
+   ],
+   "yields": 3,
+   "respawn_hours": 72,
+   "respawn_mode": "time"
+  },
+  {
+   "id": "birch_west",
+   "kind": "tree_marker",
+   "x": 129,
+   "y": 147,
+   "r": 20,
+   "label": "Chop the birch",
+   "activity": "cut_tree",
+   "tool": "axe",
+   "drops": [
+    [
+     "log",
+     1,
+     1
+    ],
+    [
+     "bark",
+     1,
+     2
+    ]
+   ],
+   "yields": 3,
+   "respawn_hours": 72,
+   "respawn_mode": "time"
   },
   {
    "id": "clay_bank",

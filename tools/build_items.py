@@ -102,7 +102,7 @@ NODES = [
  dict(id='oak_wood', kind='tree_marker', x=216, y=214, r=22, label='Chop the oak', activity='cut_tree', tool='axe', drops=[['log',1,1],['hardwood',0,1]], yields=4, respawn_hours=240, respawn_mode='time'),
  dict(id='deposit_ruin', kind='deposit', x=664, y=146, r=20, label='Mine the deposit', activity='mine', tool='pickaxe', drops=[['stone',1,1],['copper_ore',1,2],['quartz',0,1],['coal',0,1]], yields=5, respawn_hours=None, respawn_mode='none', night_extra=[['moonstone',0,1]]),
  dict(id='deposit_west', kind='deposit', x=96, y=352, r=20, label='Mine the deposit', activity='mine', tool='pickaxe', drops=[['stone',1,2],['iron_ore',0,1],['amethyst',0,1],['geode',0,1]], yields=4, respawn_hours=None, respawn_mode='none'),
- dict(id='scrap_ruin', kind='scrap_pile', x=676, y=112, r=18, label='Search the rubble', activity='search', tool='hand', drops=[['scrap_metal',1,2],['bolt',0,2],['glass_shard',0,1],['rusted_gear',0,1],['battery',0,1]], yields=3, respawn_hours=None, respawn_mode='none'),
+ dict(id='scrap_ruin', kind='scrap_pile', x=676, y=112, r=18, label='Search the rubble', activity='search', tool='hand', drops=[['scrap_metal',1,2],['bolt',0,2],['glass_shard',0,1],['rusted_gear',0,1],['battery',0,1]], yields=3, respawn_hours=240, respawn_mode='time'),
  dict(id='scrap_beam', kind='scrap_pile', x=606, y=130, r=16, label='Search under the beam', activity='search', tool='hand', drops=[['wire',0,2],['circuit',0,1],['photo',0,1],['tin_cup',0,1]], yields=2, respawn_hours=None, respawn_mode='none', unique=['photo','tin_cup']),
  dict(id='lintel_key', kind='hidden', x=612, y=98, r=14, label='Feel along the lintel', activity='search', tool='hand', drops=[['key_old',1,1]], yields=1, respawn_hours=None, respawn_mode='none', unique=['key_old']),
  # nocturnal / conditional
@@ -112,6 +112,9 @@ NODES = [
  dict(id='nightlily_pond', kind='nightlily', x=640, y=300, r=18, label='Pick the night lily', activity='pick_plant', tool='hand', drops=[['nightlily',1,1]], yields=1, respawn_hours=48, respawn_mode='time', time='night', seasons='summer,autumn'),
  dict(id='moth_lantern', kind='moth', x=244, y=256, r=16, label='Catch the moth', activity='pick_plant', tool='hand', drops=[['lantern_moth',1,1]], yields=1, respawn_hours=24, respawn_mode='time', time='night'),
  dict(id='heartwood', kind='hidden', x=206, y=216, r=14, label='Search among the roots', activity='search', tool='hand', drops=[['heartwood_seed',1,1]], yields=1, respawn_hours=None, respawn_mode='none', time='night', seasons='autumn', weather='after_rain', unique=['heartwood_seed']),
+ dict(id='oak_north', kind='tree_marker', x=419, y=102, r=20, label='Chop the oak', activity='cut_tree', tool='axe', drops=[['log',1,2],['bark',0,1]], yields=3, respawn_hours=72, respawn_mode='time'),
+ dict(id='oak_northeast', kind='tree_marker', x=493, y=111, r=20, label='Chop the oak', activity='cut_tree', tool='axe', drops=[['log',1,2],['hardwood',0,1]], yields=3, respawn_hours=72, respawn_mode='time'),
+ dict(id='birch_west', kind='tree_marker', x=129, y=147, r=20, label='Chop the birch', activity='cut_tree', tool='axe', drops=[['log',1,1],['bark',1,2]], yields=3, respawn_hours=72, respawn_mode='time'),
  dict(id='clay_bank', kind='clay', x=572, y=222, r=16, label='Dig clay', activity='gather_stones', tool='hand', drops=[['clay',1,2]], yields=3, respawn_hours=24, respawn_mode='time', weather='rain,after_rain'),
  dict(id='feather_meadow', kind='feather', x=360, y=120, r=14, label='Pick up the feather', activity='search', tool='hand', drops=[['feather',1,1]], yields=1, respawn_hours=36, respawn_mode='time'),
 ]
@@ -174,15 +177,18 @@ def icon(shape, fam):
     return c
 
 def build():
+    import build_craft_data as CD
+    CD.write()
+    ITEMS.extend(CD.CRAFTED_ITEMS)
     names = [i['id'] for i in ITEMS] + ['tool_' + t['id'] for t in TOOLS]
     sheet = Canvas(12 * 10, 12 * ((len(names) + 9) // 10)); index = {}
-    for k, (nm, ic) in enumerate([(i['id'], i['icon']) for i in ITEMS] + [('tool_' + t['id'], t['icon']) for t in TOOLS]):
+    for k, (nm, ic) in enumerate([(i['id'], i['icon']) for i in ITEMS if i['category'] != 'crafted'] + [('tool_' + t['id'], t['icon']) for t in TOOLS]):
         c = icon(*ic); x, y = (k % 10) * 12, (k // 10) * 12; sheet.blit(c, x, y); index[nm] = [x, y]
     Image.fromarray(sheet.a, 'L').save(os.path.join(OUT, 'icons_idx.png')); sheet.save(os.path.join(OUT, 'icons_preview.png'), scale=1)
     json.dump({'size': 12, 'cols': 10, 'index': index}, open(os.path.join(OUT, 'icons.json'), 'w'))
     for it in ITEMS: it['icon'] = it['id']
     for t in TOOLS: t['icon'] = 'tool_' + t['id']
-    json.dump({'version': 1, 'rarities': RARITY, 'categories': ['natural', 'geological', 'botanical', 'abandoned', 'rare_find'], 'items': ITEMS}, open(os.path.join(OUT, 'items.json'), 'w'), indent=1)
+    json.dump({'version': 1, 'rarities': RARITY, 'categories': ['natural', 'geological', 'botanical', 'abandoned', 'rare_find', 'crafted'], 'items': ITEMS}, open(os.path.join(OUT, 'items.json'), 'w'), indent=1)
     json.dump({'tools': TOOLS}, open(os.path.join(OUT, 'tools.json'), 'w'), indent=1)
     json.dump({'nodes': NODES, 'activities_extra': {'pick_plant': {'label': 'Pick', 'energy': 1, 'minutes': 4, 'heavy': False, 'anim': 'gather'},
                'cut_herb': {'label': 'Cut', 'energy': 1, 'minutes': 5, 'heavy': False, 'anim': 'gather'}, 'search': {'label': 'Search', 'energy': 1, 'minutes': 6, 'heavy': False, 'anim': 'gather'}}},

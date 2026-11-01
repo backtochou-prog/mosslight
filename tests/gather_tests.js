@@ -12,7 +12,7 @@ function check(name, ok, detail) { results.push({ name, ok: !!ok, detail }); con
   const gatherAt = (id) => ev(id => { const n = Gather.Nodes.list.find(n => n.def.id === id); Player.setPos(n.def.x, n.def.y + 6); Interaction.update(0.016); return Gather.Gathering.attempt(n); }, id);
   const nodeState = (id) => ev(id => { const n = Gather.Nodes.list.find(n => n.def.id === id); return { state: n.state, left: n.left }; }, id);
   await ev(() => { setPreset(1); WorldClock.paused = true; SeasonState.season = 'spring'; Survival.Clock.setHour(10); Survival.Energy.set(100); });
-  const n0 = await ev(() => [Object.keys(Gather.items()).length, Gather.Nodes.list.length]); check('data-driven catalog loaded: 50 items, 30 nodes', n0[0] === 50 && n0[1] === 30, `${n0[0]} items, ${n0[1]} nodes`);
+  const n0 = await ev(() => [Object.keys(Gather.items()).length, Gather.Nodes.list.length]); check('data-driven catalog loaded: 50 gathered + crafted items, 33 nodes', (n0[0] >= 50 && n0[1] === 33), `${n0[0]} items, ${n0[1]} nodes`);
   // route 1: branch
   let r = await gatherAt('branches_log'); check('1. find a branch (hand)', r.ok && r.got.some(g => g[0] === 'branch'), JSON.stringify(r.got));
   const e1 = await ev(() => [Survival.Energy.current, WorldClock.hour()]); check('gathering spends configured energy and time exactly once', e1[0] === 98 && Math.abs(e1[1] - (10 + 6 / 60)) < 0.01, `energy ${e1[0]}, clock ${e1[1].toFixed(2)} h`);

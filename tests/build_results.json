@@ -1,0 +1,186 @@
+{
+ "results": [
+  {
+   "name": "data loaded; journal total still 50 gathered entries",
+   "ok": true,
+   "detail": "38 recipes, 56 components, 87 items"
+  },
+  {
+   "name": "crafting refused without ingredients",
+   "ok": true,
+   "detail": "Still need 6 Branch, 2 Stone, 2 Cord."
+  },
+  {
+   "name": "crafting cancel uses nothing",
+   "ok": true
+  },
+  {
+   "name": "ingredients consumed, result delivered",
+   "ok": true,
+   "detail": "cord 40, fiber 10"
+  },
+  {
+   "name": "workbench crafted: 30 minutes pass exactly once",
+   "ok": true,
+   "detail": "9.00→9.50 h"
+  },
+  {
+   "name": "station requirement enforced",
+   "ok": true,
+   "detail": "That needs a Workbench."
+  },
+  {
+   "name": "foundation rejected on the pond",
+   "ok": true,
+   "detail": "The ground here is blocked."
+  },
+  {
+   "name": "wall rejected with no foundation",
+   "ok": true,
+   "detail": "Walls need a foundation beneath them."
+  },
+  {
+   "name": "roof rejected in open air",
+   "ok": true,
+   "detail": "A roof must sit over a foundation."
+  },
+  {
+   "name": "window rejected without wall",
+   "ok": true,
+   "detail": "Windows go into a wall."
+  },
+  {
+   "name": "insufficient resources refuse placement and take nothing",
+   "ok": true,
+   "detail": "Still need 1 Clay."
+  },
+  {
+   "name": "workbench placed from the pack",
+   "ok": true
+  },
+  {
+   "name": "station recipes work after unlock",
+   "ok": true,
+   "detail": "planks 48, nails 36, unlocked 18"
+  },
+  {
+   "name": "foundation laid (30 cells)",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "name": "floor laid",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "name": "walls placed individually (18)",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "name": "wall connections resolve: corner, run, side, corner",
+   "ok": true,
+   "detail": "6,10,5,9"
+  },
+  {
+   "name": "window rejected on a north-south run",
+   "ok": true,
+   "detail": "Needs a straight east-west wall on both sides."
+  },
+  {
+   "name": "door and windows fit east-west walls",
+   "ok": true,
+   "detail": "[[],[]]"
+  },
+  {
+   "name": "closed door blocks, open door lets through",
+   "ok": true
+  },
+  {
+   "name": "roof placed over the whole structure",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "name": "furniture placed: rug, table, chair, chest, lamp, bed",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "name": "wall shelf mounts on the north wall",
+   "ok": true
+  },
+  {
+   "name": "furniture can be moved and rotated",
+   "ok": true
+  },
+  {
+   "name": "storage transfers and merges stacks",
+   "ok": true,
+   "detail": "[true,1,true]"
+  },
+  {
+   "name": "player walks through the open door into the house",
+   "ok": true,
+   "detail": "y=155"
+  },
+  {
+   "name": "interior wall stops the player",
+   "ok": true,
+   "detail": "x=528"
+  },
+  {
+   "name": "door offers an interaction",
+   "ok": true,
+   "detail": "Open door"
+  },
+  {
+   "name": "a big build stays a site after one session",
+   "ok": true,
+   "detail": "work left 180 min"
+  },
+  {
+   "name": "construction progresses over several days",
+   "ok": true,
+   "detail": "3 sessions over 3 days"
+  },
+  {
+   "name": "damage state and repair",
+   "ok": true,
+   "detail": "[\"Repair Wooden wall\",105]"
+  },
+  {
+   "name": "dependencies protected: roofed wall and occupied foundation cannot be removed",
+   "ok": true,
+   "detail": "Take the roof off first."
+  },
+  {
+   "name": "save/load restores structures, furniture, storage, durability, recipes, collision exactly",
+   "ok": true
+  },
+  {
+   "name": "loading twice does not duplicate",
+   "ok": true
+  },
+  {
+   "name": "older saves without construction data still load",
+   "ok": true
+  },
+  {
+   "name": "build menu opens with B",
+   "ok": true
+  },
+  {
+   "name": "selecting enters placement",
+   "ok": true
+  },
+  {
+   "name": "no page errors",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "passed": 38,
+ "total": 38
+}
