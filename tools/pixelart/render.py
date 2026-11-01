@@ -91,6 +91,8 @@ class Scene:
         self.season = season
         c = render_terrain(self.mm, tiles)
         water_depth_pass(c)
+        from .canvas import refine
+        refine(c, families={'water', 'stone'})
         if season == 'winter': ice_pass(c)
         meadow_tone_pass(c)
         litter_pass(c, self.mm, season)

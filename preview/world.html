@@ -78,7 +78,7 @@ async function boot() {
 // per-index class flags: 1 canopy (sways), 2 water (ripples/reflection), 4 emissive, 8 sky
 let CLS;
 function classify() { const n = DATA.entries.entries.length; CLS = new Uint8Array(n);
-  DATA.entries.entries.forEach((e, i) => { let f = 0; if (DATA.entries.canopy.includes(e.family)) f |= 1; if (e.family === 'water') f |= 2; if (DATA.entries.emissive.includes(e.family)) f |= 4; if (DATA.entries.sky.includes(e.family)) f |= 8; if (e.family === 'firefly') f |= 16; CLS[i] = f; }); }
+  DATA.entries.entries.forEach((e, i) => { let f = 0; const base = e.family.replace('~', ''); if (DATA.entries.canopy.includes(base)) f |= 1; if (base === 'water') f |= 2; if (DATA.entries.emissive.includes(base)) f |= 4; if (DATA.entries.sky.includes(base)) f |= 8; if (e.family === 'firefly') f |= 16; CLS[i] = f; }); }
 
 // ---------------------------------------------------------------- lights: static falloff map, per-light flicker
 const W = 768, H = 480; let LW, LI, LIGHTS;

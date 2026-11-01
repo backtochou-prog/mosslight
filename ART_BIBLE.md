@@ -523,6 +523,26 @@ consistency; 8 technical validation passes (`icons_validation.json`);
 9 placed in the UI at the real display size and looked at. Technical
 validation never substitutes for the visual check.
 
+## 7k. Resolution without pixels (v0.9)
+
+Apparent resolution at a fixed pixel count comes from how much work each
+pixel does, so three passes are now standard and run automatically in the build:
+
+* **Half-step tones.** Key families (oak, birch, pine, shrub, wood, stone,
+  water) carry a derived `family~` ramp of midpoints. Night and season tables
+  derive them from the base family, so they never fall out of harmony.
+* **Stair-step smoothing** (`canvas.refine`): a pixel whose horizontal and
+  vertical neighbours are both the next rank of its family becomes the
+  half-step tone, so shading bands read as curves. Applied to every sprite,
+  node and to water and stone on the terrain; never to the meadow.
+* **Lit-side outlines**: outline pixels that border transparency above or to
+  the left lighten by one rank, so silhouettes are not one uniform dark line.
+* Micro-detail where the eye lands: tufts at the foot of edge trees (own
+  random stream so the composition never shifts).
+
+What this cannot do: give a 16-px face or flower the detail of a 32-px
+sprite. That would be a tile-size milestone, planned separately.
+
 ## 8. What is *not* acceptable
 
 * Flat single-colour tiles; visible tile grids; any 16-px repetition that the

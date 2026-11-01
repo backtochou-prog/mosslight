@@ -50,7 +50,7 @@ depth_map('spring'); depth_map('winter')
 # ---- collision mask: 1 = blocked
 col = np.zeros((H, W), dtype=np.uint8)
 c = sc.render_indexed(tiles, night=False, season='spring')
-water = np.isin(c.a, PAL.ramp('water'))
+water = np.isin(c.a, PAL.ramp('water') + PAL.ramp('water~'))
 # erode water by 2 px so the player can stand on the bank
 for _ in range(2):
     p = np.pad(water, 1); water = water & p[:-2, 1:-1] & p[2:, 1:-1] & p[1:-1, :-2] & p[1:-1, 2:]

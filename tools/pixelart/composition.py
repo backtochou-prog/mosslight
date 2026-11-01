@@ -156,10 +156,14 @@ def forest_edge(ctx: Context, clearing_dist, species_by_band, n_cand=3000, spaci
         d = clearing_dist(tx, ty)
         return spacing[0 if d < 2.6 else (1 if d < 5.5 else 2)]
     H = ctx.mm.h
+    tuft_rng = random.Random(4242)                      # separate stream: tufts never shift the composition
+    tufts = []
     for (tx, ty) in poisson(ctx, accept, n_cand, sp, order=True):
         d = clearing_dist(tx, ty); band = 0 if d < 2.6 else (1 if d < 5.5 else 2)
         name = species_by_band(band, tx, ty, ctx.rng)
         ctx.place(name, tx * T, ty * T, layer='fg' if ty > H - 0.6 else 'ysort')
+        if band == 0 and tuft_rng.random() < 0.5: tufts.append((tx * T + tuft_rng.randint(-9, 9), ty * T + tuft_rng.randint(1, 4), tuft_rng.randrange(3)))
+    for (x, y, v) in tufts: ctx.place(f'tuft_{v}', x, y, solid=False, flip=False)
 
 def shoreline(mm, band=MUD):
     """Tile-space points along the water edge with an outward normal."""

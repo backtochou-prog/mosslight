@@ -1154,6 +1154,7 @@ def reeds_winter(variant=0) -> Sprite:
 
 def build_library_extended(lib: dict) -> dict:
     def add(s): lib[s.name] = s
+    from .canvas import refine
     for sp in ('oak', 'birch'):
         for v in range(2): add(sapling(sp, v))
     add(hedge(0)); add(hedge(1))
@@ -1174,6 +1175,8 @@ def build_library_extended(lib: dict) -> dict:
     for v in range(2): add(reeds_winter(v))
     for v in range(2): add(ice_hole(v)); add(stool(v)); add(string_light_post(v))
     add(bench())
+    for s in lib.values():
+        if 'debug' not in s.tags: refine(s.c)
     return lib
 
 
@@ -1274,4 +1277,7 @@ def node_sprites():
     out['nightlily'] = {'full': S('node_nightlily_full', c, 7, 8), 'depleted': S('node_nightlily_dep', d, 5, 6), 'regrow': S('node_nightlily_dep', d, 5, 6)}
     c = Canvas(12, 8); c.poly([(1, 2), (6, 4), (1, 7)], mi[2]); c.poly([(11, 2), (6, 4), (11, 7)], mi[2]); c.rect(5, 2, 2, 5, mi[1]); c.put(3, 4, R('moonlight')[2]); c.put(9, 4, R('moonlight')[2]); c.put(5, 1, mi[0]); c.put(7, 1, mi[0])
     out['moth'] = {'full': S('node_moth_full', c, 6, 7), 'depleted': S('node_moth_dep', Canvas(2, 2), 1, 1), 'regrow': S('node_moth_dep', Canvas(2, 2), 1, 1)}
+    from .canvas import refine
+    for states in out.values():
+        for s in states.values(): refine(s.c)
     return out

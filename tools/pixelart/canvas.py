@@ -198,3 +198,36 @@ def shaded_blob(c: Canvas, cx, cy, rx, ry, ramp, light=(-0.35, -0.35), rng=None,
         c.scatter(rng, m, int(rx * ry * texture), lt, clump=1)
         s = c.ellipse_mask(cx, cy, rx, ry) & ~m
         c.scatter(rng, s, int(rx * ry * texture * 0.5), mid, clump=1)
+
+
+def refine(c: 'Canvas', families=None):
+    """In-place resolution pass (no new pixels):
+    1. stair-step smoothing: a pixel whose horizontal AND vertical neighbours
+       are the next rank of the same family becomes the half-step tone, so
+       shading bands read as curves instead of steps;
+    2. lit-side outline: an outline pixel (rank 0) that borders transparency
+       above or to the left lightens to rank 1, so silhouettes are not one
+       uniform dark line all round.
+    Only families that have a half-step ramp are smoothed."""
+    a = c.a; h, w = a.shape; out = a.copy()
+    fam = PAL.family_of; rank = PAL.rank_of
+    for y in range(h):
+        for x in range(w):
+            v = int(a[y, x])
+            if v == 0: continue
+            f = fam(v); r = rank(v)
+            if f.endswith('~'): continue
+            if families and f not in families: continue
+            up = int(a[y - 1, x]) if y > 0 else 0; dn = int(a[y + 1, x]) if y < h - 1 else 0
+            lf = int(a[y, x - 1]) if x > 0 else 0; rt = int(a[y, x + 1]) if x < w - 1 else 0
+            if r == 0 and (up == 0 or lf == 0) and PAL.nranks(f) > 1 and (dn != 0 and rt != 0):
+                out[y, x] = PAL.i(f, 1); continue
+            def is_rank(k, rr): return k != 0 and fam(k) == f and rank(k) == rr
+            for d in (1, -1):
+                hits_h = is_rank(lf, r + d) or is_rank(rt, r + d); hits_v = is_rank(up, r + d) or is_rank(dn, r + d)
+                if hits_h and hits_v:
+                    hi = PAL.half(f, r if d == 1 else r - 1)
+                    if hi is not None: out[y, x] = hi
+                    break
+    c.a = out
+    return c

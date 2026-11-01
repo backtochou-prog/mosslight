@@ -169,6 +169,13 @@ def night_derive(rgb, rank, nranks):
         c = lerp(c, (150, 175, 215), 0.20 if rank == nranks - 1 else 0.08)
     return clamp8(c)
 
+HALF_FAMILIES = ['oak', 'birch', 'pine', 'shrub', 'wood', 'stone', 'water']
+for _f in HALF_FAMILIES:
+    _r = FAMILIES[_f]
+    FAMILIES[_f + '~'] = [''.join('%02x' % ((a + b) // 2) for a, b in zip(_hex(_r[i]), _hex(_r[i + 1]))) for i in range(len(_r) - 1)]
+
+def _mid(a, b): return tuple((a[i] + b[i]) // 2 for i in range(3))
+
 class Palette:
     def __init__(self):
         self.entries: list[tuple[str, int]] = [('transparent', 0)]
@@ -216,6 +223,20 @@ class Palette:
             self.shade[i] = self.index[(fam, max(0, rank - 1))]
         # double shade for deep shadow
         self.shade2 = [self.shade[self.shade[i]] for i in range(len(self.entries))]
+
+        for key, tab in self.luts.items():
+            for i, (fam, rank) in enumerate(self.entries):
+                if fam.endswith('~'):
+                    base = fam[:-1]; tab[i] = _mid(tab[self.index[(base, rank)]], tab[self.index[(base, rank + 1)]])
+        for i, (fam, rank) in enumerate(self.entries):
+            if fam.endswith('~'):
+                base = fam[:-1]
+                self.day[i] = _mid(self.day[self.index[(base, rank)]], self.day[self.index[(base, rank + 1)]])
+                self.night[i] = _mid(self.night[self.index[(base, rank)]], self.night[self.index[(base, rank + 1)]])
+
+    def half(self, fam, rank):
+        """Index of the half-step tone between rank and rank+1 (None if the family has none)."""
+        return self.index.get((fam + '~', rank))
 
     def lut(self, season='spring', night=False):
         return self.luts[(season, night)]
