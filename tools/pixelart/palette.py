@@ -169,6 +169,18 @@ def night_derive(rgb, rank, nranks):
         c = lerp(c, (150, 175, 215), 0.20 if rank == nranks - 1 else 0.08)
     return clamp8(c)
 
+def _saturate(hexes, sat=1.18, val=1.03):
+    out = []
+    for h in hexes:
+        r, g, b = [v / 255 for v in _hex(h)]
+        hh, l, ss = colorsys.rgb_to_hls(r, g, b)
+        r, g, b = colorsys.hls_to_rgb(hh, min(0.96, l * val), min(1.0, ss * sat))
+        out.append('%02x%02x%02x' % (int(r * 255), int(g * 255), int(b * 255)))
+    return out
+for _f, _k in (('grass', 1.22), ('worn', 1.15), ('forest', 1.15), ('dirt', 1.18), ('earth', 1.1), ('water', 1.15), ('oak', 1.22), ('birch', 1.2), ('pine', 1.15),
+               ('rowan', 1.2), ('shrub', 1.2), ('fern', 1.18), ('reed', 1.15), ('moss', 1.15), ('wood', 1.15), ('canvas', 1.12), ('leaf_litter', 1.2), ('sand', 1.1)):
+    FAMILIES[_f] = _saturate(FAMILIES[_f], _k)
+
 HALF_FAMILIES = ['oak', 'birch', 'pine', 'shrub', 'wood', 'stone', 'water']
 for _f in HALF_FAMILIES:
     _r = FAMILIES[_f]

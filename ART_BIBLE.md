@@ -404,7 +404,18 @@ winter fishing night (lantern ring on the frozen pond, light snow), autumn
 gathering at dusk (string-light pools, wind, leaves), summer pond evening
 (bonfire, doubled fireflies), night marsh expedition (fog, cyan glow pools).
 
-## 7g. Harmony rules (v0.5)
+## 7g. Harmony rules (v0.5, saturation v1.0)
+
+**Saturation (v1.0).** The natural families are lifted at build time by a
+per-family factor (`_saturate` in `palette.py`: grass, oak, shrub ×1.22;
+birch, rowan, leaf litter ×1.20; dirt, fern ×1.18; worn, forest, water,
+pine, reed, moss, wood ×1.15; canvas ×1.12; sand, earth ×1.10) with a 3 %
+value lift, capped so no tone clips. The hex values listed below are the
+pre-lift authored values; `renders/_palette_swatches.png` shows the result.
+Target: saturated, warm mids with cool shadows, in the range of the best
+cozy sims, without neon.
+
+
 
 * **Warm key, cool shadows.** Every natural ramp's mids are warm and
   saturated; its two darkest ranks lean blue-green. The far forest haze is

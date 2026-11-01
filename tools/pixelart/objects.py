@@ -458,16 +458,17 @@ def boulder(size='l', variant=0) -> Sprite:
             if m[y0 + i, x0 + (i // 2)]: c.put(x0 + (i // 2), y0 + i, st[1])
     # moss on the shaded lower-left and on top (damp, mossy outcrop)
     # moss: a cap on the crown (damp, shaded by the canopy above) and a fringe low on the shaded right side
-    mm = (c.ellipse_mask(cx + rx * 0.1, cy - ry * 0.66, rx * 0.4, ry * 0.24) | c.ellipse_mask(cx + rx * 0.5, cy + ry * 0.4, rx * 0.3, ry * 0.26)) & m
-    c.a[mm] = mo[1]
+    mm = (c.ellipse_mask(cx + rx * 0.15, cy - ry * 0.7, rx * 0.32, ry * 0.2) | c.ellipse_mask(cx + rx * 0.55, cy + ry * 0.35, rx * 0.22, ry * 0.22)) & m
     ys, xs = np.nonzero(mm)
-    for k in range(len(xs)):
-        if (xs[k] + ys[k]) % 3 == 0: c.put(int(xs[k]), int(ys[k]), mo[2])
-    edge = np.pad(mm, 1); grown = edge[:-2, 1:-1] | edge[2:, 1:-1] | edge[1:-1, :-2] | edge[1:-1, 2:]
-    ring = grown[:, :] & ~mm & m
-    ys, xs = np.nonzero(ring)
-    for k in range(len(xs)):
-        if (xs[k] + ys[k] * 2) % 4 == 0: c.put(int(xs[k]), int(ys[k]), mo[0])       # a sparse, soft moss edge
+    for k in range(len(xs)):                                   # moss as a dithered, living patch, never a flat block
+        x, y = int(xs[k]), int(ys[k]); c.put(x, y, mo[2] if (x * 2 + y) % 5 == 0 else (mo[1] if (x + y) % 2 == 0 else mo[0]))
+    # a second crack and a lit facet edge give the stone structure
+    for i in range(int(rx * 0.6)):
+        x = int(cx - rx * 0.1 + i); y = int(cy - ry * 0.25 + i * 0.35)
+        if m[y, x]: c.put(x, y, st[1])
+    for i in range(int(rx * 0.5)):
+        x = int(cx - rx * 0.6 + i); y = int(cy - ry * 0.55 - i * 0.2)
+        if 0 <= y < c.h and m[y, x] and c.a[y, x] in (st[2], st[3]): c.put(x, y, st[4])
     # embedded: the bottom row is cut flat and a soil line runs along it, the rock sits IN the ground
     cut = c.ellipse_mask(cx, cy + ry + 1.9, rx + 1, 1.6) & m      # only the very bottom row flattens: the rock sits a little into the soil
     c.a[cut] = 0
@@ -643,8 +644,8 @@ def flat_stone(variant=0) -> Sprite:
     rng = random.Random(3100 + variant)
     W, H = 20, 9
     c = Canvas(W, H); st = R('stone'); mo = R('moss')
-    c.ellipse(10, 5, 9, 3, st[2]); c.ellipse(9, 4, 7.5, 2, st[3]); c.ellipse(8, 3.5, 4, 1, st[4])
-    c.hline(3, 16, 7, st[1]); c.put(4, 6, st[1]); c.put(15, 6, st[1])
+    c.ellipse(10, 5, 9, 3, st[2]); c.ellipse(9, 4, 7.5, 2.2, st[4]); c.ellipse(8, 3.5, 4, 1, st[5])
+    c.hline(2, 17, 7, st[1]); c.hline(3, 16, 8, st[0]); c.put(4, 6, st[1]); c.put(15, 6, st[1]); c.hline(6, 12, 5, st[3])
     for _ in range(3): c.put(rng.randint(3, 16), rng.randint(2, 6), st[1])
     c.put(14, 3, mo[1]); c.put(15, 3, mo[1]); c.put(4, 5, mo[1])
     c.outline_inside(st[0])
