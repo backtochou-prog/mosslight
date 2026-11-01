@@ -1,0 +1,13 @@
+{
+ "integration_test": {
+  "source": "PixelLab",
+  "endpoint": "create-image-pixflux",
+  "prompt": "small mossy stone lantern, cozy forest game prop",
+  "size": 48,
+  "seed": 7,
+  "usage": {
+   "type": "generations",
+   "generations": 1.0
+  }
+ }
+}

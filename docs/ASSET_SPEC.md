@@ -167,3 +167,7 @@ Finished (hand-authored, validated): all 50 items and 5 tools — `assets/items/
 ## Fishing assets (Prompt 12)
 
 `assets/fishing/fish_idx.png` + `fish_atlas.json`: 89 fish plates, 32x32, plate palette in the atlas. Status: all 89 finished as code-authored art, no human artist pass. `vista_*_idx.png`: four 800x360 scenes in the world palette. `trail_sign_idx.png`: signpost. Tackle and bait icons are 16 px hand grids in `tools/icons/catalog.py`. Worm bed and reed insect nodes are in the node atlas.
+
+## Third-party generated art (PixelLab)
+
+`tools/pixellab.py` generates images through the PixelLab API. Output lands in `assets/third_party/pixellab/` with a raw PNG, a world-palette index PNG and an entry in `provenance.json`. Nothing there is used by the game until it is deliberately adopted and reviewed against ART_BIBLE.md. The key is read from `PIXL_API_KEY` or `~/.config/mosslight/pixellab.env` and must never be committed.
