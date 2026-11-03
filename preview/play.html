@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <title>MOSSlight — explore</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <style>
   :root { color-scheme: dark; }
   html, body { margin: 0; height: 100%; background: #0f1418; color: #cfd6d2; font: 13px/1.4 ui-monospace, Menlo, Consolas, monospace; }
@@ -42,6 +42,8 @@
   <span class="hint">WASD move · E interact · I pack · J field guide · C craft · B build · N fish book · H neighbours · V calendar · F strike · Shift sneak · L lantern · K creatures · 1-4 tools · space pause · [ ] time</span>
 </header>
 <main><canvas id="c"></canvas></main>
+<script src="ui.js"></script>
+<script src="audio.js" onerror="window.Sound=null"></script>
 <script src="survival.js"></script>
 <script src="gather.js"></script>
 <script src="build.js"></script>
@@ -92,6 +94,8 @@ async function boot() {
   DATA.col = await loadIdx(PL + 'collision.png');
   DATA.pidx = await loadIdx(PL + 'player_idx.png');
   Player.init();
+  { const fimg = q => new Promise(r => { const im = new Image(); im.onload = () => r(im); im.src = q; }); const U = '../assets/ui/';
+    UIKit.init(UIW, { img1: await fimg(U + 'mossbook.png'), meta1: await loadJSON(U + 'mossbook.json'), img2: await fimg(U + 'mossbook2.png'), meta2: await loadJSON(U + 'mossbook2.json') }); }
   DATA.survival = await loadJSON('../assets/survival/config.json');
   Survival.init(DATA.survival, { WorldClock, SeasonState, Player, Interaction, DATA, keyframes: DATA.keyframes });
   const IT = '../assets/items/';
@@ -112,6 +116,17 @@ async function boot() {
   Social.init({ cast: CAST, atlas: await loadJSON('../assets/social/folk_atlas.json'), idx: await loadIdx('../assets/social/folk_idx.png'), portraits: await loadJSON('../assets/social/portraits.json'), pidx: await loadIdx('../assets/social/portraits_idx.png') },
     { Survival, Gather, Build, Monsters, Fishing, WorldClock, SeasonState, WeatherState, Player, Camera, DATA, touchOn: () => Touch.enabled });
   Festival.init(await loadJSON('../assets/festivals/festivals.json'), { Survival, Gather, Build, Monsters, Fishing, Social, WorldClock, SeasonState, WeatherState, Player, applyEvent: (n, keep) => { applyEvent(n, keep); }, tableDark: () => tableAt(SeasonState.season, WorldClock.hour()).darkness, waterPixels: (() => { let wp = null; return () => wp || (wp = (() => { const a = [], sp = DATA.idx.spring; for (let i = 0; i < sp.length; i++) if (CLS[sp[i]] & 2) a.push(i); return a; })()); })() });
+  // one ribbon of tabs joins every book: whichever is open, the others are a tap away
+  const shut = () => { Gather.UI.open = null; if (Build.UI.open) Build.UI.open = null; Fishing.Book.open = false; Monsters.Journal.open = false; Social.UI.journal = false; Festival.UI.open = false; };
+  for (const [id, label, isOpen, open] of [
+    ['pack', 'Pack', () => Gather.UI.open === 'inventory', () => { Gather.UI.open = 'inventory'; }],
+    ['guide', 'Guide', () => Gather.UI.open === 'journal', () => { Gather.UI.open = 'journal'; }],
+    ['craft', 'Craft', () => Build.UI.open === 'craft', () => { Build.UI.open = 'craft'; Build.UI.cur = 0; }],
+    ['build', 'Build', () => Build.UI.open === 'build', () => { Build.UI.open = 'build'; Build.UI.cur = 0; }],
+    ['fish', 'Fish', () => !!Fishing.Book.open, () => { Fishing.Book.open = true; }],
+    ['creatures', 'Beasts', () => !!Monsters.Journal.open, () => { Monsters.Journal.open = true; }],
+    ['folk', 'Folk', () => !!Social.UI.journal, () => { Social.UI.journal = true; }],
+    ['calendar', 'Days', () => !!Festival.UI.open, () => { Festival.UI.open = true; }]]) UIKit.register({ id, label, isOpen, open: () => { shut(); open(); }, close: shut });
   Survival.Dev.mount(document.getElementById('dev'));
   if (location.search.includes('dev=1')) { document.getElementById('dev').style.display = ''; document.getElementById('devtoggle').checked = true; }
   WorldClock.paused = false;
@@ -119,6 +134,22 @@ async function boot() {
   const sel = document.getElementById('event'); for (const k in DATA.events) { const o = document.createElement('option'); o.value = k; o.textContent = DATA.events[k].label; sel.appendChild(o); }
   classify(); buildLightMap(); requestAnimationFrame(frame);
 }
+// ---------------------------------------------------------------- the UI kit's view of the world
+let FRAME_MS = 0;
+const UIW = { get Gather() { return Gather; }, get Fishing() { return Fishing; }, get Sound() { return window.Sound; }, get Camera() { return Camera; }, get Player() { return Player; }, get Survival() { return Survival; }, get WorldClock() { return WorldClock; }, get SeasonState() { return SeasonState; }, get DATA() { return DATA; },
+  tab: () => DATA.keyframes[SeasonState.season].tables[2],          // screen-space UI is always drawn in daylight colours
+  touchOn: () => Touch.enabled, frameMs: () => FRAME_MS,
+  save: () => { try { Survival.SaveState.save(); return !!localStorage.getItem('mosslight.save'); } catch (_) { return false; } },
+  load: () => { try { return !!Survival.SaveState.load(); } catch (_) { return false; } },
+  setAspect: v => { const sel = $('aspect'); if (v === 'auto') { fitTouch(true); return; } sel.value = v; sel.onchange({ target: sel }); fitTouch(); },
+  setTouch: v => { Touch.enabled = v === 'on' || (v === 'auto' && 'ontouchstart' in window); $('touch').checked = Touch.enabled; },
+  mapPins: () => { const pins = [{ x: DATA.play.interactables[0].x, y: DATA.play.interactables[0].y, label: 'camp', always: true, color: '#8a3a1a' }];
+    for (const it of DATA.play.interactables) { if (it.id === 'tent') continue; const lab = { dock: 'platform', ruin: 'ruins', oak: 'old oak', outcrop: 'stones', campfire: 'fire', rowan: 'rowan', log: 'hollow log' }[it.id]; if (lab && lab !== 'fire') pins.push({ x: it.x, y: it.y, label: lab, color: '#5e4a32' }); }
+    try { const sg = Fishing.data().sign; pins.push({ x: sg.x, y: sg.y, label: 'signpost', color: '#2a6680' }); } catch (_) {}
+    try { for (const c in Social.L) { const l = Social.L[c]; if (l && l.present && !(l.entry || {}).hidden) pins.push({ x: l.x, y: l.y, label: Social.CH()[c].name, color: '#4c6a28' }); } } catch (_) {}
+    try { for (const e of Build.S.list) if (['campfire', 'workbench', 'bedroll', 'chest', 'crate'].some(k => e.type.includes(k))) pins.push({ x: (e.cx + .5) * 16, y: (e.cy + .5) * 16, color: '#9a6a14' }); } catch (_) {}
+    return pins; },
+  farWaters: () => { try { return (Fishing.S.visited || []).slice(); } catch (_) { return []; } } };
 // per-index class flags: 1 canopy (sways), 2 water (ripples/reflection), 4 emissive, 8 sky
 let CLS;
 function classify() { const n = DATA.entries.entries.length; CLS = new Uint8Array(n);
@@ -192,7 +223,11 @@ const Input = {
     const L = Math.hypot(x, y); return L > 1 ? [x / L, y / L] : [x, y]; },   // diagonal never faster than cardinal
   consumeAction() { const p = this.actionPressed && !this._actionLatch; this._actionLatch = this.actionPressed; return p; },
 };
-addEventListener('keydown', e => { const k = e.key.toLowerCase(); if (window.Festival && Festival.key(k)) { e.preventDefault(); return; } if (window.Social && Social.key(k)) { e.preventDefault(); return; } if (window.Fishing && Fishing.key(k)) { e.preventDefault(); return; } if (window.Monsters && Monsters.key(k)) { e.preventDefault(); return; } if (window.Build && Build.UI.key(k)) { e.preventDefault(); return; } if (window.Gather && Gather.UI.key(k)) { e.preventDefault(); return; } Input.keys[k] = true; if (k === 'e' || k === 'enter') Input.actionPressed = true; if (['arrowup','arrowdown','arrowleft','arrowright',' '].includes(k)) e.preventDefault(); });
+addEventListener('keydown', e => { const k = e.key.toLowerCase(); if (window.Sound && Sound.start) Sound.start();
+  if (UIKit.Menu.open) { if (k === 'escape') { UIKit.Menu.open = UIKit.Menu.open === 'settings' ? 'pause' : null; if (window.Sound) Sound.ui('close'); } e.preventDefault(); return; }
+  if (UIKit.Map.open) { if (k === 'escape' || k === 'm') { UIKit.Map.open = false; if (window.Sound) Sound.ui('close'); } e.preventDefault(); return; }
+  if (k === 'tab' && UIKit.anyBook()) { const ids = ['pack', 'guide', 'craft', 'build', 'fish', 'creatures', 'folk', 'calendar']; const cur = UIKit.anyBook().id; UIKit.openBook(ids[(ids.indexOf(cur) + (e.shiftKey ? ids.length - 1 : 1)) % ids.length]); e.preventDefault(); return; }
+  if (window.Festival && Festival.key(k)) { e.preventDefault(); return; } if (window.Social && Social.key(k)) { e.preventDefault(); return; } if (window.Fishing && Fishing.key(k)) { e.preventDefault(); return; } if (window.Monsters && Monsters.key(k)) { e.preventDefault(); return; } if (window.Build && Build.UI.key(k)) { e.preventDefault(); return; } if (window.Gather && Gather.UI.key(k)) { e.preventDefault(); return; } if (k === 'escape') { UIKit.Menu.open = 'pause'; UIKit.Menu.tab = 'sound'; return; } if (k === 'm') { UIKit.Map.open = true; return; } Input.keys[k] = true; if (k === 'e' || k === 'enter') Input.actionPressed = true; if (['arrowup','arrowdown','arrowleft','arrowright',' '].includes(k)) e.preventDefault(); });
 addEventListener('keyup', e => { const k = e.key.toLowerCase(); Input.keys[k] = false; if (window.Fishing) Fishing.keyup(k); if (k === 'e' || k === 'enter') Input.actionPressed = false; });
 
 // ---------------------------------------------------------------- Player (movement only; mirrors godot/play/Player.gd)
@@ -247,22 +282,46 @@ const Interaction = { current: null, message: null, msgT: 0,
       else if (best.activity) { const r = Survival.Activities.perform(best.activity, best.id); this.message = r.ok ? best.text + (r.night ? ' (after dark)' : '') : r.reason; this.msgT = r.ok ? 3.2 : 2.6; }
       else { this.message = best.text; this.msgT = 3.2; } } } };
 // ---------------------------------------------------------------- Touch controls (drawn on the canvas; only when enabled or on a touch device)
-const Touch = { enabled: false, btn: { x: 0, y: 0, r: 26 },
-  attach(cv) { const pos = e => { const r = cv.getBoundingClientRect(); const t = e.changedTouches ? e.changedTouches[0] : e; return [ (t.clientX - r.left) / r.width * cv.width / state.zoom, (t.clientY - r.top) / r.height * cv.height / state.zoom, t.identifier ]; };
-    cv.addEventListener('touchstart', e => { if (!this.enabled) return; e.preventDefault(); for (const t of e.changedTouches) { const [x, y, id] = pos({ changedTouches: [t] });
-      if (window.Festival && Festival.UI.open && Festival.pointer(x, y, true)) continue; if (window.Social && Social.busy() && Social.pointer(x, y, true)) continue; if (window.Fishing && (Fishing.busy() || Fishing.Book.open || Fishing.buttons.length) && Fishing.pointer(x, y, true)) continue; if (this.book && Math.hypot(x - this.book.x, y - this.book.y) < this.book.r + 6) { Fishing.Book.open = true; continue; }
-      if (Math.hypot(x - this.btn.x, y - this.btn.y) < this.btn.r + 8) { Input.actionPressed = true; } else if (this.pack && Math.hypot(x - this.pack.x, y - this.pack.y) < this.pack.r + 6) { Gather.UI.toggle('inventory'); } else if (!Input.touch.active) { Input.touch = { active: true, ax: x, ay: y, x, y, id }; } } }, { passive: false });
-    cv.addEventListener('touchmove', e => { if (!this.enabled) return; e.preventDefault(); for (const t of e.changedTouches) { const [x, y, id] = pos({ changedTouches: [t] }); if (Input.touch.active && id === Input.touch.id) { Input.touch.x = x; Input.touch.y = y; } } }, { passive: false });
+const Touch = { enabled: false, btn: { x: 0, y: 0, r: 22 },
+  attach(cv) { const pos = t => { const r = cv.getBoundingClientRect(); return [ (t.clientX - r.left) / r.width * cv.width / state.zoom, (t.clientY - r.top) / r.height * cv.height / state.zoom, t.identifier ]; };
+    cv.addEventListener('touchstart', e => { if (!this.enabled) return; e.preventDefault(); if (window.Sound && Sound.start) Sound.start(); for (const t of e.changedTouches) { const [x, y, id] = pos(t);
+      if (UIKit.pointer(x / UI_SCALE, y / UI_SCALE)) continue; if (UIKit.paused() || UIKit.Map.open || portrait()) continue;          // every drawn control lives in the kit
+      if (window.Festival && Festival.UI.open && Festival.pointer(x, y, true)) continue; if (window.Social && Social.busy() && Social.pointer(x, y, true)) continue; if (window.Fishing && (Fishing.busy() || Fishing.Book.open || Fishing.buttons.length) && Fishing.pointer(x, y, true)) continue;
+      if (window.Build && (Build.UI.open || Build.UI.place) && Build.UI.pointer(x, y, true)) continue;
+      if (UIKit.anyBook()) continue; if (!Input.touch.active) { Input.touch = { active: true, ax: x, ay: y, x, y, id }; } } }, { passive: false });
+    cv.addEventListener('touchmove', e => { if (!this.enabled) return; e.preventDefault(); for (const t of e.changedTouches) { const [x, y, id] = pos(t); if (Input.touch.active && id === Input.touch.id) { Input.touch.x = x; Input.touch.y = y; } } }, { passive: false });
     const end = e => { if (!this.enabled) return; if (window.Fishing) Fishing.pointer(0, 0, false); for (const t of e.changedTouches) { if (Input.touch.active && t.identifier === Input.touch.id) Input.touch.active = false; } Input.actionPressed = false; };
     cv.addEventListener('touchend', end); cv.addEventListener('touchcancel', end); },
-  draw(g, vw, vh) { if (!this.enabled || (window.Fishing && (Fishing.busy() || Fishing.Book.open)) || (window.Social && Social.UI.journal) || (window.Festival && Festival.UI.open)) return; const sf = Camera.safe; this.btn.x = vw - 40 - sf; this.btn.y = vh - 40 - sf;
-    g.fillStyle = 'rgba(20,30,28,0.45)'; g.strokeStyle = 'rgba(222,220,180,0.7)'; g.lineWidth = 1;
-    if (Input.touch.active) { g.beginPath(); g.arc(Input.touch.ax, Input.touch.ay, 28, 0, 7); g.fill(); g.stroke(); const dx = Input.touch.x - Input.touch.ax, dy = Input.touch.y - Input.touch.ay, L = Math.hypot(dx, dy) || 1, k = Math.min(1, L / 28); g.fillStyle = 'rgba(222,220,180,0.8)'; g.beginPath(); g.arc(Input.touch.ax + dx / L * 28 * k, Input.touch.ay + dy / L * 28 * k, 9, 0, 7); g.fill(); }
-    else { g.beginPath(); g.arc(44 + sf, vh - 44 - sf, 28, 0, 7); g.fill(); g.stroke(); }
-    g.fillStyle = Input.actionPressed ? 'rgba(255,204,122,0.7)' : 'rgba(20,30,28,0.68)'; g.lineWidth = 1.5; g.beginPath(); g.arc(this.btn.x, this.btn.y, this.btn.r, 0, 7); g.fill(); g.stroke(); g.lineWidth = 1;
-    g.fillStyle = 'rgba(222,220,180,0.9)'; g.font = '10px ui-monospace, monospace'; g.textAlign = 'center'; g.fillText(Interaction.current ? '●' : '○', this.btn.x, this.btn.y + 4);
-    this.pack = { x: this.btn.x - 60, y: this.btn.y + 8, r: 16 }; g.fillStyle = 'rgba(20,30,28,0.68)'; g.beginPath(); g.arc(this.pack.x, this.pack.y, this.pack.r, 0, 7); g.fill(); g.stroke(); g.fillStyle = 'rgba(222,220,180,0.9)'; g.fillText('pack', this.pack.x, this.pack.y + 3); this.book = { x: this.btn.x - 100, y: this.btn.y + 8, r: 16 }; g.fillStyle = 'rgba(20,30,28,0.68)'; g.beginPath(); g.arc(this.book.x, this.book.y, this.book.r, 0, 7); g.fill(); g.stroke(); g.fillStyle = 'rgba(222,220,180,0.9)'; g.fillText('book', this.book.x, this.book.y + 3); } };
+  // stamped roundels on the paper colour: the action seal, then pack, journal and map in an arc; the menu sits top-right
+  seal(g, x, y, r, glyph, fn, label, o = {}) { const K = UIKit, C = K.C; g.fillStyle = 'rgba(24,14,6,.32)'; g.beginPath(); g.arc(x + 1, y + 2, r, 0, 7); g.fill(); g.fillStyle = o.on ? C.leather2 : C.leather; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill(); g.fillStyle = o.on ? '#f3e2b8' : C.paper; g.beginPath(); g.arc(x, y, r - 2, 0, 7); g.fill(); g.strokeStyle = 'rgba(58,42,26,.4)'; g.beginPath(); g.arc(x, y, r - 4.5, 0, 7); g.stroke();
+    const sc = r >= 18 ? 2 : 1; K.glyph(g, glyph, x - 2.5 * sc, y - 3.5 * sc - (label && r < 18 ? 2 : 0), o.dim ? C.faint : (o.color || C.ink), sc); if (label && r < 18) K.text(g, label, x, y + r - 4, { align: 'center', color: C.ink2 }); if (fn) K.hit(x - r, y - r, r * 2, r * 2, fn, label || glyph); },
+  draw(g, vw, vh, sf) { if (!this.enabled || portrait() || UIKit.paused() || UIKit.Map.open) return; const K = UIKit, C = K.C;
+    const book = UIKit.anyBook(); const fishing = window.Fishing && (Fishing.busy() || Fishing.Book.open), talking = window.Social && Social.busy();
+    if (!book && !talking) this.seal(g, vw - 18 - sf, 16 + sf, 11, 'menu', () => { UIKit.Menu.open = 'pause'; }, null);
+    if (book || fishing || talking || (window.Festival && Festival.UI.open)) return;
+    // the stick: an inked ring where the thumb lands, a faint one at rest
+    if (Input.touch.active) { const s = UI_SCALE, ax = Input.touch.ax / s, ay = Input.touch.ay / s; g.strokeStyle = 'rgba(246,236,210,.75)'; g.lineWidth = 2; g.beginPath(); g.arc(ax, ay, 22, 0, 7); g.stroke(); g.lineWidth = 1; const dx = Input.touch.x / s - ax, dy = Input.touch.y / s - ay, L = Math.hypot(dx, dy) || 1, k = Math.min(1, L / 22); g.fillStyle = k > .92 ? C.leather2 : 'rgba(246,236,210,.85)'; g.beginPath(); g.arc(ax + dx / L * 22 * k, ay + dy / L * 22 * k, 7, 0, 7); g.fill(); }
+    else { g.strokeStyle = 'rgba(246,236,210,.35)'; g.lineWidth = 2; g.beginPath(); g.arc(36 + sf, vh - 36 - sf, 22, 0, 7); g.stroke(); g.lineWidth = 1; }
+    const bx = vw - 32 - sf, by = vh - 32 - sf; this.btn.x = bx * UI_SCALE; this.btn.y = by * UI_SCALE;
+    this.seal(g, bx, by, 21, Interaction.current ? 'hand' : 'leaf', () => { Input.actionPressed = true; }, 'act', { on: Input.actionPressed, dim: !Interaction.current });
+    this.seal(g, bx - 50, by + 8, 15, 'pack', () => UIKit.openBook('pack'), 'pack');
+    this.seal(g, bx - 40, by - 34, 15, 'book', () => UIKit.openBook(UIKit.lastTab() === 'pack' ? 'guide' : UIKit.lastTab()), 'journal');
+    this.seal(g, bx - 4, by - 52, 15, 'map', () => { UIKit.Map.open = true; }, 'map');
+    if (tableAt(SeasonState.season, WorldClock.hour()).darkness > .35 && window.Monsters) { const on = Monsters.Health && Monsters.Health.lantern; this.seal(g, bx - 88, by + 8, 15, 'lantern', () => Monsters.key('l'), 'lamp', { on }); this.seal(g, bx - 82, by - 30, 15, 'sneak', () => Monsters.key('f'), 'strike'); } } };
 
+// ---------------------------------------------------------------- the prompt line and short messages, drawn as journal tags
+let UI_SCALE = 1;
+function drawPrompt(g, vw, vh, sf) { const K = UIKit, C = K.C;
+  if (Interaction.current && !Interaction.message && !Survival.Sleep.sleeping) { const lab = Interaction.current.label, key = Touch.enabled ? null : 'E'; const tw = K.measure(lab) + (key ? 22 : 12); const x = Math.round(vw / 2 - tw / 2), y = vh - 44 - sf;
+    K.tag(g, x, y, tw, 15); if (key) { g.fillStyle = C.leather; g.fillRect(x + 4, y + 3, 10, 9); K.text(g, key, x + 9, y + 10, { align: 'center', color: C.cream }); } K.text(g, lab, x + (key ? 18 : 6), y + 11); }
+  if (Interaction.message) { const ls = K.lines(Interaction.message, Math.min(vw - 60, 340)); const tw = Math.max(...ls.map(l => K.measure(l))) + 16, th = ls.length * 10 + 8; const x = Math.round(vw / 2 - tw / 2), y = vh - 50 - sf - th + 15;
+    K.tag(g, x, y, tw, th); ls.forEach((l, k) => K.text(g, l, vw / 2, y + 11 + k * 10, { align: 'center' })); } }
+// a phone held upright: the clearing is wide, so the game asks to be turned (see UI_STYLE_GUIDE.md, Orientation)
+const portrait = () => Touch.enabled && innerHeight > innerWidth * 1.05;
+function drawPortraitCard(g, vw, vh) { const K = UIKit; g.fillStyle = 'rgba(16,10,4,.82)'; g.fillRect(0, 0, vw, vh); const w = Math.min(vw - 16, 220), h = 92, x = Math.round(vw / 2 - w / 2), y = Math.round(vh / 2 - h / 2); K.paper(g, x, y, w, h, { title: 'Turn sideways' });
+  K.wrap(g, 'The clearing is wide. Hold your phone on its side to play; the game waits for you.', x + 14, y + 42, w - 28, 10); const t = K.now() % 3, a = Math.min(1, Math.max(0, t - .6)) * Math.PI / 2; g.save(); g.translate(x + w - 30, y + 20); g.rotate(-(K.S.reduceMotion ? 1 : a / (Math.PI / 2))); g.strokeStyle = K.C.ink; g.strokeRect(-4.5, -7.5, 9, 15); g.restore(); }
+function soundState() { const ev = EventState.current; return { season: SeasonState.season, hour: WorldClock.hour(), weather: WeatherState.kind, intensity: WeatherState.intensity, wind: WeatherState.wind, x: Player.x, y: Player.y, moving: Player.moving, running: !!Player.running, sheltered: !!(window.Build && Build.sheltered && Build.sheltered(Player.x, Player.y)), nearWater: !!(window.Fishing && Fishing.nearest && Fishing.waterAt && nearWaterCheap()), fire: Math.hypot(Player.x - 318, Player.y - 272), danger: window.Monsters ? Monsters.list.filter(m => m.state === 'pursue' || m.state === 'stalk' || m.state === 'attack').length : 0, festival: window.Festival && Festival.active ? (Festival.active() || null) : null, fishing: !!(window.Fishing && Fishing.busy()), dark: tableAt(SeasonState.season, WorldClock.hour()).darkness, event: ev ? ev.name : null, paused: UIKit.paused() }; }
+let _nwT = 0, _nw = false; function nearWaterCheap() { if (T - _nwT < .5) return _nw; _nwT = T; _nw = false; const px = Math.round(Player.x), py = Math.round(Player.y); for (let r = 0; r < 60 && !_nw; r += 6) for (let a = 0; a < 6.28; a += .8) { const x = Math.round(px + Math.cos(a) * r), y = Math.round(py + Math.sin(a) * r); if (x >= 0 && y >= 0 && x < 768 && y < 480 && (CLS[DATA.idx[SeasonState.season][y * 768 + x]] & 2)) { _nw = true; break; } } return _nw; }
 // ---------------------------------------------------------------- frame
 const off = document.createElement('canvas'); off.width = W; off.height = H; const og = off.getContext('2d'); const img = og.createImageData(W, H);
 const cv = document.getElementById('c'), ctx = cv.getContext('2d');
@@ -271,8 +330,9 @@ const SIM_DT = 1 / 60;
 const depthNow = () => (EventState.current && DATA.depth[EventState.current.name]) || DATA.depth[SeasonState.season === 'winter' ? 'winter' : 'spring'];
 function simulate(dt) { simAcc += dt; let n = 0; const ax = (Survival.Sleep.sleeping || Survival.Activities.current || Gather.UI.open || Build.UI.busy() || Monsters.Journal.open || Fishing.busy() || Fishing.Book.open || Social.UI.journal || Festival.UI.open) ? [0, 0] : Input.axis(); while (simAcc >= SIM_DT && n < 5) { Player.step(SIM_DT, ax); simAcc -= SIM_DT; n++; } Camera.update(dt); Interaction.update(dt); Survival.tick(dt, WorldClock.paused ? 0 : dt * WorldClock.scale / 60, Player.moving); Gather.tick(dt); Build.tick(dt); if (!Gather.UI.open && !Build.UI.open && !Monsters.Journal.open && !Fishing.Book.open && !Fishing.render.inVista() && !Social.busy()) Monsters.tick(dt); Fishing.tick(dt); Social.tick(dt); Festival.tick(dt); }
 function frame(now) {
-  const dt = Math.min(0.1, (now - last) / 1000); last = now; T += dt;
-  WorldClock.tick(dt); WeatherState.tick(dt); tickParticles(dt, T); simulate(dt);
+  const dt = Math.min(0.1, (now - last) / 1000); last = now; T += dt; const tf0 = performance.now();
+  UIKit.tick(dt); const held = UIKit.paused() || UIKit.Map.open || portrait();
+  if (!held) { WorldClock.tick(dt); WeatherState.tick(dt); tickParticles(dt, T); simulate(dt); } UIKit.explore(Player.x, Player.y); if (window.Sound && Sound.update) Sound.update(dt, soundState());
   const season = SeasonState.season, hour = WorldClock.hour(), ev = EventState.current;
   const { table, darkness } = tableAt(season, hour);
   let tab = gradeTable(table, WeatherState.kind, WeatherState.intensity, ev);
@@ -351,14 +411,13 @@ function frame(now) {
   if (state.viewport) { const vwc = Math.min(W, Camera.vw), vhc = Math.min(H, Camera.vh); state.ox = Camera.ix(); state.oy = Camera.iy(); cv.width = vwc * z; cv.height = vhc * z; ctx.imageSmoothingEnabled = false; ctx.drawImage(off, state.ox, state.oy, vwc, vhc, 0, 0, vwc * z, vhc * z); }
   else { cv.width = W * z; cv.height = H * z; ctx.imageSmoothingEnabled = false; ctx.drawImage(off, 0, 0, W * z, H * z); }
   ctx.save(); ctx.scale(z, z); ctx.imageSmoothingEnabled = false; const vw = state.viewport ? Math.min(W, Camera.vw) : W, vh = state.viewport ? Math.min(H, Camera.vh) : H;
-  if (Interaction.current && !Interaction.message) { const t = (Touch.enabled ? '● ' : 'E · ') + Interaction.current.label; ctx.font = '10px ui-monospace, monospace'; const tw = ctx.measureText(t).width + 12;
-    ctx.fillStyle = 'rgba(24,30,28,0.78)'; const sf = Camera.safe; ctx.fillRect(Math.round(vw / 2 - tw / 2), vh - 42 - sf, Math.round(tw), 16); ctx.strokeStyle = 'rgba(222,220,180,0.55)'; ctx.strokeRect(Math.round(vw / 2 - tw / 2) + 0.5, vh - 41.5 - sf, Math.round(tw) - 1, 15);
-    ctx.fillStyle = '#eedcb0'; ctx.textAlign = 'center'; ctx.fillText(t, vw / 2, vh - 30 - sf); }
-  if (Interaction.message) { ctx.font = '10px ui-monospace, monospace'; const tw = Math.min(vw - 40, ctx.measureText(Interaction.message).width + 16);
-    ctx.fillStyle = 'rgba(24,30,28,0.86)'; const sf = Camera.safe; ctx.fillRect(Math.round(vw / 2 - tw / 2), vh - 64 - sf, Math.round(tw), 30); ctx.strokeStyle = 'rgba(222,220,180,0.55)'; ctx.strokeRect(Math.round(vw / 2 - tw / 2) + 0.5, vh - 63.5 - sf, Math.round(tw) - 1, 29);
-    ctx.fillStyle = '#eedcb0'; ctx.textAlign = 'center'; ctx.fillText(Interaction.message, vw / 2, vh - 45 - sf); }
   if (Fishing.render.inVista()) { const pm = DATA.player, pidx = DATA.pidx, fw = pm.frame_w, fh = pm.frame_h; Fishing.render.vista(ctx, vw, vh, tab, tableAt(season, 1).table, (g, sx, sy, tt) => { const row = pm.facings.indexOf('up'); for (let yy = 0; yy < fh; yy++) for (let xx = 0; xx < fw; xx++) { const pi = pidx[(row * fh + yy) * (fw * pm.frames.length) + xx]; if (!pi) continue; const c = tt[pi]; g.fillStyle = `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`; g.fillRect(sx - pm.origin[0] + xx, sy - pm.origin[1] + yy, 1, 1); } g.fillStyle = `rgb(${tt[60][0] | 0},${tt[60][1] | 0},${tt[60][2] | 0})`; g.fillStyle = 'rgba(70,46,24,.95)'; for (let k = 0; k < 22; k++) g.fillRect(sx + 4 + k * .3, sy - 8 - k * .8, 1, 1); }); }
-  Touch.draw(ctx, vw, vh); Survival.HUD.draw(ctx, vw, vh, Camera.safe, T); Gather.UI.draw(ctx, vw, vh, Camera.safe, tab); Monsters.render.overlay(ctx, vw, vh, Camera.safe, tab); Build.UI.draw(ctx, vw, vh, Camera.safe, tab); Fishing.render.overlay(ctx, vw, vh, Camera.safe, tab); Social.render.overlay(ctx, vw, vh, Camera.safe, tab); Festival.render.calendar(ctx, vw, vh); ctx.restore();
+  for (const M of [Gather.UI, Build.UI, Monsters.render, Fishing.render, Social.render, Festival.render]) if (M.drawWorld) M.drawWorld(ctx, vw, vh, tab);
+  ctx.restore(); ctx.save(); const us = UIKit.scale(vh); ctx.scale(z * us, z * us); ctx.imageSmoothingEnabled = false; const uw = Math.floor(vw / us), uh = Math.floor(vh / us), usf = Math.round(Camera.safe / us), uiTab = UIW.tab(); UI_SCALE = us; UIKit.begin();
+  if (!UIKit.anyBook() && !UIKit.Map.open) drawPrompt(ctx, uw, uh, usf);
+  Touch.draw(ctx, uw, uh, usf); Survival.HUD.draw(ctx, uw, uh, usf, T); Gather.UI.draw(ctx, uw, uh, usf, uiTab); Monsters.render.overlay(ctx, uw, uh, usf, uiTab); Build.UI.draw(ctx, uw, uh, usf, uiTab); Fishing.render.overlay(ctx, uw, uh, usf, uiTab); Social.render.overlay(ctx, uw, uh, usf, uiTab); Festival.render.calendar(ctx, uw, uh);
+  UIKit.drawRibbon(ctx, uw, uh); UIKit.drawMap(ctx, uw, uh, uiTab); UIKit.drawNotices(ctx, uw, uh, usf, uiTab); UIKit.drawMenu(ctx, uw, uh); if (portrait()) drawPortraitCard(ctx, uw, uh); ctx.restore();
+  FRAME_MS += (performance.now() - tf0 - FRAME_MS) * .05;
   document.getElementById('clock').textContent = `${WorldClock.label()} · day ${Survival.Clock.day} · ${season} · ${Survival.Clock.phase()} · ${WeatherState.kind} ${(WeatherState.intensity * 100) | 0}%`;
   if (!WorldClock.paused) document.getElementById('time').value = WorldClock.minutes | 0;
   requestAnimationFrame(frame);
@@ -376,10 +435,14 @@ $('vol').oninput = e => { Monsters.Audio.vol.master = e.target.value / 100; if (
 if ('ontouchstart' in window) { Touch.enabled = true; $('touch').checked = true; }
 Touch.attach(cv);
 // on a phone the game is the page: the canvas fills the screen height and the widest matching view is used
-function fitTouch() { if (!('ontouchstart' in window)) return; const a = innerWidth / innerHeight, sel = $('aspect'); const want = a > 1.95 ? '780x360' : a > 1.7 ? '640x360' : '480x360'; if (sel.value !== want) { sel.value = want; if (sel.onchange) sel.onchange({ target: sel }); } const [vw, vh] = want.split('x').map(Number); Object.assign(cv.style, { position: 'fixed', top: '0', left: Math.round((innerWidth - innerHeight * vw / vh) / 2) + 'px', height: innerHeight + 'px', width: Math.round(innerHeight * vw / vh) + 'px', zIndex: 50 }); document.body.style.background = '#000'; }
-fitTouch(); addEventListener('resize', fitTouch);
+function fitTouch(force) { if (!('ontouchstart' in window) && !force) return; const land = innerWidth >= innerHeight, a = land ? innerWidth / innerHeight : innerHeight / innerWidth, sel = $('aspect'); const pick = UIKit.S.aspect && UIKit.S.aspect !== 'auto' ? UIKit.S.aspect : null; const want = pick || (a > 1.95 ? '780x360' : a > 1.7 ? '640x360' : '480x360'); if (sel.value !== want) { sel.value = want; if (sel.onchange) sel.onchange({ target: sel }); } const [vw, vh] = want.split('x').map(Number);
+  // fit inside the screen on both axes, letterboxed; never crop the view
+  const k = Math.min(innerWidth / vw, innerHeight / vh), w = Math.round(vw * k), h = Math.round(vh * k); Object.assign(cv.style, { position: 'fixed', top: Math.round((innerHeight - h) / 2) + 'px', left: Math.round((innerWidth - w) / 2) + 'px', height: h + 'px', width: w + 'px', zIndex: 50 }); document.body.style.background = '#000'; }
+fitTouch(); addEventListener('resize', () => fitTouch()); if (window.visualViewport) visualViewport.addEventListener('resize', () => fitTouch());
+let KIT_TOOK = false;
 { const lp = e => { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * cv.width / state.zoom, (e.clientY - r.top) / r.height * cv.height / state.zoom]; };
-  cv.addEventListener('mousemove', e => { const [x, y] = lp(e); Build.UI.pointer(x, y, false); }); cv.addEventListener('mousedown', e => { const [x, y] = lp(e); if (Festival.UI.open) { Festival.pointer(x, y, true); return; } if (Social.busy()) { Social.pointer(x, y, true); return; } if (Fishing.pointer(x, y, true)) e.stopPropagation(); }); addEventListener('mouseup', () => Fishing.pointer(0, 0, false)); cv.addEventListener('click', e => { const [x, y] = lp(e); if (Fishing.busy() || Fishing.Book.open || Social.busy()) return; Build.UI.pointer(x, y, true); }); }
+  cv.addEventListener('mousemove', e => { const [x, y] = lp(e); UIKit.move(x / UI_SCALE, y / UI_SCALE); Build.UI.pointer(x, y, false); }); cv.addEventListener('mouseleave', () => { UIKit.Ptr.over = false; });
+  cv.addEventListener('mousedown', e => { if (window.Sound && Sound.start) Sound.start(); const [x, y] = lp(e); if (UIKit.pointer(x / UI_SCALE, y / UI_SCALE)) { KIT_TOOK = true; return; } KIT_TOOK = false; if (UIKit.paused() || UIKit.Map.open) return; if (Festival.UI.open) { Festival.pointer(x, y, true); return; } if (Social.busy()) { Social.pointer(x, y, true); return; } if (Fishing.pointer(x, y, true)) e.stopPropagation(); }); addEventListener('mouseup', () => Fishing.pointer(0, 0, false)); cv.addEventListener('click', e => { if (KIT_TOOK) return; const [x, y] = lp(e); if (Fishing.busy() || Fishing.Book.open || Social.busy()) return; Build.UI.pointer(x, y, true); }); }
 window.CLSX = () => CLS; window.DATA = DATA; window.tableAt = tableAt; window.Player = Player; window.Camera = Camera; window.WorldClock = WorldClock; window.WeatherState = WeatherState; window.SeasonState = SeasonState; window.Interaction = Interaction; window.Input = Input; window.SIM = { step: (axis, n) => { for (let i = 0; i < n; i++) Player.step(SIM_DT, axis); }, depthAt: (x, y) => DATA.depth[SeasonState.season === 'winter' ? 'winter' : 'spring'][y * W + x], blocked: (x, y) => Player.blocked(x, y) };
 $('event').onchange = e => applyEvent(e.target.value);
 function applyEvent(name, keep) { const ev = DATA.events[name]; EventState.current = ev || null; buildLightMap(ev ? ev.extra_lights : []); if (keep) return;
