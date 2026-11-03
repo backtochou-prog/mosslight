@@ -163,7 +163,8 @@ async function boot() {
   requestAnimationFrame(frame);
 }
 // ---------------------------------------------------------------- the UI kit's view of the world
-let FRAME_MS = 0;
+let FRAME_MS = 0, SLOW_T = 0, HALF_RATE = false, FRAMEC = 0, BASE_VIEW = [-99, -99];
+const BASE = new Uint32Array(768 * 480);
 // frame-time breakdown (smoothed ms per section), shown in Settings › Performance and read by the tests
 const FT = { s: {}, mark(k, t0) { const t = performance.now(); this.s[k] = (this.s[k] || 0) * .9 + (t - t0) * .1; return t; } }; window.FT = FT;
 const UIW = { get Gather() { return Gather; }, get Fishing() { return Fishing; }, get Sound() { return window.Sound; }, get Camera() { return Camera; }, get Player() { return Player; }, get Survival() { return Survival; }, get WorldClock() { return WorldClock; }, get SeasonState() { return SeasonState; }, get DATA() { return DATA; },
@@ -368,6 +369,7 @@ const Touch = { enabled: false, btn: { x: 0, y: 0, r: 22 },
     if (tableAt(SeasonState.season, WorldClock.hour()).darkness > .35 && window.Monsters) { const on = Monsters.Health && Monsters.Health.lantern; this.seal(g, bx - 110, by - 4, 15, 'lantern', () => Monsters.key('l'), 'lamp', { on }); this.seal(g, bx - 104, by - 50, 15, 'strike', () => Monsters.key('f'), 'strike'); } } };
 
 // ---------------------------------------------------------------- the world pixel pass (hot path: flat typed arrays, numbers only)
+const SPR = [0, 0, 0];
 const SH = { tab: new Float32Array(768), post: new Float32Array(768), lamp: new Float32Array(768), day: new Float32Array(768), nl: 0, lk: null, lc: null, fl: null };
 function shadeWorld(VX0, VY0, VX1, VY1, idx, night, depL, shNoon, shLong, shadeT, CLS, LW, LI, d32, swayA, grassA, shadowOn, longW, shadowStrength,
   nightShow, winter, lightAmount, ffMul, ambK, moon, deep, snowAcc, snR, snG, snB, wetDark, tick30, fogA, fogShift, tick2, fgR, fgG, fgB) {
@@ -477,24 +479,26 @@ function frame(now) {
   flat(tab, SH.tab); flat(postT, SH.post); flat(lampT, SH.lamp); flat(dayTab, SH.day);
   if (SH.nl < LIGHTS.length) { SH.nl = LIGHTS.length + 16; SH.lk = new Uint8Array(SH.nl); SH.lc = new Float32Array(SH.nl * 3); SH.fl = new Float32Array(SH.nl); }
   LIGHTS.forEach((L, k) => { SH.lk[k] = { fire: 1, lantern: 2, firefly: 3, glow: 4 }[L.kind] || 0; SH.lc[k * 3] = L.color[0]; SH.lc[k * 3 + 1] = L.color[1]; SH.lc[k * 3 + 2] = L.color[2]; SH.fl[k] = flick[k]; });
-  shadeWorld(VX0, VY0, VX1, VY1, idx, night, depL, shNoon, shLong, shadeT, CLS, LW, LI, d32, breeze > 0.12 ? swayA : 0, calm ? 0 : .45 + wind * .9, shadowOn ? 1 : 0, longW, shadowStrength,
+  const freshBase = !HALF_RATE || (FRAMEC++ & 1) === 0 || Math.abs(Camera.ix() - BASE_VIEW[0]) > 3 || Math.abs(Camera.iy() - BASE_VIEW[1]) > 3;          /* slow devices repaint the backdrop every other frame */
+  if (freshBase) shadeWorld(VX0, VY0, VX1, VY1, idx, night, depL, shNoon, shLong, shadeT, CLS, LW, LI, d32, breeze > 0.12 ? swayA : 0, calm ? 0 : .45 + wind * .9, shadowOn ? 1 : 0, longW, shadowStrength,
     nightShow, season === 'winter' ? 1 : 0, lightAmount, ev && ev.fireflies ? ev.fireflies : 1, ambK, moon, deep, SNOWACC, snowC[0], snowC[1], snowC[2], wetDark, (T * 30) | 0, fogA, fogShift, (T * 2) | 0, fogCol[0], fogCol[1], fogCol[2]);
   const spriteRGB = (pi, i) => { const c = tab[pi]; let r = c[0], g = c[1], b = c[2]; const lw = LW[i]; let lit = 0; if (lw > 0 && lightAmount > 0) { const L = LIGHTS[LI[i]]; if (L.kind !== 'firefly') { const w = lw * lightAmount * flick[LI[i]]; lit = w; const lc = (L.kind === 'fire' || L.kind === 'lantern') ? lampT[pi] : dayTab[pi]; r += (lc[0] * L.color[0] * 1.06 + 10 - r) * w; g += (lc[1] * L.color[1] * 1.06 + 8 - g) * w; b += (lc[2] * L.color[2] * 1.06 + 4 - b) * w; } }
-    if (ambK > 0 && !(CLS[pi] & 4)) { const un = 1 - Math.min(1, lit * 2.2); if (moon > 0) { const dc = dayTab[pi], dl = (dc[0] * .3 + dc[1] * .59 + dc[2] * .11) / 255, m = moon * un; r += (dl * 104 - r) * m; g += (dl * 124 - g) * m; b += (dl * 168 - b) * m; } const f = 1 - ambK * un * .9; r *= f; g *= f; b *= f; } return [r, g, b]; };
+    if (ambK > 0 && !(CLS[pi] & 4)) { const un = 1 - Math.min(1, lit * 2.2); if (moon > 0) { const dc = dayTab[pi], dl = (dc[0] * .3 + dc[1] * .59 + dc[2] * .11) / 255, m = moon * un; r += (dl * 104 - r) * m; g += (dl * 124 - g) * m; b += (dl * 168 - b) * m; } const f = 1 - ambK * un * .9; r *= f; g *= f; b *= f; } SPR[0] = r; SPR[1] = g; SPR[2] = b; return SPR; };          /* one shared out-array: no garbage per pixel */
   tq = FT.mark('shade', tq);
   const buildCtx = { view: [VX0, VY0, VX1, VY1], spriteRGB, lampT, ambK, d, W, H, tab, dayTab, dep: depthNow(), LW, LI, LIGHTS, lightAmount, flick, season, pyBase: Math.round(Player.y) };
-  Fishing.render.water(buildCtx, tab, Math.min(1, darkness)); Festival.render.world(buildCtx, Math.min(1, darkness)); Build.render.ground(buildCtx);
+  if (freshBase) { Fishing.render.water(buildCtx, tab, Math.min(1, darkness)); Festival.render.world(buildCtx, Math.min(1, darkness)); Build.render.ground(buildCtx); BASE.set(d32); BASE_VIEW = [Camera.ix(), Camera.iy()]; }
+  else d32.set(BASE);          /* reuse the backdrop; everything that moves is drawn fresh below */
   // ---- resource nodes: live sprites from the atlas, hidden when their conditions fail, sorted against the player by base y
   { const dep = depthNow(); const nIdx = DATA.nodeIdx; const aw = DATA.nodeAtlasW; const pyBase = Math.round(Player.y);
-    for (const n of Gather.Nodes.list) { if (!Gather.Nodes.visible(n)) continue; const sp = Gather.nodeSprite(n); if (!sp) continue; const x0 = n.def.x - sp.ox, y0 = n.def.y - sp.oy; const glow = ['glowcap', 'ghostcap', 'nightlily', 'moth', 'starshard', 'nightglass', 'ember_vent', 'spore_patch'].includes(n.def.kind) && n.state === 'full';
+    for (const n of Gather.Nodes.list) { if (!Gather.Nodes.visible(n)) continue; const sp = Gather.nodeSprite(n); if (!sp) continue; const x0 = n.def.x - sp.ox, y0 = n.def.y - sp.oy; if (x0 > VX1 || y0 > VY1 || x0 + sp.w < VX0 || y0 + sp.h < VY0) continue; const glow = ['glowcap', 'ghostcap', 'nightlily', 'moth', 'starshard', 'nightglass', 'ember_vent', 'spore_patch'].includes(n.def.kind) && n.state === 'full';
       for (let yy = 0; yy < sp.h; yy++) for (let xx = 0; xx < sp.w; xx++) { const pi = nIdx[(sp.y + yy) * aw + sp.x + xx]; if (!pi) continue; const x = x0 + xx, y = y0 + yy; if (x < 0 || y < 0 || x >= W || y >= H) continue; const i = y * W + x; if (dep[i] > n.def.y || (pyBase < n.def.y && false)) continue;
         let [r, g, b] = spriteRGB(pi, i); if (glow && darkness > 0.4) { const k = 0.35 + 0.15 * Math.sin(T * 2 + n.def.x); r += (200 - r) * k * 0.3; g += (255 - g) * k * 0.4; b += (230 - b) * k * 0.4; }
         const o = i * 4; d[o] = r; d[o + 1] = g; d[o + 2] = b; } } }
   { // the fire is alive: flame pixels step through their own ramp, so it flickers in the palette at any hour
     if (!window.FIREPX) { const fam = DATA.entries.entries; const rk = []; fam.forEach((e, i) => { if (e.family === 'fire') rk[e.rank] = i; }); window.FIRERK = rk; const pos = {}; rk.forEach((v, r) => pos[v] = r); window.FIREPX = []; const sp = DATA.idx.spring; for (let i = 0; i < W * H; i++) if (pos[sp[i]] !== undefined) FIREPX.push([i, pos[sp[i]], i % W, (i / W) | 0]); }
-    for (const [i, rk, x, y] of FIREPX) { if (!(CLS[idx[i]] !== undefined)) continue; const w = Math.sin(T * 13 + y * 1.1 + x * .6) + Math.sin(T * 7.1 - y * .8 + x * 1.7); const nr = Math.max(0, Math.min(FIRERK.length - 1, rk + Math.round(w))); const c = tab[FIRERK[nr]], o = i * 4; if (season === 'winter' && idx[i] !== DATA.idx.spring[i]) continue; d[o] = c[0]; d[o + 1] = c[1]; d[o + 2] = c[2]; } }
+    for (const [i, rk, x, y] of FIREPX) { if (x < VX0 || x >= VX1 || y < VY0 || y >= VY1) continue; if (!(CLS[idx[i]] !== undefined)) continue; const w = Math.sin(T * 13 + y * 1.1 + x * .6) + Math.sin(T * 7.1 - y * .8 + x * 1.7); const nr = Math.max(0, Math.min(FIRERK.length - 1, rk + Math.round(w))); const c = tab[FIRERK[nr]], o = i * 4; if (season === 'winter' && idx[i] !== DATA.idx.spring[i]) continue; d[o] = c[0]; d[o + 1] = c[1]; d[o + 2] = c[2]; } }
   if (!calm) { if (!CANVASPX) { const rk = []; DATA.entries.entries.forEach((e, k) => { if (e.family === 'canvas') rk[e.rank] = k; }); CANVRK = rk.filter(v => v !== undefined); const pos = {}; CANVRK.forEach((v, r) => pos[v] = r); CANVASPX = []; for (let k = 0; k < W * H; k++) { const v = DATA.idx.spring[k]; if (pos[v] !== undefined) CANVASPX.push([k, pos[v], k % W, (k / W) | 0]); } }
-    const amp = .35 + wind * 1.1; for (const [k, rk, x, y] of CANVASPX) { if (idx[k] !== DATA.idx.spring[k] && !ev) continue; const w = Math.sin(T * 1.1 - x * .16 + y * .05) * amp; const sh = Math.round(w); if (!sh) continue; const nr = Math.max(0, Math.min(CANVRK.length - 1, rk + sh)); const c = spriteRGB(CANVRK[nr], k), o = k * 4; d[o] = c[0]; d[o + 1] = c[1]; d[o + 2] = c[2]; } }
+    const amp = .35 + wind * 1.1; for (const [k, rk, x, y] of CANVASPX) { if (x < VX0 || x >= VX1 || y < VY0 || y >= VY1) continue; if (idx[k] !== DATA.idx.spring[k] && !ev) continue; const w = Math.sin(T * 1.1 - x * .16 + y * .05) * amp; const sh = Math.round(w); if (!sh) continue; const nr = Math.max(0, Math.min(CANVRK.length - 1, rk + sh)); const c = spriteRGB(CANVRK[nr], k), o = k * 4; d[o] = c[0]; d[o + 1] = c[1]; d[o + 2] = c[2]; } }
   buildCtx.idx = idx; Fishing.render.sign(buildCtx, tab); Monsters.render.lantern(buildCtx); Build.render.items(buildCtx, false); Monsters.render.items(buildCtx, false); Social.render.items(buildCtx, false);
   // ---- player: y-sorted against the baked scene through the depth map, lit by the same table
   { const dep = depthNow(); const pm = DATA.player, pidx = DATA.pidx; const fw = pm.frame_w, fh = pm.frame_h;
@@ -511,7 +515,7 @@ function frame(now) {
     for (const n of Gather.Nodes.list) { if (n.def.y <= pyBase || !Gather.Nodes.visible(n)) continue; const sp = Gather.nodeSprite(n); if (!sp) continue; if (Math.abs(n.def.x - Player.x) > 24 || n.def.y - pyBase > 30) continue; const x0 = n.def.x - sp.ox, y0 = n.def.y - sp.oy;
       for (let yy = 0; yy < sp.h; yy++) for (let xx = 0; xx < sp.w; xx++) { const pi = nIdx[(sp.y + yy) * aw + sp.x + xx]; if (!pi) continue; const x = x0 + xx, y = y0 + yy; if (x < 0 || y < 0 || x >= W || y >= H) continue; const i = y * W + x; const c = spriteRGB(pi, i); const o = i * 4; d[o] = c[0]; d[o + 1] = c[1]; d[o + 2] = c[2]; } } }
   Build.render.items(buildCtx, true); Monsters.render.items(buildCtx, true); Social.render.items(buildCtx, true); Build.render.roofs(buildCtx); Build.render.ghost(buildCtx);
-  tq = FT.mark('sprites', tq); og.putImageData(img, 0, 0);
+  tq = FT.mark('sprites', tq); og.putImageData(img, 0, 0, VX0, VY0, VX1 - VX0, VY1 - VY0);          /* only the visible window goes to the GPU */
   // particles drawn in palette-ish colours, 1-2 px, no blur
   og.fillStyle = 'rgba(190,205,215,0.55)'; for (const p of P.rain) { og.fillRect(p.x | 0, p.y | 0, 1, p.near ? 5 : 3); if (p.near) og.fillRect((p.x | 0) + 1, (p.y | 0) + 2, 1, 2); }
   og.fillStyle = 'rgba(200,215,225,0.5)'; for (const p of P.splash) { const s = 1 + (p.t * 3 | 0); og.fillRect((p.x | 0) - s, p.y | 0, 1, 1); og.fillRect((p.x | 0) + s, p.y | 0, 1, 1); }
@@ -523,8 +527,8 @@ function frame(now) {
   Festival.render.fx(og, Math.min(1, darkness));
   // present through the camera (integer source offset keeps pixels crisp), then HUD at native resolution
   tq = FT.mark('particles', tq); const z = state.zoom; ctx.imageSmoothingEnabled = false;
-  if (state.viewport) { const vwc = Math.min(W, Camera.vw), vhc = Math.min(H, Camera.vh); state.ox = Camera.ix(); state.oy = Camera.iy(); cv.width = vwc * z; cv.height = vhc * z; ctx.imageSmoothingEnabled = false; ctx.drawImage(off, state.ox, state.oy, vwc, vhc, 0, 0, vwc * z, vhc * z); }
-  else { cv.width = W * z; cv.height = H * z; ctx.imageSmoothingEnabled = false; ctx.drawImage(off, 0, 0, W * z, H * z); }
+  if (state.viewport) { const vwc = Math.min(W, Camera.vw), vhc = Math.min(H, Camera.vh); state.ox = Camera.ix(); state.oy = Camera.iy(); if (cv.width !== vwc * z || cv.height !== vhc * z) { cv.width = vwc * z; cv.height = vhc * z; } ctx.imageSmoothingEnabled = false; ctx.drawImage(off, state.ox, state.oy, vwc, vhc, 0, 0, vwc * z, vhc * z); }
+  else { if (cv.width !== W * z || cv.height !== H * z) { cv.width = W * z; cv.height = H * z; } ctx.imageSmoothingEnabled = false; ctx.drawImage(off, 0, 0, W * z, H * z); }
   ctx.save(); ctx.scale(z, z); ctx.imageSmoothingEnabled = false; const vw = state.viewport ? Math.min(W, Camera.vw) : W, vh = state.viewport ? Math.min(H, Camera.vh) : H;
   if (Fishing.render.inVista()) { const pm = DATA.player, pidx = DATA.pidx, fw = pm.frame_w, fh = pm.frame_h; Fishing.render.vista(ctx, vw, vh, tab, tableAt(season, 1).table, (g, sx, sy, tt) => { const row = pm.facings.indexOf('up'); for (let yy = 0; yy < fh; yy++) for (let xx = 0; xx < fw; xx++) { const pi = pidx[(row * fh + yy) * (fw * pm.frames.length) + xx]; if (!pi) continue; const c = tt[pi]; g.fillStyle = `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`; g.fillRect(sx - pm.origin[0] + xx, sy - pm.origin[1] + yy, 1, 1); } g.fillStyle = `rgb(${tt[60][0] | 0},${tt[60][1] | 0},${tt[60][2] | 0})`; g.fillStyle = 'rgba(70,46,24,.95)'; for (let k = 0; k < 22; k++) g.fillRect(sx + 4 + k * .3, sy - 8 - k * .8, 1, 1); }); }
   for (const M of [Gather.UI, Build.UI, Monsters.render, Fishing.render, Social.render, Festival.render]) if (M.drawWorld) M.drawWorld(ctx, vw, vh, tab);
@@ -535,6 +539,7 @@ function frame(now) {
   if (SAVED_T > 0 && !UIKit.anyBook()) { ctx.globalAlpha = Math.min(1, SAVED_T); UIKit.tag(ctx, 6 + usf, uh - 22 - usf, 40, 14); UIKit.glyph(ctx, 'book', 10 + usf, uh - 19 - usf, UIKit.C.ink2); UIKit.text(ctx, 'saved', 18 + usf, uh - 12 - usf, { color: UIKit.C.ink2 }); ctx.globalAlpha = 1; }          // a quiet sign that progress is safe
   UIKit.drawRibbon(ctx, uw, uh); UIKit.drawMap(ctx, uw, uh, uiTab); UIKit.drawNotices(ctx, uw, uh, usf, uiTab); UIKit.drawMenu(ctx, uw, uh); if (portrait()) drawPortraitCard(ctx, uw, uh); ctx.restore();
   FT.mark('present_ui', tq); FRAME_MS += (performance.now() - tf0 - FRAME_MS) * .05;
+  if (!LAB && state.zoom > 2 && FRAME_MS > 24) { SLOW_T += dt; if (SLOW_T > 3) { state.zoom = 2; HALF_RATE = true; SLOW_T = 0; } } else SLOW_T = 0;          /* a slow device drops to the 2x canvas on its own */
   document.getElementById('clock').textContent = `${WorldClock.label()} · day ${Survival.Clock.day} · ${season} · ${Survival.Clock.phase()} · ${WeatherState.kind} ${(WeatherState.intensity * 100) | 0}%`;
   if (!WorldClock.paused) document.getElementById('time').value = WorldClock.minutes | 0;
   requestAnimationFrame(frame);
@@ -550,6 +555,7 @@ $('intensity').oninput = e => WeatherState.set(WeatherState.kind, e.target.value
 $('zoom').onchange = e => state.zoom = +e.target.value; $('viewport').onchange = e => state.viewport = e.target.checked;
 $('vol').oninput = e => { if (window.Sound) { Sound.setVolume('master', e.target.value / 100); return; } Monsters.Audio.vol.master = e.target.value / 100; if (Monsters.Audio.master) Monsters.Audio.master.gain.value = Monsters.Audio.vol.master; }; $('touch').onchange = e => Touch.enabled = e.target.checked; $('devtoggle').onchange = e => $('dev').style.display = e.target.checked ? '' : 'none'; $('aspect').onchange = e => { const [w, h] = e.target.value.split('x').map(Number); Camera.vw = w; Camera.vh = h; }; $('safe').oninput = e => Camera.safe = +e.target.value; $('camsmooth').oninput = e => Camera.smooth = +e.target.value;
 if ('ontouchstart' in window) { Touch.enabled = true; $('touch').checked = true; }
+if (!LAB && Touch.enabled) { state.zoom = 2; HALF_RATE = true; }          /* phones: a 2x backing canvas, scaled up crisply by CSS; a third of the pixels to fill */
 Touch.attach(cv);
 // on a phone the game is the page: the canvas fills the screen height and the widest matching view is used
 function fitTouch(force) { if (!('ontouchstart' in window) && !force && LAB) return; const land = innerWidth >= innerHeight, a = land ? innerWidth / innerHeight : innerHeight / innerWidth, sel = $('aspect'); const pick = UIKit.S.aspect && UIKit.S.aspect !== 'auto' ? UIKit.S.aspect : null; const want = pick || (a > 1.95 ? '780x360' : a > 1.7 ? '640x360' : '480x360'); if (sel.value !== want) { sel.value = want; if (sel.onchange) sel.onchange({ target: sel }); } const [vw, vh] = want.split('x').map(Number);
