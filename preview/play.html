@@ -297,17 +297,19 @@ const Player = {
     if (this.vy) { if (!mv(0, this.vy * dt)) { if (!(this.vx) && !mv(1, this.vy * dt)) mv(-1, this.vy * dt); if (this.blocked(this.x, this.y + Math.sign(this.vy))) this.vy = 0; } }
     this.moving = !!(ix || iy);
     if (this.moving) { if (Math.abs(ix) >= Math.abs(iy) * 0.9 && ix) { this.facing = 'side'; this.flip = ix < 0; } else this.facing = iy < 0 ? 'up' : 'down'; }
-    this.animT += dt * (this.moving ? (this.running ? 12 : c.walkFps) : c.idleFps);
+    const pm = DATA.player; this.animT += dt * (this.moving ? (this.running ? (pm.run_fps || 12) : (pm.walk_fps || c.walkFps)) : (pm.idle_fps || c.idleFps));
   },
-  frame() { const a = Survival.Activities.current || (window.Fishing && Fishing.active()); if (a && a.anim) return Math.floor(a.t * 6) % 4; const n = this.moving ? 2 + (Math.floor(this.animT) % 4) : (Math.floor(this.animT) % 2); return n; },
+  // sheet columns come from player.json: v3 has 4 breathing idles and 8-frame walk/run cycles
+  cols() { const pm = DATA.player; return { idle: pm.idle_cols || [0, 1], walk: pm.walk_cols || [2, 3, 4, 5] }; },
+  frame() { const pm = DATA.player, a = Survival.Activities.current || (window.Fishing && Fishing.active()); if (a && a.anim) return Math.floor(a.t * (pm.action_fps || 6)) % (pm.action_frames || 4); const k = this.cols(), L = this.moving ? k.walk : k.idle; return L[Math.floor(this.animT) % L.length]; },
   // which row and column of the sheet to draw: sleeping, flinching, working, running, blinking, or plain walk/idle
   pose(T) { const pm = DATA.player, F = pm.facings; const H = window.Monsters && Monsters.Health; const act = Survival.Activities.current || (window.Fishing && Fishing.active());
-    if (Survival.Sleep.sleeping && F.includes('sleep')) return [F.indexOf('sleep'), Math.floor(T * .6) % 2];
-    const fcol = { down: 0, side: 1, up: 2 }[this.facing];
+    if (Survival.Sleep.sleeping && F.includes('sleep')) return [F.indexOf('sleep'), Math.floor(T * ((pm.sleep && pm.sleep.fps) || .6)) % 2];
+    const fcol = ((pm.blink && pm.blink.cols) || { down: 0, side: 1, up: 2 })[this.facing];
     if (H && H.inv > 0 && H.cur < H.max && F.includes('hurt') && (H.inv % .5) > .25) return [F.indexOf('hurt'), fcol];
     if (act && act.anim) return [F.indexOf(act.anim), this.frame()];
-    if (this.moving && this.running && F.includes('run_' + this.facing)) return [F.indexOf('run_' + this.facing), 2 + (Math.floor(this.animT) % 4)];
-    if (!this.moving && F.includes('blink') && !(window.UIKit && UIKit.S.reduceMotion) && (T % 3.7) < .13) { const lifted = Math.floor(this.animT) % 2 === 1; return [F.indexOf('blink'), (lifted ? 3 : 0) + fcol]; }
+    if (this.moving && this.running && F.includes('run_' + this.facing)) { const L = this.cols().walk; return [F.indexOf('run_' + this.facing), L[Math.floor(this.animT) % L.length]]; }
+    if (!this.moving && F.includes('blink') && !(window.UIKit && UIKit.S.reduceMotion) && (T % 3.7) < .13) { const L = this.cols().idle, lifted = L.indexOf(this.frame()) >= L.length / 2; return [F.indexOf('blink'), (lifted ? ((pm.blink && pm.blink.lifted_offset) || 3) : 0) + fcol]; }
     return [F.indexOf(this.facing), this.frame()]; },
   setPos(x, y) { this.x = x; this.y = y; this.vx = this.vy = 0; },
 };
@@ -411,7 +413,7 @@ const portrait = () => Touch.enabled && innerHeight > innerWidth * 1.05;
 function drawPortraitCard(g, vw, vh) { const K = UIKit; g.fillStyle = 'rgba(16,10,4,.82)'; g.fillRect(0, 0, vw, vh); const w = Math.min(vw - 16, 220), h = 92, x = Math.round(vw / 2 - w / 2), y = Math.round(vh / 2 - h / 2); K.paper(g, x, y, w, h, { title: 'Turn sideways' });
   K.wrap(g, 'The clearing is wide. Hold your phone on its side to play; the game waits for you.', x + 14, y + 42, w - 28, 10); const t = K.now() % 3, a = Math.min(1, Math.max(0, t - .6)) * Math.PI / 2; g.save(); g.translate(x + w - 30, y + 20); g.rotate(-(K.S.reduceMotion ? 1 : a / (Math.PI / 2))); g.strokeStyle = K.C.ink; g.strokeRect(-4.5, -7.5, 9, 15); g.restore(); }
 // ---------------------------------------------------------------- sound: the engine senses the world; the game tells it what happened
-function footsteps() { if (!Player.moving || Survival.Sleep.sleeping) { STEP_COL = -1; return; } const c = 2 + (Math.floor(Player.animT) % 4); if (c === STEP_COL) return; STEP_COL = c; if (c !== 3 && c !== 5) return;
+function footsteps() { if (!Player.moving || Survival.Sleep.sleeping) { STEP_COL = -1; return; } const c = Player.frame(); if (c === STEP_COL) return; STEP_COL = c; if (!(DATA.player.contacts || [3, 5]).includes(c)) return;
   const x = Math.round(Player.x), y = Math.round(Player.y); const e = DATA.entries.entries[DATA.idx[SeasonState.season][y * 768 + x]] || {}; const f = (e.family || '').replace('~', '');
   const kind = (SeasonState.season === 'winter' || SNOWACC > .5 || f === 'snow' || f === 'ice') ? 'footstep_snow' : (f === 'wood' || f === 'wood_grey') ? 'footstep_wood' : ['dirt', 'earth', 'worn', 'mud', 'sand', 'pebble', 'stone', 'rubble'].includes(f) ? 'footstep_dirt' : 'footstep_grass';
   Sound.play(kind, { x, y, gain: Player.running ? 1 : .7 }); }
@@ -499,7 +501,8 @@ function frame(now) {
     const [row, colf] = Player.pose(T); const px0 = Math.round(Player.x) - pm.origin[0], py0 = Math.round(Player.y) - pm.origin[1];
     const pyBase = Math.round(Player.y); const shade = DATA.play.shade;
     // soft contact shadow on the ground only
-    for (let yy = -1; yy <= 1; yy++) for (let xx = -5; xx <= 5; xx++) { if ((xx * xx) / 25 + (yy * yy) / 1.5 > 1) continue; const sx = Math.round(Player.x) + xx, sy = pyBase + yy; if (sx < 0 || sy < 0 || sx >= W || sy >= H) continue; const i = sy * W + sx; if (dep[i] !== 0 || (CLS[idx[i]] & 2)) continue; const c = tab[shade[idx[i]]]; const o = i * 4; d[o] = c[0]; d[o + 1] = c[1]; d[o + 2] = c[2]; }
+    const [srx, sry] = pm.shadow || [5, 1.2];          /* the soft oval under the feet, sized by the sheet */
+    for (let yy = -2; yy <= 2; yy++) for (let xx = -srx; xx <= srx; xx++) { if ((xx * xx) / (srx * srx) + (yy * yy) / (sry * sry) > 1) continue; const sx = Math.round(Player.x) + xx, sy = pyBase + yy; if (sx < 0 || sy < 0 || sx >= W || sy >= H) continue; const i = sy * W + sx; if (dep[i] !== 0 || (CLS[idx[i]] & 2)) continue; const c = tab[shade[idx[i]]]; const o = i * 4; d[o] = c[0]; d[o + 1] = c[1]; d[o + 2] = c[2]; }
     for (let yy = 0; yy < fh; yy++) for (let xx = 0; xx < fw; xx++) { const sxx = Player.flip ? (fw - 1 - xx) : xx; const pi = pidx[(row * fh + yy) * (fw * pm.frames.length) + colf * fw + sxx]; if (!pi) continue;
       const x = px0 + xx, y = py0 + yy; if (x < 0 || y < 0 || x >= W || y >= H) continue; const i = y * W + x; if (dep[i] > pyBase) continue;   // something whose base is lower on screen is in front
       const [r, g, b] = spriteRGB(pi, i);

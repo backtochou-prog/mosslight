@@ -9,7 +9,7 @@ from pixelart.objects import build_library, build_library_extended
 from pixelart.scene_clearing import build
 from pixelart.palette import PAL
 from pixelart.canvas import Canvas
-from pixelart import player
+from pixelart import field_camper as player     # v4 camper (hand-drawn, slim, felt hat); v3 in camper.py, v2 in player.py
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 out = os.path.join(ROOT, 'assets/play'); os.makedirs(out, exist_ok=True)

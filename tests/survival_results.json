@@ -72,7 +72,7 @@
   {
    "name": "player can still walk at zero energy",
    "ok": true,
-   "detail": "moved to x=482"
+   "detail": "moved to x=483"
   },
   {
    "name": "heavy allowed when exhausted (config allow_heavy_when_exhausted) with reduced efficiency",
@@ -82,17 +82,17 @@
   {
    "name": "night fishing allowed with energy and logged after dark",
    "ok": true,
-   "detail": "afterDark 140.46640000000002 min"
+   "detail": "afterDark 140.39959999999996 min"
   },
   {
    "name": "sleep at 23:00 day 3 → day 4 at dawn, energy full",
    "ok": true,
-   "detail": "day 4 6.003326666666666 h energy 100"
+   "detail": "day 4 6.002226666666667 h energy 100"
   },
   {
    "name": "journal summary built only from recorded fields",
    "ok": true,
-   "detail": "Day 3, spring. A quiet day of walking and looking. Back late, by lantern light. Today: clear skies all day."
+   "detail": "Day 3, spring. A quiet day of walking and looking. Back late, by lantern light. Today: wind in the early morning, then showers in the afternoon."
   },
   {
    "name": "second sleep within cooldown is ignored",
@@ -101,7 +101,7 @@
   {
    "name": "sleep at 01:30 day 5 → dawn of day 5 (same calendar day), energy full (before 02:00)",
    "ok": true,
-   "detail": "day 5 6.0022199999999994 h energy 100"
+   "detail": "day 5 6.006666666666666 h energy 100"
   },
   {
    "name": "sleep at 03:30 → short night, energy restored to 80 not 100",
