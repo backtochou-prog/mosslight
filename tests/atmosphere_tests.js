@@ -6,7 +6,7 @@ function check(name, ok, detail) { results.push({ name, ok: !!ok, detail }); con
 (async () => {
   const b = await chromium.launch(); const ctxo = await b.newContext({ viewport: { width: 2000, height: 1200 } }); const p = await ctxo.newPage();
   const errs = []; p.on('pageerror', e => errs.push(e.message));
-  await p.goto(`http://127.0.0.1:${PORT}/preview/play.html`); await p.evaluate(() => { localStorage.removeItem('mosslight.settings'); });
+  await p.goto(`http://127.0.0.1:${PORT}/preview/play.html?lab=1`); await p.evaluate(() => { localStorage.removeItem('mosslight.settings'); });
   await p.reload(); await p.waitForFunction(() => window.UIKit && UIKit.Map && window.Gather && Gather.Nodes && Gather.Nodes.list.length && window.OFFC, { timeout: 60000 });
   const ev = (f, a) => p.evaluate(f, a); const wait = ms => p.waitForTimeout(ms);
   fs.mkdirSync('/root/mosslight/renders/p15', { recursive: true });

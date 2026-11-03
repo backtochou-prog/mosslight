@@ -4,6 +4,14 @@ A 2D cozy-survival game in a reclaimed-by-nature world. This repository holds
 the **first milestone: the art direction and one forest clearing** rendered in
 two atmospheres. There is no gameplay here on purpose (see the brief).
 
+## Play
+
+**https://stardewapocalipse.vercel.app** opens the game: a title page, then the clearing, filling the window (keyboard on desktop, touch on phones held sideways). Progress saves itself; Pause › New game starts over.
+
+- `preview/play.html?dev=1` (or `?lab=1`) shows the lab controls (time, season, weather, presets, dev tools). The tests use these.
+- `preview/lab.html` lists the older viewers and still renders.
+- After changing which assets the game loads, regenerate `preview/manifest.json` with `node tools/build_manifest.js` (the integration suite fails if it is out of date).
+
 ## What is here
 
 ```

@@ -16,6 +16,12 @@
   canvas { image-rendering: pixelated; image-rendering: crisp-edges; background: #000; }
   .hint { opacity: .6; } #clock { min-width: 15ch; color: #e6ead9; }
   .presets button { padding: 2px 6px; font-size: 12px; }
+  /* player mode (the default): just the game, filling the window. ?dev=1 or ?lab=1 shows the lab controls above */
+  body.player { background: #000; } body.player header { display: none; } body.player main { padding: 0; overflow: hidden; }
+  #turn { position: fixed; inset: 0; display: grid; place-items: center; background: #120d08; z-index: 90; } #turn div { background: #ecdfbd; color: #3a2a1a; border: 3px solid #5a3820; padding: 20px 24px; margin: 24px; font: 18px/1.5 Georgia, serif; text-align: center; } #turn b { display: block; font-size: 24px; margin-bottom: 8px; }
+  #loading { position: fixed; inset: 0; display: grid; place-items: center; background: #120d08; z-index: 100; transition: opacity .4s; }
+  #loading div { background: #ecdfbd; color: #3a2a1a; border: 3px solid #5a3820; box-shadow: 0 4px 0 rgba(0,0,0,.4); padding: 18px 26px; font: 15px/1.5 Georgia, serif; text-align: center; min-width: 220px; }
+  #loading b { display: block; font-size: 22px; letter-spacing: .06em; margin-bottom: 6px; } #loading i { display: block; height: 6px; background: #c9b585; margin-top: 10px; } #loading i span { display: block; height: 100%; width: 0; background: #4c6a28; transition: width .2s; }
 </style>
 </head>
 <body>
@@ -42,6 +48,9 @@
   <span class="hint">WASD move · E interact · I pack · J field guide · C craft · B build · N fish book · H neighbours · V calendar · F strike · Shift sneak · L lantern · K creatures · 1-4 tools · space pause · [ ] time</span>
 </header>
 <main><canvas id="c"></canvas></main>
+<div id="turn" style="display:none"><div><b>Turn sideways</b>The clearing is wide. Hold your phone on its side to play; the game waits for you.</div></div>
+<div id="loading"><div><b>MOSSlight</b><span id="loadmsg">Opening the journal…</span><i><span id="loadbar"></span></i></div></div>
+<script>const LAB = /[?&](dev|lab)=1/.test(location.search); if (!LAB) document.body.classList.add('player');</script>
 <script src="ui.js"></script>
 <script src="audio.js" onerror="window.Sound=null"></script>
 <script src="survival.js"></script>
@@ -77,10 +86,15 @@ const EventState = { current: null };
 // ---------------------------------------------------------------- data
 const DATA = { keyframes: {}, entries: null, weather: null, scene: null, idx: {}, night: null, events: {}, play: null, depth: {}, col: null, player: null, pidx: null };
 function loadRGB(p) { return new Promise(res => { const im = new Image(); im.onload = () => { const cv = document.createElement('canvas'); cv.width = im.width; cv.height = im.height; const g = cv.getContext('2d'); g.drawImage(im, 0, 0); res({ w: im.width, h: im.height, d: g.getImageData(0, 0, im.width, im.height).data }); }; im.src = p; }); }
-async function loadJSON(p) { return (await fetch(p)).json(); }
+const LOADP = { done: 0, total: 1 }; const loadTick = () => { LOADP.done++; const b = document.getElementById('loadbar'); if (b) b.style.width = Math.min(100, LOADP.done / LOADP.total * 100) + '%'; };
+async function loadJSON(p) { const r = await (await fetch(p)).json(); loadTick(); return r; }
+// fetch every asset in parallel first (one wait for latency, not ~60 in a row); the loaders below then read from the HTTP cache
+async function warmAssets() { if (location.search.includes('nomanifest=1')) return; try { const m = await (await fetch('manifest.json')).json(); LOADP.total = m.files.length; m.files.forEach(f => fetch(f).catch(() => {})); } catch (_) {} }
 function loadIdx(p) { return new Promise(res => { const im = new Image(); im.onload = () => { const cv = document.createElement('canvas'); cv.width = im.width; cv.height = im.height; const g = cv.getContext('2d'); g.drawImage(im, 0, 0); const d = g.getImageData(0, 0, im.width, im.height).data; const out = new Uint8Array(im.width * im.height); for (let i = 0; i < out.length; i++) out[i] = d[i * 4]; res(out); }; im.src = p; }); }
+{ const a = loadRGB, b = loadIdx; loadRGB = p => a(p).then(v => (loadTick(), v)); loadIdx = p => b(p).then(v => (loadTick(), v)); }
 const A = '../assets/atmosphere/';
 async function boot() {
+  await warmAssets();
   try { await fetch(A + 'scene.json'); } catch (e) { document.getElementById('clock').textContent = 'needs a local server: run  python3 preview/serve.py  in the project folder, then open http://localhost:8765/preview/world.html'; return; }
   for (const s of ['spring', 'summer', 'autumn', 'winter']) DATA.keyframes[s] = await loadJSON(A + s + '_keyframes.json');
   DATA.entries = await loadJSON(A + 'palette_entries.json'); DATA.weather = await loadJSON(A + 'weather_grades.json'); DATA.scene = await loadJSON(A + 'scene.json');
@@ -144,6 +158,8 @@ async function boot() {
   // carry on where you left off (add ?new=1 to start fresh); a damaged save falls back to the backup copy
   if (!location.search.includes('new=1') && Survival.SaveState.exists()) { const ok = Survival.SaveState.load(); const SS = Survival.SaveState;
     if (ok) UIKit.toast({ kicker: 'Welcome back', title: `Day ${Survival.Clock.day}, ${SeasonState.season}`, sub: SS.lastSource !== SS.KEY ? 'Restored from the backup copy' : (SS.problems.length ? 'Some parts could not be restored' : 'Your journal is as you left it'), glyph: 'book' }); }
+  if (!LAB) { UIKit.Menu.open = 'title'; fitTouch(true); }          /* players start at the title page; the first tap also wakes the sound */
+  window.BOOTED = true; const ld = document.getElementById('loading'); if (ld) { ld.style.opacity = 0; setTimeout(() => ld.remove(), 450); }
   requestAnimationFrame(frame);
 }
 // ---------------------------------------------------------------- the UI kit's view of the world
@@ -164,6 +180,7 @@ const UIW = { get Gather() { return Gather; }, get Fishing() { return Fishing; }
     try { for (const e of Build.S.list) if (['campfire', 'workbench', 'bedroll', 'chest', 'crate'].some(k => e.type.includes(k))) pins.push({ x: (e.cx + .5) * 16, y: (e.cy + .5) * 16, color: '#9a6a14' }); } catch (_) {}
     try { if (Build.homeBonus().watch && tableAt(SeasonState.season, WorldClock.hour()).darkness > .35) for (const m of Monsters.list) if (!m.dawn && !m.distant) pins.push({ x: m.x, y: m.y, label: Monsters.cfg().creatures[m.type].name, color: '#9a2e16', always: true }); } catch (_) {}
     return pins; },
+  hasSave: () => { try { return Survival.SaveState.exists(); } catch (_) { return false; } }, dayLine: () => `Day ${Survival.Clock.day}, ${SeasonState.season}`,
   homeLine: () => { try { return `home ${Build.homeStage()}/5`; } catch (_) { return ''; } },
   farWaters: () => { try { return (Fishing.S.visited || []).slice(); } catch (_) { return []; } } };
 // per-index class flags: 1 canopy (sways), 2 water (ripples/reflection), 4 emissive, 8 sky
@@ -252,6 +269,7 @@ const Input = {
   consumeAction() { const p = this.actionPressed && !this._actionLatch; this._actionLatch = this.actionPressed; return p; },
 };
 addEventListener('keydown', e => { const k = e.key.toLowerCase(); if (window.Sound && Sound.start) Sound.start();
+  if (UIKit.Menu.open === 'title') { if (['enter', 'e', ' ', 'escape'].includes(k)) { UIKit.closeMenu(); if (window.Sound) Sound.ui('confirm'); } e.preventDefault(); return; }
   if (UIKit.Menu.open) { if (k === 'escape') { UIKit.Menu.open = UIKit.Menu.open === 'settings' ? 'pause' : null; if (window.Sound) Sound.ui('close'); } e.preventDefault(); return; }
   if (UIKit.Map.open) { if (k === 'escape' || k === 'm') { UIKit.Map.open = false; if (window.Sound) Sound.ui('close'); } e.preventDefault(); return; }
   if (k === 'tab' && UIKit.anyBook()) { const ids = ['pack', 'guide', 'craft', 'build', 'fish', 'creatures', 'folk', 'calendar']; const cur = UIKit.anyBook().id; UIKit.openBook(ids[(ids.indexOf(cur) + (e.shiftKey ? ids.length - 1 : 1)) % ids.length]); e.preventDefault(); return; }
@@ -419,7 +437,7 @@ function simulate(dt) { simAcc += dt; let n = 0; const ax = (Survival.Sleep.slee
 function frame(now) {
   const dt = Math.min(0.1, (now - last) / 1000); last = now; T += dt; const tf0 = performance.now();
   UIKit.tick(dt); const held = UIKit.paused() || UIKit.Map.open || portrait(); if (!held && window.MOSS_AUTOSAVE) { AUTO_T += dt; if (AUTO_T > 180) { AUTO_T = 0; MOSS_AUTOSAVE('timer'); } } if (SAVED_T > 0) SAVED_T -= dt;
-  if (!held) { WorldClock.tick(dt); WeatherState.tick(dt); tickParticles(dt, T); simulate(dt); } UIKit.explore(Player.x, Player.y); if (window.Sound) { Sound.tick(dt); footsteps(); }
+  if (!held) { WorldClock.tick(dt); WeatherState.tick(dt); tickParticles(dt, T); simulate(dt); } else Camera.update(dt); UIKit.explore(Player.x, Player.y); if (window.Sound) { Sound.tick(dt); footsteps(); }
   FT.mark('sim', tf0); let tq = performance.now();
   const season = SeasonState.season, hour = WorldClock.hour(), ev = EventState.current;
   const { table, darkness } = tableAt(season, hour);
@@ -531,10 +549,11 @@ $('vol').oninput = e => { if (window.Sound) { Sound.setVolume('master', e.target
 if ('ontouchstart' in window) { Touch.enabled = true; $('touch').checked = true; }
 Touch.attach(cv);
 // on a phone the game is the page: the canvas fills the screen height and the widest matching view is used
-function fitTouch(force) { if (!('ontouchstart' in window) && !force) return; const land = innerWidth >= innerHeight, a = land ? innerWidth / innerHeight : innerHeight / innerWidth, sel = $('aspect'); const pick = UIKit.S.aspect && UIKit.S.aspect !== 'auto' ? UIKit.S.aspect : null; const want = pick || (a > 1.95 ? '780x360' : a > 1.7 ? '640x360' : '480x360'); if (sel.value !== want) { sel.value = want; if (sel.onchange) sel.onchange({ target: sel }); } const [vw, vh] = want.split('x').map(Number);
+function fitTouch(force) { if (!('ontouchstart' in window) && !force && LAB) return; const land = innerWidth >= innerHeight, a = land ? innerWidth / innerHeight : innerHeight / innerWidth, sel = $('aspect'); const pick = UIKit.S.aspect && UIKit.S.aspect !== 'auto' ? UIKit.S.aspect : null; const want = pick || (a > 1.95 ? '780x360' : a > 1.7 ? '640x360' : '480x360'); if (sel.value !== want) { sel.value = want; if (sel.onchange) sel.onchange({ target: sel }); } const [vw, vh] = want.split('x').map(Number);
   // fit inside the screen on both axes, letterboxed; never crop the view
+  const turn = document.getElementById('turn'); if (turn) turn.style.display = !LAB && portrait() ? 'grid' : 'none';          /* a readable full-screen page, not a tiny canvas card */
   const k = Math.min(innerWidth / vw, innerHeight / vh), w = Math.round(vw * k), h = Math.round(vh * k); Object.assign(cv.style, { position: 'fixed', top: Math.round((innerHeight - h) / 2) + 'px', left: Math.round((innerWidth - w) / 2) + 'px', height: h + 'px', width: w + 'px', zIndex: 50 }); document.body.style.background = '#000'; }
-fitTouch(); addEventListener('resize', () => fitTouch()); if (window.visualViewport) visualViewport.addEventListener('resize', () => fitTouch());
+fitTouch(!LAB); addEventListener('resize', () => fitTouch(!LAB)); if (window.visualViewport) visualViewport.addEventListener('resize', () => fitTouch());
 let KIT_TOOK = false;
 { const lp = e => { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * cv.width / state.zoom, (e.clientY - r.top) / r.height * cv.height / state.zoom]; };
   cv.addEventListener('mousemove', e => { const [x, y] = lp(e); UIKit.move(x / UI_SCALE, y / UI_SCALE); Build.UI.pointer(x, y, false); }); cv.addEventListener('mouseleave', () => { UIKit.Ptr.over = false; });
@@ -551,9 +570,9 @@ function setPreset(n, instant = true) { const [lbl, s, h, w, i] = PRESETS[n]; $(
   WeatherState.set(w, i); if (instant) { WeatherState.intensity = i; WeatherState.prevIntensity = 0; WeatherState.wind = WeatherState.windTarget; } $('weather').value = w; $('intensity').value = i * 100;
   if (n === 9) { Player.setPos(262, 286); } }
 window.setPreset = setPreset; window.WorldClock = WorldClock; window.WeatherState = WeatherState; window.SeasonState = SeasonState; window.viewState = state;
-addEventListener('keydown', e => { if (e.key === ' ') $('play').click(); if (e.key === '[') WorldClock.minutes = (WorldClock.minutes - 30 + 1440) % 1440; if (e.key === ']') WorldClock.minutes = (WorldClock.minutes + 30) % 1440; });
+addEventListener('keydown', e => { if (!LAB) return; if (e.key === ' ') $('play').click(); if (e.key === '[') WorldClock.minutes = (WorldClock.minutes - 30 + 1440) % 1440; if (e.key === ']') WorldClock.minutes = (WorldClock.minutes + 30) % 1440; });
 
-boot();
+boot().catch(e => { const m = document.getElementById('loadmsg'); if (m) m.textContent = 'The journal would not open: ' + e.message + '. Try reloading the page.'; console.error(e); });
 </script>
 </body>
 </html>

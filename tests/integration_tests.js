@@ -29,7 +29,7 @@ const J = p => JSON.parse(fs.readFileSync('/root/mosslight/' + p, 'utf8'));
   check('every one of the 93 fish can be caught with conditions the weather actually makes and bait the player can get', /catchable with gathered or crafted bait: 93/.test(fr) && /impossible: none/.test(fr), (fr.match(/catchable[^\n]*/) || [''])[0]);
   const b = await chromium.launch(); const ctx = await b.newContext({ viewport: { width: 2000, height: 1200 } }); const p = await ctx.newPage();
   const errs = []; p.on('pageerror', e => errs.push(e.message));
-  await p.goto(`http://127.0.0.1:${PORT}/preview/play.html?new=1`); await p.waitForFunction(() => window.Monsters && Monsters.cfg() && window.Build && Build.comp().wall_wood && window.UIKit && UIKit.Map && Gather.Nodes.list.length, { timeout: 60000 });
+  await p.goto(`http://127.0.0.1:${PORT}/preview/play.html?lab=1&new=1`); await p.waitForFunction(() => window.Monsters && Monsters.cfg() && window.Build && Build.comp().wall_wood && window.UIKit && UIKit.Map && Gather.Nodes.list.length, { timeout: 60000 });
   const ev = (f, a) => p.evaluate(f, a); const wait = ms => p.waitForTimeout(ms);
   await ev(() => { Festival.setEnabled(false); Social.setEnabled(false); setPreset(1); WorldClock.paused = true; Survival.Clock.day = 5; Monsters.clearAll();
     window.give = o => { for (const [k, v] of Object.entries(o)) Gather.Inventory.add(k, v); };
@@ -126,7 +126,7 @@ const J = p => JSON.parse(fs.readFileSync('/root/mosslight/' + p, 'utf8'));
   check('switching away from the game (page hidden) saves at once', r === 16, String(r));
   // continue after a reload: position and day come back, with a welcome note
   await ev(() => { Player.setPos(430, 310); Survival.Clock.day = 21; WorldClock.minutes = 800; Survival.SaveState.save(); });
-  await p.goto(`http://127.0.0.1:${PORT}/preview/play.html`); await p.waitForFunction(() => window.Survival && window.Gather && Gather.Nodes && Gather.Nodes.list.length && window.UIKit && UIKit.Map, { timeout: 60000 }); await wait(800);
+  await p.goto(`http://127.0.0.1:${PORT}/preview/play.html?lab=1`); await p.waitForFunction(() => window.Survival && window.Gather && Gather.Nodes && Gather.Nodes.list.length && window.UIKit && UIKit.Map, { timeout: 60000 }); await wait(800);
   r = await ev(() => [Survival.Clock.day, Math.round(Player.x), Math.round(Player.y), Math.round(WorldClock.minutes)]);
   check('reopening the game carries on where you left off', r[0] === 21 && Math.abs(r[1] - 430) < 2 && Math.abs(r[2] - 310) < 2 && Math.abs(r[3] - 800) < 30, JSON.stringify(r));
   await ev(() => { UIKit.Menu.open = 'newgame'; }); await wait(250); const c = await p.$('#c'); await c.screenshot({ path: '/root/mosslight/renders/p16/new_game_confirm.png' }).catch(async () => { fs.mkdirSync('/root/mosslight/renders/p16', { recursive: true }); await c.screenshot({ path: '/root/mosslight/renders/p16/new_game_confirm.png' }); }); await ev(() => { UIKit.Menu.open = null; });
@@ -139,6 +139,14 @@ const J = p => JSON.parse(fs.readFileSync('/root/mosslight/' + p, 'utf8'));
   r = await ev(() => { const S = Monsters; S.clearAll(); WorldClock.paused = true; Survival.Clock.setHour(23.5); Survival.Clock.day = 9; for (let i = 0; i < 12; i++) S.spawn(Object.keys(S.cfg().creatures)[i % 6], 100 + i * 50, 300); return new Promise(res => { let n = 0, t0 = performance.now(); (function f() { if (++n < 60) requestAnimationFrame(f); else res((performance.now() - t0) / 60); })(); }); });
   check('night with 12 creatures renders under the frame budget', r < 60, r.toFixed(1) + ' ms/frame');
 
+  // ---- the public page: the site root opens the game in player mode, fast and complete
+  { const pp = await ctx.newPage(); const reqs = new Set(); const perr = []; pp.on('pageerror', e => perr.push(e.message)); pp.on('request', q => { const u = new URL(q.url()); if (/^\/assets\/.*\.(png|json)$/.test(u.pathname)) reqs.add('..' + u.pathname); });
+    await pp.evaluate(() => 0).catch(() => {}); await pp.goto(`http://127.0.0.1:${PORT}/?new=1`); await pp.waitForFunction(() => window.BOOTED, null, { timeout: 60000 });
+    const st = await pp.evaluate(() => [location.pathname, getComputedStyle(document.querySelector('header')).display, UIKit.Menu.open, !!document.getElementById('loading'), document.getElementById('c').getBoundingClientRect().width]);
+    const man = J('preview/manifest.json').files; const missing = [...reqs].filter(u => !man.includes(u));
+    check('the site root opens the game: no lab controls, a title page, the canvas fills the window', /preview\/play\.html$/.test(st[0]) && st[1] === 'none' && st[2] === 'title' && st[4] > 1500, JSON.stringify(st));
+    check('every file the game loads is in the parallel warm-up manifest', missing.length === 0 && reqs.size > 50, missing.slice(0, 5).join(', ') || `${reqs.size} files, all listed`);
+    await pp.keyboard.press('Enter'); await wait(300); check('Enter on the title page starts play', await pp.evaluate(() => UIKit.Menu.open === null) && perr.length === 0, perr.join(' | ')); await pp.close(); }
   check('no page errors', errs.length === 0, errs.slice(0, 3).join(' | '));
   fs.writeFileSync('/root/mosslight/tests/integration_results.json', JSON.stringify({ results, passed: results.filter(r => r.ok).length, total: results.length }, null, 1));
   console.log(`${results.filter(r => r.ok).length}/${results.length} passed`); await b.close();

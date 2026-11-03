@@ -8,7 +8,7 @@ function check(name, ok, detail) { results.push({ name, ok: !!ok, detail }); con
 (async () => {
   const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 2000, height: 1200 } });
   const errs = []; p.on('pageerror', e => errs.push(e.message));
-  await p.goto(`http://127.0.0.1:${PORT}/preview/play.html`);
+  await p.goto(`http://127.0.0.1:${PORT}/preview/play.html?lab=1`);
   await p.waitForFunction(() => window.Player && window.SIM && document.getElementById('clock').textContent.includes(':'), { timeout: 30000 });
   await p.evaluate(() => { window.Social && Social.setEnabled(false); window.Festival && Festival.setEnabled(false); });   // movement and world prompts are tested without inhabitants; tests/social_tests.js covers them
   await p.evaluate(() => { setPreset(1); WorldClock.paused = true; });
