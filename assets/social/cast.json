@@ -1,5 +1,62 @@
 {
 "version": 1,
+"milestones": [
+{
+"id": "met",
+"short": "acquaintance",
+"label": "Met for the first time",
+"when": {
+"met": true
+}
+},
+{
+"id": "familiar",
+"short": "familiar",
+"label": "Became familiar faces to each other",
+"when": {
+"familiarity": 15
+}
+},
+{
+"id": "trusted",
+"short": "trusted",
+"label": "Earned its trust",
+"when": {
+"trust": 18
+},
+"needs": {
+"memories": [
+"promise_kept",
+"quest_help",
+"protected",
+"quest_choice"
+]
+}
+},
+{
+"id": "close",
+"short": "close friend",
+"label": "Became close friends",
+"when": {
+"bond": "friendly"
+},
+"needs": {
+"shared": 3
+}
+},
+{
+"id": "kindred",
+"short": "kindred",
+"label": "Something deeper than friendship",
+"when": {
+"bond": "close"
+},
+"needs": {
+"chapter": true,
+"shared": 6
+}
+}
+],
 "dims": [
 "trust",
 "familiarity",
@@ -224,6 +281,30 @@
 "discovery": {
 "sig": 0.65,
 "sign": 1
+},
+"milestone": {
+"sig": 0.75,
+"sign": 1
+},
+"festival": {
+"sig": 0.65,
+"sign": 1
+},
+"saw_at_festival": {
+"sig": 0.3,
+"sign": 1
+},
+"shared_time": {
+"sig": 0.4,
+"sign": 1
+},
+"exchange": {
+"sig": 0.45,
+"sign": 1
+},
+"left_behind": {
+"sig": 0.85,
+"sign": -1
 }
 },
 "moods": {
@@ -336,6 +417,42 @@
 ],
 "habits": "Rises at the dock at dawn and dusk; dozes in the willow shallows through the day; reads the moon on clear nights; under the ice in winter except at noon.",
 "schedule": [
+{
+"when": {
+"festival": "fest_awakening"
+},
+"frm": 0,
+"to": 24,
+"at": "dock_end",
+"act": "watching petals land on the water"
+},
+{
+"when": {
+"festival": "fest_fireflies"
+},
+"frm": 0,
+"to": 24,
+"at": "pond_centre",
+"act": "surfaced among the floating lanterns"
+},
+{
+"when": {
+"festival": "fest_forgotten"
+},
+"frm": 0,
+"to": 24,
+"at": "dock_end",
+"act": "listening to the bonfire from the water"
+},
+{
+"when": {
+"festival": "fest_silent_tide"
+},
+"frm": 0,
+"to": 24,
+"at": "pond_centre",
+"act": "just beneath the clear ice"
+},
 {
 "when": {
 "season": [
@@ -619,6 +736,24 @@
 "text": "You walk softly. Some things splash for no reason. I keep a list of those things.",
 "learn": "quiet",
 "w": 0.7
+},
+{
+"id": "ebb_soon_fest_fireflies",
+"text": "In a few nights the fireflies come down to the pond all at once. The lanterns go out on the water. You should be here. Or not. The pond will be.",
+"when": {
+"festival_soon": "fest_fireflies"
+},
+"reveals": "fest_fireflies",
+"w": 4
+},
+{
+"id": "ebb_soon_fest_silent_tide",
+"text": "Soon the ice goes clear for a night. You can see what is under it. I would not miss it. I cannot, actually. I live here.",
+"when": {
+"festival_soon": "fest_silent_tide"
+},
+"reveals": "fest_silent_tide",
+"w": 4
 }
 ],
 "recall": [
@@ -697,6 +832,15 @@
 "mem": {
 "type": "advice_outcome",
 "min_age": 0
+},
+"w": 4
+},
+{
+"id": "e_r_fest",
+"text": "You were here for the {mem.detailText}. I remember you on the bank. You were looking at the water instead of the lights. Good.",
+"mem": {
+"type": "festival",
+"min_age": 1
 },
 "w": 4
 }
@@ -937,6 +1081,196 @@
 ],
 "complete": "The perch rose under the dock tonight. Five of them. I counted twice.",
 "reward_secret": true
+},
+"milestone_lines": {
+"familiar": "You come back often. The pond has started expecting you. So have I. That is a sentence I have not said in a long time.",
+"trusted": "I am going to tell you something I have not told anyone. Not yet. Soon. Come back when the water is quiet.",
+"close": "You are part of what I count now, when I count the pond.",
+"kindred": "When I go quiet for the last time, the pond will need a keeper. I am not asking. I am only saying I have thought about it."
+},
+"activities": [
+{
+"id": "fish",
+"kind": "fish",
+"milestone": "familiar",
+"water": true,
+"label": "Fish here together",
+"line": "The {fish} comes up at {when}. Try {bait}. ... That is all I will say. The pond keeps its own secrets, mostly.",
+"none": "There is nothing left in this pond you have not met. Hm. That has never happened before."
+}
+],
+"pools": {
+"festival": [
+{
+"id": "e_fest_ff",
+"text": "All those little lights, and every one of them on the water twice. I count them. I lose count. That is the point.",
+"when": {
+"festival": "fest_fireflies"
+}
+},
+{
+"id": "e_fest_tide",
+"text": "Look down. Those are the town lights. They do not know they are under water. I have never had the heart to tell them.",
+"when": {
+"festival": "fest_silent_tide"
+}
+},
+{
+"id": "e_fest_aw",
+"text": "Petals on the water. The fish rise to them and are disappointed every year.",
+"when": {
+"festival": "fest_awakening"
+}
+},
+{
+"id": "e_fest_fg",
+"text": "The bonfire makes the pond warm at one edge. The perch line up there like old men.",
+"when": {
+"festival": "fest_forgotten"
+}
+}
+]
+},
+"quest2": {
+"variants": {
+"default": {
+"id": "carved",
+"title": "The Carved Fish",
+"requires": {
+"milestone": "trusted"
+},
+"offer": "Ask about what it keeps at the bottom of the pond",
+"stages": [
+{
+"id": "ask",
+"talk": "A child sat on the dock every evening, a long time ago. They carved me a fish. I kept it at the bottom of the pond for forty years. Last spring I could not find it. The silt moved. Only a hook could reach where it went. Fish from the platform at dusk. Bring it up, if it wants to come.",
+"journal": "Fish from the platform at dusk: somewhere down there is the carved fish Ebb lost.",
+"objective": {
+"type": "fish_snag",
+"habitat": "pond",
+"period": [
+"dusk"
+],
+"item": "carved_fish",
+"after": 2,
+"found": "Your line comes up heavy and wrong. On the hook: a small wooden fish, smoothed by forty years of water."
+}
+},
+{
+"id": "decide",
+"talk": "You have it. ... Let me see. ... Yes. That is it. What will you do with it?",
+"journal": "Decide what to do with the child's carved fish.",
+"objective": {
+"type": "choice",
+"options": [
+{
+"id": "return",
+"text": "Give it back to you.",
+"needs": {
+"carved_fish": 1
+},
+"result": "good",
+"keepsake": "carved_fish",
+"line": "... It goes back where it belongs. Where I can find it. Thank you. I have no other words for this, and I have had a long time to collect words.",
+"rel": {
+"trust": 8,
+"affection": 8,
+"shared": 4
+}
+},
+{
+"id": "dock",
+"text": "Set it on the dock post, where the child sat.",
+"needs": {
+"carved_fish": 1
+},
+"result": "good",
+"world": {
+"dock_fish": true
+},
+"line": "On the post. Where they sat. Yes. Then I can see it every evening, and so can anyone who comes to sit there. That is better than the bottom of a pond.",
+"rel": {
+"affection": 6,
+"respect": 6,
+"shared": 4
+}
+},
+{
+"id": "keep",
+"text": "I would like to keep it.",
+"result": "mixed",
+"line": "... It chose your hook, not mine. Keep it, then. Carry it somewhere. Things should go places.",
+"rel": {
+"trust": -2,
+"respect": 2
+}
+}
+]
+}
+}
+],
+"complete": "Some things come back. Not many. Some."
+},
+"wait": {
+"id": "carved",
+"title": "The Carved Fish",
+"requires": {
+"milestone": "trusted"
+},
+"offer": "Ask about what it keeps at the bottom of the pond",
+"stages": [
+{
+"id": "ask",
+"talk": "A child carved me a wooden fish once. I kept it at the bottom, forty years. The pond is thinner now, as you know; we let the river find its own way. The silt moved with it. It will be hard to reach. Fish from the platform at dusk, and be patient.",
+"journal": "Fish from the platform at dusk, patiently: the pond is thin and the carved fish is deep in the silt.",
+"objective": {
+"type": "fish_snag",
+"habitat": "pond",
+"period": [
+"dusk"
+],
+"item": "carved_fish",
+"after": 4,
+"found": "After a long while your hook catches something that is not a fish: a small wooden carving, smoothed by water."
+}
+},
+{
+"id": "decide",
+"talk": "You found it, even in a thin pond. What will you do with it?",
+"journal": "Decide what to do with the child's carved fish.",
+"objective": {
+"type": "choice",
+"options": [
+{
+"id": "return",
+"text": "Give it back to you.",
+"needs": {
+"carved_fish": 1
+},
+"result": "good",
+"keepsake": "carved_fish",
+"line": "Back where it belongs. The river took its time, and so did you. Thank you.",
+"rel": {
+"trust": 8,
+"affection": 8
+}
+},
+{
+"id": "keep",
+"text": "I would like to keep it.",
+"result": "mixed",
+"line": "Keep it, then. The pond is too thin to hold it safely anyway.",
+"rel": {
+"respect": 2
+}
+}
+]
+}
+}
+],
+"complete": "Some things come back."
+}
+}
 }
 },
 "pip": {
@@ -1025,6 +1359,42 @@
 ],
 "habits": "Up at dawn at the lone rowan, foraging by the hollow log in the morning, chasing beetles in the meadow at noon, watching dragonflies at the pond in the afternoon. Sleeps in the hollow log.",
 "schedule": [
+{
+"when": {
+"festival": "fest_awakening"
+},
+"frm": 0,
+"to": 24,
+"at": "lone_rowan",
+"act": "dancing under the blossom"
+},
+{
+"when": {
+"festival": "fest_fireflies"
+},
+"frm": 0,
+"to": 24,
+"at": "pond_bank",
+"act": "chasing fireflies"
+},
+{
+"when": {
+"festival": "fest_forgotten"
+},
+"frm": 0,
+"to": 24,
+"at": "meadow",
+"act": "digging through the leaf heaps"
+},
+{
+"when": {
+"festival": "fest_silent_tide"
+},
+"frm": 0,
+"to": 24,
+"at": "camp_fire",
+"act": "warming itself at your fire"
+},
 {
 "when": {
 "weather": [
@@ -1326,6 +1696,24 @@
 "monsters_seen": 1
 },
 "learn": "loud"
+},
+{
+"id": "pip_soon_fest_awakening",
+"text": "The rowan is going to bloom! All at once! In a few days! Everyone hangs a wish on it. You should hang one. I have six.",
+"when": {
+"festival_soon": "fest_awakening"
+},
+"reveals": "fest_awakening",
+"w": 4
+},
+{
+"id": "pip_soon_fest_forgotten",
+"text": "The leaves are piling up funny on the ruin path. That means the Forgetting is coming! The forest gives things back. I found a spoon last year!",
+"when": {
+"festival_soon": "fest_forgotten"
+},
+"reveals": "fest_forgotten",
+"w": 4
 }
 ],
 "recall": [
@@ -1429,6 +1817,28 @@
 "min_age": 0
 },
 "w": 4
+},
+{
+"id": "p_r_fest",
+"text": "You were at the {mem.detailText}! I saw you! I waved! You did not see me wave. I waved very hard.",
+"mem": {
+"type": [
+"festival",
+"saw_at_festival"
+],
+"min_age": 1
+},
+"w": 4
+},
+{
+"id": "p_r_left",
+"text": "You went too fast that night. I found my own way home. It's okay. It isn't okay. It's getting okay.",
+"mem": {
+"type": "left_behind",
+"min_age": 0
+},
+"w": 7,
+"expr": "troubled"
 }
 ],
 "asleep": [
@@ -1711,6 +2121,169 @@
 ],
 "complete": "Whenever I see something glow now, I think: maybe.",
 "reward_secret": true
+},
+"milestone_lines": {
+"familiar": "I know your footsteps now! Big, then a stop, then big. I don't even hide anymore. Mostly.",
+"trusted": "Okay. I'll tell you. I keep a button in my satchel with a face on it. I think it's a very small person asleep. You can't tell anyone.",
+"close": "You're my best person. I only have a few people. You're the best one.",
+"kindred": "If I ever go north for good, I'll leave a mushroom on your tent every spring. So you know I remember."
+},
+"activities": [
+{
+"id": "fire",
+"kind": "fireside",
+"milestone": "familiar",
+"near": "camp_fire",
+"radius": 90,
+"when": {
+"period": [
+"dusk",
+"night"
+]
+},
+"label": "Sit by the fire together",
+"line": "We sat and watched the fire eat the log. Pip named every spark."
+},
+{
+"id": "found",
+"kind": "found",
+"milestone": "trusted",
+"every": 3,
+"label": "Ask what it found today",
+"items": [
+"feather",
+"eggshell",
+"seeds_wild",
+"glass_shard",
+"mushroom_red",
+"fern_frond"
+],
+"line": "Look! A {item}. You can have it. I have another one. I do not have another one. You can have it anyway."
+},
+{
+"id": "walk",
+"kind": "walk",
+"milestone": "close",
+"label": "Come for a walk with me",
+"line": "Yes! Where are we going? Don't tell me. Surprise me.",
+"stop": "That's far enough for today.",
+"stop_line": "Okay! That was a good walk. I'm going to go and tell the beetle."
+}
+],
+"pools": {
+"fireside": [
+{
+"id": "p_fire1",
+"text": "Sparks are just fire trying to be fireflies. I read that. I didn't read that. I made it up just now.",
+"w": 1
+},
+{
+"id": "p_fire2",
+"text": "When I was a chestnut I fell a very long way. Your fire is the opposite of falling.",
+"w": 1
+}
+],
+"festival": [
+{
+"id": "p_fest_aw",
+"text": "I hung SIX wishes! One is for you! I am not telling you which one. It is the yellow one.",
+"when": {
+"festival": "fest_awakening"
+}
+},
+{
+"id": "p_fest_ff",
+"text": "I caught one! I let it go! I caught another one! I let it go! This is the best night!",
+"when": {
+"festival": "fest_fireflies"
+}
+},
+{
+"id": "p_fest_fg",
+"text": "I found a spoon AGAIN. Same spoon? I think it is the same spoon. The forest is giving it back to me on purpose.",
+"when": {
+"festival": "fest_forgotten"
+}
+},
+{
+"id": "p_fest_tide",
+"text": "It's so cold I can't feel Fennel. Can I stay by your fire? I'm staying by your fire.",
+"when": {
+"festival": "fest_silent_tide"
+}
+}
+]
+},
+"quest2": {
+"id": "north",
+"title": "Into the North",
+"requires": {
+"milestone": "close"
+},
+"offer": "Ask about the north woods",
+"stages": [
+{
+"id": "ask",
+"talk": "Will you walk with me to the north glade? The edge of the north woods. I'll stay right behind you. Don't go too fast. Please don't go too fast.",
+"journal": "Walk Pip to the north glade, slowly enough that it can keep up.",
+"objective": {
+"type": "escort",
+"at": "north_glade",
+"lose": 200,
+"go": "Let's go to the north glade",
+"start": "Okay. Okay okay okay. Walking.",
+"found": "Pip stops at the edge of the glade and goes very quiet, looking into the north woods.",
+"shared": "walked Pip to the edge of the north woods",
+"lost_text": "You look back and Pip is gone. Somewhere behind you, something small is finding its own way home.",
+"on_lost": {
+"detail": "went too fast and left Pip behind",
+"line": "I found my own way back. It took all night. I don't think I'm going north again. It's not your fault. It's a little bit your fault."
+}
+}
+},
+{
+"id": "decide",
+"talk": "It's so big. It goes on forever. ... What do we do now?",
+"journal": "At the edge of the north woods with Pip.",
+"objective": {
+"type": "choice",
+"options": [
+{
+"id": "stay",
+"text": "Stay until dark and watch the moss glow.",
+"result": "good",
+"line": "We waited. It got dark. And then \u2014 blue. All of it, blue, like the ground was full of tiny skies. I am never going to forget this. Never.",
+"rel": {
+"shared": 8,
+"affection": 6
+}
+},
+{
+"id": "home",
+"text": "We've seen it. Let's head back before dark.",
+"result": "mixed",
+"line": "Okay. Yes. We saw it. I saw the edge of it. That's more than anyone. ...I'm going to come back by myself one day. When I'm bigger. I'm not going to get bigger.",
+"rel": {
+"trust": 3
+}
+},
+{
+"id": "alone",
+"text": "Go on in. I think you should see it on your own.",
+"result": "mixed",
+"sets": "pip_north",
+"away": 2,
+"line": "On my own? ... Okay. If you think I can. ... Will you be here when I come back? Say yes. You don't have to mean it.",
+"rel": {
+"respect": 6,
+"trust": 2
+}
+}
+]
+}
+}
+],
+"complete": "Whenever Pip talks about the north now, it says \"we\"."
 }
 },
 "wick": {
@@ -1784,6 +2357,33 @@
 ],
 "habits": "Only at night. Visits your lantern after dusk, keeps watch at the ruin arch, lights the crossing after midnight. Never in rain.",
 "schedule": [
+{
+"when": {
+"festival": "fest_fireflies"
+},
+"frm": 18,
+"to": 24,
+"at": "pond_bank",
+"act": "among the fireflies, perfectly happy"
+},
+{
+"when": {
+"festival": "fest_forgotten"
+},
+"frm": 18,
+"to": 24,
+"at": "ruin_arch",
+"act": "watching the bonfire from the arch"
+},
+{
+"when": {
+"festival": "fest_silent_tide"
+},
+"frm": 18,
+"to": 24,
+"at": "ice_hole",
+"act": "holding its lantern over the ice"
+},
 {
 "when": {
 "weather": [
@@ -2016,6 +2616,15 @@
 "summer"
 ]
 }
+},
+{
+"id": "wick_soon_fest_fireflies",
+"text": "*It points at the pond, then opens its hands and lets a hundred small lights out of them, all imagined.* (Soon.)",
+"when": {
+"festival_soon": "fest_fireflies"
+},
+"reveals": "fest_fireflies",
+"w": 4
 }
 ],
 "recall": [
@@ -2082,6 +2691,18 @@
 "mem": {
 "type": "advice_outcome",
 "min_age": 0
+},
+"w": 4
+},
+{
+"id": "w_r_fest",
+"text": "*It shows you the {mem.detailText} in light, and you in it.* (It remembers you were there.)",
+"mem": {
+"type": [
+"festival",
+"saw_at_festival"
+],
+"min_age": 1
 },
 "w": 4
 }
@@ -2294,6 +2915,242 @@
 ],
 "complete": "*Every night now it stops at the arch, then comes to your lantern last.*",
 "reward_secret": true
+},
+"milestone_lines": {
+"familiar": "*It lets its light rest on your shoulder for a moment.* (It knows you.)",
+"trusted": "*It opens its wings for you, wide, and the dusty eyes on them catch your lantern.* (It is showing you what it hides.)",
+"close": "*Every night now, your lantern is the last one it visits.*",
+"kindred": "*It gives you one small flame from its own lantern. It does not go out.*"
+},
+"activities": [
+{
+"id": "fire",
+"kind": "fireside",
+"milestone": "familiar",
+"near": "lantern",
+"radius": 120,
+"when": {
+"period": [
+"night",
+"deep"
+]
+},
+"label": "Sit by the fire with it",
+"line": "*You watch the fire burn down together. At the very end, it leans close.*"
+}
+],
+"pools": {
+"fireside": [
+{
+"id": "w_fire1",
+"text": "*It makes its flame match the dying fire, ember for ember, until you cannot tell which is which.*"
+},
+{
+"id": "w_fire2",
+"text": "*It points at each spark as it rises, then at the stars, one by one, as if keeping count of where they go.*"
+}
+],
+"festival": [
+{
+"id": "w_fest_ff",
+"text": "*It is surrounded by fireflies and its flame is laughing, if a flame can.* (This is its favourite night.)",
+"when": {
+"festival": "fest_fireflies"
+}
+},
+{
+"id": "w_fest_fg",
+"text": "*It watches the bonfire from the arch, very still, like someone at a window.* (Too big a fire to visit.)",
+"when": {
+"festival": "fest_forgotten"
+}
+},
+{
+"id": "w_fest_tide",
+"text": "*It holds its lantern low over the ice, and below, a drowned window seems to brighten in answer.*",
+"when": {
+"festival": "fest_silent_tide"
+}
+}
+]
+},
+"quest2": {
+"variants": {
+"seal": {
+"id": "knocking",
+"title": "The Knocking",
+"requires": {
+"milestone": "trusted"
+},
+"offer": "*Its light keeps turning toward the boarded door*",
+"stages": [
+{
+"id": "ask",
+"talk": "*It takes you to the boards you nailed over the door. It holds its lantern close to the wood and waits.* (Listen. Deep night.)",
+"journal": "Listen at the boarded door in the ruin, at deep night.",
+"objective": {
+"type": "be_at",
+"at": "ruin_arch",
+"radius": 34,
+"period": [
+"deep"
+],
+"found": "Behind the boards: three slow knocks. Then nothing. Then three more."
+}
+},
+{
+"id": "decide",
+"talk": "*It looks at you. It does not know either.*",
+"journal": "Decide what to do about the knocking.",
+"objective": {
+"type": "choice",
+"options": [
+{
+"id": "open",
+"text": "Pull the boards off. Let it out.",
+"result": "bad",
+"world": {
+"door_open": true
+},
+"line": "*The last board comes away. Cold air, and nothing comes out, and nothing comes out, and then something does: you never see it, only feel it pass. Wick will not go near the arch for a long time.*",
+"rel": {
+"trust": -6
+},
+"complete": "*The arch is just an arch now. Whatever was behind it is somewhere else. Wick stays close to the camp.*"
+},
+{
+"id": "reinforce",
+"text": "Nail more boards over it.",
+"needs": {
+"plank": 2,
+"nails": 1
+},
+"result": "mixed",
+"line": "*The knocking stops after the third board. Wick rests its lantern on the wood a long time.* (We will never know what it was.)",
+"rel": {
+"trust": 3,
+"reliability": 2
+}
+},
+{
+"id": "sit",
+"text": "Sit with Wick through the night and listen.",
+"result": "good",
+"line": "*You sit with your backs to the boards. The knocking goes on, slower and slower. At dawn it stops. Wick lays one wing over your shoulder.* (Perhaps it only wanted someone to hear.)",
+"rel": {
+"shared": 8,
+"trust": 6
+}
+}
+]
+}
+}
+],
+"complete": "*It still listens at the door some nights. Less, now.*"
+},
+"light": {
+"id": "answer",
+"title": "The Answering Light",
+"requires": {
+"milestone": "trusted"
+},
+"offer": "*Its light blinks a pattern at you: long, short, long*",
+"stages": [
+{
+"id": "ask",
+"talk": "*It blinks at you: long, short, long. Then it points at your lantern and at the door.* (At deep night, signal the dark with your lantern.)",
+"journal": "At the ruin arch at deep night, turn your lantern on and off a few times, like Wick showed you.",
+"objective": {
+"type": "signal",
+"at": "ruin_arch",
+"radius": 40,
+"period": [
+"deep"
+],
+"toggles": 4,
+"found": "Far down in the dark, a small light blinks back: on, off, on.",
+"shared": "signalled the dark and saw it answer"
+}
+},
+{
+"id": "decide",
+"talk": "*It is trembling, light and all.* (Something down there has a light too.)",
+"journal": "Decide with Wick what to do about the answering light.",
+"objective": {
+"type": "choice",
+"options": [
+{
+"id": "reply",
+"text": "Keep signalling. Every night.",
+"result": "good",
+"world": {
+"answering_light": true
+},
+"line": "*Wick takes the first watch. Every deep night now, two lights blink at the door, and one blinks back.*",
+"rel": {
+"shared": 8,
+"trust": 4
+}
+},
+{
+"id": "stop",
+"text": "Stop. We do not know what it is.",
+"result": "mixed",
+"line": "*It dims its lantern and nods, slowly. It does not look at the door again that night.*",
+"rel": {
+"respect": 3
+}
+}
+]
+}
+}
+],
+"complete": "*Some nights, far down, the light blinks first.*"
+},
+"leave": {
+"id": "alone",
+"title": "Alone at the Door",
+"requires": {
+"trust": 20
+},
+"offer": "*It stands apart from you*",
+"stages": [
+{
+"id": "decide",
+"talk": "*It keeps its back to you. Its light is very small.*",
+"journal": "Wick has been keeping watch alone since you left the door to it.",
+"objective": {
+"type": "choice",
+"options": [
+{
+"id": "help",
+"text": "I was wrong to leave it to you. Let's set a light there now.",
+"needs_light": "ruin_arch",
+"result": "good",
+"line": "*It turns, slowly, and sets its lantern beside the one you placed. It stays there with you until morning.*",
+"rel": {
+"trust": 8,
+"shared": 4
+}
+},
+{
+"id": "right",
+"text": "It was the right call.",
+"result": "bad",
+"sets": "wick_cold",
+"line": "*It does not answer. From now on it visits your lantern only on the way to somewhere else.*",
+"rel": {
+"affection": -6,
+"trust": -4
+}
+}
+]
+}
+}
+],
+"complete": "*It watches the door.*"
+}
+}
 }
 },
 "burl": {
@@ -2367,6 +3224,24 @@
 ],
 "habits": "Never moves. Awake from dawn to dusk, asleep at night. Through winter it barely wakes, and only at noon on clear days.",
 "schedule": [
+{
+"when": {
+"festival": "fest_awakening"
+},
+"frm": 6,
+"to": 21,
+"at": "burl_home",
+"act": "awake for the blossom"
+},
+{
+"when": {
+"festival": "fest_forgotten"
+},
+"frm": 6,
+"to": 22,
+"at": "burl_home",
+"act": "listening to the bonfire"
+},
 {
 "when": {
 "season": [
@@ -2589,6 +3464,15 @@
 "when": {
 "met_char": "pip"
 }
+},
+{
+"id": "burl_soon_fest_awakening",
+"text": "...The rowan is restless. ... It will bloom. ... Three days. ... Perhaps two.",
+"when": {
+"festival_soon": "fest_awakening"
+},
+"reveals": "fest_awakening",
+"w": 4
 }
 ],
 "recall": [
@@ -2685,6 +3569,18 @@
 "min_age": 0
 },
 "w": 4
+},
+{
+"id": "b_r_fest",
+"text": "...You were at the {mem.detailText}. ... I felt you walking. ... Light steps. ... Good steps.",
+"mem": {
+"type": [
+"festival",
+"saw_at_festival"
+],
+"min_age": 1
+},
+"w": 3
 }
 ],
 "asleep": [
@@ -2917,6 +3813,199 @@
 ],
 "complete": "...The birches. ... Better. ... Come in spring. ... See.",
 "reward_secret": true
+},
+"milestone_lines": {
+"familiar": "...You. ... I know your weight on the ground now.",
+"trusted": "...I will tell you about the ones who cut me. ... Later. ... It is a long story. ... For me, all stories are long.",
+"close": "...Sit. ... You do not have to talk. ... That is how I know you are a friend.",
+"kindred": "...When I am only wood, the sapling will know your name. ... I told it."
+},
+"activities": [
+{
+"id": "sit",
+"kind": "line",
+"pool": "quiet",
+"milestone": "familiar",
+"every": 1,
+"label": "Sit with it a while",
+"line": "..."
+}
+],
+"pools": {
+"quiet": [
+{
+"id": "b_q1",
+"text": "...You sat. ... The light moved across the clearing. ... Neither of you said anything. ... It was good."
+},
+{
+"id": "b_q2",
+"text": "...A beetle crossed your boot and then crossed Burl. ... Burl said it tickled. ... It was the first joke you have heard it make."
+},
+{
+"id": "b_q3",
+"text": "...It told you the name of the oak by your tent. ... It took a long time. ... You fell asleep twice. ... It did not mind."
+}
+],
+"festival": [
+{
+"id": "b_fest_aw",
+"text": "...The rowan. ... Blooming. ... Every year I think: not this year. ... Every year, yes.",
+"when": {
+"festival": "fest_awakening"
+}
+},
+{
+"id": "b_fest_fg",
+"text": "...The bonfire. ... Fallen wood only, I hope. ... I am told yes. ... Good.",
+"when": {
+"festival": "fest_forgotten"
+}
+}
+]
+},
+"quest2": {
+"variants": {
+"default": {
+"id": "seed",
+"title": "A Seed of Its Own",
+"requires": {
+"milestone": "trusted"
+},
+"offer": "Ask about the space beside it",
+"stages": [
+{
+"id": "ask",
+"talk": "...Heartwood. ... A seed from the old oaks. ... Plant it beside me. ... I would like company that grows.",
+"journal": "Bring Burl a heartwood seed to plant beside it (they turn up under the big oak, on autumn nights after rain).",
+"objective": {
+"type": "deliver",
+"items": {
+"heartwood_seed": 1
+},
+"label": "the seed",
+"done_text": "...In the ground. ... Now: come and see it. ... Three days."
+}
+},
+{
+"id": "grow",
+"talk": "...Watch it with me. ... Three different days.",
+"journal": "Visit Burl and the new seed on three different days.",
+"objective": {
+"type": "visit_days",
+"n": 3,
+"found": "A green thread has come up beside Burl, two leaves wide."
+}
+},
+{
+"id": "decide",
+"talk": "...It came up. ... It needs a name. ... Long names take a long time. ... Choose.",
+"journal": "Help Burl name the new oak.",
+"objective": {
+"type": "choice",
+"options": [
+{
+"id": "after",
+"text": "Name it after you.",
+"result": "good",
+"keepsake": "heartwood_seed",
+"line": "...After me. ... Burl, the small. ... It will hate that. ... Good.",
+"rel": {
+"affection": 6
+}
+},
+{
+"id": "let",
+"text": "Let it grow up and name itself.",
+"result": "good",
+"keepsake": "heartwood_seed",
+"line": "...Yes. ... Trees do that. ... In a hundred years. ... I will tell it you said so.",
+"rel": {
+"respect": 6
+}
+},
+{
+"id": "yours",
+"text": "Name it after me.",
+"result": "mixed",
+"keepsake": "heartwood_seed",
+"line": "...After you. ... Hm. ... That is a short name, for a tree. ... It will have to grow into it.",
+"rel": {
+"affection": 3
+}
+}
+]
+}
+}
+],
+"complete": "...Two of us now. ... The clearing feels different."
+},
+"cut": {
+"id": "seed",
+"title": "A Seed of Its Own",
+"requires": {
+"milestone": "trusted",
+"trust": 30
+},
+"offer": "Ask about the space beside it",
+"stages": [
+{
+"id": "ask",
+"talk": "...You told me to cut the birches. ... They are stumps. ... I have thought about stumps. ... Bring me a heartwood seed. ... I want something to grow where they were.",
+"journal": "Bring Burl a heartwood seed, to grow where the cut birches were.",
+"objective": {
+"type": "deliver",
+"items": {
+"heartwood_seed": 1
+},
+"label": "the seed",
+"done_text": "...Planted. ... Where they were. ... Come back. ... Three days."
+}
+},
+{
+"id": "grow",
+"talk": "...Watch it with me.",
+"journal": "Visit Burl and the new seed on three different days.",
+"objective": {
+"type": "visit_days",
+"n": 3,
+"found": "A green thread has come up where the birches were."
+}
+},
+{
+"id": "decide",
+"talk": "...It came up. ... Where the stumps are. ... Name it.",
+"journal": "Help Burl name the new tree.",
+"objective": {
+"type": "choice",
+"options": [
+{
+"id": "birch",
+"text": "Name it for the birches.",
+"result": "good",
+"keepsake": "heartwood_seed",
+"line": "...For the birches. ... Yes. ... That is right. ... I forgive you a little.",
+"rel": {
+"trust": 6,
+"respect": 4
+}
+},
+{
+"id": "let",
+"text": "Let it name itself.",
+"result": "mixed",
+"keepsake": "heartwood_seed",
+"line": "...Hm. ... It will grow up next to stumps. ... It will have opinions.",
+"rel": {
+"respect": 2
+}
+}
+]
+}
+}
+],
+"complete": "...Something grows where the birches were."
+}
+}
 }
 },
 "tessel": {
@@ -2998,6 +4087,33 @@
 ],
 "habits": "Tinkers in the ruin in the morning, surveys the path junction before noon, reads the signpost in the afternoon, powers down in the arch at night. Shelters from rain.",
 "schedule": [
+{
+"when": {
+"festival": "fest_awakening"
+},
+"frm": 0,
+"to": 24,
+"at": "north_glade",
+"act": "counting petals"
+},
+{
+"when": {
+"festival": "fest_forgotten"
+},
+"frm": 0,
+"to": 24,
+"at": "ruin_floor",
+"act": "cataloguing the forgotten things"
+},
+{
+"when": {
+"festival": "fest_silent_tide"
+},
+"frm": 0,
+"to": 24,
+"at": "pond_bank",
+"act": "measuring the light under the ice"
+},
 {
 "when": {
 "weather": [
@@ -3184,6 +4300,15 @@
 "sign"
 ]
 }
+},
+{
+"id": "tessel_soon_fest_forgotten",
+"text": "Calendar note: in two days, the leaf heaps release objects. I log them. Last year: a spoon, a coin, a doll arm. I have questions.",
+"when": {
+"festival_soon": "fest_forgotten"
+},
+"reveals": "fest_forgotten",
+"w": 4
 }
 ],
 "recall": [
@@ -3262,6 +4387,18 @@
 "mem": {
 "type": "advice_outcome",
 "min_age": 0
+},
+"w": 4
+},
+{
+"id": "t_r_fest",
+"text": "Log entry: you attended the {mem.detailText}. I logged you twice. Once as attendance. Once as something I do not have a category for.",
+"mem": {
+"type": [
+"festival",
+"saw_at_festival"
+],
+"min_age": 1
 },
 "w": 4
 }
@@ -3484,6 +4621,213 @@
 ],
 "complete": "The beacon pings at dusk. I do not know who hears it. That is acceptable. It is better than not pinging.",
 "reward_secret": true
+},
+"milestone_lines": {
+"familiar": "Observation: I now predict your arrival times with 74 percent accuracy. This is the closest thing I have to saying I like it when you come.",
+"trusted": "Disclosure: I have a record zero. I have never shown it to anyone. I may show it to you. Not yet. Soon. That is a promise. I have started making those.",
+"close": "Social routines now at 61 percent. You are responsible for 30 of those percent.",
+"kindred": "I have moved you into protected memory. You cannot be erased now. I did not ask permission. I am told that is what friends do."
+},
+"activities": [
+{
+"id": "found",
+"kind": "found",
+"milestone": "trusted",
+"every": 3,
+"label": "Ask what it salvaged today",
+"items": [
+"bolt",
+"wire",
+"scrap_metal",
+"glass_shard",
+"hinge"
+],
+"line": "Salvage report: one {item}. Assigning to you. Reason: you will use it. Second reason: I wanted to."
+},
+{
+"id": "walk",
+"kind": "walk",
+"milestone": "close",
+"label": "Come and survey with me",
+"line": "Survey mode with company. New mode. Recording.",
+"stop": "That is enough surveying for now.",
+"stop_line": "Survey complete. Distance logged. Company logged separately."
+},
+{
+"id": "forecast",
+"kind": "line",
+"pool": "forecast",
+"milestone": "familiar",
+"when": {
+"ch1": "weather"
+},
+"every": 1,
+"label": "Ask for the forecast",
+"line": "Forecast unavailable."
+}
+],
+"pools": {
+"forecast": [
+{
+"id": "t_fc1",
+"text": "Forecast from the beacon: today {weather}. Confidence: high. I broadcast it at dawn. You are the only listener I have confirmed."
+}
+],
+"festival": [
+{
+"id": "t_fest_aw",
+"text": "Petal count: 11,402. Margin of error: large. I keep losing count because I keep looking up.",
+"when": {
+"festival": "fest_awakening"
+}
+},
+{
+"id": "t_fest_fg",
+"text": "Catalogue of forgotten things, item 31: a doll arm. Same as last year. I suspect it is the same doll arm. I suspect it wants to be found.",
+"when": {
+"festival": "fest_forgotten"
+}
+},
+{
+"id": "t_fest_tide",
+"text": "Under the ice: 212 lit windows. Before the flood: 212 houses. I have checked my records three times.",
+"when": {
+"festival": "fest_silent_tide"
+}
+}
+]
+},
+"quest2": {
+"variants": {
+"call": {
+"id": "answered",
+"title": "What Answered",
+"requires": {
+"milestone": "trusted"
+},
+"offer": "Ask about the beacon",
+"stages": [
+{
+"id": "ask",
+"talk": "The beacon's call has been sent 41 times. Last night: an answer. Come to the arch at night. Observe with me.",
+"journal": "Watch the beacon with Tessel at the ruin arch, at night.",
+"objective": {
+"type": "be_at",
+"at": "ruin_arch",
+"radius": 40,
+"period": [
+"night",
+"deep"
+],
+"found": "The beacon blinks twice. Far out past the lake, something blinks back. Twice."
+}
+},
+{
+"id": "decide",
+"talk": "Something answered. Options: reply, or go silent. I would like a recommendation. I would also like to not be alone with this.",
+"journal": "Decide with Tessel whether to answer the light.",
+"objective": {
+"type": "choice",
+"options": [
+{
+"id": "reply",
+"text": "Reply. Tell it we are here.",
+"result": "mixed",
+"world": {
+"beacon_reply": true
+},
+"line": "Reply sent: \"We are here.\" ... Response received: \"So are we.\" ... I do not know if that is good. I am logging it as hope.",
+"rel": {
+"trust": 4,
+"shared": 4
+}
+},
+{
+"id": "silence",
+"text": "Go silent. Some calls should not be answered.",
+"result": "good",
+"line": "Silencing the call. ... It is quieter. I think I prefer knowing someone was out there to knowing who.",
+"rel": {
+"respect": 4
+}
+},
+{
+"id": "wick",
+"text": "Ask Wick first. It knows what lives in the dark.",
+"needs_met": "wick",
+"result": "good",
+"line": "Consulted Wick. Wick says the light out there is cold. I will not answer. I am glad you thought of asking. I would not have.",
+"rel": {
+"trust": 5,
+"respect": 3
+}
+}
+]
+}
+}
+],
+"complete": "The beacon pings at dusk. Sometimes, far off, something pings back."
+},
+"default": {
+"id": "measure",
+"title": "The Long Measure",
+"requires": {
+"milestone": "trusted"
+},
+"offer": "Ask about the beacon",
+"stages": [
+{
+"id": "ask",
+"talk": "Request: be at the pond with me on the night the ice goes clear. The Silent Tide. I want to measure the drowned town. I do not want to do it alone.",
+"journal": "Be with Tessel at the Silent Tide, deep in winter.",
+"objective": {
+"type": "festival_with",
+"festival": "fest_silent_tide"
+}
+},
+{
+"id": "decide",
+"talk": "The town is all there. Every house. What should I record?",
+"journal": "Help Tessel decide what to record of the drowned town.",
+"objective": {
+"type": "choice",
+"options": [
+{
+"id": "town",
+"text": "Measure the whole town, house by house.",
+"result": "good",
+"line": "Recording. 212 houses. 1 bell tower. 0 people. The last number is the one I will think about.",
+"rel": {
+"respect": 4
+}
+},
+{
+"id": "lights",
+"text": "Just count the lights still burning.",
+"result": "good",
+"line": "Counting. 212. Every one. Somebody left every light on. I will record that they were expected home.",
+"rel": {
+"affection": 5,
+"shared": 3
+}
+},
+{
+"id": "watch",
+"text": "Don't record anything. Just watch it with me.",
+"result": "good",
+"line": "Recording disabled. ... This is new. ... I am watching. ... I think I am doing it correctly.",
+"rel": {
+"shared": 8,
+"affection": 4
+}
+}
+]
+}
+}
+],
+"complete": "Some measurements are kept in protected memory."
+}
+}
 }
 },
 "lull": {
@@ -3554,6 +4898,24 @@
 ],
 "habits": "Only in fog, in snow, or at dawn after rain. Drifts over the meadow and the pond bank.",
 "schedule": [
+{
+"when": {
+"gone": true
+},
+"frm": 0,
+"to": 24,
+"at": null,
+"act": "gone"
+},
+{
+"when": {
+"festival": "fest_silent_tide"
+},
+"frm": 0,
+"to": 24,
+"at": "pond_centre",
+"act": "drifting low over the clear ice"
+},
 {
 "when": {
 "weather": [
@@ -3753,6 +5115,15 @@
 "when": {
 "bond": "acquainted"
 }
+},
+{
+"id": "lull_soon_fest_silent_tide",
+"text": "*It shows you the pond, frozen, and under the ice, windows with lights in them.* (Soon. It wants you to see.)",
+"when": {
+"festival_soon": "fest_silent_tide"
+},
+"reveals": "fest_silent_tide",
+"w": 4
 }
 ],
 "recall": [
@@ -3805,6 +5176,18 @@
 "mem": {
 "type": "advice_outcome",
 "min_age": 0
+},
+"w": 4
+},
+{
+"id": "l_r_fest",
+"text": "*It shows you the {mem.detailText}, and you in it, small and bright.*",
+"mem": {
+"type": [
+"festival",
+"saw_at_festival"
+],
+"min_age": 1
 },
 "w": 4
 }
@@ -3981,6 +5364,127 @@
 ],
 "complete": "*Now when it shows you the town, it shows you too, standing at the edge of it, looking.*",
 "reward_secret": true
+},
+"milestone_lines": {
+"familiar": "*It shows you a picture of yourself, sharp this time, not blurred.*",
+"trusted": "*It shows you a door, and a hand on the handle, and then it hands you the picture.* (It trusts you with what it has lost.)",
+"close": "*Now, when it is foggy, the fog comes to your tent first.*",
+"kindred": "*It shows you the drowned town, and you are in it, and you belong there.*"
+},
+"activities": [
+{
+"id": "pics",
+"kind": "line",
+"pool": "pictures",
+"milestone": "familiar",
+"every": 1,
+"label": "Watch its pictures together",
+"line": "*It shows you pictures for a long time.*"
+},
+{
+"id": "walk",
+"kind": "walk",
+"milestone": "close",
+"label": "Drift along with me",
+"line": "*It folds in behind you, cool and soft.*",
+"stop": "That's far enough.",
+"stop_line": "*It drifts back toward the meadow, showing you a small wave.*"
+}
+],
+"pools": {
+"pictures": [
+{
+"id": "l_p1",
+"text": "*A street with a bakery on the corner. Bread in the window. Somebody waving from inside.*",
+"pics": [
+"seeds_wild"
+]
+},
+{
+"id": "l_p2",
+"text": "*Children on the dock, feet in the water, a wooden fish passed from hand to hand.*",
+"pics": [
+"photo"
+]
+},
+{
+"id": "l_p3",
+"text": "*Snow falling on a town square, and a bell ringing, and everyone looking up at once.*",
+"pics": [
+"tin_cup"
+]
+}
+],
+"festival": [
+{
+"id": "l_fest_tide",
+"text": "*Under the ice: its pictures, all of them, real. It is shaking.* (This is where it came from.)",
+"when": {
+"festival": "fest_silent_tide"
+}
+}
+]
+},
+"quest2": {
+"id": "lastafternoon",
+"title": "The Last Afternoon",
+"requires": {
+"milestone": "close"
+},
+"offer": "*It shows you the frozen pond*",
+"stages": [
+{
+"id": "ask",
+"talk": "*It shows you the pond frozen clear, and the town below, and itself drifting down toward it.* (On the Silent Tide, come with it to the ice.)",
+"journal": "Be with Lull at the Silent Tide.",
+"objective": {
+"type": "festival_with",
+"festival": "fest_silent_tide"
+}
+},
+{
+"id": "decide",
+"talk": "*Under the ice, its town. It hovers over the hole, looking down, looking at you.* (Should it go back down?)",
+"journal": "Lull is deciding whether to go back to the drowned town.",
+"objective": {
+"type": "choice",
+"options": [
+{
+"id": "go",
+"text": "Go home. They kept the lights on for you.",
+"result": "bad",
+"gone": true,
+"line": "*It folds once around you, cool and soft, and then it is a thin white thread going down through the hole into the lit town. The fog never comes to the meadow again.*",
+"rel": {
+"affection": 6
+},
+"complete": "*Some winter nights, under the clear ice, one of the windows has a small fog in it.*"
+},
+{
+"id": "stay",
+"text": "Stay. You have a place here now.",
+"result": "good",
+"line": "*It rises from the hole and settles around your shoulders. Its pictures are the clearing now, and you, and the pond with nothing under it.*",
+"rel": {
+"affection": 8,
+"shared": 6
+}
+},
+{
+"id": "visit",
+"text": "Stay, and come back here every winter to look.",
+"result": "good",
+"line": "*Every one of its eyes opens. It shows you the two of you on the ice, again and again, a year apart each time.*",
+"rel": {
+"shared": 8,
+"trust": 4
+}
+}
+]
+}
+}
+],
+"complete": "*Every winter, on the Silent Tide, it is there first.*"
 }
 }
 }

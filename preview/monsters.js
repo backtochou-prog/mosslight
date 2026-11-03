@@ -77,7 +77,7 @@ window.Monsters = (() => {
 
   // ---------------- director: activity follows the clock gradually; dusk is warnings, dawn is retreat
   const Director = { t: 0, sil: 0, calls: 0, lastPhase: null, blockedDays: {},
-    budget() { const ph = W.Survival.Clock.phase(), base = CFG.phases[ph] || 0; if (!base) return 0; const wx = CFG.weather[W.WeatherState.kind]; const season = W.SeasonState.season === 'winter' ? .8 : 1; const sc = W.Survival.Clock.schedule(); let h = W.WorldClock.hour(); let ramp = 1; if (ph === 'early_night') ramp = Math.min(1, .35 + (h - sc.early_night) / Math.max(.5, sc.deep_night - sc.early_night)); return Math.round(base * ramp * (wx ? 1 + (wx.activity - 1) * W.WeatherState.intensity : 1) * season); },
+    budget() { const ph = W.Survival.Clock.phase(), base = CFG.phases[ph] || 0; if (!base) return 0; const wx = CFG.weather[W.WeatherState.kind]; const season = W.SeasonState.season === 'winter' ? .8 : 1; const sc = W.Survival.Clock.schedule(); let h = W.WorldClock.hour(); let ramp = 1; if (ph === 'early_night') ramp = Math.min(1, .35 + (h - sc.early_night) / Math.max(.5, sc.deep_night - sc.early_night)); return (window.Social && Social.world && Social.world().door_open ? 1 : 0) + Math.round(base * ramp * (wx ? 1 + (wx.activity - 1) * W.WeatherState.intensity : 1) * season); },
     tick(dt) { const ph = W.Survival.Clock.phase(); const night = ph === 'early_night' || ph === 'deep_night'; this.t -= dt;
       if (ph !== this.lastPhase) { this.lastPhase = ph; if (ph === 'sunset') { Audio_.play('call', 60, 100); } if (ph === 'early_night') Audio_.play('howl', 720, 300); }
       Audio_.ambience(night ? 1 : ph === 'sunset' ? .5 : .15);

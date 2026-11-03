@@ -46,6 +46,28 @@ def depth_map(season):
     rgb = np.dstack([(d & 255).astype(np.uint8), (d >> 8).astype(np.uint8), np.zeros((H, W), np.uint8)])
     Image.fromarray(rgb, 'RGB').save(os.path.join(out, f'depth_{season}.png'))
 depth_map('spring'); depth_map('winter')
+# festivals: each gets its own depth map so its decorations sort against the player like anything else
+from build_atmosphere_events import FESTIVALS
+from pixelart.render import Placement
+for name, ev in FESTIVALS.items():
+    base = list(sc.extra_placements); sc.extra_placements = [Placement(lib[p['sprite']], p['x'], p['y'], layer=p.get('layer', 'ysort')) for p in ev['props'] if p['sprite'] in lib]
+    allp = sc.placements; sc.placements = allp + sc.extra_placements; depth_map(ev['season']) if False else None
+    import numpy as _np
+    sc.season = ev['season']; d = _np.zeros((H, W), dtype=_np.uint16)
+    for p in sorted([p for p in sc.placements if p.layer == 'ysort'], key=lambda p: (p.y, p.x)):
+        s_ = sc.resolve(p.sprite)
+        if s_ is None: continue
+        ox = (s_.w - 1 - s_.ox) if p.flip else s_.ox; x0, y0 = p.x - ox, p.y - s_.oy; a = s_.c.a[:, ::-1] if p.flip else s_.c.a
+        for yy in range(max(0, y0), min(H, y0 + s_.h)):
+            xs = _np.nonzero(a[yy - y0])[0] + x0; xs = xs[(xs >= 0) & (xs < W)]; d[yy, xs] = p.y
+    for p in [p for p in sc.placements if p.layer == 'fg']:
+        s_ = sc.resolve(p.sprite)
+        if s_ is None: continue
+        ox = (s_.w - 1 - s_.ox) if p.flip else s_.ox; x0, y0 = p.x - ox, p.y - s_.oy; a = s_.c.a[:, ::-1] if p.flip else s_.c.a
+        for yy in range(max(0, y0), min(H, y0 + s_.h)):
+            xs = _np.nonzero(a[yy - y0])[0] + x0; xs = xs[(xs >= 0) & (xs < W)]; d[yy, xs] = 65535
+    Image.fromarray(_np.dstack([(d & 255).astype(_np.uint8), (d >> 8).astype(_np.uint8), _np.zeros((H, W), _np.uint8)]), 'RGB').save(os.path.join(out, f'depth_{name}.png'))
+    sc.placements = allp; sc.extra_placements = base; sc.season = 'spring'
 
 # ---- collision mask: 1 = blocked
 col = np.zeros((H, W), dtype=np.uint8)

@@ -1,0 +1,222 @@
+{
+"name": "fest_silent_tide",
+"label": "The Silent Tide (winter festival)",
+"season": "winter",
+"hour": 22.0,
+"weather": "clear",
+"intensity": 0,
+"festival": true,
+"grade": {
+"key": [
+170,
+200,
+255
+],
+"t": 0.05,
+"val": 1.02,
+"sat": 1.0
+},
+"focal": "the ice hole in a ring of light, ice lanterns around the frozen pond",
+"props": [
+{
+"sprite": "tide_ring",
+"x": 612,
+"y": 290,
+"layer": "ground"
+},
+{
+"sprite": "ice_lantern",
+"x": 556,
+"y": 272
+},
+{
+"sprite": "ice_lantern",
+"x": 560,
+"y": 250
+},
+{
+"sprite": "ice_lantern",
+"x": 582,
+"y": 232
+},
+{
+"sprite": "ice_lantern",
+"x": 623,
+"y": 222
+},
+{
+"sprite": "ice_lantern",
+"x": 667,
+"y": 227
+},
+{
+"sprite": "ice_lantern",
+"x": 699,
+"y": 245
+},
+{
+"sprite": "ice_lantern",
+"x": 698,
+"y": 287
+},
+{
+"sprite": "ice_lantern",
+"x": 666,
+"y": 305
+},
+{
+"sprite": "ice_lantern",
+"x": 622,
+"y": 309
+},
+{
+"sprite": "ice_lantern",
+"x": 581,
+"y": 298
+},
+{
+"sprite": "ice_lantern",
+"x": 598,
+"y": 284
+},
+{
+"sprite": "ice_lantern",
+"x": 626,
+"y": 284
+}
+],
+"extra_lights": [
+{
+"x": 556,
+"y": 266,
+"radius": 20,
+"color": [
+1,
+0.85,
+0.6
+],
+"intensity": 0.75,
+"kind": "lantern"
+},
+{
+"x": 560,
+"y": 244,
+"radius": 20,
+"color": [
+1,
+0.85,
+0.6
+],
+"intensity": 0.75,
+"kind": "lantern"
+},
+{
+"x": 582,
+"y": 226,
+"radius": 20,
+"color": [
+1,
+0.85,
+0.6
+],
+"intensity": 0.75,
+"kind": "lantern"
+},
+{
+"x": 623,
+"y": 216,
+"radius": 20,
+"color": [
+1,
+0.85,
+0.6
+],
+"intensity": 0.75,
+"kind": "lantern"
+},
+{
+"x": 667,
+"y": 221,
+"radius": 20,
+"color": [
+1,
+0.85,
+0.6
+],
+"intensity": 0.75,
+"kind": "lantern"
+},
+{
+"x": 699,
+"y": 239,
+"radius": 20,
+"color": [
+1,
+0.85,
+0.6
+],
+"intensity": 0.75,
+"kind": "lantern"
+},
+{
+"x": 698,
+"y": 281,
+"radius": 20,
+"color": [
+1,
+0.85,
+0.6
+],
+"intensity": 0.75,
+"kind": "lantern"
+},
+{
+"x": 666,
+"y": 299,
+"radius": 20,
+"color": [
+1,
+0.85,
+0.6
+],
+"intensity": 0.75,
+"kind": "lantern"
+},
+{
+"x": 622,
+"y": 303,
+"radius": 20,
+"color": [
+1,
+0.85,
+0.6
+],
+"intensity": 0.75,
+"kind": "lantern"
+},
+{
+"x": 581,
+"y": 292,
+"radius": 20,
+"color": [
+1,
+0.85,
+0.6
+],
+"intensity": 0.75,
+"kind": "lantern"
+},
+{
+"x": 612,
+"y": 280,
+"radius": 40,
+"color": [
+0.7,
+0.9,
+1.0
+],
+"intensity": 0.7,
+"kind": "glow"
+}
+]
+}

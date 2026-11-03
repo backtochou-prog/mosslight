@@ -17,7 +17,7 @@ atmosphere.export(out)
 tiles = TerrainTiles(); lib = build_library_extended(build_library())
 from pixelart.render import Placement
 layers = {}; shadows = {}; events = {}
-EVENTS = {n: json.load(open(os.path.join(ROOT, 'assets/events', n + '.json'))) for n in ('winter_fishing', 'autumn_gathering', 'summer_pond_evening', 'marsh_night')}
+EVENTS = {n: json.load(open(os.path.join(ROOT, 'assets/events', n + '.json'))) for n in ('winter_fishing', 'autumn_gathering', 'summer_pond_evening', 'marsh_night', 'fest_awakening', 'fest_fireflies', 'fest_forgotten', 'fest_silent_tide')}
 def make_scene(season, props=None):
     sc = build(lib)
     if props:

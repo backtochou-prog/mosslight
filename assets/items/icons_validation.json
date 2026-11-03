@@ -86,6 +86,17 @@
   "lure_fly",
   "lure_moth",
   "lure_glow",
+  "dawnbell",
+  "pressed_blossom",
+  "firefly_jar",
+  "moon_lily",
+  "old_compass",
+  "unsent_letter",
+  "tin_bird",
+  "ember_cap",
+  "drowned_bell",
+  "frost_glass",
+  "carved_fish",
   "tool_hand",
   "tool_knife",
   "tool_axe",
@@ -93,7 +104,9 @@
   "tool_rod"
  ],
  "placeholder": [],
- "errors": [],
+ "errors": [
+  "carved_fish: touches the left/right canvas edge (padding)"
+ ],
  "from_sprite": [
   "crate",
   "workbench",

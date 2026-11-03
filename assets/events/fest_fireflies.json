@@ -1,0 +1,239 @@
+{
+"name": "fest_fireflies",
+"label": "The Firefly Evening (summer festival)",
+"season": "summer",
+"hour": 21.5,
+"weather": "clear",
+"intensity": 0,
+"festival": true,
+"fireflies": 3.0,
+"grade": {
+"key": [
+150,
+180,
+255
+],
+"t": 0.06,
+"val": 1.0,
+"sat": 1.05
+},
+"focal": "the pond: a ring of lily lanterns on the water, fireflies over it",
+"props": [
+{
+"sprite": "lily_lantern_0",
+"x": 675,
+"y": 266
+},
+{
+"sprite": "lily_lantern_1",
+"x": 658,
+"y": 281
+},
+{
+"sprite": "lily_lantern_0",
+"x": 628,
+"y": 285
+},
+{
+"sprite": "lily_lantern_1",
+"x": 600,
+"y": 278
+},
+{
+"sprite": "lily_lantern_0",
+"x": 588,
+"y": 263
+},
+{
+"sprite": "lily_lantern_1",
+"x": 597,
+"y": 247
+},
+{
+"sprite": "lily_lantern_0",
+"x": 623,
+"y": 238
+},
+{
+"sprite": "lily_lantern_1",
+"x": 654,
+"y": 241
+},
+{
+"sprite": "reed_lantern",
+"x": 560,
+"y": 232
+},
+{
+"sprite": "reed_lantern",
+"x": 548,
+"y": 250
+},
+{
+"sprite": "reed_lantern",
+"x": 566,
+"y": 330
+},
+{
+"sprite": "reed_lantern",
+"x": 700,
+"y": 322
+},
+{
+"sprite": "firefly_jar",
+"x": 530,
+"y": 272
+},
+{
+"sprite": "firefly_jar",
+"x": 596,
+"y": 272
+}
+],
+"extra_lights": [
+{
+"x": 675,
+"y": 258,
+"radius": 28,
+"color": [
+1,
+0.8,
+0.48
+],
+"intensity": 0.95,
+"kind": "lantern"
+},
+{
+"x": 658,
+"y": 273,
+"radius": 28,
+"color": [
+1,
+0.8,
+0.48
+],
+"intensity": 0.95,
+"kind": "lantern"
+},
+{
+"x": 628,
+"y": 277,
+"radius": 28,
+"color": [
+1,
+0.8,
+0.48
+],
+"intensity": 0.95,
+"kind": "lantern"
+},
+{
+"x": 600,
+"y": 270,
+"radius": 28,
+"color": [
+1,
+0.8,
+0.48
+],
+"intensity": 0.95,
+"kind": "lantern"
+},
+{
+"x": 588,
+"y": 255,
+"radius": 28,
+"color": [
+1,
+0.8,
+0.48
+],
+"intensity": 0.95,
+"kind": "lantern"
+},
+{
+"x": 597,
+"y": 239,
+"radius": 28,
+"color": [
+1,
+0.8,
+0.48
+],
+"intensity": 0.95,
+"kind": "lantern"
+},
+{
+"x": 623,
+"y": 230,
+"radius": 28,
+"color": [
+1,
+0.8,
+0.48
+],
+"intensity": 0.95,
+"kind": "lantern"
+},
+{
+"x": 654,
+"y": 233,
+"radius": 28,
+"color": [
+1,
+0.8,
+0.48
+],
+"intensity": 0.95,
+"kind": "lantern"
+},
+{
+"x": 560,
+"y": 212,
+"radius": 14,
+"color": [
+1,
+0.82,
+0.55
+],
+"intensity": 0.85,
+"kind": "lantern"
+},
+{
+"x": 548,
+"y": 230,
+"radius": 14,
+"color": [
+1,
+0.82,
+0.55
+],
+"intensity": 0.85,
+"kind": "lantern"
+},
+{
+"x": 566,
+"y": 310,
+"radius": 14,
+"color": [
+1,
+0.82,
+0.55
+],
+"intensity": 0.85,
+"kind": "lantern"
+},
+{
+"x": 700,
+"y": 302,
+"radius": 14,
+"color": [
+1,
+0.82,
+0.55
+],
+"intensity": 0.85,
+"kind": "lantern"
+}
+]
+}

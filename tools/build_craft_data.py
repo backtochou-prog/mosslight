@@ -26,6 +26,19 @@ TACKLE_ITEMS = [TK('rod_wooden', 'Basic wooden rod', 'A straight ash pole with a
  TK('worm', 'Worms', 'Fat and unwilling. Almost everything eats them.', 'common', 1, 30, 'bait'), TK('insect_bait', 'Insects', 'A pinch of wings and legs from the reeds.', 'common', 1, 30, 'bait'), TK('baitfish', 'Baitfish', 'A small fish on a big hook, for predators.', 'common', 3, 20, 'bait'), TK('dough_bait', 'Plant dough', 'Seed meal and mushroom, kneaded. Carp cannot resist it.', 'common', 2, 30, 'bait'), TK('night_bait', 'Night bait', 'Worm rolled in moondew. It shines faintly, and strange things come to it.', 'uncommon', 8, 20, 'bait'),
  TK('lure_spinner', 'Spinner lure', 'A flashing blade. Predators and bad weather love it. Not eaten, but a snapped line loses it.', 'uncommon', 25, 3), TK('lure_fly', 'Tied fly', 'Feather and thread. Delicate fish take it on clear days.', 'uncommon', 22, 3), TK('lure_moth', 'Moth lure', 'Wings of dust and a real moth body, for the things that rise at night.', 'rare', 55, 3), TK('lure_glow', 'Glow lure', 'Spores set in nightglass. It is the only thing some fish have ever looked at.', 'very_rare', 120, 2)]
 import fish_data as _FD
+def FV(id, name, desc, rarity, value, stack=5, cat='festival'):
+    d = I(id, name, desc, stack, value, .05); d.update(category=cat, rarity=rarity, gathering='festival', collectible='festival'); return d
+FEST_ITEMS = [FV('dawnbell', 'Dawnbell', 'A white bell-flower that opens only on the Awakening. It rings once when it is picked, and never again.', 'rare', 40),
+ FV('pressed_blossom', 'Pressed rowan blossom', 'A blossom from the lone rowan, pressed flat between the pages of your book. One for each year you hang a wish.', 'uncommon', 15, 10),
+ FV('firefly_jar', 'Jar of fireflies', 'A glass jar of borrowed light from the Firefly Evening. Let them go when you are ready.', 'uncommon', 20),
+ FV('moon_lily', 'Moon lily', 'A white lily that opens for one night of summer and smells of rain on warm stone.', 'rare', 45),
+ FV('old_compass', 'Brass compass', 'Turned up in the autumn leaves. It points at the ruin, not north. It always has.', 'rare', 60, 1),
+ FV('unsent_letter', 'Unsent letter', '"If you find the pond still there, it is because we left it alone." The rest has run in the rain.', 'rare', 30, 1),
+ FV('tin_bird', 'Tin bird', 'A wind-up bird from the leaf heaps with exactly one chirp left in it. You have not used it yet.', 'rare', 50, 1),
+ FV('ember_cap', 'Ember cap', 'A mushroom from the autumn ring, warm in the hand, glowing faintly orange underneath.', 'uncommon', 25),
+ FV('drowned_bell', 'Drowned bell', 'A small brass bell from under the Silent Tide. It does not ring in air. In water, faintly, it does.', 'very_rare', 120, 1),
+ FV('frost_glass', 'Frost glass', 'A shard of the ice lantern you lit on the Silent Tide. It has not melted. It is not going to.', 'rare', 40),
+ FV('carved_fish', 'Carved wooden fish', "A child's carving, smoothed by forty years of pond water. Someone loved it very much.", 'very_rare', 0, 1, 'keepsake')]
 FISH_ITEMS = []
 for _f in _FD.RECORDS:
     _d = I(_f['id'], _f['name'], _f['description'], {'common': 20, 'uncommon': 10, 'rare': 5}.get(_f['rarity'], 1), _f['value'], round((_f['kg'][0] + _f['kg'][1]) / 2, 3)); _d.update(category='fish', rarity=_f['rarity'], gathering='fishing', collectible='fish', habitat=_f['habitat'], crafting=', '.join(_f['uses']), plate=True); FISH_ITEMS.append(_d)
@@ -68,7 +81,7 @@ for r in RECIPES:
     if not r['name'] and r['id'] in NAMES: r['name'], r['description'] = NAMES[r['id']]
     if not r['name']: m = next(i for i in MATERIALS + NIGHT_ITEMS + TACKLE_ITEMS + FISH_ITEMS if i['id'] == r['id']); r['name'], r['description'] = m['name'], m['description']
 PLACEABLE_ITEMS = [I(k, NAMES[k][0], NAMES[k][1], 5, 8, 3, sprite=k) for k in NAMES]
-CRAFTED_ITEMS = MATERIALS + PLACEABLE_ITEMS + NIGHT_ITEMS + TACKLE_ITEMS + FISH_ITEMS
+CRAFTED_ITEMS = MATERIALS + PLACEABLE_ITEMS + NIGHT_ITEMS + TACKLE_ITEMS + FISH_ITEMS + FEST_ITEMS
 L_CRATE = dict(slots=8)
 def O(id, foot, **k): return dict(id=id, name=NAMES[id][0], cat=k.pop('cat', 'Home'), layer='object', item=id, sprite=id, foot=foot, durability=k.pop('durability', 60), **k)
 LAMP = dict(radius=46, color=[1.0, 0.82, 0.55], intensity=0.95, kind='lantern')

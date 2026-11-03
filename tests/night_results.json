@@ -166,12 +166,12 @@
   {
    "name": "AI cost with 12 creatures",
    "ok": true,
-   "detail": "0.06 ms/tick"
+   "detail": "0.02 ms/tick"
   },
   {
    "name": "frame time with creatures (software Chromium)",
    "ok": true,
-   "detail": "23.2 ms"
+   "detail": "19.6 ms"
   },
   {
    "name": "real keys: L lantern, F strike, K guide, Shift sneak",

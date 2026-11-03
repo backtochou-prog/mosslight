@@ -182,7 +182,30 @@ def reservoir():
     for x, l in [(120, 90), (580, 70)]: c.line(x, 266, x + 12, 310, I('rubble', 0)); c.line(x + 12, 310, x + 4, H, I('rubble', 0))
     c.rect(0, 272, 18, 88, I('metal_rust', 0)); c.rect(782, 280, 18, 80, I('metal_rust', 1))
     return c
-ALL = dict(stream=stream, marsh=marsh, lake=lake, reservoir=reservoir)
+def tide():
+    """The Silent Tide: kneeling on clear ice, looking down into the drowned town. Roofs, a street, lit windows, a bell tower; the ice over it all."""
+    rng = random.Random(88); c = Canvas(W, H, I('water', 0)); band(c, 0, 290, 'water', 0, 1)
+    def house(x, y, w, h, roof='ruin'):
+        c.rect(x, y, w, h, I('ruin', 1)); c.rect(x, y, w, 2, I('ruin', 2)); c.poly([(x - 3, y), (x + w // 2, y - h // 2), (x + w + 3, y)], I(roof, 1)); c.line(x - 3, y, x + w // 2, y - h // 2, I(roof, 2))
+        for k in range(max(1, w // 10)):
+            wx = x + 4 + k * 10
+            if wx + 4 < x + w: c.rect(wx, y + 4, 4, 5, I('lantern_glass', rng.choice((0, 1, 2)) if rng.random() < .7 else 0) if rng.random() < .75 else I('metal', 0))
+    c.rect(0, 160, W, 28, I('ruin', 0)); [c.hline(0, W, 160 + k * 7, I('rubble', 0)) for k in range(4)]                       # the drowned street
+    for (x, y, w, h) in [(30, 120, 54, 34), (110, 96, 64, 44), (200, 126, 46, 30), (520, 104, 60, 40), (610, 128, 50, 30), (690, 98, 70, 46), (60, 230, 60, 36), (170, 250, 50, 30), (560, 236, 64, 40), (660, 250, 54, 34)]: house(x, y, w, h, 'metal_rust' if x % 3 else 'ruin')
+    c.rect(374, 40, 52, 110, I('ruin', 1)); c.poly([(368, 40), (400, 4), (432, 40)], I('metal_rust', 1)); c.rect(390, 54, 20, 22, I('lantern_glass', 1)); c.ellipse(400, 66, 7, 7, I('metal_rust', 2)); c.put(400, 70, I('metal', 0))   # the bell tower, its window lit
+    for _ in range(60): x, y = rng.randrange(W), rng.randint(20, 280); c.ellipse(x, y, rng.randint(2, 6), 1, I('lily', 0) if rng.random() < .5 else I('moss', 0))   # weed in the streets
+    for y in range(0, 300):                                    # the ice: sheen and long cracks over everything
+        for x in range(W):
+            if ((x // 9) * 5 + (y // 2) * 11) % 47 < 2 and (x + y) % 3: c.put(x, y, I('ice', 2))
+    for _ in range(9):
+        x, y = rng.randrange(W), rng.randint(10, 280); a = rng.random() * 3.14
+        for t in range(rng.randint(30, 90)): x += math.cos(a); y += math.sin(a) * .5; a += rng.uniform(-.2, .2); c.put(int(x), int(y), I('ice', 4))
+    for x in range(W): y = 290 + int(4 * math.sin(x * .02)); c.rect(x, y, 1, H - y, I('snow', 3)); c.put(x, y, I('snow', 4))
+    for _ in range(700): x, y = rng.randrange(W), rng.randint(294, H - 1); c.put(x, y, I('snow', rng.choice((2, 3, 4))))
+    c.ellipse(400, 222, 26, 12, I('ice', 3)); c.ellipse(400, 222, 21, 9, I('water', 0)); c.ellipse(399, 220, 12, 4, I('water', 1))     # the ice hole
+    for k in range(10): a = k / 10 * 6.28; c.rect(int(400 + math.cos(a) * 34) - 2, int(222 + math.sin(a) * 15) - 3, 4, 5, I('ice', 3)); c.put(int(400 + math.cos(a) * 34), int(222 + math.sin(a) * 15) - 1, I('lantern_glass', 2))
+    return c
+ALL = dict(stream=stream, marsh=marsh, lake=lake, reservoir=reservoir, tide=tide)
 
 def trail_sign():
     """Finger-post at the head of the trail: one solid post, two warm boards."""

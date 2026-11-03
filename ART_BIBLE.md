@@ -664,3 +664,7 @@ The river enters from the east, feeds the pond and leaves south under the footbr
 ## Inhabitants (Prompt 13)
 
 Friendly beings are never animals in costumes and never resemble the hostile creatures: each has its own body plan (a head rising from water, a burr on twig legs, a cloak of wings under a paper lantern, a stump with a face, a three-legged survey dome, a curl of mist). World sprites use the world palette so night and seasons apply; lantern glass, eyes and the mask's eye-light glow by themselves. Portraits are 48 px in the plate palette, three expressions each (calm, glad, troubled), on a wash of their own place. The dialogue box and journal use the field-book parchment and serif, not the dark HUD.
+
+## Festivals (Prompt 14)
+
+A festival transforms the place around one focal point; it is never the ordinary clearing with props scattered on it. Awakening: every rowan in blossom, flower drifts and petals underfoot, an avenue of paper lanterns leading under a woven arch to the lone rowan. Firefly Evening: a ring of lily lanterns on the pond, hundreds of fireflies, lantern light reflected in the water. Forgotten Things: a bonfire and the table of found things on the ruin path, leaf drifts gathered under trees (never confetti), gourd lanterns. Silent Tide: the pond turns to dark glass with the drowned town's lights under it, a ring of ice lanterns round the ice hole; beneath it, a painted view down through the ice. Decorations are drawn in the world palette and grounded like any object; negative space is kept (the south meadow stays open).

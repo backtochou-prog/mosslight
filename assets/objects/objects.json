@@ -2954,5 +2954,409 @@
   ],
   "solid": true,
   "trunk_top": null
+ },
+ "blossom_crown": {
+  "w": 44,
+  "h": 40,
+  "origin": [
+   22,
+   47
+  ],
+  "shadow": null,
+  "tags": [
+   "prop",
+   "ysort"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "flower_arch": {
+  "w": 64,
+  "h": 56,
+  "origin": [
+   32,
+   55
+  ],
+  "shadow": [
+   26,
+   3,
+   3,
+   0
+  ],
+  "tags": [
+   "prop",
+   "ysort"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "wish_post": {
+  "w": 14,
+  "h": 32,
+  "origin": [
+   7,
+   30
+  ],
+  "shadow": [
+   4,
+   1,
+   1,
+   1
+  ],
+  "tags": [
+   "prop",
+   "ysort"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "paper_lantern_line": {
+  "w": 72,
+  "h": 40,
+  "origin": [
+   36,
+   39
+  ],
+  "shadow": [
+   30,
+   2,
+   3,
+   0
+  ],
+  "tags": [
+   "prop",
+   "ysort"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "reed_lantern": {
+  "w": 12,
+  "h": 30,
+  "origin": [
+   6,
+   29
+  ],
+  "shadow": null,
+  "tags": [
+   "prop",
+   "ysort"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "firefly_jar": {
+  "w": 10,
+  "h": 12,
+  "origin": [
+   5,
+   11
+  ],
+  "shadow": null,
+  "tags": [
+   "prop",
+   "ysort"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "leaf_garland": {
+  "w": 72,
+  "h": 36,
+  "origin": [
+   36,
+   35
+  ],
+  "shadow": [
+   30,
+   2,
+   3,
+   0
+  ],
+  "tags": [
+   "prop",
+   "ysort"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "bonfire": {
+  "w": 40,
+  "h": 40,
+  "origin": [
+   20,
+   36
+  ],
+  "shadow": null,
+  "tags": [
+   "prop",
+   "ysort"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "leaf_heap": {
+  "w": 28,
+  "h": 14,
+  "origin": [
+   14,
+   13
+  ],
+  "shadow": null,
+  "tags": [
+   "prop",
+   "ysort"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "mushroom_ring": {
+  "w": 48,
+  "h": 20,
+  "origin": [
+   24,
+   12
+  ],
+  "shadow": null,
+  "tags": [
+   "ground"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "forgotten_table": {
+  "w": 48,
+  "h": 26,
+  "origin": [
+   24,
+   24
+  ],
+  "shadow": [
+   20,
+   2,
+   2,
+   1
+  ],
+  "tags": [
+   "prop",
+   "ysort"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "gourd_lantern": {
+  "w": 12,
+  "h": 12,
+  "origin": [
+   6,
+   11
+  ],
+  "shadow": null,
+  "tags": [
+   "prop",
+   "ysort"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "ice_lantern": {
+  "w": 10,
+  "h": 14,
+  "origin": [
+   5,
+   13
+  ],
+  "shadow": null,
+  "tags": [
+   "prop",
+   "ysort"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "tide_ring": {
+  "w": 40,
+  "h": 20,
+  "origin": [
+   20,
+   10
+  ],
+  "shadow": null,
+  "tags": [
+   "ground"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "petals_0": {
+  "w": 48,
+  "h": 20,
+  "origin": [
+   24,
+   10
+  ],
+  "shadow": null,
+  "tags": [
+   "ground"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "petals_1": {
+  "w": 48,
+  "h": 20,
+  "origin": [
+   24,
+   10
+  ],
+  "shadow": null,
+  "tags": [
+   "ground"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "petals_2": {
+  "w": 48,
+  "h": 20,
+  "origin": [
+   24,
+   10
+  ],
+  "shadow": null,
+  "tags": [
+   "ground"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "lily_lantern_0": {
+  "w": 20,
+  "h": 20,
+  "origin": [
+   10,
+   17
+  ],
+  "shadow": null,
+  "tags": [
+   "ysort",
+   "water"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "lily_lantern_1": {
+  "w": 20,
+  "h": 20,
+  "origin": [
+   10,
+   17
+  ],
+  "shadow": null,
+  "tags": [
+   "ysort",
+   "water"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "leaf_carpet_0": {
+  "w": 48,
+  "h": 22,
+  "origin": [
+   24,
+   12
+  ],
+  "shadow": null,
+  "tags": [
+   "ground"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "leaf_carpet_1": {
+  "w": 48,
+  "h": 22,
+  "origin": [
+   24,
+   12
+  ],
+  "shadow": null,
+  "tags": [
+   "ground"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "leaf_carpet_2": {
+  "w": 48,
+  "h": 22,
+  "origin": [
+   24,
+   12
+  ],
+  "shadow": null,
+  "tags": [
+   "ground"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "blossom_small": {
+  "w": 30,
+  "h": 26,
+  "origin": [
+   15,
+   30
+  ],
+  "shadow": null,
+  "tags": [
+   "prop",
+   "ysort"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "flower_drift_0": {
+  "w": 56,
+  "h": 26,
+  "origin": [
+   28,
+   14
+  ],
+  "shadow": null,
+  "tags": [
+   "ground"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "flower_drift_1": {
+  "w": 56,
+  "h": 26,
+  "origin": [
+   28,
+   14
+  ],
+  "shadow": null,
+  "tags": [
+   "ground"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "flower_drift_2": {
+  "w": 56,
+  "h": 26,
+  "origin": [
+   28,
+   14
+  ],
+  "shadow": null,
+  "tags": [
+   "ground"
+  ],
+  "solid": false,
+  "trunk_top": null
  }
 }

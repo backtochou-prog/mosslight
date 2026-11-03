@@ -101,7 +101,7 @@ window.Gather = (() => {
     found: {},    // id -> {first: {day, hour, season, weather, nodeKind}, count}
     record(id, n) { const f = this.found[id]; const ctx = { day: W.Survival.Clock.day, hour: Math.round(W.WorldClock.hour() * 10) / 10, season: W.SeasonState.season, weather: W.WeatherState.kind, phase: W.Survival.Clock.phase(), node: n ? n.def.kind : null };
       if (!f) { this.found[id] = { first: ctx, count: 1 }; emit('discovered', id, ctx); } else f.count += 1; },
-    progress(cat) { const items = cat ? DB.byCategory(cat) : DB.all().filter(i => !['crafted', 'creature', 'fish', 'bait', 'tackle'].includes(i.category)); const n = items.filter(i => this.found[i.id]).length; return [n, items.length]; },
+    progress(cat) { const items = cat ? DB.byCategory(cat) : DB.all().filter(i => !['crafted', 'creature', 'fish', 'bait', 'tackle', 'festival', 'keepsake'].includes(i.category)); const n = items.filter(i => this.found[i.id]).length; return [n, items.length]; },
     entry(id) { const it = ITEMS[id]; const f = this.found[id]; if (!f) return { id, known: false, name: '???', rarity: it.rarity, category: it.category };
       return { id, known: true, name: it.name, description: it.description, rarity: it.rarity, category: it.category, habitat: it.habitat, seasons: it.seasons, time: it.time, weather: it.weather, first: f.first, count: f.count }; },
   };
@@ -112,7 +112,7 @@ window.Gather = (() => {
 
   // ---------------- UI: inventory + journal panels, tool bar, prompts
   const UI = {
-    open: null, cursor: 0, journalCat: 0, journalCursor: 0, cats: ['natural', 'geological', 'botanical', 'abandoned', 'rare_find'],
+    open: null, cursor: 0, journalCat: 0, journalCursor: 0, cats: ['natural', 'geological', 'botanical', 'abandoned', 'rare_find', 'festival'],
     toggle(which) { this.open = this.open === which ? null : which; },
     drawIcon(g, id, x, y, scale = 1, table, hi = true) { if (W.extraIcon && W.extraIcon(g, id, x, y, scale)) return; const pos = ICON.index[id]; if (!pos) return;
       // hi-res (32 px) art by default; the 16 px grid remains the editable source

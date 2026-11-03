@@ -1229,6 +1229,8 @@ def build_library_extended(lib: dict) -> dict:
         if 'debug' not in s.tags: refine(s.c)
     from .pl_assets import apply
     apply(lib)
+    from .festival import all_sprites as _fest
+    lib.update(_fest())
     return lib
 
 

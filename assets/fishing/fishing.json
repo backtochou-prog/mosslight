@@ -3525,6 +3525,168 @@
 "clue": "Something ate through the bottom of the reservoir. It has not stopped. Bring your strongest line and do not go in autumn alone.",
 "note": "It has ribs on the outside.",
 "description": "A coiled thing all black, with bone showing in rungs through its back and a thin cold light running down the middle."
+},
+{
+"id": "blossom_dace",
+"name": "Blossom dace",
+"latin": "Leuciscus floralis",
+"rarity": "rare",
+"habitat": "pond",
+"depth": "surface",
+"periods": [
+"dawn",
+"day",
+"dusk"
+],
+"seasons": [
+"spring"
+],
+"weather": [
+"any"
+],
+"bait": [
+"insect",
+"dough"
+],
+"difficulty": 3,
+"behavior": "quick",
+"cm": [
+12,
+22
+],
+"kg": [
+0.03,
+0.15
+],
+"value": 55,
+"uses": [
+"collection",
+"gift"
+],
+"clue": "On the day the rowan blooms, petals on the water sometimes swim.",
+"note": "Only on the Awakening.",
+"description": "A dace with petal-pink fins that rises to the blossom falling on the pond, and only then.",
+"event": "fest_awakening"
+},
+{
+"id": "glowfin",
+"name": "Glowfin",
+"latin": "Photonotus aestivus",
+"rarity": "rare",
+"habitat": "pond",
+"depth": "mid",
+"periods": [
+"night",
+"deep"
+],
+"seasons": [
+"summer"
+],
+"weather": [
+"any"
+],
+"bait": [
+"night",
+"lure_glow"
+],
+"difficulty": 5,
+"behavior": "nocturnal",
+"cm": [
+15,
+30
+],
+"kg": [
+0.05,
+0.3
+],
+"value": 70,
+"uses": [
+"collection"
+],
+"clue": "When the pond is full of fireflies, something underneath answers them.",
+"note": "Only on the Firefly Evening.",
+"description": "A slim dark fish whose fins carry a row of soft green lights, blinking in time with the fireflies above.",
+"event": "fest_fireflies"
+},
+{
+"id": "tide_lantern",
+"name": "Tide lantern",
+"latin": "Lychnichthys mersus",
+"rarity": "very_rare",
+"habitat": "tide",
+"depth": "deep",
+"periods": [
+"night",
+"deep"
+],
+"seasons": [
+"winter"
+],
+"weather": [
+"any"
+],
+"bait": [
+"night",
+"lure_glow"
+],
+"difficulty": 7,
+"behavior": "deep",
+"cm": [
+25,
+45
+],
+"kg": [
+0.4,
+1.6
+],
+"value": 220,
+"uses": [
+"collection"
+],
+"clue": "Under the clear ice, some of the lights are moving.",
+"note": "Only beneath the Silent Tide.",
+"description": "A fish with a lamp of its own, drifting between the drowned windows as if it still had somewhere to be.",
+"event": "fest_silent_tide"
+},
+{
+"id": "hush_eel",
+"name": "Hush eel",
+"latin": "Anguilla tacita",
+"rarity": "rare",
+"habitat": "tide",
+"depth": "bottom",
+"periods": [
+"night",
+"deep"
+],
+"seasons": [
+"winter"
+],
+"weather": [
+"any"
+],
+"bait": [
+"worm",
+"night"
+],
+"difficulty": 6,
+"behavior": "cautious",
+"cm": [
+40,
+80
+],
+"kg": [
+0.3,
+1.2
+],
+"value": 150,
+"uses": [
+"collection"
+],
+"clue": "Something long moves through the drowned streets without a sound.",
+"note": "Only beneath the Silent Tide.",
+"description": "A pale eel that lives in the drowned streets and makes no ripple at all, even when caught.",
+"event": "fest_silent_tide"
 }
 ],
 "habitats": {
@@ -3600,6 +3762,35 @@
 150,
 255
 ]
+},
+"tide": {
+"name": "Beneath the Silent Tide",
+"hidden": true,
+"travel_hours": 0,
+"travel_energy": 0,
+"deep": true,
+"grade": "night",
+"requires": {
+"festival": "fest_silent_tide",
+"text": "The ice is ordinary ice tonight."
+},
+"night_risk": 0,
+"description": "The ice is clear as glass. Below it, the drowned town keeps its lights on.",
+"anim": {
+"flow": [
+0,
+0
+],
+"glint": "moonlight",
+"glints": 10,
+"foam": false,
+"drips": false
+},
+"float_y": [
+214,
+228
+],
+"float_dx": 14
 },
 "reservoir": {
 "name": "Sunken reservoir",

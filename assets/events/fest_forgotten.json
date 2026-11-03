@@ -1,0 +1,217 @@
+{
+"name": "fest_forgotten",
+"label": "The Harvest of Forgotten Things (autumn festival)",
+"season": "autumn",
+"hour": 18.8,
+"weather": "clear",
+"intensity": 0,
+"festival": true,
+"grade": {
+"key": [
+255,
+180,
+110
+],
+"t": 0.08,
+"val": 1.0,
+"sat": 1.08
+},
+"focal": "a bonfire and the table of forgotten things on the path to the ruin",
+"props": [
+{
+"sprite": "bonfire",
+"x": 520,
+"y": 196
+},
+{
+"sprite": "forgotten_table",
+"x": 560,
+"y": 176
+},
+{
+"sprite": "leaf_garland",
+"x": 500,
+"y": 160
+},
+{
+"sprite": "gourd_lantern",
+"x": 470,
+"y": 210
+},
+{
+"sprite": "gourd_lantern",
+"x": 486,
+"y": 186
+},
+{
+"sprite": "gourd_lantern",
+"x": 536,
+"y": 226
+},
+{
+"sprite": "gourd_lantern",
+"x": 452,
+"y": 236
+},
+{
+"sprite": "leaf_heap",
+"x": 372,
+"y": 350
+},
+{
+"sprite": "leaf_heap",
+"x": 196,
+"y": 312
+},
+{
+"sprite": "leaf_heap",
+"x": 640,
+"y": 348
+},
+{
+"sprite": "leaf_heap",
+"x": 330,
+"y": 170
+},
+{
+"sprite": "mushroom_ring",
+"x": 476,
+"y": 338,
+"layer": "ground"
+},
+{
+"sprite": "leaf_carpet_0",
+"x": 222,
+"y": 212,
+"layer": "ground"
+},
+{
+"sprite": "leaf_carpet_1",
+"x": 536,
+"y": 419,
+"layer": "ground"
+},
+{
+"sprite": "leaf_carpet_0",
+"x": 506,
+"y": 214,
+"layer": "ground"
+},
+{
+"sprite": "leaf_carpet_1",
+"x": 540,
+"y": 206,
+"layer": "ground"
+},
+{
+"sprite": "leaf_carpet_2",
+"x": 478,
+"y": 226,
+"layer": "ground"
+},
+{
+"sprite": "leaf_carpet_0",
+"x": 566,
+"y": 196,
+"layer": "ground"
+}
+],
+"extra_lights": [
+{
+"x": 520,
+"y": 180,
+"radius": 64,
+"color": [
+1,
+0.7,
+0.4
+],
+"intensity": 1.0,
+"kind": "fire"
+},
+{
+"x": 470,
+"y": 204,
+"radius": 16,
+"color": [
+1,
+0.7,
+0.4
+],
+"intensity": 0.8,
+"kind": "lantern"
+},
+{
+"x": 486,
+"y": 180,
+"radius": 16,
+"color": [
+1,
+0.7,
+0.4
+],
+"intensity": 0.8,
+"kind": "lantern"
+},
+{
+"x": 536,
+"y": 220,
+"radius": 16,
+"color": [
+1,
+0.7,
+0.4
+],
+"intensity": 0.8,
+"kind": "lantern"
+},
+{
+"x": 452,
+"y": 230,
+"radius": 16,
+"color": [
+1,
+0.7,
+0.4
+],
+"intensity": 0.8,
+"kind": "lantern"
+},
+{
+"x": 480,
+"y": 154,
+"radius": 14,
+"color": [
+1,
+0.75,
+0.45
+],
+"intensity": 0.6,
+"kind": "string"
+},
+{
+"x": 500,
+"y": 154,
+"radius": 14,
+"color": [
+1,
+0.75,
+0.45
+],
+"intensity": 0.6,
+"kind": "string"
+},
+{
+"x": 520,
+"y": 154,
+"radius": 14,
+"color": [
+1,
+0.75,
+0.45
+],
+"intensity": 0.6,
+"kind": "string"
+}
+]
+}

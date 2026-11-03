@@ -175,3 +175,7 @@ Finished (hand-authored, validated): all 50 items and 5 tools — `assets/items/
 ### Adopted PixelLab art
 
 `tools/pixelart/pl_assets.py` imports the generated sources in `assets/third_party/pixellab/`, cuts sheets apart, removes baked ground and maps each region onto chosen palette ramps, so seasons and night still apply. Adopted: tent, campfire, oak, birch, pine, willow and rowan trees, boulders, shrubs, ferns, flowers, reeds, lilies, logs, stump, woodpile, mushrooms, rubble, lantern post, ruin walls, a long garden wall, footbridge. Winter versions are derived in code from the same drawings. Still code-drawn: terrain, water, banks, pier, signpost, player. The two generated tilesets were not used because they were noisier than the existing terrain. `provenance.json` records prompts and seeds.
+
+## Festival assets (Prompt 14)
+
+`tools/pixelart/festival.py`: blossom crowns, flower drifts, petals, flower arch, wish posts, paper lantern lines, lily lanterns, reed lanterns, firefly jars, leaf garland, leaf drifts, bonfire, leaf heaps, mushroom ring, table of forgotten things, gourd lanterns, ice lanterns, tide ring. Baked into four scene layers with their own depth maps. `vista_tide_idx.png`: the Silent Tide fishing view. Eleven new collectibles with hand-drawn 16 px icons; four festival fish plates. All code-authored, no human artist pass. Music is generated in the browser and has not been judged by ear.

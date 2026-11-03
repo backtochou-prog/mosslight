@@ -23,12 +23,12 @@
   {
    "name": "moves NE",
    "ok": true,
-   "detail": "93.7 px"
+   "detail": "94.5 px"
   },
   {
    "name": "moves NW",
    "ok": true,
-   "detail": "89.4 px"
+   "detail": "89.2 px"
   },
   {
    "name": "moves SE",
@@ -38,12 +38,12 @@
   {
    "name": "moves SW",
    "ok": true,
-   "detail": "95.1 px"
+   "detail": "93.7 px"
   },
   {
    "name": "diagonal speed == cardinal speed",
    "ok": true,
-   "detail": "cardinal 93.9 px, diagonal 93.2 px over 1.5 s"
+   "detail": "cardinal 93.9 px, diagonal 93.0 px over 1.5 s"
   },
   {
    "name": "stops without sliding",
@@ -177,7 +177,7 @@
   {
    "name": "frame cost (software Chromium, 640x360 at 3x)",
    "ok": true,
-   "detail": "20.9 ms/frame"
+   "detail": "18.0 ms/frame"
   },
   {
    "name": "no page errors",

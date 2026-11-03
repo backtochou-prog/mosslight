@@ -1,0 +1,165 @@
+{
+ "results": [
+  {
+   "name": "nobody starts a conversation or walks to the player, at any hour, even standing next to them for minutes",
+   "ok": true,
+   "detail": "0 "
+  },
+  {
+   "name": "inhabitants notice you (turn, a small sign) and a prompt appears; talking only starts when you ask",
+   "ok": true,
+   "detail": "true | true | Talk to Pip | false | true"
+  },
+  {
+   "name": "walking is never frozen by a conversation; walking away ends it",
+   "ok": true,
+   "detail": "true | 61 | false | 69"
+  },
+  {
+   "name": "a conversation can be ended at any moment",
+   "ok": true,
+   "detail": "true,true"
+  },
+  {
+   "name": "fishing next to an inhabitant is never interrupted",
+   "ok": true,
+   "detail": "0,waiting"
+  },
+  {
+   "name": "milestones need real history: trust alone is not enough; a kept promise is",
+   "ok": true,
+   "detail": "true,false,true"
+  },
+  {
+   "name": "a new milestone is marked in the inhabitant's own words, the next time you choose to talk",
+   "ok": true,
+   "detail": "Greeting again. Recognition: one hundred percent. || Disclosure: I have a record zero. I have never shown it to anyone. I may show it to you. Not yet. Soon. That is a promise. I have started making those."
+  },
+  {
+   "name": "milestones unlock activities: an evening by the fire with Pip",
+   "ok": true,
+   "detail": "met,familiar,trusted >> 1 >> Talk | Ask if it needs a hand | Sit by the fire together | Ask what it found today | Give something | Goodbye"
+  },
+  {
+   "name": "sitting by the fire passes time and becomes a shared memory",
+   "ok": true,
+   "detail": "Sparks are just fire trying to be fireflies. I read that. I didn't read that. I made it up just now. | 0.5 | true"
+  },
+  {
+   "name": "declining is free: no activity is ever offered by the inhabitant itself, only listed when you talk",
+   "ok": true,
+   "detail": "Talk | Ask if it needs a hand | Ask what it found today | Give something | Goodbye"
+  },
+  {
+   "name": "the second chapter depends on the first chapter's choice",
+   "ok": true,
+   "detail": "{\"seal\":\"door>knocking\",\"light\":\"door>answer\",\"leave\":\"door>alone\"}"
+  },
+  {
+   "name": "walking Pip north slowly: it follows, you arrive together, the ending is shared",
+   "ok": true,
+   "detail": "Will you walk with me to the north glade? The edge of the north woods. I'll stay right behind you. Don't go too fast. Please don't go too fast. >> 9.1 >> true >> We waited. It got dark. And then — blue. All of it, blue, like the ground was full of tiny skies. I am never going to forget this. Never. Whenever Pip talks about the north now, it says \"we\". >> stay"
+  },
+  {
+   "name": "rushing ahead loses Pip: the storyline ends badly and Pip remembers it",
+   "ok": true,
+   "detail": "true >> I found my own way back. It took all night. I don't think I'm going north again. It's not your fault. It's a little bit your fault. >> lost >> You went too fast that night. I found my own way home. It's okay. It isn't okay. It's getting okay. || Remember when you caught that Roach and I was right there? I tell everyone. Well, I tell the beetle. || This hat's name is Fennel. Don't tell anyone. Hats get embarrassed."
+  },
+  {
+   "name": "a choice changes the world: opening the knocking door makes the nights more dangerous",
+   "ok": true,
+   "detail": "7 >> 8 >> *The last board comes away. Cold air, and nothing comes out, and nothing comes out, and then something does: you never see it, only feel it pass. Wick will not go near the arch for a long time.* *The arch is just an arch now. Whatever was behind it is somewhere else. Wick stays close to the camp.* >> true"
+  },
+  {
+   "name": "not every ending is happy: if Lull goes home, it never comes back",
+   "ok": true,
+   "detail": "fest_silent_tide >> *It folds once around you, cool and soft, and then it is a thin white thread goi >> true >> false"
+  },
+  {
+   "name": "festivals start and end by calendar day and hour, including across midnight",
+   "ok": true,
+   "detail": "spring14@7.9:- spring14@8.1:fest_awakening spring14@21.1:- summer21@18.9:- summer21@23:fest_fireflies summer22@1.5:fest_fireflies summer22@2.1:- autumn20@15.5:fest_forgotten winter25@21:fest_silent_tide winter26@3:fest_silent_tide winter26@4.1:- spring13@12:-"
+  },
+  {
+   "name": "the calendar turns the season at day 29 and respects a season set by a save",
+   "ok": true,
+   "detail": "summer,autumn,winter,1,1"
+  },
+  {
+   "name": "each festival changes the place: thousands of pixels, its own lights and its own particles",
+   "ok": true,
+   "detail": "{\"fest_awakening\":[8666,16,\"petals\"],\"fest_fireflies\":[1784,12,\"fireflies\"],\"fest_forgotten\":[4630,8,\"leaves\"],\"fest_silent_tide\":[1246,11,\"snowglow\"]}"
+  },
+  {
+   "name": "festival collectibles: picked once, recorded in the journal, attendance noted",
+   "ok": true,
+   "detail": "Pick a dawnbell | no prompt | 1 | 1 | true | 1"
+  },
+  {
+   "name": "forgotten things turn up once ever, not again next year",
+   "ok": true,
+   "detail": "1,1,1 | soc:pip"
+  },
+  {
+   "name": "the Silent Tide: kneel at the ice hole, fish the drowned town, the bell comes up; none of it outside the festival",
+   "ok": true,
+   "detail": "Kneel at the ice hole | tide | tide_lantern/hush_eel | 1 | 0 | false"
+  },
+  {
+   "name": "festivals work fully without talking to anyone",
+   "ok": true,
+   "detail": "Catch fireflies in a jar | 1"
+  },
+  {
+   "name": "skipping a festival or not talking at it never counts against you",
+   "ok": true,
+   "detail": "1,1"
+  },
+  {
+   "name": "talking to Pip at the Firefly Evening becomes a memory it brings up days later",
+   "ok": true,
+   "detail": "fest_fireflies >> turning over leaves >> You were gone 42 days! I counted. I'm not upset. I made a pile of leaves for every day. It's a big pile. || I caught one! I let it go! I caught another one! I let it go! This is the best night! >> true >> You went too fast that night. I found my own way home. It's okay. It isn't okay. It's getting okay. || Remember when you caught that Roach and I was right there? I tell everyone. Well, I tell the beetle. || You were at the The Firefly Evening! I saw you! I waved! You did not see me wave. I waved very hard."
+  },
+  {
+   "name": "just being there together is remembered too, gently",
+   "ok": true,
+   "detail": "true | The Silent Tide"
+  },
+  {
+   "name": "festivals are discovered by clues and by being told; the rest stay hidden",
+   "ok": true,
+   "detail": "true | true | 2 | In a few nights the fireflies come down to the pond all at once. The lanterns go out on the water. You should be here. Or not. The pond will be. || Watch the do | hidden"
+  },
+  {
+   "name": "the calendar draws the season, upcoming and attended festivals, and turns its pages",
+   "ok": true,
+   "detail": "5,autumn"
+  },
+  {
+   "name": "the journal tells it as a story; numbers only appear if you ask for details",
+   "ok": true
+  },
+  {
+   "name": "save and load keep festival records, discoveries, milestones and world changes; collected rewards do not come back",
+   "ok": true,
+   "detail": "true,false,fest_awakening,true"
+  },
+  {
+   "name": "saves from before this milestone still load",
+   "ok": true,
+   "detail": "true,true"
+  },
+  {
+   "name": "the whole game plays without ever talking to an inhabitant",
+   "ok": true,
+   "detail": "Pick an ember cap from the ring | 1 | true"
+  },
+  {
+   "name": "no page errors",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "passed": 32,
+ "total": 32
+}

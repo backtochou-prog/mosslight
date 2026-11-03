@@ -1,0 +1,385 @@
+{
+"name": "fest_awakening",
+"label": "The Awakening (spring festival)",
+"season": "spring",
+"hour": 17.5,
+"weather": "clear",
+"intensity": 0,
+"festival": true,
+"grade": {
+"key": [
+255,
+236,
+222
+],
+"t": 0.05,
+"val": 1.03,
+"sat": 1.04
+},
+"focal": "the lone rowan in blossom, lanterns leading to it under the arch",
+"props": [
+{
+"sprite": "blossom_crown",
+"x": 418,
+"y": 187
+},
+{
+"sprite": "blossom_crown",
+"x": 238,
+"y": 409
+},
+{
+"sprite": "blossom_crown",
+"x": 297,
+"y": 452
+},
+{
+"sprite": "petals_1",
+"x": 417,
+"y": 192,
+"layer": "ground"
+},
+{
+"sprite": "petals_1",
+"x": 244,
+"y": 414,
+"layer": "ground"
+},
+{
+"sprite": "petals_1",
+"x": 299,
+"y": 457,
+"layer": "ground"
+},
+{
+"sprite": "blossom_crown",
+"x": 418,
+"y": 187
+},
+{
+"sprite": "flower_arch",
+"x": 452,
+"y": 300
+},
+{
+"sprite": "paper_lantern_line",
+"x": 430,
+"y": 246
+},
+{
+"sprite": "wish_post",
+"x": 394,
+"y": 212
+},
+{
+"sprite": "wish_post",
+"x": 444,
+"y": 208
+},
+{
+"sprite": "wish_post",
+"x": 420,
+"y": 222
+},
+{
+"sprite": "petals_0",
+"x": 418,
+"y": 206,
+"layer": "ground"
+},
+{
+"sprite": "petals_1",
+"x": 470,
+"y": 290,
+"layer": "ground"
+},
+{
+"sprite": "petals_2",
+"x": 390,
+"y": 318,
+"layer": "ground"
+},
+{
+"sprite": "petals_0",
+"x": 440,
+"y": 318,
+"layer": "ground"
+},
+{
+"sprite": "flower_drift_0",
+"x": 372,
+"y": 196,
+"layer": "ground"
+},
+{
+"sprite": "flower_drift_1",
+"x": 452,
+"y": 196,
+"layer": "ground"
+},
+{
+"sprite": "flower_drift_2",
+"x": 392,
+"y": 232,
+"layer": "ground"
+},
+{
+"sprite": "flower_drift_0",
+"x": 446,
+"y": 236,
+"layer": "ground"
+},
+{
+"sprite": "flower_drift_1",
+"x": 350,
+"y": 216,
+"layer": "ground"
+},
+{
+"sprite": "flower_drift_2",
+"x": 480,
+"y": 214,
+"layer": "ground"
+},
+{
+"sprite": "flower_drift_0",
+"x": 520,
+"y": 300,
+"layer": "ground"
+},
+{
+"sprite": "flower_drift_1",
+"x": 396,
+"y": 330,
+"layer": "ground"
+},
+{
+"sprite": "flower_drift_2",
+"x": 344,
+"y": 350,
+"layer": "ground"
+},
+{
+"sprite": "flower_drift_0",
+"x": 432,
+"y": 356,
+"layer": "ground"
+},
+{
+"sprite": "flower_drift_1",
+"x": 300,
+"y": 170,
+"layer": "ground"
+},
+{
+"sprite": "flower_drift_2",
+"x": 494,
+"y": 160,
+"layer": "ground"
+},
+{
+"sprite": "paper_lantern_line",
+"x": 360,
+"y": 270
+},
+{
+"sprite": "paper_lantern_line",
+"x": 500,
+"y": 240
+}
+],
+"extra_lights": [
+{
+"x": 408,
+"y": 232,
+"radius": 16,
+"color": [
+1,
+0.9,
+0.8
+],
+"intensity": 0.7,
+"kind": "string"
+},
+{
+"x": 420,
+"y": 232,
+"radius": 16,
+"color": [
+1,
+0.9,
+0.8
+],
+"intensity": 0.7,
+"kind": "string"
+},
+{
+"x": 432,
+"y": 232,
+"radius": 16,
+"color": [
+1,
+0.9,
+0.8
+],
+"intensity": 0.7,
+"kind": "string"
+},
+{
+"x": 444,
+"y": 232,
+"radius": 16,
+"color": [
+1,
+0.9,
+0.8
+],
+"intensity": 0.7,
+"kind": "string"
+},
+{
+"x": 455,
+"y": 232,
+"radius": 16,
+"color": [
+1,
+0.9,
+0.8
+],
+"intensity": 0.7,
+"kind": "string"
+},
+{
+"x": 338,
+"y": 256,
+"radius": 14,
+"color": [
+1,
+0.9,
+0.8
+],
+"intensity": 0.6,
+"kind": "string"
+},
+{
+"x": 350,
+"y": 256,
+"radius": 14,
+"color": [
+1,
+0.9,
+0.8
+],
+"intensity": 0.6,
+"kind": "string"
+},
+{
+"x": 362,
+"y": 256,
+"radius": 14,
+"color": [
+1,
+0.9,
+0.8
+],
+"intensity": 0.6,
+"kind": "string"
+},
+{
+"x": 374,
+"y": 256,
+"radius": 14,
+"color": [
+1,
+0.9,
+0.8
+],
+"intensity": 0.6,
+"kind": "string"
+},
+{
+"x": 386,
+"y": 256,
+"radius": 14,
+"color": [
+1,
+0.9,
+0.8
+],
+"intensity": 0.6,
+"kind": "string"
+},
+{
+"x": 478,
+"y": 226,
+"radius": 14,
+"color": [
+1,
+0.9,
+0.8
+],
+"intensity": 0.6,
+"kind": "string"
+},
+{
+"x": 490,
+"y": 226,
+"radius": 14,
+"color": [
+1,
+0.9,
+0.8
+],
+"intensity": 0.6,
+"kind": "string"
+},
+{
+"x": 502,
+"y": 226,
+"radius": 14,
+"color": [
+1,
+0.9,
+0.8
+],
+"intensity": 0.6,
+"kind": "string"
+},
+{
+"x": 514,
+"y": 226,
+"radius": 14,
+"color": [
+1,
+0.9,
+0.8
+],
+"intensity": 0.6,
+"kind": "string"
+},
+{
+"x": 526,
+"y": 226,
+"radius": 14,
+"color": [
+1,
+0.9,
+0.8
+],
+"intensity": 0.6,
+"kind": "string"
+},
+{
+"x": 418,
+"y": 196,
+"radius": 30,
+"color": [
+1,
+0.92,
+0.85
+],
+"intensity": 0.5,
+"kind": "glow"
+}
+]
+}

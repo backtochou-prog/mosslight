@@ -23,7 +23,7 @@
   {
    "name": "each character keeps its own memory; repeat visits consolidate into one record",
    "ok": true,
-   "detail": "met,visit | met | 0 | 1 | 8"
+   "detail": "met,milestone,visit | met,milestone | 0 | 1 | 8"
   },
   {
    "name": "memory is bounded and keeps the important records",
@@ -132,7 +132,7 @@
   {
    "name": "save and load keep memories, relationships, quests, promises; reloading twice duplicates nothing",
    "ok": true,
-   "detail": "13,13,true,true"
+   "detail": "15,15,true,true"
   },
   {
    "name": "older saves without social data still load",
@@ -142,12 +142,12 @@
   {
    "name": "after loading, characters still remember and still talk from memory",
    "ok": true,
-   "detail": "Remember when you caught that Roach and I was right there? I tell everyone. Well, I tell the beetle. | 13"
+   "detail": "Remember when you caught that Roach and I was right there? I tell everyone. Well, I tell the beetle. | 16"
   },
   {
    "name": "from a fresh start, nobody recalls anything that did not happen (every recall is tied to a real, earlier memory)",
    "ok": true,
-   "detail": "156 | 6 | 0 | 0 | met/visit"
+   "detail": "156 | 6 | 0 | 0 | met/milestone/visit"
   },
   {
    "name": "a future AI voice is checked: a line citing a memory that does not exist is refused",

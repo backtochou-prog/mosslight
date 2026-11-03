@@ -1,5 +1,5 @@
 {
-"species": 89,
+"species": 93,
 "identical_colour_and_shape": [],
 "closest": [
 [
@@ -7,6 +7,12 @@
 0.67,
 "dace",
 "vendace"
+],
+[
+0.98,
+0.57,
+"dace",
+"blossom_dace"
 ],
 [
 0.76,
@@ -55,12 +61,6 @@
 0.67,
 "reed_mudskip",
 "mudfish"
-],
-[
-0.64,
-0.64,
-"lake_trout",
-"sturgeon"
 ]
 ]
 }

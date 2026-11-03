@@ -256,3 +256,7 @@ The Godot port does not include this system. Fish art is code-drawn with no huma
 ## Neighbours (Prompt 13)
 
 Six inhabitants live in the clearing on their own schedules: Ebb in the pond, Pip the forager, Wick the lantern keeper at night, Burl the rootbound stump, Tessel the survey machine, and Lull, who only comes in fog, snow or after rain. Walk up and press **E** to talk. **H** opens the neighbours journal. See `docs/SOCIAL.md`. Tests: `tests/social_tests.js`.
+
+## Calendar and festivals (Prompt 14)
+
+Seasons are 28 days. Four festivals: The Awakening (spring 14), The Firefly Evening (summer 21, night), The Harvest of Forgotten Things (autumn 20), The Silent Tide (winter 25, night). Each changes the clearing (its own scene layer, lights, grade, particles, generated music) and has its own optional activities and collectibles; the Silent Tide opens fishing beneath the clear ice. **V** opens the calendar; festivals appear in it once you have found clues, been told, or attended. Data: `tools/build_festival_events.py`; engine: `preview/festival.js`; tests: `tests/festival_tests.js`.

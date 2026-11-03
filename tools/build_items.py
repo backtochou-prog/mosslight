@@ -194,7 +194,7 @@ def build():
     json.dump({'size': 12, 'cols': 10, 'index': index}, open(os.path.join(OUT, 'icons.json'), 'w'))
     for it in ITEMS: it['icon'] = it['id']
     for t in TOOLS: t['icon'] = 'tool_' + t['id']
-    json.dump({'version': 1, 'rarities': RARITY, 'categories': ['natural', 'geological', 'botanical', 'abandoned', 'rare_find', 'creature', 'crafted', 'fish', 'bait', 'tackle'], 'items': ITEMS}, open(os.path.join(OUT, 'items.json'), 'w'), indent=1)
+    json.dump({'version': 1, 'rarities': RARITY, 'categories': ['natural', 'geological', 'botanical', 'abandoned', 'rare_find', 'creature', 'crafted', 'fish', 'bait', 'tackle', 'festival', 'keepsake'], 'items': ITEMS}, open(os.path.join(OUT, 'items.json'), 'w'), indent=1)
     json.dump({'tools': TOOLS}, open(os.path.join(OUT, 'tools.json'), 'w'), indent=1)
     json.dump({'nodes': NODES, 'activities_extra': {'pick_plant': {'label': 'Pick', 'energy': 1, 'minutes': 4, 'heavy': False, 'anim': 'gather'},
                'cut_herb': {'label': 'Cut', 'energy': 1, 'minutes': 5, 'heavy': False, 'anim': 'gather'}, 'search': {'label': 'Search', 'energy': 1, 'minutes': 6, 'heavy': False, 'anim': 'gather'}}},

@@ -1,0 +1,458 @@
+{
+"version": 1,
+"festivals": {
+"fest_awakening": {
+"scene": "fest_awakening",
+"season": "spring",
+"day": 14,
+"from": 8,
+"to": 21,
+"clue_days": 3,
+"focus": [
+418,
+200
+],
+"fx": "petals",
+"color": "#c88aa8",
+"title": "The Awakening",
+"hint": "Something blooms early in spring. The lone rowan seems to know.",
+"clue": "The rowan is covered in tight white buds. In a few days, something will open.",
+"blurb": "The lone rowan blossoms all at once, and the whole clearing follows. Lanterns lead to it under a woven arch. Wishes are hung on its posts.",
+"music": {
+"voice": "flute",
+"root": 523.25,
+"scale": [
+0,
+2,
+4,
+7,
+9,
+12,
+14
+]
+},
+"collectibles": [
+"dawnbell",
+"pressed_blossom",
+"blossom_dace"
+],
+"spots": [
+{
+"id": "dawnbell_a",
+"kind": "pick",
+"x": 404,
+"y": 214,
+"r": 16,
+"label": "Pick a dawnbell",
+"item": "dawnbell",
+"text": "A dawnbell: it rings once when picked, then never again."
+},
+{
+"id": "dawnbell_b",
+"kind": "pick",
+"x": 436,
+"y": 216,
+"r": 16,
+"label": "Pick a dawnbell",
+"item": "dawnbell"
+},
+{
+"id": "dawnbell_c",
+"kind": "pick",
+"x": 372,
+"y": 232,
+"r": 16,
+"label": "Pick a dawnbell",
+"item": "dawnbell"
+},
+{
+"id": "wish",
+"kind": "wish",
+"x": 420,
+"y": 228,
+"r": 18,
+"label": "Hang a wish on the rowan",
+"item": "pressed_blossom",
+"once": "year",
+"text": "You tie a strip of cloth to the post and a blossom falls into your hand. You press it in your book."
+}
+],
+"blockers": [
+[
+422,
+296,
+426,
+302
+],
+[
+478,
+296,
+482,
+302
+],
+[
+392,
+238,
+397,
+247
+],
+[
+464,
+238,
+469,
+247
+]
+]
+},
+"fest_fireflies": {
+"scene": "fest_fireflies",
+"season": "summer",
+"day": 21,
+"from": 19,
+"to": 26,
+"clue_days": 3,
+"focus": [
+630,
+262
+],
+"fx": "fireflies",
+"color": "#c8d870",
+"title": "The Firefly Evening",
+"hint": "On one summer night, the pond lights up. More fireflies every evening before it.",
+"clue": "There are more fireflies over the pond tonight than any night so far. They seem to be gathering for something.",
+"blurb": "Lanterns float on lily pads in a ring on the pond, and hundreds of fireflies come down to meet their reflections.",
+"music": {
+"voice": "pad",
+"root": 220.0,
+"scale": [
+0,
+3,
+5,
+7,
+10
+]
+},
+"collectibles": [
+"firefly_jar",
+"moon_lily",
+"glowfin"
+],
+"spots": [
+{
+"id": "jar",
+"kind": "pick",
+"x": 532,
+"y": 280,
+"r": 18,
+"label": "Catch fireflies in a jar",
+"item": "firefly_jar",
+"limit": 3,
+"text": "You cup your hands over the light and it settles into the jar."
+},
+{
+"id": "lily",
+"kind": "pick",
+"x": 604,
+"y": 320,
+"r": 16,
+"label": "Lift a moon lily from the water",
+"item": "moon_lily",
+"text": "A moon lily, open only tonight. It smells like rain on warm stone."
+},
+{
+"id": "float",
+"kind": "float",
+"x": 590,
+"y": 282,
+"r": 18,
+"label": "Set a lantern on the water",
+"limit": 5,
+"text": "Your lantern drifts out to join the ring."
+}
+],
+"reflect": [
+[
+675,
+268
+],
+[
+658,
+283
+],
+[
+628,
+287
+],
+[
+600,
+280
+],
+[
+588,
+265
+],
+[
+597,
+249
+],
+[
+623,
+240
+],
+[
+654,
+243
+]
+],
+"blockers": []
+},
+"fest_forgotten": {
+"scene": "fest_forgotten",
+"season": "autumn",
+"day": 20,
+"from": 15,
+"to": 24,
+"clue_days": 2,
+"focus": [
+520,
+196
+],
+"fx": "leaves",
+"color": "#c8742a",
+"title": "The Harvest of Forgotten Things",
+"hint": "In autumn the forest gives back what it took. Watch the leaf piles.",
+"clue": "The leaves are piling up in odd heaps on the ruin path, as if something is being buried, or uncovered.",
+"blurb": "The year turns over its leaves. A bonfire burns on the ruin path; lost things surface in the heaps and are laid out on a long table.",
+"music": {
+"voice": "kalimba",
+"root": 196.0,
+"scale": [
+0,
+3,
+5,
+7,
+10,
+12
+]
+},
+"collectibles": [
+"old_compass",
+"unsent_letter",
+"tin_bird",
+"ember_cap"
+],
+"spots": [
+{
+"id": "heap_a",
+"kind": "search",
+"x": 372,
+"y": 350,
+"r": 18,
+"label": "Search the leaf heap",
+"item": "old_compass",
+"once": "ever",
+"text": "Under the leaves: a brass compass. It points at the ruin, not north."
+},
+{
+"id": "heap_b",
+"kind": "search",
+"x": 196,
+"y": 312,
+"r": 18,
+"label": "Search the leaf heap",
+"item": "unsent_letter",
+"once": "ever",
+"text": "A folded letter, never sent. The ink has run, but one line is still clear."
+},
+{
+"id": "heap_c",
+"kind": "search",
+"x": 640,
+"y": 348,
+"r": 18,
+"label": "Search the leaf heap",
+"item": "tin_bird",
+"once": "ever",
+"text": "A wind-up tin bird. It still has one chirp in it."
+},
+{
+"id": "heap_d",
+"kind": "search",
+"x": 330,
+"y": 170,
+"r": 18,
+"label": "Search the leaf heap",
+"text": "Only leaves, and a beetle who is annoyed with you."
+},
+{
+"id": "ring",
+"kind": "pick",
+"x": 476,
+"y": 338,
+"r": 20,
+"label": "Pick an ember cap from the ring",
+"item": "ember_cap",
+"limit": 2,
+"text": "An ember cap: warm to hold, glowing faintly orange underneath."
+},
+{
+"id": "table",
+"kind": "offer",
+"x": 560,
+"y": 184,
+"r": 20,
+"label": "Leave something on the table",
+"limit": 3,
+"text": "You leave a {item} on the table among the forgotten things."
+}
+],
+"blockers": [
+[
+509,
+188,
+531,
+198
+],
+[
+538,
+168,
+582,
+178
+]
+]
+},
+"fest_silent_tide": {
+"scene": "fest_silent_tide",
+"season": "winter",
+"day": 25,
+"from": 20,
+"to": 28,
+"clue_days": 3,
+"focus": [
+612,
+284
+],
+"fx": "snowglow",
+"color": "#8aa2c8",
+"title": "The Silent Tide",
+"hint": "Deep in winter, the pond ice turns clear for one night. Listen to the ice before it.",
+"clue": "The pond ice rings faintly under your boots, and for a moment you think you see a light far below it.",
+"blurb": "For one night the pond ice clears like glass. Under it are the lights of the drowned town, still burning. Kneel at the ice hole and fish the deep.",
+"music": {
+"voice": "bells",
+"root": 392.0,
+"scale": [
+0,
+2,
+7,
+9,
+12,
+14,
+19
+]
+},
+"collectibles": [
+"drowned_bell",
+"frost_glass",
+"tide_lantern",
+"hush_eel"
+],
+"under_ice": [
+[
+590,
+236,
+0
+],
+[
+627,
+259,
+1
+],
+[
+664,
+282,
+2
+],
+[
+621,
+245,
+3
+],
+[
+658,
+268,
+4
+],
+[
+615,
+291,
+5
+],
+[
+652,
+254,
+6
+],
+[
+609,
+277,
+7
+],
+[
+646,
+240,
+8
+],
+[
+603,
+263,
+9
+],
+[
+640,
+286,
+10
+],
+[
+597,
+249,
+11
+],
+[
+634,
+272,
+12
+],
+[
+591,
+295,
+13
+]
+],
+"spots": [
+{
+"id": "kneel",
+"kind": "kneel",
+"x": 612,
+"y": 292,
+"r": 20,
+"label": "Kneel at the ice hole",
+"habitat": "tide",
+"limit": 99
+},
+{
+"id": "lantern",
+"kind": "pick",
+"x": 598,
+"y": 290,
+"r": 14,
+"label": "Light an ice lantern",
+"item": "frost_glass",
+"once": "year",
+"text": "You light the lantern. The ice around it rings like a glass touched with a wet finger."
+}
+],
+"blockers": []
+}
+}
+}

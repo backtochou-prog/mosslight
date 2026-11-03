@@ -95,14 +95,14 @@
    "detail": "true,true,0,255"
   },
   {
-   "name": "all species can appear under their own conditions (89 species)",
+   "name": "all species can appear under their own conditions (93 species)",
    "ok": true,
    "detail": "missing: "
   },
   {
    "name": "all species can be landed by skilled play with top tackle",
    "ok": true,
-   "detail": "89/89 not: "
+   "detail": "93/93 not: "
   },
   {
    "name": "seasonal availability: midsummer sunfish, not winter",
@@ -137,7 +137,7 @@
   {
    "name": "fish enter the one inventory; rare catches keep their own measurements",
    "ok": true,
-   "detail": "2,2,true,50,true,2"
+   "detail": "2,2,true,54.4,true,2"
   },
   {
    "name": "letting one go still counts for the book",
@@ -147,7 +147,7 @@
   {
    "name": "field book: entries have first date, sizes, count; every cell is tappable",
    "ok": true,
-   "detail": "true,true,true,89,true,6"
+   "detail": "true,true,true,93,true,7"
   },
   {
    "name": "undiscovered fish show as silhouettes without their names",
