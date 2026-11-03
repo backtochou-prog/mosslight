@@ -102,7 +102,7 @@
   {
    "name": "walking plays surface footsteps",
    "ok": true,
-   "detail": "footstep_dirt,footstep_grass,footstep_grass,footstep_grass,footstep_grass"
+   "detail": "footstep_dirt,footstep_dirt,footstep_grass,footstep_grass,footstep_grass,footstep_grass"
   },
   {
    "name": "holding R runs: faster, with run frames",
@@ -127,7 +127,7 @@
   {
    "name": "night: the camp spill is lit and warm, open ground away from camp falls into darkness",
    "ok": true,
-   "detail": "camp lum 60 (r67/b61), far 33"
+   "detail": "camp lum 63 (r73/b61), far 33"
   },
   {
    "name": "the small hours are darker than early night",
@@ -137,27 +137,27 @@
   {
    "name": "the fire breathes smoke and spits embers",
    "ok": true,
-   "detail": "3 embers, 8 smoke"
+   "detail": "5 embers, 11 smoke"
   },
   {
    "name": "a gentle breeze moves foliage even on a still day",
    "ok": true,
-   "detail": "77057 px changed"
+   "detail": "76499 px changed"
   },
   {
    "name": "rain rings form on open water",
    "ok": true,
-   "detail": "5 rings"
+   "detail": "12 rings"
   },
   {
    "name": "snow settles on the ground while it falls",
    "ok": true,
-   "detail": "0.000 → 0.017"
+   "detail": "0.000 → 0.013"
   },
   {
    "name": "reduce motion stills foliage sway and cloth (only fire, water and particles move)",
    "ok": true,
-   "detail": "6257 px changed vs 77057"
+   "detail": "6353 px changed vs 76499"
   },
   {
    "name": "no page errors",

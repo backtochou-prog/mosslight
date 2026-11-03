@@ -216,13 +216,16 @@ window.Survival = (() => {
       if (day <= 1) return this.BLOCKS.map(h => ({ h, kind: 'clear', i: 0 }));                       // a gentle first day
       this.BLOCKS.forEach((h, k) => { let kind;
         if (prev && this.rng(day, k * 7 + 1) < .62) kind = prev; else { let r = this.rng(day, k * 7 + 2), acc = 0; kind = 'clear'; for (const [w, p] of Object.entries(odds)) { acc += p; if (r < acc) { kind = w; break; } } }
-        if (kind === 'fog' && h >= 10) kind = 'clear'; prev = kind; out.push({ h, kind, i: kind === 'clear' ? 0 : .45 + this.rng(day, k * 7 + 3) * .45 }); });
+        if (kind === 'fog' && h >= 10 && !(h >= 20 && (season === 'spring' || season === 'autumn'))) kind = 'clear'; /* morning fog, and evening mist over spring and autumn nights */ prev = kind; out.push({ h, kind, i: kind === 'clear' ? 0 : .45 + this.rng(day, k * 7 + 3) * .45 }); });
       const rainy = out.some(b => b.kind === 'light_rain' || b.kind === 'heavy_rain');
-      if (season !== 'winter' && !rainy && day - this.lastRainDay >= 3) out[3] = { h: 15, kind: 'light_rain', i: .55 };
+      const fest = this.festivalOn(day);
+      if (season !== 'winter' && !rainy && day - this.lastRainDay >= 3) { if (fest) out[1] = { h: 6, kind: 'light_rain', i: .5 }; else out[3] = { h: 15, kind: 'light_rain', i: .55 }; }
+      if (fest) for (const b of out) if (b.h >= 15) { b.kind = 'clear'; b.i = 0; }          // festivals were made for clear evenings: the sky keeps the date
       return out; },
+    festivalOn(day) { try { const F = window.Festival; if (!F || !F.data || !F.data()) return null; const D = F.data(), C = F.Cal; for (const k in D.festivals) { const f = D.festivals[k]; if (C.seasonOf(day) === f.season && C.dos(day) === f.day) return k; } } catch (_) {} return null; },
     blockAt(hour, day) { const p = this.plan(day || Clock.day); let b = p[0]; for (const x of p) if (hour >= x.h) b = x; return b; },
     forecast(day) { const p = this.plan(day); const words = { clear: 'clear', light_rain: 'showers', heavy_rain: 'heavy rain', fog: 'morning fog', snow: 'snow', wind: 'wind' }; const parts = []; const when = ['night', 'early morning', 'late morning', 'afternoon', 'evening'];
-      p.forEach((b, k) => { if (b.kind !== 'clear' && k > 0 && (k === 1 || p[k - 1].kind !== b.kind)) parts.push(`${words[b.kind]} in the ${when[k]}`); }); return parts.length ? parts.join(', then ') : 'clear skies all day'; },
+      p.forEach((b, k) => { if (b.kind !== 'clear' && k > 0 && (k === 1 || p[k - 1].kind !== b.kind)) parts.push(`${words[b.kind]} in the ${when[k]}`); }); const f = this.festivalOn(day); const sky = parts.length ? parts.join(', then ') : 'clear skies all day'; return f ? sky + '; clear for the festival tonight' : sky; },
     apply(force) { const WS = window.WeatherState; if (!this.enabled || !WS) return;
       if (this.hold) { if (Clock.day === this.holdDay && !force) return; this.hold = false; }          // a hand-picked sky lasts the rest of that day
       else if (this.setKind && WS.kind !== this.setKind && !force) { this.hold = true; this.holdDay = Clock.day; return; }   // someone chose the weather by hand

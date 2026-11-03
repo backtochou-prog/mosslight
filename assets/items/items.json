@@ -439,7 +439,11 @@
    "weather": "any",
    "habitat": "meadow edges",
    "crafting": "",
-   "collectible": "plant"
+   "collectible": "plant",
+   "use": {
+    "energy": 1,
+    "eat": true
+   }
   },
   {
    "id": "poppy",
@@ -496,7 +500,11 @@
    "weather": "any",
    "habitat": "pond margin",
    "crafting": "tea",
-   "collectible": "plant"
+   "collectible": "plant",
+   "use": {
+    "energy": 2,
+    "eat": true
+   }
   },
   {
    "id": "rowan_berry",
@@ -515,7 +523,11 @@
    "weather": "any",
    "habitat": "rowan trees in autumn",
    "crafting": "jelly, bird bait",
-   "collectible": "plant"
+   "collectible": "plant",
+   "use": {
+    "energy": 3,
+    "eat": true
+   }
   },
   {
    "id": "blackberry",
@@ -534,7 +546,11 @@
    "weather": "any",
    "habitat": "hedges and thickets",
    "crafting": "jam",
-   "collectible": "plant"
+   "collectible": "plant",
+   "use": {
+    "energy": 4,
+    "eat": true
+   }
   },
   {
    "id": "burdock_root",
@@ -572,7 +588,11 @@
    "weather": "any",
    "habitat": "forest floor, near logs",
    "crafting": "stew",
-   "collectible": "plant"
+   "collectible": "plant",
+   "use": {
+    "energy": 5,
+    "eat": true
+   }
   },
   {
    "id": "mushroom_red",

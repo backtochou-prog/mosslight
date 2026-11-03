@@ -97,7 +97,7 @@
  {
   "name": "sfx_sheet: no clipping (peak < 0.95)",
   "ok": true,
-  "detail": 0.7154
+  "detail": 0.6144
  },
  {
   "name": "mood_morning: not silent (rms > 0.002)",
@@ -197,7 +197,7 @@
  {
   "name": "sfx_sheet: not silent (rms > 0.002)",
   "ok": true,
-  "detail": 0.0317
+  "detail": 0.03201
  },
  {
   "name": "mood_morning: world state selects mood 'morning'",

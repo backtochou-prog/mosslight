@@ -30,6 +30,11 @@
    "detail": "S1 0d (-), S2 3.3d (fiber), S3 9.8d (clay), S4 10.1d (stone), S5 14.1d (scrap_metal)"
   },
   {
+   "name": "every one of the 93 fish can be caught with conditions the weather actually makes and bait the player can get",
+   "ok": true,
+   "detail": "catchable with gathered or crafted bait: 93"
+  },
+  {
    "name": "a worn-out axe is mended by hand back to full",
    "ok": true,
    "detail": "[false,true,40,40]"
@@ -95,9 +100,9 @@
    "detail": "0 inside"
   },
   {
-   "name": "weather plans: rain at least every 3rd day outside winter, fog only in the morning, snow only in winter",
+   "name": "weather plans: rain at least every 3rd day outside winter, fog only in the morning (and spring/autumn evening mist), snow only in winter",
    "ok": true,
-   "detail": "longest dry spell 2 days; {\"clear\":298,\"light_rain\":127,\"fog\":22,\"heavy_rain\":40,\"wind\":42,\"snow\":61}"
+   "detail": "longest dry spell 2 days; {\"clear\":297,\"light_rain\":127,\"fog\":25,\"heavy_rain\":40,\"wind\":42,\"snow\":59}"
   },
   {
    "name": "the sky changes on its own during a day, and the morning journal can say what is coming",
@@ -117,7 +122,22 @@
   {
    "name": "the rain ambience follows the weather",
    "ok": true,
-   "detail": "rain layer 0.298"
+   "detail": "rain layer 0.2668"
+  },
+  {
+   "name": "a festival day keeps its evening clear, and the morning forecast says so",
+   "ok": true,
+   "detail": "showers in the early morning; clear for the festival tonight"
+  },
+  {
+   "name": "wild food restores a little energy, takes a moment, and is refused when you are not hungry",
+   "ok": true,
+   "detail": "[54,1,1,2]"
+  },
+  {
+   "name": "a craft in progress survives save and load and then finishes",
+   "ok": true,
+   "detail": "[true,\"cord\",0.3,1]"
   },
   {
    "name": "gathering records the find in the field guide",
@@ -172,17 +192,17 @@
   {
    "name": "reopening the game carries on where you left off",
    "ok": true,
-   "detail": "[21,430,310,801]"
+   "detail": "[21,430,310,803]"
   },
   {
    "name": "25 s of fast-forwarded play (rain, day into night): steady frame time, bounded particles, no runaway memory",
    "ok": true,
-   "detail": "1202 frames, 20.8 ms/frame, heap +0.0 MB, particles fire 11 ripples 17 rain 190, 5 tap targets"
+   "detail": "1200 frames, 20.8 ms/frame, heap +0.0 MB, particles fire 14 ripples 10 rain 190, 5 tap targets"
   },
   {
    "name": "night with 12 creatures renders under the frame budget",
    "ok": true,
-   "detail": "16.7 ms/frame"
+   "detail": "19.6 ms/frame"
   },
   {
    "name": "no page errors",
@@ -190,6 +210,6 @@
    "detail": ""
   }
  ],
- "passed": 38,
- "total": 38
+ "passed": 42,
+ "total": 42
 }

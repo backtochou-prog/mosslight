@@ -342,10 +342,10 @@ const Touch = { enabled: false, btn: { x: 0, y: 0, r: 22 },
     else { g.strokeStyle = 'rgba(246,236,210,.35)'; g.lineWidth = 2; g.beginPath(); g.arc(36 + sf, vh - 36 - sf, 22, 0, 7); g.stroke(); g.lineWidth = 1; }
     const bx = vw - 32 - sf, by = vh - 32 - sf; this.btn.x = bx * UI_SCALE; this.btn.y = by * UI_SCALE;
     this.seal(g, bx, by, 21, Interaction.current ? 'hand' : 'leaf', () => { Input.actionPressed = true; }, 'act', { on: Input.actionPressed, dim: !Interaction.current });
-    this.seal(g, bx - 50, by + 8, 15, 'pack', () => UIKit.openBook('pack'), 'pack');
-    this.seal(g, bx - 40, by - 34, 15, 'book', () => UIKit.openBook(UIKit.lastTab() === 'pack' ? 'guide' : UIKit.lastTab()), 'journal');
-    this.seal(g, bx - 4, by - 52, 15, 'map', () => { UIKit.Map.open = true; }, 'map');
-    if (tableAt(SeasonState.season, WorldClock.hour()).darkness > .35 && window.Monsters) { const on = Monsters.Health && Monsters.Health.lantern; this.seal(g, bx - 88, by + 8, 15, 'lantern', () => Monsters.key('l'), 'lamp', { on }); this.seal(g, bx - 82, by - 30, 15, 'sneak', () => Monsters.key('f'), 'strike'); } } };
+    this.seal(g, bx - 62, by - 4, 15, 'pack', () => UIKit.openBook('pack'), 'pack');
+    this.seal(g, bx - 52, by - 50, 15, 'book', () => UIKit.openBook(UIKit.lastTab() === 'pack' ? 'guide' : UIKit.lastTab()), 'journal');
+    this.seal(g, bx - 6, by - 66, 15, 'map', () => { UIKit.Map.open = true; }, 'map');
+    if (tableAt(SeasonState.season, WorldClock.hour()).darkness > .35 && window.Monsters) { const on = Monsters.Health && Monsters.Health.lantern; this.seal(g, bx - 110, by - 4, 15, 'lantern', () => Monsters.key('l'), 'lamp', { on }); this.seal(g, bx - 104, by - 50, 15, 'strike', () => Monsters.key('f'), 'strike'); } } };
 
 // ---------------------------------------------------------------- the world pixel pass (hot path: flat typed arrays, numbers only)
 const SH = { tab: new Float32Array(768), post: new Float32Array(768), lamp: new Float32Array(768), day: new Float32Array(768), nl: 0, lk: null, lc: null, fl: null };

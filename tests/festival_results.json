@@ -38,7 +38,7 @@
   {
    "name": "milestones unlock activities: an evening by the fire with Pip",
    "ok": true,
-   "detail": "met,familiar,trusted >> 1 >> Talk | Ask if it needs a hand | Sit by the fire together | Ask what it found today | Give something | Goodbye"
+   "detail": "met,familiar,trusted,close >> 1 >> Talk | Ask if it needs a hand | Sit by the fire together | Ask what it found today | Come for a walk with me | Give something | Goodbye"
   },
   {
    "name": "sitting by the fire passes time and becomes a shared memory",
@@ -48,7 +48,7 @@
   {
    "name": "declining is free: no activity is ever offered by the inhabitant itself, only listed when you talk",
    "ok": true,
-   "detail": "Talk | Ask if it needs a hand | Ask what it found today | Give something | Goodbye"
+   "detail": "Talk | Ask if it needs a hand | Ask what it found today | Come for a walk with me | Give something | Goodbye"
   },
   {
    "name": "the second chapter depends on the first chapter's choice",

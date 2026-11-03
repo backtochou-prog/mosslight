@@ -551,7 +551,7 @@ def lint():
 def build():
     lint()
     out = dict(version=1, milestones=MILESTONES, dims=DIMS, anchors=ANCHORS, water=WATER, memory_kinds={k: dict(sig=v[0], sign=v[1]) for k, v in MEMORY.items()}, moods=MOODS,
-               tiers=[[0, 'stranger'], [12, 'acquainted'], [30, 'friendly'], [55, 'close'], [80, 'kindred']], characters=C)
+               tiers=[[0, 'stranger'], [8, 'acquainted'], [20, 'friendly'], [38, 'close'], [60, 'kindred']], characters=C)
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); json.dump(out, open(os.path.join(root, 'assets/social/cast.json'), 'w'), indent=0)
     n = sum(len(c['greet']) + len(c['chat']) + len(c['recall']) + len(c['asleep']) for c in C.values()); print(len(C), 'characters,', n, 'authored lines')
 if __name__ == '__main__': build()

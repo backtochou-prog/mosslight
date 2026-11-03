@@ -130,7 +130,7 @@ No artwork, animation or effect was removed or reduced.
 
 ## 5. Tests
 
-11 suites, 422 checks.
+11 suites, 426 checks (after the second pass, section 6).
 
 | suite | result |
 |---|---|
@@ -143,7 +143,7 @@ No artwork, animation or effect was removed or reduced.
 | social | 34/34 |
 | festival | 32/32 |
 | atmosphere (Prompt 15) | 33/33 |
-| **integration (new, Prompt 16)** | **38/38** |
+| **integration (new, Prompt 16)** | **42/42** |
 | audio render | 64/64 |
 
 The new integration suite covers:
@@ -161,3 +161,26 @@ Fixture changes to older suites:
 - **Build and night suites:** they now unlock all home stages, because they test the parts rather than progression.
 - **Older-save simulations (fishing, social and festival suites):** these now read through `SaveState.read()`, because storage now holds an envelope.
 - **Nail count:** the build suite reads the per-craft yield from the data instead of assuming 6.
+
+## 6. Second pass (Prompt 16 sent again)
+
+This pass covered the areas the first one had left alone.
+
+- **Fish collection.** A new `tools/fish_report.py` checks every species against the weather the planner really makes, the clock, the craftable rods and the baits the player can get. Results go to `docs/FISH_REPORT.md`.
+  - **Before:** the marsh frogmouth (night fog) could not be caught at all. Five carp-family fish needed plant dough, whose wild seeds came only from a neighbour.
+  - **Fixes:** the planner now allows evening mist over spring and autumn nights. Poppies and daisies drop seed heads.
+  - **Now:** all 93 species are catchable with gathered or crafted bait.
+- **Relationships.** I simulated 40 days of daily chats plus a liked gift every other day.
+  - **Before:** "acquainted" took about 20–30 days, and "friendly" was out of reach for most neighbours.
+  - **Fix:** the tier thresholds are lower (8, 20, 38, 60 instead of 12, 30, 55, 80). Milestones still need real shared memories, so nothing is skipped.
+  - **Now:** "acquainted" comes around day 10–15 and "friendly" around day 28–40 from chats and gifts alone. Quests, promises and activities come on top.
+  - Wick and Lull do not appear in this simulation because they keep night and fog hours.
+- **Festivals and weather.** Festival evenings were authored clear, and the random plan could rain on them. Now a festival day's afternoon and evening are always clear. That day's rain guarantee moves to the morning, and the forecast says "clear for the festival tonight".
+- **Food.** Berries, brown mushrooms, mint and bellflowers were marked as food but did nothing when used. Now eating one takes 2 minutes and restores 1–5 energy, and is refused when you are full. This makes foraging a real choice against resting, without replacing sleep.
+- **Saving.** A craft in progress is now saved and resumes after loading.
+- **Touch controls.** The night seals (act, pack, journal, map, lamp, strike) are laid out on a spaced grid with no overlapping labels. "Strike" has its own slash glyph.
+- **Typeface.** The Mossbook "H" was redrawn with a real counter, so "H" no longer reads as "I" in bold or regular.
+- **Reviewed and left unchanged** (no problems found):
+  - fishing fight difficulty: the relaxed pace setting is already there;
+  - monster drops, and energy costs per activity;
+  - healing: the moondew tonic is craftable and the ghostcap salve is a rare night reward.

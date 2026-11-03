@@ -18,7 +18,7 @@
   {
    "name": "dawn: creatures retreat gradually, not instantly",
    "ok": true,
-   "detail": "3,4.2,0"
+   "detail": "3,4.3,0"
   },
   {
    "name": "lantern extends how far you are seen",
@@ -166,12 +166,12 @@
   {
    "name": "AI cost with 12 creatures",
    "ok": true,
-   "detail": "0.04 ms/tick"
+   "detail": "0.02 ms/tick"
   },
   {
    "name": "frame time with creatures (software Chromium)",
    "ok": true,
-   "detail": "22.4 ms"
+   "detail": "42.7 ms"
   },
   {
    "name": "real keys: L lantern, F strike, K guide, Shift sneak",

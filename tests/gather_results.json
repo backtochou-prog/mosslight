@@ -38,7 +38,7 @@
   {
    "name": "5. use a tool: axe on the oak yields a log and wears the axe",
    "ok": true,
-   "detail": "[[\"log\",1],[\"hardwood\",1]], durability 39"
+   "detail": "[[\"log\",1]], durability 39"
   },
   {
    "name": "pickaxe node refuses bare hands but auto-picks an owned compatible tool",
@@ -57,7 +57,7 @@
   {
    "name": "stacks merge: one slot per item type so far",
    "ok": true,
-   "detail": "[[\"branch\",3],[\"mushroom_brown\",1],[\"daisy\",1],[\"stone\",5],[\"log\",1],[\"hardwood\",1],[\"copper_ore\",2],[\"mint\",2]]"
+   "detail": "[[\"branch\",3],[\"mushroom_brown\",1],[\"daisy\",1],[\"stone\",5],[\"log\",1],[\"copper_ore\",2],[\"mint\",2]]"
   },
   {
    "name": "stack limit 30 overflows into a second slot",
@@ -85,7 +85,7 @@
   {
    "name": "8. journal records discoveries with progress",
    "ok": true,
-   "detail": "8/52"
+   "detail": "7/52"
   },
   {
    "name": "undiscovered entries are hidden as ???",
@@ -147,12 +147,12 @@
   {
    "name": "save/load restores inventory exactly (no loss, no duplication)",
    "ok": true,
-   "detail": "15 stacks"
+   "detail": "14 stacks"
   },
   {
    "name": "save/load restores journal and tool durability",
    "ok": true,
-   "detail": "found 13, axe 39"
+   "detail": "found 12, axe 39"
   },
   {
    "name": "save/load keeps depleted nodes depleted",

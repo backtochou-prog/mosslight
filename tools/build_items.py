@@ -90,9 +90,9 @@ NODES = [
  dict(id='stones_path', kind='stone_pile', x=520, y=292, r=18, label='Gather stones', activity='gather_stones', tool='hand', drops=[['stone',1,2]], yields=2, respawn_hours=24, respawn_mode='time'),
  dict(id='mush_log', kind='mushroom', x=490, y=372, r=16, label='Pick mushrooms', activity='pick_plant', tool='hand', drops=[['mushroom_brown',1,2]], yields=1, respawn_hours=48, respawn_mode='time', seasons='spring,autumn'),
  dict(id='mush_north', kind='mushroom', x=432, y=142, r=16, label='Pick mushrooms', activity='pick_plant', tool='hand', drops=[['mushroom_brown',1,1],['mushroom_red',0,1]], yields=1, respawn_hours=48, respawn_mode='time', seasons='spring,autumn'),
- dict(id='daisies_s', kind='flower_w', x=386, y=352, r=16, label='Pick daisies', activity='pick_plant', tool='hand', drops=[['daisy',1,2]], yields=2, respawn_hours=72, respawn_mode='season', seasons='spring,summer', time='day'),
+ dict(id='daisies_s', kind='flower_w', x=386, y=352, r=16, label='Pick daisies', activity='pick_plant', tool='hand', drops=[['daisy',1,2],['seeds_wild',0,2]], yields=2, respawn_hours=72, respawn_mode='season', seasons='spring,summer', time='day'),
  dict(id='bells_e', kind='flower_b', x=470, y=234, r=16, label='Pick bellflowers', activity='pick_plant', tool='hand', drops=[['bellflower',1,2]], yields=2, respawn_hours=72, respawn_mode='season', seasons='spring,summer'),
- dict(id='poppies_se', kind='flower_r', x=606, y=372, r=16, label='Pick poppies', activity='pick_plant', tool='hand', drops=[['poppy',1,2]], yields=2, respawn_hours=72, respawn_mode='season', seasons='summer', time='day'),
+ dict(id='poppies_se', kind='flower_r', x=606, y=372, r=16, label='Pick poppies', activity='pick_plant', tool='hand', drops=[['poppy',1,2],['seeds_wild',1,2]], yields=2, respawn_hours=72, respawn_mode='season', seasons='summer', time='day'),
  dict(id='berries_hedge', kind='berry_bush', x=560, y=440, r=20, label='Pick blackberries', activity='pick_plant', tool='hand', drops=[['blackberry',2,4]], yields=3, respawn_hours=96, respawn_mode='season', seasons='summer,autumn'),
  dict(id='rowan_berries', kind='berry_rowan', x=418, y=184, r=18, label='Pick rowan berries', activity='pick_plant', tool='hand', drops=[['rowan_berry',2,3]], yields=2, respawn_hours=120, respawn_mode='season', seasons='autumn'),
  dict(id='mint_pond', kind='herb', x=600, y=352, r=16, label='Cut wild mint', activity='cut_herb', tool='knife', drops=[['mint',1,2]], yields=2, respawn_hours=48, respawn_mode='time', seasons='spring,summer,autumn'),
@@ -186,6 +186,10 @@ def build():
     import build_craft_data as CD
     CD.write()
     ITEMS.extend(CD.CRAFTED_ITEMS)
+    # wild food: a small bite of energy, so foraging and fishing are a real alternative to stopping for the day (Prompt 16)
+    FOOD = {'blackberry': 4, 'rowan_berry': 3, 'mushroom_brown': 5, 'mint': 2, 'bellflower': 1}
+    for it in ITEMS:
+        if it['id'] in FOOD: it['use'] = dict(it.get('use') or {}, energy=FOOD[it['id']], eat=True)
     names = [i['id'] for i in ITEMS] + ['tool_' + t['id'] for t in TOOLS]
     sheet = Canvas(12 * 10, 12 * ((len(names) + 9) // 10)); index = {}
     for k, (nm, ic) in enumerate([(i['id'], i['icon']) for i in ITEMS if not isinstance(i.get('icon'), str) and i['category'] != 'crafted'] + [('tool_' + t['id'], t['icon']) for t in TOOLS]):
