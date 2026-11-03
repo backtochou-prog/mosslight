@@ -76,7 +76,8 @@ function check(name, ok, detail) { results.push({ name, ok: !!ok, detail }); con
   // ---- lighting: a warm pool at camp, real darkness away from it
   const lum = (x, y) => ev(([x, y]) => { const d = OFFC().getContext('2d').getImageData(x - 3, y - 3, 7, 7).data; let s = 0, r = 0, b = 0; for (let i = 0; i < d.length; i += 4) { s += d[i] * .3 + d[i + 1] * .59 + d[i + 2] * .11; r += d[i]; b += d[i + 2]; } return [s / 49, r / 49, b / 49]; }, [x, y]);
   await ev(() => { setPreset(9); Player.setPos(262, 286); }); await wait(700);
-  const near = await lum(330, 300), far = await lum(150, 420);
+  const avg = async (x, y) => { const acc = [0, 0, 0]; for (let k = 0; k < 6; k++) { const v = await lum(x, y); v.forEach((q, i) => acc[i] += q / 6); await wait(90); } return acc; };   // flicker: average over frames
+  const near = await avg(330, 300), far = await avg(150, 420);
   check('night: the camp spill is lit and warm, open ground away from camp falls into darkness', near[0] > far[0] * 1.7 && near[1] > near[2] * 1.1, `camp lum ${near[0].toFixed(0)} (r${near[1].toFixed(0)}/b${near[2].toFixed(0)}), far ${far[0].toFixed(0)}`); await shot('night_camp_pool');
   const deep = await ev(() => { const s = []; for (const h of [21, 1.5]) { WorldClock.minutes = h * 60; s.push(h); } return true; }); await ev(() => { WorldClock.minutes = 21 * 60; }); await wait(400); const l21 = await lum(150, 420); await ev(() => { WorldClock.minutes = 90; }); await wait(400); const l01 = await lum(150, 420);
   check('the small hours are darker than early night', l01[0] < l21[0], `21:00 ${l21[0].toFixed(1)} vs 01:30 ${l01[0].toFixed(1)}`);

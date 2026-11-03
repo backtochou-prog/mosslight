@@ -56,6 +56,7 @@
   "nails",
   "stone_block",
   "iron_ingot",
+  "copper_ingot",
   "glass_pane",
   "hinge",
   "cloth",
@@ -104,9 +105,7 @@
   "tool_rod"
  ],
  "placeholder": [],
- "errors": [
-  "carved_fish: touches the left/right canvas edge (padding)"
- ],
+ "errors": [],
  "from_sprite": [
   "crate",
   "workbench",

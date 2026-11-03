@@ -87,7 +87,7 @@
     ]
    ],
    "yields": 3,
-   "respawn_hours": 36,
+   "respawn_hours": 24,
    "respawn_mode": "time"
   },
   {
@@ -107,7 +107,7 @@
     ]
    ],
    "yields": 2,
-   "respawn_hours": 36,
+   "respawn_hours": 24,
    "respawn_mode": "time"
   },
   {
@@ -301,8 +301,8 @@
      3
     ]
    ],
-   "yields": 3,
-   "respawn_hours": 24,
+   "yields": 4,
+   "respawn_hours": 16,
    "respawn_mode": "time"
   },
   {
@@ -342,7 +342,7 @@
     ]
    ],
    "yields": 2,
-   "respawn_hours": 72,
+   "respawn_hours": 36,
    "respawn_mode": "time"
   },
   {
@@ -367,7 +367,7 @@
     ]
    ],
    "yields": 4,
-   "respawn_hours": 240,
+   "respawn_hours": 120,
    "respawn_mode": "time"
   },
   {
@@ -383,7 +383,7 @@
     [
      "stone",
      1,
-     1
+     2
     ],
     [
      "copper_ore",
@@ -402,8 +402,8 @@
     ]
    ],
    "yields": 5,
-   "respawn_hours": null,
-   "respawn_mode": "none",
+   "respawn_hours": 96,
+   "respawn_mode": "time",
    "night_extra": [
     [
      "moonstone",
@@ -429,7 +429,7 @@
     ],
     [
      "iron_ore",
-     0,
+     1,
      1
     ],
     [
@@ -444,8 +444,8 @@
     ]
    ],
    "yields": 4,
-   "respawn_hours": null,
-   "respawn_mode": "none"
+   "respawn_hours": 96,
+   "respawn_mode": "time"
   },
   {
    "id": "scrap_ruin",
@@ -469,7 +469,7 @@
     ],
     [
      "glass_shard",
-     0,
+     1,
      1
     ],
     [
@@ -483,8 +483,8 @@
      1
     ]
    ],
-   "yields": 3,
-   "respawn_hours": 240,
+   "yields": 4,
+   "respawn_hours": 72,
    "respawn_mode": "time"
   },
   {
@@ -499,8 +499,13 @@
    "drops": [
     [
      "wire",
-     0,
+     1,
      2
+    ],
+    [
+     "scrap_metal",
+     0,
+     1
     ],
     [
      "circuit",
@@ -519,8 +524,8 @@
     ]
    ],
    "yields": 2,
-   "respawn_hours": null,
-   "respawn_mode": "none",
+   "respawn_hours": 120,
+   "respawn_mode": "time",
    "unique": [
     "photo",
     "tin_cup"
@@ -901,8 +906,8 @@
      2
     ]
    ],
-   "yields": 3,
-   "respawn_hours": 24,
+   "yields": 4,
+   "respawn_hours": 18,
    "respawn_mode": "time",
    "weather": "rain,after_rain"
   },

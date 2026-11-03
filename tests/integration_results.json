@@ -1,0 +1,195 @@
+{
+ "results": [
+  {
+   "name": "every material that progression needs is renewable or craftable",
+   "ok": true,
+   "detail": "all renewable"
+  },
+  {
+   "name": "essential late materials have a guaranteed (non-random) source",
+   "ok": true,
+   "detail": "iron ore 1/strike, glass 1/search, coal from charcoal, bolts and wire from scrap"
+  },
+  {
+   "name": "every tool that can break can be mended by hand, with no tool needed",
+   "ok": true,
+   "detail": "knife, axe, pickaxe, rod"
+  },
+  {
+   "name": "axe, pickaxe and knife have three tiers with rising durability and efficiency",
+   "ok": true
+  },
+  {
+   "name": "every recipe and every non-fish item has an icon in the atlas (no blank slots)",
+   "ok": true,
+   "detail": "132 icons"
+  },
+  {
+   "name": "balance model: each home stage takes 2-15 days of waiting for materials, rising stage by stage, nothing blocked",
+   "ok": true,
+   "detail": "S1 0d (-), S2 3.3d (fiber), S3 9.8d (clay), S4 10.1d (stone), S5 14.1d (scrap_metal)"
+  },
+  {
+   "name": "a worn-out axe is mended by hand back to full",
+   "ok": true,
+   "detail": "[false,true,40,40]"
+  },
+  {
+   "name": "tool tiers go in order: copper before iron; the copper axe lasts longer and works better",
+   "ok": true,
+   "detail": "[false,\"Make the Copper axe first.\",true,\"Copper axe\",90,1.25]"
+  },
+  {
+   "name": "better tools yield more per swing (iron axe vs basic, 200 swings each)",
+   "ok": true,
+   "detail": "basic 1.44 logs/swing, iron 1.95"
+  },
+  {
+   "name": "crafting a plank takes the log, gives 4 planks, and costs its energy and minutes",
+   "ok": true,
+   "detail": "[true,4,1,2,10]"
+  },
+  {
+   "name": "crafting with a full pack never destroys the result: the rest lands at your feet",
+   "ok": true,
+   "detail": "[true,0,4]"
+  },
+  {
+   "name": "a fresh camp is stage 1; stage-3 walls wait for a shelter, with the reason given",
+   "ok": true,
+   "detail": "1 · Build a woodland shelter first (home stage 2)."
+  },
+  {
+   "name": "a closed, roofed room with a door is a Woodland shelter, and standing inside it counts as sheltered",
+   "ok": true,
+   "detail": "stage 2, inside true, outside false"
+  },
+  {
+   "name": "sleeping in your own room after 02:00 still gives a full night; the tent outside does not",
+   "ok": true,
+   "detail": "room 100, tent 80"
+  },
+  {
+   "name": "a 6-cell timber room with a window and a bed is a homestead: +10 morning energy, stage-4 parts open",
+   "ok": true,
+   "detail": "[3,110,\"Walls need a foundation beneath them.\"]"
+  },
+  {
+   "name": "pulling the home down drops the stage again",
+   "ok": true,
+   "detail": "1"
+  },
+  {
+   "name": "night danger ramps over the first nights (budget day 1 < day 2 < day 6)",
+   "ok": true,
+   "detail": "3 → 5 → 6 → 7"
+  },
+  {
+   "name": "creatures are never placed within 110 px of the player",
+   "ok": true,
+   "detail": "1600 sites, 0 too close"
+  },
+  {
+   "name": "no spawn site inside the campfire's pool of light",
+   "ok": true,
+   "detail": "0 inside"
+  },
+  {
+   "name": "weather plans: rain at least every 3rd day outside winter, fog only in the morning, snow only in winter",
+   "ok": true,
+   "detail": "longest dry spell 2 days; {\"clear\":298,\"light_rain\":127,\"fog\":22,\"heavy_rain\":40,\"wind\":42,\"snow\":61}"
+  },
+  {
+   "name": "the sky changes on its own during a day, and the morning journal can say what is coming",
+   "ok": true,
+   "detail": "2 changes; tomorrow: morning fog in the early morning"
+  },
+  {
+   "name": "weather chosen by hand (dev menu, preset) holds for the rest of that day",
+   "ok": true,
+   "detail": "[\"fog\",false]"
+  },
+  {
+   "name": "rain opens the clay bank and changes the fishing conditions; dry weather closes it again",
+   "ok": true,
+   "detail": "[true,true,false]"
+  },
+  {
+   "name": "the rain ambience follows the weather",
+   "ok": true,
+   "detail": "rain layer 0.298"
+  },
+  {
+   "name": "gathering records the find in the field guide",
+   "ok": true,
+   "detail": "[true,1]"
+  },
+  {
+   "name": "building placement refuses water and the tent",
+   "ok": true,
+   "detail": "[\"The ground here is blocked.\",\"The ground here is blocked.\"]"
+  },
+  {
+   "name": "walking past a neighbour who is waiting never lowers trust or affection",
+   "ok": true,
+   "detail": "checkIgnored only records the day"
+  },
+  {
+   "name": "one save holds position, pack, tool tiers, buildings and home stage, weather, day and time, health, map, far waters, fish records and memories",
+   "ok": true,
+   "detail": "[410,300,3,{\"id\":\"knife\",\"tier\":1,\"durability\":77},34,\"fog\",12,870,61,131,[\"Stream\"],3,1,2]"
+  },
+  {
+   "name": "a damaged save (checksum mismatch) is caught and the backup copy is loaded instead",
+   "ok": true,
+   "detail": "[true,12,\"mosslight.save.bak\",\"mosslight.save: checksum mismatch\"]"
+  },
+  {
+   "name": "an interrupted write (main torn, backup garbage) recovers from the temp copy without throwing",
+   "ok": true,
+   "detail": "[false,true,40,\"mosslight.save.tmp\"]"
+  },
+  {
+   "name": "an older plain (version 1) save still loads and is migrated",
+   "ok": true,
+   "detail": "[true,7,\"summer\",55]"
+  },
+  {
+   "name": "when every copy is garbage, loading fails cleanly (no crash, no partial state)",
+   "ok": true,
+   "detail": "[false,false]"
+  },
+  {
+   "name": "waking up autosaves the morning",
+   "ok": true,
+   "detail": "15"
+  },
+  {
+   "name": "switching away from the game (page hidden) saves at once",
+   "ok": true,
+   "detail": "16"
+  },
+  {
+   "name": "reopening the game carries on where you left off",
+   "ok": true,
+   "detail": "[21,430,310,801]"
+  },
+  {
+   "name": "25 s of fast-forwarded play (rain, day into night): steady frame time, bounded particles, no runaway memory",
+   "ok": true,
+   "detail": "1202 frames, 20.8 ms/frame, heap +0.0 MB, particles fire 11 ripples 17 rain 190, 5 tap targets"
+  },
+  {
+   "name": "night with 12 creatures renders under the frame budget",
+   "ok": true,
+   "detail": "16.7 ms/frame"
+  },
+  {
+   "name": "no page errors",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "passed": 38,
+ "total": 38
+}

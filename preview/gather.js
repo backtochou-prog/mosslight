@@ -33,10 +33,14 @@ window.Gather = (() => {
   // ---------------- tools: durability, compatibility, efficiency
   const Tools = {
     owned: {}, active: 'hand',
-    init() { for (const id of ['hand', 'knife', 'axe', 'pickaxe']) this.owned[id] = { id, durability: TOOLS[id].durability }; this.active = 'hand'; },
+    init() { for (const id of ['hand', 'knife', 'axe', 'pickaxe']) this.owned[id] = { id, tier: 0, durability: TOOLS[id].durability }; this.active = 'hand'; },
+    // tiers: a tool keeps its slot and gets better (name, durability, efficiency); mending restores the current tier in full
+    info(id) { const t = TOOLS[id]; if (!t) return null; const o = this.owned[id] || {}; const tr = (t.tiers || [])[o.tier || 0] || {}; return { name: tr.name || t.name, durability: tr.durability !== undefined ? tr.durability : t.durability, efficiency: tr.efficiency || t.efficiency || 1, damage: tr.damage || t.damage, tier: o.tier || 0, tiers: (t.tiers || []).length }; },
+    repair(id) { const o = this.owned[id]; if (!o || o.durability === null) return false; o.durability = this.info(id).durability; emit('tool', id); return true; },
+    upgrade(id, tier) { const o = this.owned[id]; if (!o || tier <= (o.tier || 0) || tier >= this.info(id).tiers) return false; o.tier = tier; o.durability = this.info(id).durability; emit('tool', id); return true; },
     get(id) { return this.owned[id]; },
     canUse(toolId, required) { const t = TOOLS[toolId]; return !!t && t.compat.includes(required) && (this.owned[toolId].durability === null || this.owned[toolId].durability > 0); },
-    wear(toolId, n = 1) { const o = this.owned[toolId]; if (o && o.durability !== null) { o.durability = Math.max(0, o.durability - n); emit('tool', toolId); if (o.durability === 0) emit('tool_broken', toolId); } },
+    wear(toolId, n = 1) { const o = this.owned[toolId]; if (o && o.durability !== null) { o.durability = Math.max(0, o.durability - n); emit('tool', toolId); if (o.durability === 0) { emit('tool_broken', toolId); if (window.UIKit) UIKit.note(`Your ${this.info(toolId).name.toLowerCase()} is worn out. Mend it by hand: open crafting (C) and look under Tools.`, 5); } } },
     select(id) { if (this.owned[id]) { this.active = id; emit('tool'); } },
     bestFor(required) { if (this.canUse(this.active, required)) return this.active; for (const id in this.owned) if (this.canUse(id, required)) return id; return null; },
   };
@@ -78,11 +82,11 @@ window.Gather = (() => {
       if (Inventory.isFull()) return { ok: false, reason: 'Your pack is full.' };
       const r = W.Survival.Activities.perform(d.activity, 'node:' + d.id);       // energy + time, once
       if (!r.ok) return r;
-      const eff = r.efficiency; const got = []; let skippedUnique = false;
+      const eff = r.efficiency, teff = Tools.info(tool).efficiency; const got = []; let skippedUnique = false; let bonus = teff > 1 && rnd() < teff - 1 ? 1 : 0;   // better tools: a chance of one extra of the main drop
       const table = d.drops.concat((d.night_extra && W.Survival.Clock.isNight()) ? d.night_extra : []);
       for (const [id, lo, hi] of table) {
         if (d.unique && d.unique.includes(id) && (n.uniqueTaken.includes(id) || Journal.found[id])) { skippedUnique = true; continue; }
-        let q = lo + Math.floor(rnd() * (hi - lo + 1)); if (lo === 0 && q > 0 && rnd() > 0.55 * eff) q = 0;   // optional extras are a chance, scaled by efficiency
+        let q = lo + Math.floor(rnd() * (hi - lo + 1)); if (lo === 0 && q > 0 && rnd() > 0.55 * eff * teff) q = 0; if (lo > 0 && bonus) { q += bonus; bonus = 0; }   // optional extras are a chance, scaled by efficiency
         q = Math.round(q * (eff >= 1 ? 1 : (rnd() < eff ? 1 : 0)));
         if (q > 0) { const added = Inventory.add(id, q); if (added) { got.push([id, added]); Journal.record(id, n); if (d.unique && d.unique.includes(id)) n.uniqueTaken.push(id); } }
       }
@@ -196,9 +200,9 @@ window.Gather = (() => {
       TOOLBAR.forEach((id, i) => { const o = Tools.owned[id], on = Tools.active === id, x = sx + i * (s + gap); const lift = on && now - this.toolBump < .16 && !U.S.reduceMotion ? 1 : 0, y = y0 + 3 - lift;
         U.slot(g, x, y, s, { sel: on, empty: !o, hover: over(x, y) });
         if (o) { const broken = o.durability === 0; if (broken) g.globalAlpha = .4; this.icon(g, 'tool_' + id, x + (s - isz) / 2, y + (s - isz) / 2 - 1, isz, table); g.globalAlpha = 1;
-          if (o.durability !== null && TOOLS[id].durability) { const f = o.durability / TOOLS[id].durability, bw = s - 6; g.fillStyle = 'rgba(58,42,26,.28)'; g.fillRect(x + 3, y + s - 3, bw, 1); g.fillStyle = f > .25 ? C.moss : C.danger; g.fillRect(x + 3, y + s - 3, broken ? 0 : Math.max(1, Math.round(bw * f)), 1); } }
+          if (o.durability !== null && TOOLS[id].durability) { const f = o.durability / Tools.info(id).durability, bw = s - 6; g.fillStyle = 'rgba(58,42,26,.28)'; g.fillRect(x + 3, y + s - 3, bw, 1); g.fillStyle = f > .25 ? C.moss : C.danger; g.fillRect(x + 3, y + s - 3, broken ? 0 : Math.max(1, Math.round(bw * f)), 1); } }
         else silhouette(g, 'tool_' + id, x + (s - 16) / 2, y + (s - 16) / 2 - 1, 16);
-        U.hit(x, y0 + 3, s, s, () => this.selectTool(id), 'tool'); if (over(x, y0 + 3)) tip = [x, o ? TOOLS[id].name : 'No ' + id + ' yet', o && o.durability !== null ? `${o.durability}/${TOOLS[id].durability}` : null, String(i + 1)]; });
+        U.hit(x, y0 + 3, s, s, () => this.selectTool(id), 'tool'); if (over(x, y0 + 3)) tip = [x, o ? Tools.info(id).name : 'No ' + id + ' yet', o && o.durability !== null ? `${o.durability}/${Tools.info(id).durability}` + (o.durability === 0 ? ' · mend it by hand (C)' : '') : null, String(i + 1)]; });
       if (tip && !touch) { const [tx, name, dur, key] = tip; const extra = (dur ? '  ' + dur : '') + (U.S.hints ? '  [' + key + ']' : ''); const tw = U.measure(name) + U.measure(extra) + 12, x = Math.max(4, Math.min(tx, vw - safe - 6 - tw)), y = y0 + h + 4;
         U.tag(g, x, y, tw, 14); U.text(g, name, x + 6, y + 10); if (extra) U.text(g, extra, x + 6 + U.measure(name), y + 10, { color: C.faint }); } },
     drawInventory(g, vw, vh, safe, table) { const U = K(), C = U.C, touch = U.touch(), now = U.now(), P = U.Ptr;
@@ -298,7 +302,7 @@ window.Gather = (() => {
   // ---------------- save hooks
   const Save = {
     snapshot() { return { inventory: Inventory.slots, tools: Tools.owned, active: Tools.active, nodes: Nodes.list.map(n => ({ id: n.def.id, left: n.left, state: n.state, depletedAt: n.depletedAt, depletedSeason: n.depletedSeason || null, uniqueTaken: n.uniqueTaken })), journal: Journal.found, stats: Stats }; },
-    restore(s) { if (!s) return; Inventory.slots = s.inventory.map(x => x ? { ...x } : null); while (Inventory.slots.length < Inventory.size) Inventory.slots.push(null); Tools.owned = s.tools; Tools.active = s.active;
+    restore(s) { if (!s) return; Inventory.slots = s.inventory.map(x => x ? { ...x } : null); while (Inventory.slots.length < Inventory.size) Inventory.slots.push(null); Tools.owned = s.tools || Tools.owned; for (const id in Tools.owned) if (Tools.owned[id].tier === undefined) Tools.owned[id].tier = 0; Tools.active = s.active || 'hand';
       const by = Object.fromEntries(s.nodes.map(n => [n.id, n])); for (const n of Nodes.list) { const r = by[n.def.id]; if (r) { n.left = r.left; n.state = r.state; n.depletedAt = r.depletedAt; n.depletedSeason = r.depletedSeason; n.uniqueTaken = r.uniqueTaken || []; } }
       Journal.found = s.journal || {}; Object.assign(Stats, s.stats || {}); emit('inventory'); },
   };
@@ -309,7 +313,7 @@ window.Gather = (() => {
     Inventory.init(); Tools.init(); Nodes.init();
     // save integration: extend the survival snapshot, restore after it
     const S = W.Survival.SaveState; const snap = S.snapshot.bind(S), load = S.load.bind(S);
-    S.snapshot = () => Object.assign(snap(), { gather: Save.snapshot() }); S.load = (s) => { s = s || JSON.parse(localStorage.getItem(S.KEY) || 'null'); const ok = load(s); if (ok && s.gather) Save.restore(s.gather); return ok; };
+    S.snapshot = () => Object.assign(snap(), { gather: Save.snapshot() }); S.load = (s) => { s = s || S.read(); const ok = load(s); if (ok && s.gather) S.guard('pack and field guide', () => Save.restore(s.gather)); return ok; };
     W.WeatherState.recentRainHours = 99;   // tracked by tick below
   }
   let lastHour = null;

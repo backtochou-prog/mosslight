@@ -3,7 +3,7 @@
 window.Build = (() => {
   let W = null, COMP = {}, RECIPES = [], STN = {}, CFG = null, A = null, IDX = null, AW = 0, baseCol = null;
   const T = 16; let uid = 1;
-  const S = { list: [], F: new Map(), L: new Map(), Wl: new Map(), R: new Map(), N: new Map(), roofGroups: [], unlocked: {}, stationsBuilt: {} };
+  const S = { list: [], F: new Map(), L: new Map(), Wl: new Map(), R: new Map(), N: new Map(), roofGroups: [], unlocked: {}, stationsBuilt: {}, rooms: [], stage: 1, stageReached: { 1: 1 }, allStages: false };
   const key = (x, y) => x + ',' + y;
   const FX = { msg: null, t: 0, say(m, t = 2.6) { this.msg = m; this.t = t; if (window.UIKit && UIKit.note) UIKit.note(m, t); } };   // short sentences go to the one note line
   const inv = () => W.Gather.Inventory, items = () => W.Gather.items();
@@ -25,13 +25,20 @@ window.Build = (() => {
       if (r.station !== (station || this.station)) return { ok: false, reason: 'That needs a ' + STN[r.station] + '.' };
       if (!have(r.ingredients)) return { ok: false, reason: 'Still need ' + missing(r.ingredients).join(', ') + '.' };
       if (!W.Survival.Energy.canDo({ heavy: r.energy >= 5, energy: r.energy })) return { ok: false, reason: 'You are too tired for that.' };
-      if (!canHold(r.result, r.qty) && !Object.keys(r.ingredients).length) return { ok: false, reason: 'Your pack is full.' };
+      if (r.tool) { const T = W.Gather.Tools, o = T.get(r.tool), inf = T.info(r.tool); if (!o) return { ok: false, reason: 'You do not have that tool.' };
+        if (r.repair && o.durability >= inf.durability) return { ok: false, reason: `Your ${inf.name.toLowerCase()} is in good shape.` };
+        if (r.tier !== undefined && (o.tier || 0) >= r.tier) return { ok: false, reason: `You already have a ${inf.name.toLowerCase()}.` };
+        if (r.tier !== undefined && (o.tier || 0) < r.tier - 1) return { ok: false, reason: `Make the ${(W.Gather.DB.tool(r.tool).tiers[r.tier - 1] || {}).name || 'previous tool'} first.` }; }
+      else if (!canHold(r.result, r.qty) && !Object.keys(r.ingredients).length) return { ok: false, reason: 'Your pack is full.' };
       this.job = { id, r, t: 0, dur: Math.max(0.5, Math.min(2, r.minutes / 20)) }; return { ok: true }; },
     cancel() { if (!this.job) return false; FX.say('Stopped. Nothing was used.'); this.job = null; return true; },   // ingredients are only taken at completion
     tick(dt) { if (!this.job) return; this.job.t += dt; if (this.job.t >= this.job.dur) this.finish(); },
     finish() { const { r } = this.job; this.job = null; if (!have(r.ingredients)) return FX.say('Something went missing from your pack.');
       const a = W.Survival.Activities.performCustom('craft:' + r.id, { label: r.name, heavy: r.energy >= 5, energy: r.energy, minutes: r.minutes, anim: 'build' }); if (!a.ok) return FX.say(a.reason);
-      take(r.ingredients); const got = inv().add(r.result, r.qty); if (window.UIKit) UIKit.toast({ kicker: 'Crafted', title: r.name + (r.qty > 1 ? ' ×' + r.qty : ''), sub: got === r.qty ? null : 'Pack full: some stays on the bench', icon: r.icon || r.result }); if (got !== r.qty) FX.say('Your pack is full; some of it stays on the bench.'); if (window.Sound && Sound.play) Sound.play('craft_done'); W.Gather.FX.pop(W.Player.x, W.Player.y - 30, [[r.result, got]]); this.check(); return true; },
+      if (r.tool) { take(r.ingredients); const T = W.Gather.Tools; const ok = r.repair ? T.repair(r.tool) : T.upgrade(r.tool, r.tier); if (window.UIKit) UIKit.toast({ kicker: r.repair ? 'Mended' : 'Better tool', title: T.info(r.tool).name, sub: r.repair ? 'Good as new' : `Lasts ${T.info(r.tool).durability} uses`, icon: 'tool_' + r.tool, sting: r.repair ? null : 'recipe' }); if (window.Sound && Sound.play) Sound.play('craft_done'); this.check(); return ok; }
+      take(r.ingredients); const got = inv().add(r.result, r.qty);
+      if (got < r.qty && window.Monsters && Monsters.drops) Monsters.drops.push({ id: r.result, q: r.qty - got, x: W.Player.x + 10, y: W.Player.y + 4, from: null });   // what does not fit waits on the ground at your feet
+      if (window.UIKit) UIKit.toast({ kicker: 'Crafted', title: r.name + (r.qty > 1 ? ' ×' + r.qty : ''), sub: got === r.qty ? null : 'Pack full: the rest is at your feet', icon: r.icon || r.result }); if (got !== r.qty) FX.say('Your pack is full; the rest is on the ground at your feet.'); if (window.Sound && Sound.play) Sound.play('craft_done'); W.Gather.FX.pop(W.Player.x, W.Player.y - 30, [[r.result, got]]); this.check(); return true; },
   };
 
   // ---------------- world model
@@ -54,13 +61,39 @@ window.Build = (() => {
     S.roofGroups = []; const seen = new Set();
     for (const k of S.R.keys()) { if (seen.has(k)) continue; const g = new Set(), st = [k]; while (st.length) { const c = st.pop(); if (g.has(c) || !S.R.has(c)) continue; g.add(c); seen.add(c); const [x, y] = c.split(',').map(Number); st.push(key(x + 1, y), key(x - 1, y), key(x, y + 1), key(x, y - 1)); } S.roofGroups.push(g); }
     S.stationsBuilt = {}; for (const e of S.list) { const d = COMP[e.type]; if (d.station && finished(e)) S.stationsBuilt[d.station] = true; }
+    findRooms(); const st = homeStage(); if (st > S.stage) { for (let k = S.stage + 1; k <= st; k++) if (!S.stageReached[k]) { S.stageReached[k] = W.Survival.Clock.day; if (window.UIKit && !S.quietStage) UIKit.toast({ kicker: 'Your home', title: CFG.stages[k], sub: (STAGE_GIFT[k] || [''])[0], glyph: 'shelter', rare: true, sting: 'milestone' }); if (!S.quietStage && window.MOSS_AUTOSAVE) setTimeout(() => MOSS_AUTOSAVE('home'), 0); } } S.stage = st;
     Craft.check(); if (W.relight) W.relight();
   }
   const objectCell = (x, y) => [Math.floor(x / T), Math.floor(y / T)];
+  // ---------------- rooms and home stages: a room is roofed floor space closed in on every side by finished walls
+  const STAGE_GIFT = { 2: ['Sleep in your own room: a full night\'s rest, whatever the hour, and nothing gets in past a closed door.', { fullRest: true }],
+    3: ['A bed of your own: +10 energy each morning. Stage 4 walls, roofs and defences can now be built.', { fullRest: true, maxEnergy: 10 }],
+    4: ['Stone and iron: +20 health, and Brutes do half damage to your walls. Metal walls can now be built.', { fullRest: true, maxEnergy: 10, maxHealth: 20, wallArmor: .5 }],
+    5: ['A fortified estate: +20 energy, and from the watch platform you see night creatures on your map.', { fullRest: true, maxEnergy: 20, maxHealth: 20, wallArmor: .5, watch: true }] };
+  function findRooms() { S.rooms = [];
+    for (const g of S.roofGroups) { const cells = [...g].filter(c => !S.Wl.has(c)); if (!cells.length) continue; const inside = new Set(cells); let closed = true; const walls = new Set();
+      for (const c of cells) { const r = S.R.get(c); if (!r || !finished(r)) { closed = false; break; } const [x, y] = c.split(',').map(Number);
+        for (const n of [key(x + 1, y), key(x - 1, y), key(x, y + 1), key(x, y - 1)]) { if (inside.has(n)) continue; const w = S.Wl.get(n); if (!w || !finished(w)) { closed = false; break; } walls.add(w); } if (!closed) break; }
+      if (!closed) continue; const ws = [...walls]; const objs = S.list.filter(e => COMP[e.type].layer === 'object' && finished(e) && inside.has(key(...objectCell(e.x, e.y))));
+      S.rooms.push({ cells: inside, walls: ws, size: cells.length, door: ws.some(w => w.opening && COMP[w.opening].kind === 'door'), window: ws.some(w => w.opening && COMP[w.opening].kind === 'window'), bed: objs.some(e => COMP[e.type].sleep),
+        floored: cells.every(c => S.L.has(c) && finished(S.L.get(c))), base: Math.min(...ws.map(w => COMP[w.type].stage || 2), ...cells.map(c => COMP[S.R.get(c).type].stage || 2)), metal: ws.filter(w => COMP[w.type].mat === 'metal').length }); } }
+  function roomStage(r) { if (!r.door) return 1; let st = 2; if (r.base >= 3 && r.size >= 6 && r.bed && r.window) st = 3; else return st;
+    const fenced = S.list.filter(e => COMP[e.type].layer === 'fence' && finished(e)).length >= 4; if (r.base >= 4 && r.floored && fenced) st = 4; else return st;
+    const defs = S.list.filter(e => ['spikes', 'barricade'].includes(e.type) && finished(e)).length, watch = S.list.some(e => e.type === 'watch_platform' && finished(e)); if (r.metal >= 4 && watch && defs >= 2) st = 5; return st; }
+  function homeStage() { return Math.max(1, ...S.rooms.map(roomStage)); }
+  function sheltered(x, y) { const k = key(Math.floor(x / T), Math.floor(y / T)); return S.rooms.some(r => r.cells.has(k)); }
+  function homeBonus() { let b = {}; for (let k = 2; k <= S.stage; k++) b = Object.assign({}, b, (STAGE_GIFT[k] || [])[1] || {}); return b; }
+  // what a stage needs next, in words, for the build page
+  function stageNeeds() { const st = S.stage; if (st >= 5) return null; const best = S.rooms.slice().sort((a, b) => roomStage(b) - roomStage(a))[0];
+    if (st === 1) return 'Next: a Woodland shelter. Close in a roofed room with walls on every side and a door.';
+    if (st === 2) return 'Next: an Established homestead. A room of 6+ cells with stage-3 walls and roof (timber-frame or better), a window and a bed.' + (best ? ` Now: ${best.size} cells${best.window ? '' : ', no window'}${best.bed ? '' : ', no bed'}${best.base >= 3 ? '' : ', walls or roof too simple'}.` : '');
+    if (st === 3) return 'Next: a Reinforced residence. Stage-4 walls and roof (stone, reinforced or slate), every cell floored, and 4+ pieces of fence around the yard.';
+    return 'Next: a Fortified woodland estate. 4+ metal-plated walls on the home, a watch platform and 2+ spikes or barricades.'; }
 
   // ---------------- placement validation: one function, always a reason
   function validate(type, p, rot = 0, ignore = null) {
     const d = COMP[type]; const cell = !(d.layer === 'object') || d.mount; const cx = p.cx, cy = p.cy; const x0 = cx * T, y0 = cy * T;
+    if (d.stage >= 3 && !S.allStages && S.stage < d.stage - 1) return `Build a ${CFG.stages[d.stage - 1].toLowerCase()} first (home stage ${d.stage - 1}).`;          // each stage opens the next
     const col = W.DATA.col, w = W.DATA.play.width; const free = (a, b, c, e) => { for (let y = b; y < e; y++) for (let x = a; x < c; x++) if (x < 0 || y < 0 || x >= w || y >= W.DATA.play.height || col[y * w + x]) return false; return true; };
     const onNode = (x, y) => W.Gather.Nodes.list.some(n => n.def.kind !== 'hidden' && n.def.kind !== 'tree_marker' && Math.abs(n.def.x - x) < 10 && Math.abs(n.def.y - y) < 10);
     const player = (a, b, c, e) => W.Player.x + 4 > a && W.Player.x - 4 < c && W.Player.y + 2 > b && W.Player.y - 2 < e;
@@ -109,7 +142,7 @@ window.Build = (() => {
     const a = W.Survival.Activities.performCustom('build:repair', { label: 'Repair', heavy: false, energy: CFG.repair.energy, minutes: CFG.repair.minutes, anim: 'build' }); if (!a.ok) return a; take(c); e.dur = Math.min(max, e.dur + max * CFG.repair.amount); return { ok: true }; }
   // structures under attack: a broken piece comes down with no refund
   function structureAt(x, y) { const k = key(Math.floor(x / T), Math.floor(y / T)); const w = S.Wl.get(k); if (w && !(w.open)) return w; const n = S.N.get(k); if (n && !n.open) return n; return S.list.find(e => { const d = COMP[e.type]; if (d.layer !== 'object' || d.ground || d.mount || !d.foot[0]) return false; const r = footRect(e, d); return x >= r[0] - 3 && x <= r[2] + 3 && y >= r[1] - 3 && y <= r[3] + 3; }) || null; }
-  function hit(e, n) { e.dur -= n; if (e.dur > 0) return false; if (e.opening && COMP[e.opening].kind === 'door') { e.opening = null; e.dur = 20; rebuild(); FX.say('Something broke through a door.'); return true; } for (const o of S.list.filter(o => COMP[o.type].mount && o.cx === e.cx && o.cy === e.cy)) S.list.splice(S.list.indexOf(o), 1); if (e.slots) for (const s of e.slots) if (s) inv().add(s.id, s.qty); S.list.splice(S.list.indexOf(e), 1); FX.say(COMP[e.type].name + ' was destroyed.'); rebuild(); return true; }
+  function hit(e, n) { const ar = homeBonus().wallArmor; if (ar && COMP[e.type].layer === 'wall' && (COMP[e.type].stage || 2) >= 4) n *= 1 - ar; e.dur -= n; if (e.dur > 0) return false; if (e.opening && COMP[e.opening].kind === 'door') { e.opening = null; e.dur = 20; rebuild(); FX.say('Something broke through a door.'); return true; } for (const o of S.list.filter(o => COMP[o.type].mount && o.cx === e.cx && o.cy === e.cy)) S.list.splice(S.list.indexOf(o), 1); if (e.slots) for (const s of e.slots) if (s) inv().add(s.id, s.qty); S.list.splice(S.list.indexOf(e), 1); FX.say(COMP[e.type].name + ' was destroyed.'); rebuild(); return true; }
   const lights = () => S.list.filter(e => COMP[e.type].light && finished(e) && e.on !== false).map(e => Object.assign({ x: e.x, y: e.y - 12 }, COMP[e.type].light));
 
   // ---------------- interaction: the objects say what they do
@@ -136,7 +169,7 @@ window.Build = (() => {
 
   // ---------------- UI: the field-journal pages (see UI_STYLE_GUIDE.md). Every control is a kit hit, every key still works.
   const CATS = ['Foundation', 'Floor', 'Wall', 'Opening', 'Roof', 'Defense', 'Home'];
-  const RCAT = { all: 'All', material: 'Materials', tackle: 'Tackle', furniture: 'Furniture', station: 'Stations', storage: 'Storage', lighting: 'Light', decor: 'Decor', kitchen: 'Kitchen', medicine: 'Medicine', garden: 'Garden' };
+  const RCAT = { all: 'All', material: 'Materials', tackle: 'Tackle', furniture: 'Furniture', station: 'Stations', storage: 'Storage', lighting: 'Light', decor: 'Decor', kitchen: 'Kitchen', medicine: 'Medicine', garden: 'Garden', tool: 'Tools' };
   const LAYER_NOTE = { foundation: 'Laid on open ground. Floors, walls and roofs all stand on foundations.', floor: 'Laid over a foundation, inside the walls.', wall: 'Built on a foundation. Joins its neighbours; a straight east-west run can take a door or window.', opening: 'Set into a finished, straight east-west wall.', roof: 'Covers a foundation; needs walls or a support within three cells. Shelter from rain and snow.', fence: 'Runs along open ground and joins its neighbours.' };
   const K = () => window.UIKit, rnd = Math.round;
   const fit = (s, w, f = 1) => { const U = K(); s = String(s); if (U.measure(s, f) <= w) return s; while (s.length > 1 && U.measure(s + '.', f) > w) s = s.slice(0, -1); return s.replace(/[ ,·]+$/, '') + '.'; };
@@ -249,23 +282,25 @@ window.Build = (() => {
         else { const ok = have(r.ingredients), bw = Math.floor((dw - 4) / 2); U.button(g, dx, by, bw, bh, 'Craft', () => this.doCraft(), { primary: ok, disabled: !ok }); U.button(g, dx + bw + 4, by, dw - bw - 4, bh, 'Close', () => { this.open = null; }); } }
       else U.button(g, dx + dw - 60, by, 60, bh, 'Close', () => { this.open = null; });
       this.turn(g, x0 + 2, y0 + 2, pw - 4, ph - 4); g.restore(); },
-    unlocks(r) { const st = Object.values(COMP).find(d => d.item === r.result && d.station); if (st) { const n = RECIPES.filter(x => x.station === st.station).length; return `Place it with Build to open ${n} more recipes.`; }
+    unlocks(r) { if (r.tool) { const T = W.Gather.Tools, o = T.get(r.tool), inf = T.info(r.tool); if (!o) return null; const tn = r.tier !== undefined ? W.Gather.DB.tool(r.tool).tiers[r.tier] : null; return `Your ${inf.name.toLowerCase()}: ${o.durability}/${inf.durability} uses left.` + (tn ? ` Becomes the ${tn.name.toLowerCase()}: ${tn.durability} uses, ${Math.round((tn.efficiency - 1) * 100)}% chance of an extra find.` : ''); }
+      const st = Object.values(COMP).find(d => d.item === r.result && d.station); if (st) { const n = RECIPES.filter(x => x.station === st.station).length; return `Place it with Build to open ${n} more recipes.`; }
       const by = RECIPES.filter(x => x.unlock.type === 'item' && x.unlock.id === r.result && x.id !== r.id); if (by.length) return 'Teaches: ' + by.map(x => x.name).join(', ') + '.';
       if (Object.values(COMP).some(d => d.item === r.result)) return 'Placed from the Home page of Build.'; return null; },
 
     // ---- the building page
     drawBuild(g, vw, vh, tab) { const U = K(), C = U.C, touch = U.touch(); const l = this.listBuild(); const [x0, y0, pw, ph] = this.frame(vw, vh);
-      g.save(); U.enter(g, 'build', true, x0, y0, pw, ph); U.paper(g, x0, y0, pw, ph, { title: 'Build', sub: CATS[this.cat].toLowerCase(), close: () => { this.open = null; } });
+      g.save(); U.enter(g, 'build', true, x0, y0, pw, ph); U.paper(g, x0, y0, pw, ph, { title: 'Build', sub: `${CATS[this.cat].toLowerCase()} · home: ${CFG.stages[S.stage].toLowerCase()} (${S.stage}/5)`, close: () => { this.open = null; } });
       const ty = y0 + 31; this.tabs(g, CATS, this.cat, x0 + 12, ty, pw - 24, i => this.setCat(i, CATS.length));
       const lx = x0 + 14, rTop = ty + 20, bottom = y0 + ph - 10, lw = Math.max(170, Math.min(240, rnd((pw - 28) * .5)));
-      this.list(g, l, lx, rTop, lw, bottom, (d, x, ry, on) => { const cost = costOf(d), ok = have(cost); compIcon(g, d, x, ry + 3, 20, tab);
+      const locked = d => d.stage >= 3 && !S.allStages && S.stage < d.stage - 1;
+      this.list(g, l, lx, rTop, lw, bottom, (d, x, ry, on) => { const cost = costOf(d), lk = locked(d), ok = have(cost) && !lk; if (lk) g.globalAlpha = .45; compIcon(g, d, x, ry + 3, 20, tab); g.globalAlpha = 1;
         U.text(g, fit(d.name, lw - 30), x + 26, ry + 11, { color: ok ? C.ink : C.ink2, bold: on }); if (ok) { g.fillStyle = C.moss; g.fillRect(x + lw - 4, ry + 6, 3, 3); }
-        if (d.item) U.text(g, `in your pack: ${inv().count(d.item)}`, x + 26, ry + 22, { color: C.ink2 }); else this.costRow(g, cost, x + 26, ry + 22, lw - 28, tab, true); }, () => this.doBuild());
+        if (lk) U.text(g, `opens at home stage ${d.stage - 1}`, x + 26, ry + 22, { color: C.faint }); else if (d.item) U.text(g, `in your pack: ${inv().count(d.item)}`, x + 26, ry + 22, { color: C.ink2 }); else this.costRow(g, cost, x + 26, ry + 22, lw - 28, tab, true); }, () => this.doBuild());
       if (!l.length) this.para(g, CATS[this.cat] === 'Home' ? 'Nothing to place yet. Furniture you craft lands in your pack, then shows up here.' : 'Nothing here yet.', lx, rTop + 12, lw, bottom - 20, C.faint);
       this.hint(g, '← → kind · ↑ ↓ choose · E place', lx, bottom + 2);
       const dx = lx + lw + 14, dw = x0 + pw - 14 - dx, d = l[this.cur], bh = touch ? 18 : 16, by = bottom - bh; g.fillStyle = 'rgba(58,42,26,.18)'; for (let yy = rTop; yy < bottom; yy += 3) g.fillRect(dx - 7, yy, 1, 2);
       if (d) { const stage = d.stage && CFG.stages[d.stage]; let yy = this.detailHead(g, dx, rTop + 2, dw, d.name, stage ? `stage ${d.stage} · ${stage.toLowerCase()}` : (d.layer === 'object' ? 'furniture' : d.layer), (ix, iy) => compIcon(g, d, ix, iy, 32, tab));
-        const maxY = by - 8; const note = LAYER_NOTE[d.layer] || this.objNote(d); yy = this.para(g, note, dx, yy, dw, maxY - 30, C.ink) + 3;
+        const maxY = by - 8; const note = locked(d) ? `Opens when your home reaches stage ${d.stage - 1}, ${CFG.stages[d.stage - 1].toLowerCase()}. ${stageNeeds() || ''}` : (LAYER_NOTE[d.layer] || this.objNote(d)); yy = this.para(g, note, dx, yy, dw, maxY - 30, locked(d) ? C.rust : C.ink) + 3;
         if (!d.item) yy = this.needs(g, costOf(d), dx, yy + 8, dw, maxY - 10, tab); else { if (yy <= maxY - 10) U.text(g, `In your pack: ${inv().count(d.item)}`, dx, yy + 2, { color: C.ink2 }); yy += 12; }
         const mins = d.minutes || (d.item ? 5 : 10), stats = `${mins} min${d.energy ? ' · ' + d.energy + ' energy' : ''} · sturdiness ${d.durability || 60}`; if (yy <= maxY) U.text(g, fit(stats, dw), dx, yy + 2, { color: C.ink2 });
         const bw = Math.floor((dw - 4) / 2); U.button(g, dx, by, bw, bh, 'Build', () => this.doBuild(), { primary: true }); U.button(g, dx + bw + 4, by, dw - bw - 4, bh, 'Close', () => { this.open = null; }); }
@@ -353,9 +388,9 @@ window.Build = (() => {
   let snowCache = null; const PAL_SNOW = () => snowCache || (snowCache = (() => { const r = []; W.DATA.entries.entries.forEach((e, i) => { if (e.family === 'snow') r[e.rank] = i; }); return r; })());
 
   // ---------------- save: appended to the one snapshot; loading replaces, never duplicates
-  const Save = { snapshot() { return { version: 1, uid, list: S.list.map(e => JSON.parse(JSON.stringify(e))), unlocked: S.unlocked }; }, restore(s) { if (!s) return; uid = s.uid; S.list = s.list.map(e => JSON.parse(JSON.stringify(e))); S.unlocked = Object.assign({}, s.unlocked); Craft.job = null; UI.open = null; UI.place = null; rebuild(); } };
+  const Save = { snapshot() { return { version: 2, uid, list: S.list.map(e => JSON.parse(JSON.stringify(e))), unlocked: S.unlocked, stageReached: S.stageReached }; }, restore(s) { if (!s) return; uid = s.uid; S.list = (s.list || []).filter(e => COMP[e.type]).map(e => JSON.parse(JSON.stringify(e))); S.unlocked = Object.assign({}, s.unlocked); S.stageReached = Object.assign({ 1: 1 }, s.stageReached || {}); S.stage = 1; S.quietStage = true; Craft.job = null; UI.open = null; UI.place = null; rebuild(); S.quietStage = false; for (let k = 2; k <= S.stage; k++) if (!S.stageReached[k]) S.stageReached[k] = W.Survival.Clock.day; } };
   function init(data, world) { W = world; A = data.atlas; AW = A.width; IDX = data.idx; CFG = data.components; data.components.components.forEach(c => COMP[c.id] = c); RECIPES = data.recipes.recipes; STN = data.recipes.stations; baseCol = W.DATA.col.slice(); Craft.check(); rebuild(); W.Gather.on('inventory', () => Craft.check());
-    const SS = W.Survival.SaveState, snap_ = SS.snapshot.bind(SS), load = SS.load.bind(SS); SS.snapshot = () => Object.assign(snap_(), { build: Save.snapshot() }); SS.load = s => { s = s || JSON.parse(localStorage.getItem(SS.KEY) || 'null'); const ok = load(s); if (ok && s.build) Save.restore(s.build); return ok; }; }
+    const SS = W.Survival.SaveState, snap_ = SS.snapshot.bind(SS), load = SS.load.bind(SS); SS.snapshot = () => Object.assign(snap_(), { build: Save.snapshot() }); SS.load = s => { s = s || SS.read(); const ok = load(s); if (ok && s.build) SS.guard('buildings', () => Save.restore(s.build)); return ok; }; }
   function tick(dt) { if (!W) return; if (FX.t > 0) FX.t -= dt; Craft.tick(dt); }
-  return { init, tick, on: null, structureAt, hit, S, Craft, UI, FX, Storage, Save, place, remove, move, validate, work, damage, repair, nearest, lights, rebuild, render: R, comp: () => COMP, recipes: () => RECIPES, snap, baseY, have };
+  return { sheltered, homeStage: () => S.stage, homeBonus, stageNeeds, rooms: () => S.rooms, STAGE_GIFT, unlockAllStages: v => { S.allStages = v !== false; }, init, tick, on: null, structureAt, hit, S, Craft, UI, FX, Storage, Save, place, remove, move, validate, work, damage, repair, nearest, lights, rebuild, render: R, comp: () => COMP, recipes: () => RECIPES, snap, baseY, have };
 })();

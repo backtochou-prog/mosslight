@@ -67,7 +67,7 @@
    "minutes": 8,
    "energy": 1,
    "result": "nails",
-   "qty": 6,
+   "qty": 8,
    "unlock": {
     "type": "item",
     "id": "scrap_metal"
@@ -81,18 +81,95 @@
    "description": "Squared on four faces, near enough.",
    "station": "stone_station",
    "ingredients": {
-    "stone": 2
+    "stone": 3
    },
-   "minutes": 12,
+   "minutes": 15,
    "energy": 2,
    "result": "stone_block",
-   "qty": 1,
+   "qty": 2,
    "unlock": {
     "type": "station",
     "id": "stone_station"
    },
    "category": "material",
    "icon": "stone_block"
+  },
+  {
+   "id": "copper_ingot",
+   "name": "Copper ingot",
+   "description": "Soft, warm-coloured, and easy to work cold.",
+   "station": "furnace",
+   "ingredients": {
+    "copper_ore": 2,
+    "coal": 1
+   },
+   "minutes": 30,
+   "energy": 2,
+   "result": "copper_ingot",
+   "qty": 1,
+   "unlock": {
+    "type": "item",
+    "id": "copper_ore"
+   },
+   "category": "material",
+   "icon": "copper_ingot"
+  },
+  {
+   "id": "charcoal",
+   "name": "Charcoal",
+   "description": "Two logs smothered in the furnace come out as one clean lump of fuel.",
+   "station": "furnace",
+   "ingredients": {
+    "log": 2
+   },
+   "minutes": 30,
+   "energy": 1,
+   "result": "coal",
+   "qty": 1,
+   "unlock": {
+    "type": "station",
+    "id": "furnace"
+   },
+   "category": "material",
+   "icon": "coal"
+  },
+  {
+   "id": "wire_drawn",
+   "name": "Drawn wire",
+   "description": "Old scrap heated and pulled thin through a hole in a plate.",
+   "station": "workbench",
+   "ingredients": {
+    "scrap_metal": 1
+   },
+   "minutes": 12,
+   "energy": 1,
+   "result": "wire",
+   "qty": 2,
+   "unlock": {
+    "type": "item",
+    "id": "scrap_metal"
+   },
+   "category": "material",
+   "icon": "wire"
+  },
+  {
+   "id": "bolts",
+   "name": "Bolts",
+   "description": "Scrap softened in the furnace and hammered round over a die.",
+   "station": "furnace",
+   "ingredients": {
+    "scrap_metal": 1
+   },
+   "minutes": 15,
+   "energy": 1,
+   "result": "bolt",
+   "qty": 3,
+   "unlock": {
+    "type": "station",
+    "id": "furnace"
+   },
+   "category": "material",
+   "icon": "bolt"
   },
   {
    "id": "iron_ingot",
@@ -1140,6 +1217,228 @@
    },
    "category": "garden",
    "icon": "garden_bed"
+  },
+  {
+   "id": "mend_knife",
+   "name": "Hone and rewrap the knife",
+   "description": "A flat stone for the edge, fresh cord for the grip. Good as it was.",
+   "station": "hand",
+   "ingredients": {
+    "stone": 1,
+    "cord": 1
+   },
+   "minutes": 10,
+   "energy": 1,
+   "result": null,
+   "qty": 0,
+   "unlock": {
+    "type": "start"
+   },
+   "category": "tool",
+   "icon": "tool_knife",
+   "tool": "knife",
+   "repair": "knife"
+  },
+  {
+   "id": "mend_axe",
+   "name": "Hone and rehaft the axe",
+   "description": "Sharpen the head and wedge it onto a new handle.",
+   "station": "hand",
+   "ingredients": {
+    "stone": 1,
+    "cord": 1,
+    "branch": 1
+   },
+   "minutes": 15,
+   "energy": 1,
+   "result": null,
+   "qty": 0,
+   "unlock": {
+    "type": "start"
+   },
+   "category": "tool",
+   "icon": "tool_axe",
+   "tool": "axe",
+   "repair": "axe"
+  },
+  {
+   "id": "mend_pickaxe",
+   "name": "Dress and rehaft the pickaxe",
+   "description": "Grind the points back and fit a new handle.",
+   "station": "hand",
+   "ingredients": {
+    "stone": 2,
+    "cord": 1,
+    "branch": 1
+   },
+   "minutes": 15,
+   "energy": 1,
+   "result": null,
+   "qty": 0,
+   "unlock": {
+    "type": "start"
+   },
+   "category": "tool",
+   "icon": "tool_pickaxe",
+   "tool": "pickaxe",
+   "repair": "pickaxe"
+  },
+  {
+   "id": "mend_rod",
+   "name": "Rebind the reed rod",
+   "description": "New cord for the guides and a straight reed.",
+   "station": "hand",
+   "ingredients": {
+    "branch": 2,
+    "cord": 2
+   },
+   "minutes": 10,
+   "energy": 1,
+   "result": null,
+   "qty": 0,
+   "unlock": {
+    "type": "start"
+   },
+   "category": "tool",
+   "icon": "tool_rod",
+   "tool": "rod",
+   "repair": "rod"
+  },
+  {
+   "id": "knife_t1",
+   "name": "Copper knife",
+   "description": "A copper blade on a hardwood grip: cuts more and lasts longer.",
+   "station": "workbench",
+   "ingredients": {
+    "copper_ingot": 1,
+    "hardwood": 1
+   },
+   "minutes": 25,
+   "energy": 1,
+   "result": null,
+   "qty": 0,
+   "unlock": {
+    "type": "item",
+    "id": "copper_ingot"
+   },
+   "category": "tool",
+   "icon": "tool_knife",
+   "tool": "knife",
+   "tier": 1
+  },
+  {
+   "id": "axe_t1",
+   "name": "Copper axe",
+   "description": "Heavier head, better haft. Trees give more for the same swing.",
+   "station": "workbench",
+   "ingredients": {
+    "copper_ingot": 2,
+    "hardwood": 1,
+    "cord": 1
+   },
+   "minutes": 30,
+   "energy": 1,
+   "result": null,
+   "qty": 0,
+   "unlock": {
+    "type": "item",
+    "id": "copper_ingot"
+   },
+   "category": "tool",
+   "icon": "tool_axe",
+   "tool": "axe",
+   "tier": 1
+  },
+  {
+   "id": "pickaxe_t1",
+   "name": "Copper pickaxe",
+   "description": "Bites deeper into the deposits.",
+   "station": "workbench",
+   "ingredients": {
+    "copper_ingot": 2,
+    "plank": 1,
+    "cord": 1
+   },
+   "minutes": 30,
+   "energy": 1,
+   "result": null,
+   "qty": 0,
+   "unlock": {
+    "type": "item",
+    "id": "copper_ingot"
+   },
+   "category": "tool",
+   "icon": "tool_pickaxe",
+   "tool": "pickaxe",
+   "tier": 1
+  },
+  {
+   "id": "knife_t2",
+   "name": "Iron knife",
+   "description": "Holds an edge for a season.",
+   "station": "adv_bench",
+   "ingredients": {
+    "iron_ingot": 1,
+    "hardwood": 1,
+    "cord": 1
+   },
+   "minutes": 30,
+   "energy": 1,
+   "result": null,
+   "qty": 0,
+   "unlock": {
+    "type": "item",
+    "id": "iron_ingot"
+   },
+   "category": "tool",
+   "icon": "tool_knife",
+   "tool": "knife",
+   "tier": 2
+  },
+  {
+   "id": "axe_t2",
+   "name": "Iron axe",
+   "description": "The best axe the clearing will ever see.",
+   "station": "adv_bench",
+   "ingredients": {
+    "iron_ingot": 2,
+    "hardwood": 2
+   },
+   "minutes": 40,
+   "energy": 1,
+   "result": null,
+   "qty": 0,
+   "unlock": {
+    "type": "item",
+    "id": "iron_ingot"
+   },
+   "category": "tool",
+   "icon": "tool_axe",
+   "tool": "axe",
+   "tier": 2
+  },
+  {
+   "id": "pickaxe_t2",
+   "name": "Iron pickaxe",
+   "description": "Rock gives up its seams.",
+   "station": "adv_bench",
+   "ingredients": {
+    "iron_ingot": 2,
+    "hardwood": 1,
+    "plank": 1
+   },
+   "minutes": 40,
+   "energy": 1,
+   "result": null,
+   "qty": 0,
+   "unlock": {
+    "type": "item",
+    "id": "iron_ingot"
+   },
+   "category": "tool",
+   "icon": "tool_pickaxe",
+   "tool": "pickaxe",
+   "tier": 2
   }
  ],
  "stations": {

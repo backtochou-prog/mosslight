@@ -108,7 +108,7 @@ async function boot() {
   Build.init({ atlas: await loadJSON(BL + 'build_atlas.json'), idx: await loadIdx(BL + 'build_idx.png'), recipes: await loadJSON(BL + 'recipes.json'), components: await loadJSON(BL + 'components.json') }, { Survival, Gather, WorldClock, SeasonState, Player, Camera, DATA, relight: () => buildLightMap(EventState.current ? EventState.current.extra_lights : []) });
   Monsters.init({ cfg: await loadJSON('../assets/monsters/monsters.json'), atlas: await loadJSON('../assets/monsters/monsters_atlas.json'), idx: await loadIdx('../assets/monsters/monsters_idx.png') }, { Survival, Gather, Build, WorldClock, SeasonState, WeatherState, Player, Camera, DATA, Input,
     isWater: (x, y) => CLS[DATA.idx[SeasonState.season][y * 768 + x]] & 2,
-    lightAt: (x, y) => { if (x < 0 || y < 0 || x >= 768 || y >= 480) return 0; const i = y * 768 + x; if (!LW[i] || LIGHTS[LI[i]].kind === 'firefly' || LIGHTS[LI[i]].kind === 'glow') return 0; return LW[i] * Math.max(0, Math.min(1, (tableAt(SeasonState.season, WorldClock.hour()).darkness - .08) / .6)); },
+    lightAt: (x, y) => { if (x < 0 || y < 0 || x >= 768 || y >= 480) return 0; const i = y * 768 + x; if (!LWC[i] || LIGHTS[LI[i]].kind === 'firefly' || LIGHTS[LI[i]].kind === 'glow') return 0; return LWC[i] * Math.max(0, Math.min(1, (tableAt(SeasonState.season, WorldClock.hour()).darkness - .08) / .6)); },
     foliageAt: (x, y) => { x = Math.round(x); y = Math.round(y); if (x < 0 || y < 0 || x >= 768 || y >= 480) return false; return depthNow()[y * 768 + x] > y; } });
   classify(); { const FB = '../assets/fishing/'; const vistas = {}; for (const h of ['stream', 'marsh', 'lake', 'reservoir', 'tide']) vistas[h] = await loadIdx(FB + 'vista_' + h + '_idx.png');
     Fishing.init({ cfg: await loadJSON(FB + 'fishing.json'), atlas: await loadJSON(FB + 'fish_atlas.json'), idx: await loadIdx(FB + 'fish_idx.png'), vistas, sign: await loadIdx(FB + 'trail_sign_idx.png') }, { Survival, Gather, Build, Monsters, WorldClock, SeasonState, WeatherState, Player, Camera, DATA, Input, CLS,
@@ -128,22 +128,32 @@ async function boot() {
     ['folk', 'Folk', () => !!Social.UI.journal, () => { Social.UI.journal = true; }],
     ['calendar', 'Days', () => !!Festival.UI.open, () => { Festival.UI.open = true; }]]) UIKit.register({ id, label, isOpen, open: () => { shut(); open(); }, close: shut });
   mountSound();
+  // ---- saving: every few minutes of play, every morning, at festivals and home milestones, and whenever the page is hidden
+  window.MOSS_AUTOSAVE = why => { if (Survival.Sleep.sleeping || (Fishing.busy && Fishing.busy())) return false; const ok = !!Survival.SaveState.save(); SAVED_T = ok ? 2 : 0; if (!ok && why !== 'hidden') UIKit.note('Could not save: ' + ((Survival.SaveState.problems || [])[0] || 'storage unavailable') + '.', 5); return ok; };
+  Survival.on('wake', () => setTimeout(() => MOSS_AUTOSAVE('morning'), 60)); Festival.on('begin', () => MOSS_AUTOSAVE('festival')); Festival.on('end', () => MOSS_AUTOSAVE('festival'));
+  document.addEventListener('visibilitychange', () => { if (document.hidden) MOSS_AUTOSAVE('hidden'); }); addEventListener('pagehide', () => MOSS_AUTOSAVE('hidden'));
   { const SS = Survival.SaveState, snap = SS.snapshot.bind(SS), load = SS.load.bind(SS);          // the map remembers where you have been
     SS.snapshot = () => Object.assign(snap(), { map: UIKit.Map.seen ? Array.from(UIKit.Map.seen).join('') : null });
-    SS.load = st => { st = st || JSON.parse(localStorage.getItem(SS.KEY) || 'null'); const ok = load(st); if (ok && st && st.map) UIKit.Map.seen = Uint8Array.from(st.map, c => +c); return ok; }; }
+    SS.load = st => { st = st || SS.read(); const ok = load(st); if (ok && st && st.map) SS.guard('map', () => { if (st.map.length !== 1440) throw new Error('map size'); UIKit.Map.seen = Uint8Array.from(st.map, c => +c); }); return ok; }; }
   Survival.Dev.mount(document.getElementById('dev'));
   if (location.search.includes('dev=1')) { document.getElementById('dev').style.display = ''; document.getElementById('devtoggle').checked = true; }
   WorldClock.paused = false;
   for (const e of ['winter_fishing', 'autumn_gathering', 'summer_pond_evening', 'marsh_night', 'fest_awakening', 'fest_fireflies', 'fest_forgotten', 'fest_silent_tide']) { try { DATA.events[e] = await loadJSON('../assets/events/' + e + '.json'); } catch (_) {} }
   const sel = document.getElementById('event'); for (const k in DATA.events) { const o = document.createElement('option'); o.value = k; o.textContent = DATA.events[k].label; sel.appendChild(o); }
-  classify(); buildLightMap(); requestAnimationFrame(frame);
+  classify(); buildLightMap();
+  // carry on where you left off (add ?new=1 to start fresh); a damaged save falls back to the backup copy
+  if (!location.search.includes('new=1') && Survival.SaveState.exists()) { const ok = Survival.SaveState.load(); const SS = Survival.SaveState;
+    if (ok) UIKit.toast({ kicker: 'Welcome back', title: `Day ${Survival.Clock.day}, ${SeasonState.season}`, sub: SS.lastSource !== SS.KEY ? 'Restored from the backup copy' : (SS.problems.length ? 'Some parts could not be restored' : 'Your journal is as you left it'), glyph: 'book' }); }
+  requestAnimationFrame(frame);
 }
 // ---------------------------------------------------------------- the UI kit's view of the world
 let FRAME_MS = 0;
+// frame-time breakdown (smoothed ms per section), shown in Settings › Performance and read by the tests
+const FT = { s: {}, mark(k, t0) { const t = performance.now(); this.s[k] = (this.s[k] || 0) * .9 + (t - t0) * .1; return t; } }; window.FT = FT;
 const UIW = { get Gather() { return Gather; }, get Fishing() { return Fishing; }, get Sound() { return window.Sound; }, get Camera() { return Camera; }, get Player() { return Player; }, get Survival() { return Survival; }, get WorldClock() { return WorldClock; }, get SeasonState() { return SeasonState; }, get DATA() { return DATA; },
   tab: () => DATA.keyframes[SeasonState.season].tables[2],          // screen-space UI is always drawn in daylight colours
   touchOn: () => Touch.enabled, frameMs: () => FRAME_MS,
-  save: () => { try { Survival.SaveState.save(); return !!localStorage.getItem('mosslight.save'); } catch (_) { return false; } },
+  save: () => !!Survival.SaveState.save(), saveProblem: () => (Survival.SaveState.problems || [])[0] || null, newGame: () => { const SS = Survival.SaveState; try { const m = localStorage.getItem(SS.KEY); if (m) localStorage.setItem(SS.KEY + '.previous', m); for (const k of ['', '.bak', '.tmp']) localStorage.removeItem(SS.KEY + k); } catch (_) {} location.search = '?new=1'; },
   load: () => { try { return !!Survival.SaveState.load(); } catch (_) { return false; } },
   setAspect: v => { const sel = $('aspect'); if (v === 'auto') { fitTouch(true); return; } sel.value = v; sel.onchange({ target: sel }); fitTouch(); },
   setTouch: v => { Touch.enabled = v === 'on' || (v === 'auto' && 'ontouchstart' in window); $('touch').checked = Touch.enabled; },
@@ -152,7 +162,9 @@ const UIW = { get Gather() { return Gather; }, get Fishing() { return Fishing; }
     try { const sg = Fishing.data().sign; pins.push({ x: sg.x, y: sg.y, label: 'signpost', color: '#2a6680' }); } catch (_) {}
     try { for (const c in Social.L) { const l = Social.L[c]; if (l && l.present && !(l.entry || {}).hidden) pins.push({ x: l.x, y: l.y, label: Social.CH()[c].name, color: '#4c6a28' }); } } catch (_) {}
     try { for (const e of Build.S.list) if (['campfire', 'workbench', 'bedroll', 'chest', 'crate'].some(k => e.type.includes(k))) pins.push({ x: (e.cx + .5) * 16, y: (e.cy + .5) * 16, color: '#9a6a14' }); } catch (_) {}
+    try { if (Build.homeBonus().watch && tableAt(SeasonState.season, WorldClock.hour()).darkness > .35) for (const m of Monsters.list) if (!m.dawn && !m.distant) pins.push({ x: m.x, y: m.y, label: Monsters.cfg().creatures[m.type].name, color: '#9a2e16', always: true }); } catch (_) {}
     return pins; },
+  homeLine: () => { try { return `home ${Build.homeStage()}/5`; } catch (_) { return ''; } },
   farWaters: () => { try { return (Fishing.S.visited || []).slice(); } catch (_) { return []; } } };
 // per-index class flags: 1 canopy (sways), 2 water (ripples/reflection), 4 emissive, 8 sky
 let CLS;
@@ -160,13 +172,13 @@ function classify() { const n = DATA.entries.entries.length; CLS = new Uint8Arra
   DATA.entries.entries.forEach((e, i) => { let f = 0; const base = e.family.replace('~', ''); if (DATA.entries.canopy.includes(base)) f |= 1; if (base === 'water') f |= 2; if (DATA.entries.emissive.includes(base)) f |= 4; if (DATA.entries.sky.includes(base)) f |= 8; if (e.family === 'firefly') f |= 16; CLS[i] = f; }); }
 
 // ---------------------------------------------------------------- lights: static falloff map, per-light flicker
-const W = 768, H = 480; let LW, LI, LIGHTS;
+const W = 768, H = 480; let LW, LWC, LI, LIGHTS;          // LW: what is drawn (core + warm spill); LWC: the core pools that creatures and gameplay respect
 function buildLightMap(extra = []) {
-  LIGHTS = DATA.scene.lights.concat(extra, window.Build ? Build.lights() : []); LW = new Float32Array(W * H); LI = new Int16Array(W * H).fill(-1);
+  LIGHTS = DATA.scene.lights.concat(extra, window.Build ? Build.lights() : []); LW = new Float32Array(W * H); LWC = new Float32Array(W * H); LI = new Int16Array(W * H).fill(-1);
   const bay = [[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]];
   LIGHTS.forEach((L, li) => { const r = L.radius; const x0 = Math.max(0, L.x - r | 0), x1 = Math.min(W - 1, L.x + r | 0), y0 = Math.max(0, L.y - r | 0), y1 = Math.min(H - 1, L.y + r | 0);
     for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) { const d = Math.hypot(x - L.x, (y - L.y) * 1.25) / r; if (d >= 1) continue;
-      let w = Math.pow(1 - d, 1.6) * L.intensity; w = Math.min(1, Math.floor(w * 5 + bay[y & 3][x & 3] / 16 * 0.9) / 5); const i = y * W + x; if (w > LW[i]) { LW[i] = w; LI[i] = li; } }
+      let w = Math.pow(1 - d, 1.6) * L.intensity; w = Math.min(1, Math.floor(w * 5 + bay[y & 3][x & 3] / 16 * 0.9) / 5); const i = y * W + x; if (w > LW[i]) { LW[i] = w; LI[i] = li; } if (w > LWC[i]) LWC[i] = w; }
     if (L.kind === 'fire' || L.kind === 'lantern') { const R2 = r * (L.kind === 'fire' ? 2.2 : 1.7), sp = L.kind === 'fire' ? .58 : .3; const a0 = Math.max(0, L.x - R2 | 0), a1 = Math.min(W - 1, L.x + R2 | 0), b0 = Math.max(0, L.y - R2 | 0), b1 = Math.min(H - 1, L.y + R2 | 0);   // the warm spill: what makes a camp read as a pool of light in real dark
       for (let y = b0; y <= b1; y++) for (let x = a0; x <= a1; x++) { const d = Math.hypot(x - L.x, (y - L.y) * 1.25) / R2; if (d >= 1) continue; let w = Math.pow(1 - d, 1.1) * sp * L.intensity; w = Math.floor(w * 10 + bay[y & 3][x & 3] / 16 * 0.9) / 10; const i = y * W + x; if (w > LW[i]) { LW[i] = w; LI[i] = li; } } } });
 }
@@ -335,8 +347,42 @@ const Touch = { enabled: false, btn: { x: 0, y: 0, r: 22 },
     this.seal(g, bx - 4, by - 52, 15, 'map', () => { UIKit.Map.open = true; }, 'map');
     if (tableAt(SeasonState.season, WorldClock.hour()).darkness > .35 && window.Monsters) { const on = Monsters.Health && Monsters.Health.lantern; this.seal(g, bx - 88, by + 8, 15, 'lantern', () => Monsters.key('l'), 'lamp', { on }); this.seal(g, bx - 82, by - 30, 15, 'sneak', () => Monsters.key('f'), 'strike'); } } };
 
+// ---------------------------------------------------------------- the world pixel pass (hot path: flat typed arrays, numbers only)
+const SH = { tab: new Float32Array(768), post: new Float32Array(768), lamp: new Float32Array(768), day: new Float32Array(768), nl: 0, lk: null, lc: null, fl: null };
+function shadeWorld(VX0, VY0, VX1, VY1, idx, night, depL, shNoon, shLong, shadeT, CLS, LW, LI, d32, swayA, grassA, shadowOn, longW, shadowStrength,
+  nightShow, winter, lightAmount, ffMul, ambK, moon, deep, snowAcc, snR, snG, snB, wetDark, tick30, fogA, fogShift, tick2, fgR, fgG, fgB) {
+  const TB = SH.tab, PO = SH.post, LA = SH.lamp, DY = SH.day, LK = SH.lk, LC = SH.lc, FL = SH.fl, SWa = SW.a, SWcc = SW.cc, SWcs = SW.cs, SWgs = SW.gs, SWgc = SW.gc;
+  for (let y = VY0; y < VY1; y++) { const rsY = SW.rs[y] * .4, rcY = SW.rc[y] * .4, ycY = SW.yc[y], ysY = SW.ys[y], fy = Math.min(FH - 1, (y / 8) | 0), brow = (y & 3) * 4;
+    for (let x = VX0; x < VX1; x++) {
+      const i = y * W + x; let ix = idx[i]; const cl = CLS[ix];
+      // wind sway: canopy pixels sampled from a neighbour column, weighted by height above the trunk base; grass tufts sway a pixel
+      if (swayA > 0 && (cl & 1)) { const hg = depL[i] - y, wg = hg > 0 ? (hg < 34 ? hg / 34 : 1) : .5; const o = Math.round((SWa[x] + rsY * SWcc[x] + rcY * SWcs[x]) * swayA * wg); if (o !== 0) { let xx = x - o; xx = xx < 0 ? 0 : xx > W - 1 ? W - 1 : xx; const j = y * W + xx; if (CLS[idx[j]] & 1) ix = idx[j]; } }
+      else if (grassA > 0 && (cl & 32) && depL[i] > y) { const o = Math.round((SWgs[x] * ycY + SWgc[x] * ysY) * grassA); if (o !== 0) { const j = i - o; if (CLS[idx[j]] & 32) ix = idx[j]; } }
+      if (shadowOn) { const a = shNoon[i], bL = shLong[i]; let sv = 0; if (longW < 0.5) sv = a ? a : (bL && longW > 0.2 ? 1 : 0); else sv = bL ? bL : (a && longW < 0.8 ? 1 : 0);
+        if (sv) { const bt = BAYER[brow + (x & 3)] / 16; if (sv === 2 || bt < 0.5) { if (shadowStrength > bt * 0.6) ix = shadeT[ix]; } } }
+      let r = 0, g = 0, b = 0; const nidx = night[i], lw = LW[i], c3 = ix * 3;
+      if (!(nidx && nightShow > 0) && !(lw > 0 && lightAmount > 0)) { r = PO[c3]; g = PO[c3 + 1]; b = PO[c3 + 2]; }          // most pixels: unlit, no night overlay: the colour is the index alone
+      else { r = TB[c3]; g = TB[c3 + 1]; b = TB[c3 + 2]; const cx = CLS[ix];
+        if (nidx && nightShow > 0 && !(winter && (CLS[nidx] & 16))) { const n3 = nidx * 3; r += (TB[n3] - r) * nightShow; g += (TB[n3 + 1] - g) * nightShow; b += (TB[n3 + 2] - b) * nightShow; }   // night-only pixels fade in
+        let lit = 0; if (lw > 0 && lightAmount > 0) { const li = LI[i], kind = LK[li];
+          if (!(kind === 3 && winter)) { const w = lw * lightAmount * FL[li] * (kind === 3 ? ffMul : 1), l3 = li * 3;
+            if (kind === 1 || kind === 2) { lit = w; r += (LA[c3] * LC[l3] * 1.06 + 10 - r) * w; g += (LA[c3 + 1] * LC[l3 + 1] * 1.06 + 8 - g) * w; b += (LA[c3 + 2] * LC[l3 + 2] * 1.06 + 4 - b) * w; }   // lamplight: the warm ramp
+            else { const d0 = DY[c3], d1 = DY[c3 + 1], d2 = DY[c3 + 2], lum = d0 * .3 + d1 * .59 + d2 * .11; r += ((d0 + (lum - d0) * .42) * LC[l3] * 1.08 + 18 - r) * w; g += ((d1 + (lum - d1) * .42) * LC[l3 + 1] * 1.08 + 18 - g) * w; b += ((d2 + (lum - d2) * .42) * LC[l3 + 2] * 1.08 + 18 - b) * w; } } }
+        if (ambK > 0 && !(cx & 4)) { const un = 1 - (lit * 2.2 < 1 ? lit * 2.2 : 1);
+          if (moon > 0 && un > 0) { const dl = (DY[c3] * .3 + DY[c3 + 1] * .59 + DY[c3 + 2] * .11) / 255, m = moon * un; r += (dl * 104 - r) * m; g += (dl * 124 - g) * m; b += (dl * 168 - b) * m; }
+          if (deep > 0) { const k = deep * .22 * un; r += (14 - r) * k; g += (18 - g) * k; b += (40 - b) * k; }
+          const kb = ambK * un; if (kb > 0) { const f = 1 - kb * .9; r *= f; g *= f; b *= f * 1.04; } } }
+      const ck = CLS[ix];
+      if (snowAcc > .02 && depL[i] === 0 && !(ck & 6)) { const n = FOG[fy * FW + Math.min(FW - 1, (x / 8) | 0)]; if (n * .55 + BAYER[brow + (x & 3)] / 16 * .45 < snowAcc * .8) { r += (snR - r) * .8; g += (snG - g) * .8; b += (snB - b) * .8; } }   // snow settles in drifts
+      if (wetDark > 0 && (ck & 2) && ((x * 7 + y * 13 + tick30) % 97) < 2) { r += 40; g += 40; b += 40; }          // rain glints on water
+      if (fogA > 0 && !(ck & 4)) { const fx = Math.min(FW - 1, (((x + fogShift) / 8) | 0) % FW); const n = FOG[fy * FW + fx] * 0.6 + FOG2[fy * FW + ((fx + tick2) % FW)] * 0.4;   // ground mist, Bayer-thresholded
+        const dens = Math.max(0, n - 0.34) * 3.2 * fogA * (0.55 + 0.45 * (y / H)); const bt = BAYER[brow + (x & 3)] / 16;
+        if (dens > bt * 0.8) { const k = dens * .6 < .62 ? dens * .6 : .62; r += (fgR - r) * k; g += (fgG - g) * k; b += (fgB - b) * k; } }
+      const R = r > 255 ? 255 : r < 0 ? 0 : r, G = g > 255 ? 255 : g < 0 ? 0 : g, B = b > 255 ? 255 : b < 0 ? 0 : b;
+      d32[i] = (0xff000000 | (B << 16) | (G << 8) | R) >>> 0;          // one 32-bit store per pixel
+    } } }
 // ---------------------------------------------------------------- the prompt line and short messages, drawn as journal tags
-let UI_SCALE = 1, RUN_ACC = 0, STEP_COL = -1;
+let UI_SCALE = 1, RUN_ACC = 0, STEP_COL = -1, AUTO_T = 0, SAVED_T = 0;
 function drawPrompt(g, vw, vh, sf) { const K = UIKit, C = K.C;
   if (Interaction.current && !Interaction.message && !Survival.Sleep.sleeping) { const lab = Interaction.current.label, key = Touch.enabled ? null : 'E'; const tw = K.measure(lab) + (key ? 22 : 12); const x = Math.round(vw / 2 - tw / 2), y = vh - 44 - sf;
     K.tag(g, x, y, tw, 15); if (key) { g.fillStyle = C.leather; g.fillRect(x + 4, y + 3, 10, 9); K.text(g, key, x + 9, y + 10, { align: 'center', color: C.cream }); } K.text(g, lab, x + (key ? 18 : 6), y + 11); }
@@ -372,8 +418,9 @@ const depthNow = () => (EventState.current && DATA.depth[EventState.current.name
 function simulate(dt) { simAcc += dt; let n = 0; const ax = (Survival.Sleep.sleeping || Survival.Activities.current || Gather.UI.open || Build.UI.busy() || Monsters.Journal.open || Fishing.busy() || Fishing.Book.open || Social.UI.journal || Festival.UI.open) ? [0, 0] : Input.axis(); Player.wantRun = !!Input.keys['r'] || (Input.touch.active && Math.hypot(Input.touch.x - Input.touch.ax, Input.touch.y - Input.touch.ay) > 21 * UI_SCALE); if (Player.running && Player.moving) { RUN_ACC += dt; if (RUN_ACC > 20) { RUN_ACC = 0; Survival.Energy.spend(1, 'running'); } } while (simAcc >= SIM_DT && n < 5) { Player.step(SIM_DT, ax); simAcc -= SIM_DT; n++; } Camera.update(dt); Interaction.update(dt); Survival.tick(dt, WorldClock.paused ? 0 : dt * WorldClock.scale / 60, Player.moving); Gather.tick(dt); Build.tick(dt); if (!Gather.UI.open && !Build.UI.open && !Monsters.Journal.open && !Fishing.Book.open && !Fishing.render.inVista() && !Social.busy()) Monsters.tick(dt); Fishing.tick(dt); Social.tick(dt); Festival.tick(dt); }
 function frame(now) {
   const dt = Math.min(0.1, (now - last) / 1000); last = now; T += dt; const tf0 = performance.now();
-  UIKit.tick(dt); const held = UIKit.paused() || UIKit.Map.open || portrait();
+  UIKit.tick(dt); const held = UIKit.paused() || UIKit.Map.open || portrait(); if (!held && window.MOSS_AUTOSAVE) { AUTO_T += dt; if (AUTO_T > 180) { AUTO_T = 0; MOSS_AUTOSAVE('timer'); } } if (SAVED_T > 0) SAVED_T -= dt;
   if (!held) { WorldClock.tick(dt); WeatherState.tick(dt); tickParticles(dt, T); simulate(dt); } UIKit.explore(Player.x, Player.y); if (window.Sound) { Sound.tick(dt); footsteps(); }
+  FT.mark('sim', tf0); let tq = performance.now();
   const season = SeasonState.season, hour = WorldClock.hour(), ev = EventState.current;
   const { table, darkness } = tableAt(season, hour);
   let tab = gradeTable(table, WeatherState.kind, WeatherState.intensity, ev);
@@ -393,7 +440,7 @@ function frame(now) {
   const nightShow = Math.max(0, (darkness - 0.45) / 0.55);
   const wetDark = (WeatherState.kind === 'light_rain' || WeatherState.kind === 'heavy_rain') ? WeatherState.intensity : 0;
   if (!FLAGGED) { FLAGGED = true; DATA.entries.entries.forEach((e, i) => { const b = e.family.replace('~', ''); if (['grass', 'flower_b', 'flower_p', 'flower_w', 'flower_y', 'fern', 'shroom'].includes(b)) CLS[i] |= 32; }); }
-  const depL = depthNow();
+  tq = FT.mark('tables', tq); const depL = depthNow();
   const lampT = dayTab.map((c, k) => { const l = c[0] * .3 + c[1] * .59 + c[2] * .11, wr = warmRamp(l * 1.08); return [c[0] + (wr[0] - c[0]) * .78, c[1] + (wr[1] - c[1]) * .78, c[2] + (wr[2] - c[2]) * .78]; });
   const deep = (hour >= 22.5 ? Math.min(1, (hour - 22.5) / 1.5) : hour < 4.5 ? Math.min(1, (4.5 - hour) / 1.5) : 0) * lightAmount;          // the small hours are the darkest
   const clearSky = (WeatherState.kind === 'clear' || WeatherState.kind === 'wind') ? 1 : WeatherState.kind === 'snow' ? .55 : .3; const moon = nightShow * clearSky * .2;   // moonlight: cool, low, shows form
@@ -403,42 +450,19 @@ function frame(now) {
   const postT = tab.map((c, k) => { let r = c[0], g = c[1], b = c[2]; if (ambK > 0 && !(CLS[k] & 4)) { if (moon > 0) { const dc = dayTab[k], dl = (dc[0] * .3 + dc[1] * .59 + dc[2] * .11) / 255; r += (dl * 104 - r) * moon; g += (dl * 124 - g) * moon; b += (dl * 168 - b) * moon; } if (deep > 0) { const q = deep * .22; r += (14 - r) * q; g += (18 - g) * q; b += (40 - b) * q; } const f = 1 - ambK * .9; r *= f; g *= f; b *= f * 1.04; } return [r, g, b]; });
   const breeze = calm ? wind : Math.max(wind, .22), swayA = .35 + wind * 2.2;
   const snowing = WeatherState.kind === 'snow' ? WeatherState.intensity : 0; if (!held) SNOWACC = Math.max(0, Math.min(1, SNOWACC + dt * (snowing ? snowing / 90 : -(season === 'winter' ? 1 / 600 : 1 / 120)))); const snowC = tab[DATA.entries.entries.reduce((m, e, i) => e.family === 'snow' && (m < 0 || e.rank > DATA.entries.entries[m].rank) ? i : m, -1)] || [240, 244, 250];
-  for (let y = 0; y < H; y++) {
-    const fy = Math.min(FH - 1, (y / 8) | 0);
-    for (let x = 0; x < W; x++) {
-      const i = y * W + x; let ix = idx[i];
-      // wind sway: canopy pixels sampled from a neighbour column
-      if (breeze > 0.12 && (CLS[ix] & 1)) { const hg = depL[i] - y, wg = hg > 0 ? Math.min(1, hg / 34) : .5; const o = Math.round((SW.a[x] + (SW.rs[y] * SW.cc[x] + SW.rc[y] * SW.cs[x]) * .4) * swayA * wg); if (o) { const j = y * W + Math.min(W - 1, Math.max(0, x - o)); if (CLS[idx[j]] & 1) ix = idx[j]; } }
-      else if (!calm && (CLS[ix] & 32) && depL[i] > y) { const o = Math.round((SW.gs[x] * SW.yc[y] + SW.gc[x] * SW.ys[y]) * (.45 + wind * .9)); if (o) { const j = i - o; if (CLS[idx[j]] & 32) ix = idx[j]; } }
-      if (shadowOn) { const a = shNoon[i], bL = shLong[i]; let sv = 0; if (longW < 0.5) sv = a ? a : (bL && longW > 0.2 ? 1 : 0); else sv = bL ? bL : (a && longW < 0.8 ? 1 : 0);
-        if (sv) { const bt = BAYER[(y & 3) * 4 + (x & 3)] / 16; if (sv === 2 || bt < 0.5) { if (shadowStrength > bt * 0.6) ix = (sv === 2 && shadowStrength > 0.9 && (CLS[ix] & 2) === 0) ? shadeT[ix] : shadeT[ix]; } } }
-      let r, g, b; const nidx = night[i], lw = LW[i];
-      if (!(nidx && nightShow > 0) && !(lw > 0 && lightAmount > 0)) { const c = postT[ix]; r = c[0]; g = c[1]; b = c[2]; }          // most pixels: unlit, no night overlay, so the colour depends on the index alone
-      else { const c = tab[ix]; r = c[0]; g = c[1]; b = c[2];
-      // night-only pixels fade in with darkness
-      if (nidx && nightShow > 0 && !(season === 'winter' && (CLS[nidx] & 16))) { const nc = tab[nidx]; r += (nc[0] - r) * nightShow; g += (nc[1] - g) * nightShow; b += (nc[2] - b) * nightShow; }
-      // light pools: mix the DAY colour back in, tinted, so lamplight reveals true colour
-      let lit = 0; if (lw > 0 && lightAmount > 0) { const L = LIGHTS[LI[i]]; if (L.kind === 'firefly' && season === 'winter') { } else { const w = lw * lightAmount * flick[LI[i]] * (L.kind === 'firefly' && ev && ev.fireflies ? ev.fireflies : 1); lit = L.kind === 'fire' || L.kind === 'lantern' ? w : 0;
-        if (lit) { const lc = lampT[ix]; r += (lc[0] * L.color[0] * 1.06 + 10 - r) * w; g += (lc[1] * L.color[1] * 1.06 + 8 - g) * w; b += (lc[2] * L.color[2] * 1.06 + 4 - b) * w; }
-        else { const dc0 = dayTab[ix]; const lum = dc0[0] * .3 + dc0[1] * .59 + dc0[2] * .11; const dc = [dc0[0] + (lum - dc0[0]) * .42, dc0[1] + (lum - dc0[1]) * .42, dc0[2] + (lum - dc0[2]) * .42]; r += (dc[0] * L.color[0] * 1.08 + 18 - r) * w; g += (dc[1] * L.color[1] * 1.08 + 18 - g) * w; b += (dc[2] * L.color[2] * 1.08 + 18 - b) * w; } } }
-      if (ambK > 0 && !(CLS[ix] & 4)) { const bt = BAYER[(y & 3) * 4 + (x & 3)] / 16; const un = 1 - Math.min(1, lit * 2.2);
-        if (moon > 0 && un > 0) { const dc = dayTab[ix], dl = (dc[0] * .3 + dc[1] * .59 + dc[2] * .11) / 255; const m = moon * un; r += (dl * 104 - r) * m; g += (dl * 124 - g) * m; b += (dl * 168 - b) * m; }
-        if (deep > 0) { const k = deep * .22 * un; r += (14 - r) * k; g += (18 - g) * k; b += (40 - b) * k; }
-        const kb = ambK * un; if (kb > 0) { const f = 1 - kb * .9; r *= f; g *= f; b *= f * 1.04; } } }
-      // snow settles on open ground while it falls, in drifts, and melts slowly afterwards
-      if (SNOWACC > .02 && depL[i] === 0 && !(CLS[ix] & 6)) { const n = FOG[fy * FW + Math.min(FW - 1, (x / 8) | 0)]; if (n * .55 + BAYER[(y & 3) * 4 + (x & 3)] / 16 * .45 < SNOWACC * .8) { const k = .8; r += (snowC[0] - r) * k; g += (snowC[1] - g) * k; b += (snowC[2] - b) * k; } }
-      // rain: wet surfaces darken a little, water sparkles
-      if (wetDark > 0 && (CLS[ix] & 2) && ((x * 7 + y * 13 + (T * 30 | 0)) % 97) < 2) { r += 40; g += 40; b += 40; }
-      // fog: ground mist, Bayer-thresholded so it stays crisp; thinner over emissives and the top band
-      if (fogA > 0 && !(CLS[ix] & 4)) { const fx = Math.min(FW - 1, (((x + fogShift) / 8) | 0) % FW); const n = FOG[fy * FW + fx] * 0.6 + FOG2[fy * FW + ((fx + ((T * 2) | 0)) % FW)] * 0.4;
-        const dens = Math.max(0, n - 0.34) * 3.2 * fogA * (0.55 + 0.45 * (y / H)); const bt = BAYER[(y & 3) * 4 + (x & 3)] / 16;
-        if (dens > bt * 0.8) { const k = Math.min(0.62, dens * 0.6); r += (fogCol[0] - r) * k; g += (fogCol[1] - g) * k; b += (fogCol[2] - b) * k; } }
-      d32[i] = 0xff000000 | ((b > 255 ? 255 : b) << 16) | ((g > 255 ? 255 : g) << 8) | (r > 255 ? 255 : r);          // one 32-bit store per pixel
-    }
-  }
+  const VX0 = state.viewport ? Math.max(0, Camera.ix() - 4) : 0, VX1 = state.viewport ? Math.min(W, Camera.ix() + Camera.vw + 4) : W, VY0 = state.viewport ? Math.max(0, Camera.iy() - 32) : 0, VY1 = state.viewport ? Math.min(H, Camera.iy() + Camera.vh + 4) : H;   // only what the camera can see is shaded
+  tq = FT.mark('setup', tq);
+  // the per-pixel pass lives in its own small function with flat typed inputs, so the engine keeps it optimised
+  const flat = (t, out) => { for (let k = 0; k < t.length; k++) { const c = t[k] || t[0]; out[k * 3] = c[0]; out[k * 3 + 1] = c[1]; out[k * 3 + 2] = c[2]; } return out; };
+  flat(tab, SH.tab); flat(postT, SH.post); flat(lampT, SH.lamp); flat(dayTab, SH.day);
+  if (SH.nl < LIGHTS.length) { SH.nl = LIGHTS.length + 16; SH.lk = new Uint8Array(SH.nl); SH.lc = new Float32Array(SH.nl * 3); SH.fl = new Float32Array(SH.nl); }
+  LIGHTS.forEach((L, k) => { SH.lk[k] = { fire: 1, lantern: 2, firefly: 3, glow: 4 }[L.kind] || 0; SH.lc[k * 3] = L.color[0]; SH.lc[k * 3 + 1] = L.color[1]; SH.lc[k * 3 + 2] = L.color[2]; SH.fl[k] = flick[k]; });
+  shadeWorld(VX0, VY0, VX1, VY1, idx, night, depL, shNoon, shLong, shadeT, CLS, LW, LI, d32, breeze > 0.12 ? swayA : 0, calm ? 0 : .45 + wind * .9, shadowOn ? 1 : 0, longW, shadowStrength,
+    nightShow, season === 'winter' ? 1 : 0, lightAmount, ev && ev.fireflies ? ev.fireflies : 1, ambK, moon, deep, SNOWACC, snowC[0], snowC[1], snowC[2], wetDark, (T * 30) | 0, fogA, fogShift, (T * 2) | 0, fogCol[0], fogCol[1], fogCol[2]);
   const spriteRGB = (pi, i) => { const c = tab[pi]; let r = c[0], g = c[1], b = c[2]; const lw = LW[i]; let lit = 0; if (lw > 0 && lightAmount > 0) { const L = LIGHTS[LI[i]]; if (L.kind !== 'firefly') { const w = lw * lightAmount * flick[LI[i]]; lit = w; const lc = (L.kind === 'fire' || L.kind === 'lantern') ? lampT[pi] : dayTab[pi]; r += (lc[0] * L.color[0] * 1.06 + 10 - r) * w; g += (lc[1] * L.color[1] * 1.06 + 8 - g) * w; b += (lc[2] * L.color[2] * 1.06 + 4 - b) * w; } }
     if (ambK > 0 && !(CLS[pi] & 4)) { const un = 1 - Math.min(1, lit * 2.2); if (moon > 0) { const dc = dayTab[pi], dl = (dc[0] * .3 + dc[1] * .59 + dc[2] * .11) / 255, m = moon * un; r += (dl * 104 - r) * m; g += (dl * 124 - g) * m; b += (dl * 168 - b) * m; } const f = 1 - ambK * un * .9; r *= f; g *= f; b *= f; } return [r, g, b]; };
-  const buildCtx = { spriteRGB, lampT, ambK, d, W, H, tab, dayTab, dep: depthNow(), LW, LI, LIGHTS, lightAmount, flick, season, pyBase: Math.round(Player.y) };
+  tq = FT.mark('shade', tq);
+  const buildCtx = { view: [VX0, VY0, VX1, VY1], spriteRGB, lampT, ambK, d, W, H, tab, dayTab, dep: depthNow(), LW, LI, LIGHTS, lightAmount, flick, season, pyBase: Math.round(Player.y) };
   Fishing.render.water(buildCtx, tab, Math.min(1, darkness)); Festival.render.world(buildCtx, Math.min(1, darkness)); Build.render.ground(buildCtx);
   // ---- resource nodes: live sprites from the atlas, hidden when their conditions fail, sorted against the player by base y
   { const dep = depthNow(); const nIdx = DATA.nodeIdx; const aw = DATA.nodeAtlasW; const pyBase = Math.round(Player.y);
@@ -466,7 +490,7 @@ function frame(now) {
     for (const n of Gather.Nodes.list) { if (n.def.y <= pyBase || !Gather.Nodes.visible(n)) continue; const sp = Gather.nodeSprite(n); if (!sp) continue; if (Math.abs(n.def.x - Player.x) > 24 || n.def.y - pyBase > 30) continue; const x0 = n.def.x - sp.ox, y0 = n.def.y - sp.oy;
       for (let yy = 0; yy < sp.h; yy++) for (let xx = 0; xx < sp.w; xx++) { const pi = nIdx[(sp.y + yy) * aw + sp.x + xx]; if (!pi) continue; const x = x0 + xx, y = y0 + yy; if (x < 0 || y < 0 || x >= W || y >= H) continue; const i = y * W + x; const c = spriteRGB(pi, i); const o = i * 4; d[o] = c[0]; d[o + 1] = c[1]; d[o + 2] = c[2]; } } }
   Build.render.items(buildCtx, true); Monsters.render.items(buildCtx, true); Social.render.items(buildCtx, true); Build.render.roofs(buildCtx); Build.render.ghost(buildCtx);
-  og.putImageData(img, 0, 0);
+  tq = FT.mark('sprites', tq); og.putImageData(img, 0, 0);
   // particles drawn in palette-ish colours, 1-2 px, no blur
   og.fillStyle = 'rgba(190,205,215,0.55)'; for (const p of P.rain) { og.fillRect(p.x | 0, p.y | 0, 1, p.near ? 5 : 3); if (p.near) og.fillRect((p.x | 0) + 1, (p.y | 0) + 2, 1, 2); }
   og.fillStyle = 'rgba(200,215,225,0.5)'; for (const p of P.splash) { const s = 1 + (p.t * 3 | 0); og.fillRect((p.x | 0) - s, p.y | 0, 1, 1); og.fillRect((p.x | 0) + s, p.y | 0, 1, 1); }
@@ -477,7 +501,7 @@ function frame(now) {
   for (const p of P.ripple) { const rr = 1 + p.t * 4 | 0, a = (1 - p.t) * .6; og.fillStyle = `rgba(215,230,240,${a})`; og.fillRect((p.x | 0) - rr, p.y | 0, 1, 1); og.fillRect((p.x | 0) + rr, p.y | 0, 1, 1); og.fillRect((p.x | 0) - (rr >> 1), (p.y | 0) - 1, rr, 1); og.fillRect((p.x | 0) - (rr >> 1), (p.y | 0) + 1, rr, 1); }
   Festival.render.fx(og, Math.min(1, darkness));
   // present through the camera (integer source offset keeps pixels crisp), then HUD at native resolution
-  const z = state.zoom; ctx.imageSmoothingEnabled = false;
+  tq = FT.mark('particles', tq); const z = state.zoom; ctx.imageSmoothingEnabled = false;
   if (state.viewport) { const vwc = Math.min(W, Camera.vw), vhc = Math.min(H, Camera.vh); state.ox = Camera.ix(); state.oy = Camera.iy(); cv.width = vwc * z; cv.height = vhc * z; ctx.imageSmoothingEnabled = false; ctx.drawImage(off, state.ox, state.oy, vwc, vhc, 0, 0, vwc * z, vhc * z); }
   else { cv.width = W * z; cv.height = H * z; ctx.imageSmoothingEnabled = false; ctx.drawImage(off, 0, 0, W * z, H * z); }
   ctx.save(); ctx.scale(z, z); ctx.imageSmoothingEnabled = false; const vw = state.viewport ? Math.min(W, Camera.vw) : W, vh = state.viewport ? Math.min(H, Camera.vh) : H;
@@ -487,8 +511,9 @@ function frame(now) {
   if (!UIKit.anyBook() && !UIKit.Map.open) drawPrompt(ctx, uw, uh, usf);
   const book = UIKit.anyBook() || UIKit.Map.open; if (book) { ctx.fillStyle = 'rgba(16,10,4,.38)'; ctx.fillRect(0, 0, uw, uh); }          // a book takes the focus: the world dims, the HUD steps aside
   Touch.draw(ctx, uw, uh, usf); if (!book) Survival.HUD.draw(ctx, uw, uh, usf, T); Gather.UI.draw(ctx, uw, uh, usf, uiTab); Monsters.render.overlay(ctx, uw, uh, usf, uiTab); Build.UI.draw(ctx, uw, uh, usf, uiTab); Fishing.render.overlay(ctx, uw, uh, usf, uiTab); Social.render.overlay(ctx, uw, uh, usf, uiTab); Festival.render.calendar(ctx, uw, uh);
+  if (SAVED_T > 0 && !UIKit.anyBook()) { ctx.globalAlpha = Math.min(1, SAVED_T); UIKit.tag(ctx, 6 + usf, uh - 22 - usf, 40, 14); UIKit.glyph(ctx, 'book', 10 + usf, uh - 19 - usf, UIKit.C.ink2); UIKit.text(ctx, 'saved', 18 + usf, uh - 12 - usf, { color: UIKit.C.ink2 }); ctx.globalAlpha = 1; }          // a quiet sign that progress is safe
   UIKit.drawRibbon(ctx, uw, uh); UIKit.drawMap(ctx, uw, uh, uiTab); UIKit.drawNotices(ctx, uw, uh, usf, uiTab); UIKit.drawMenu(ctx, uw, uh); if (portrait()) drawPortraitCard(ctx, uw, uh); ctx.restore();
-  FRAME_MS += (performance.now() - tf0 - FRAME_MS) * .05;
+  FT.mark('present_ui', tq); FRAME_MS += (performance.now() - tf0 - FRAME_MS) * .05;
   document.getElementById('clock').textContent = `${WorldClock.label()} · day ${Survival.Clock.day} · ${season} · ${Survival.Clock.phase()} · ${WeatherState.kind} ${(WeatherState.intensity * 100) | 0}%`;
   if (!WorldClock.paused) document.getElementById('time').value = WorldClock.minutes | 0;
   requestAnimationFrame(frame);

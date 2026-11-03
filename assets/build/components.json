@@ -157,7 +157,7 @@
    "mat": "metal",
    "cost": {
     "plank": 2,
-    "scrap_metal": 2,
+    "scrap_metal": 1,
     "bolt": 2
    },
    "minutes": 70,

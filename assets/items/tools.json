@@ -23,6 +23,25 @@
     "knife"
    ],
    "efficiency": 1.1,
+   "tiers": [
+    {
+     "name": "Gathering knife",
+     "durability": 60,
+     "efficiency": 1.1
+    },
+    {
+     "name": "Copper knife",
+     "durability": 110,
+     "efficiency": 1.25,
+     "damage": 10
+    },
+    {
+     "name": "Iron knife",
+     "durability": 180,
+     "efficiency": 1.45,
+     "damage": 12
+    }
+   ],
    "upgrade": "knife_steel",
    "icon": "tool_knife",
    "description": "A short, sharp blade for herbs, bark and fibre."
@@ -36,6 +55,25 @@
     "axe"
    ],
    "efficiency": 1.0,
+   "tiers": [
+    {
+     "name": "Basic axe",
+     "durability": 40,
+     "efficiency": 1.0
+    },
+    {
+     "name": "Copper axe",
+     "durability": 90,
+     "efficiency": 1.25,
+     "damage": 17
+    },
+    {
+     "name": "Iron axe",
+     "durability": 160,
+     "efficiency": 1.5,
+     "damage": 20
+    }
+   ],
    "upgrade": "axe_copper",
    "icon": "tool_axe",
    "description": "A hatchet with a worn handle. For wood only."
@@ -49,6 +87,25 @@
     "pickaxe"
    ],
    "efficiency": 1.0,
+   "tiers": [
+    {
+     "name": "Pickaxe",
+     "durability": 40,
+     "efficiency": 1.0
+    },
+    {
+     "name": "Copper pickaxe",
+     "durability": 90,
+     "efficiency": 1.25,
+     "damage": 13
+    },
+    {
+     "name": "Iron pickaxe",
+     "durability": 160,
+     "efficiency": 1.5,
+     "damage": 15
+    }
+   ],
    "upgrade": "pickaxe_copper",
    "icon": "tool_pickaxe",
    "description": "Heavy, blunt, and the only way into rock."
@@ -62,6 +119,13 @@
     "fishing"
    ],
    "efficiency": 1.0,
+   "tiers": [
+    {
+     "name": "Primitive rod",
+     "durability": 30,
+     "efficiency": 1.0
+    }
+   ],
    "upgrade": null,
    "icon": "tool_rod",
    "description": "A reed, a length of cord, a bone hook. It catches fish, mostly small ones."

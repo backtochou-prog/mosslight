@@ -76,18 +76,18 @@ ITEMS = [
 ]
 TOOLS = [
  dict(damage=4, id='hand', name='Bare hands', durability=None, compat=['hand'], efficiency=1.0, upgrade=None, icon=('hand','canvas'), description='Fingers and patience.'),
- dict(damage=8, id='knife', name='Gathering knife', durability=60, compat=['hand','knife'], efficiency=1.1, upgrade='knife_steel', icon=('knife','metal'), description='A short, sharp blade for herbs, bark and fibre.'),
- dict(damage=14, id='axe', name='Basic axe', durability=40, compat=['axe'], efficiency=1.0, upgrade='axe_copper', icon=('axe','wood'), description='A hatchet with a worn handle. For wood only.'),
- dict(damage=11, id='pickaxe', name='Pickaxe', durability=40, compat=['pickaxe'], efficiency=1.0, upgrade='pickaxe_copper', icon=('pickaxe','metal'), description='Heavy, blunt, and the only way into rock.'),
- dict(damage=2, id='rod', name='Primitive rod', durability=30, compat=['fishing'], efficiency=1.0, upgrade=None, icon=('rod','wood'), description='A reed, a length of cord, a bone hook. It catches fish, mostly small ones.'),
+ dict(damage=8, id='knife', name='Gathering knife', durability=60, compat=['hand','knife'], efficiency=1.1, tiers=[dict(name='Gathering knife', durability=60, efficiency=1.1), dict(name='Copper knife', durability=110, efficiency=1.25, damage=10), dict(name='Iron knife', durability=180, efficiency=1.45, damage=12)], upgrade='knife_steel', icon=('knife','metal'), description='A short, sharp blade for herbs, bark and fibre.'),
+ dict(damage=14, id='axe', name='Basic axe', durability=40, compat=['axe'], efficiency=1.0, tiers=[dict(name='Basic axe', durability=40, efficiency=1.0), dict(name='Copper axe', durability=90, efficiency=1.25, damage=17), dict(name='Iron axe', durability=160, efficiency=1.5, damage=20)], upgrade='axe_copper', icon=('axe','wood'), description='A hatchet with a worn handle. For wood only.'),
+ dict(damage=11, id='pickaxe', name='Pickaxe', durability=40, compat=['pickaxe'], efficiency=1.0, tiers=[dict(name='Pickaxe', durability=40, efficiency=1.0), dict(name='Copper pickaxe', durability=90, efficiency=1.25, damage=13), dict(name='Iron pickaxe', durability=160, efficiency=1.5, damage=15)], upgrade='pickaxe_copper', icon=('pickaxe','metal'), description='Heavy, blunt, and the only way into rock.'),
+ dict(damage=2, id='rod', name='Primitive rod', durability=30, compat=['fishing'], efficiency=1.0, tiers=[dict(name='Primitive rod', durability=30, efficiency=1.0)], upgrade=None, icon=('rod','wood'), description='A reed, a length of cord, a bone hook. It catches fish, mostly small ones.'),
 ]
 # ---- world resource nodes placed in the clearing. Each: visual kind + states, drop table, tool, conditions, respawn.
 NODES = [
  dict(id='branches_log', kind='branch_pile', x=452, y=366, r=20, label='Gather branches', activity='gather_branches', tool='hand', drops=[['branch',2,3]], yields=2, respawn_hours=12, respawn_mode='time'),
  dict(id='branches_oak', kind='branch_pile', x=190, y=222, r=20, label='Gather branches', activity='gather_branches', tool='hand', drops=[['branch',1,3],['bark',0,1]], yields=2, respawn_hours=12, respawn_mode='time'),
  dict(id='branches_west', kind='branch_pile', x=150, y=334, r=20, label='Gather branches', activity='gather_branches', tool='hand', drops=[['branch',1,2]], yields=1, respawn_hours=18, respawn_mode='time'),
- dict(id='stones_outcrop', kind='stone_pile', x=338, y=238, r=22, label='Gather stones', activity='gather_stones', tool='hand', drops=[['stone',2,3],['flint',0,1]], yields=3, respawn_hours=36, respawn_mode='time'),
- dict(id='stones_path', kind='stone_pile', x=520, y=292, r=18, label='Gather stones', activity='gather_stones', tool='hand', drops=[['stone',1,2]], yields=2, respawn_hours=36, respawn_mode='time'),
+ dict(id='stones_outcrop', kind='stone_pile', x=338, y=238, r=22, label='Gather stones', activity='gather_stones', tool='hand', drops=[['stone',2,3],['flint',0,1]], yields=3, respawn_hours=24, respawn_mode='time'),
+ dict(id='stones_path', kind='stone_pile', x=520, y=292, r=18, label='Gather stones', activity='gather_stones', tool='hand', drops=[['stone',1,2]], yields=2, respawn_hours=24, respawn_mode='time'),
  dict(id='mush_log', kind='mushroom', x=490, y=372, r=16, label='Pick mushrooms', activity='pick_plant', tool='hand', drops=[['mushroom_brown',1,2]], yields=1, respawn_hours=48, respawn_mode='time', seasons='spring,autumn'),
  dict(id='mush_north', kind='mushroom', x=432, y=142, r=16, label='Pick mushrooms', activity='pick_plant', tool='hand', drops=[['mushroom_brown',1,1],['mushroom_red',0,1]], yields=1, respawn_hours=48, respawn_mode='time', seasons='spring,autumn'),
  dict(id='daisies_s', kind='flower_w', x=386, y=352, r=16, label='Pick daisies', activity='pick_plant', tool='hand', drops=[['daisy',1,2]], yields=2, respawn_hours=72, respawn_mode='season', seasons='spring,summer', time='day'),
@@ -96,14 +96,14 @@ NODES = [
  dict(id='berries_hedge', kind='berry_bush', x=560, y=440, r=20, label='Pick blackberries', activity='pick_plant', tool='hand', drops=[['blackberry',2,4]], yields=3, respawn_hours=96, respawn_mode='season', seasons='summer,autumn'),
  dict(id='rowan_berries', kind='berry_rowan', x=418, y=184, r=18, label='Pick rowan berries', activity='pick_plant', tool='hand', drops=[['rowan_berry',2,3]], yields=2, respawn_hours=120, respawn_mode='season', seasons='autumn'),
  dict(id='mint_pond', kind='herb', x=600, y=352, r=16, label='Cut wild mint', activity='cut_herb', tool='knife', drops=[['mint',1,2]], yields=2, respawn_hours=48, respawn_mode='time', seasons='spring,summer,autumn'),
- dict(id='fiber_reeds', kind='herb', x=690, y=330, r=18, label='Cut reed fibre', activity='cut_herb', tool='knife', drops=[['fiber',2,3]], yields=3, respawn_hours=24, respawn_mode='time'),
+ dict(id='fiber_reeds', kind='herb', x=690, y=330, r=18, label='Cut reed fibre', activity='cut_herb', tool='knife', drops=[['fiber',2,3]], yields=4, respawn_hours=16, respawn_mode='time'),
  dict(id='vines_ruin', kind='vine', x=556, y=136, r=18, label='Cut vines', activity='cut_herb', tool='knife', drops=[['vine',1,2]], yields=2, respawn_hours=72, respawn_mode='time'),
- dict(id='moss_stone', kind='moss_pad', x=352, y=236, r=14, label='Gather moss', activity='pick_plant', tool='hand', drops=[['moss',1,2]], yields=2, respawn_hours=72, respawn_mode='time'),
- dict(id='oak_wood', kind='tree_marker', x=216, y=214, r=22, label='Chop the oak', activity='cut_tree', tool='axe', drops=[['log',1,1],['hardwood',0,1]], yields=4, respawn_hours=240, respawn_mode='time'),
- dict(id='deposit_ruin', kind='deposit', x=664, y=146, r=20, label='Mine the deposit', activity='mine', tool='pickaxe', drops=[['stone',1,1],['copper_ore',1,2],['quartz',0,1],['coal',0,1]], yields=5, respawn_hours=None, respawn_mode='none', night_extra=[['moonstone',0,1]]),
- dict(id='deposit_west', kind='deposit', x=96, y=352, r=20, label='Mine the deposit', activity='mine', tool='pickaxe', drops=[['stone',1,2],['iron_ore',0,1],['amethyst',0,1],['geode',0,1]], yields=4, respawn_hours=None, respawn_mode='none'),
- dict(id='scrap_ruin', kind='scrap_pile', x=676, y=112, r=18, label='Search the rubble', activity='search', tool='hand', drops=[['scrap_metal',1,2],['bolt',0,2],['glass_shard',0,1],['rusted_gear',0,1],['battery',0,1]], yields=3, respawn_hours=240, respawn_mode='time'),
- dict(id='scrap_beam', kind='scrap_pile', x=606, y=130, r=16, label='Search under the beam', activity='search', tool='hand', drops=[['wire',0,2],['circuit',0,1],['photo',0,1],['tin_cup',0,1]], yields=2, respawn_hours=None, respawn_mode='none', unique=['photo','tin_cup']),
+ dict(id='moss_stone', kind='moss_pad', x=352, y=236, r=14, label='Gather moss', activity='pick_plant', tool='hand', drops=[['moss',1,2]], yields=2, respawn_hours=36, respawn_mode='time'),
+ dict(id='oak_wood', kind='tree_marker', x=216, y=214, r=22, label='Chop the oak', activity='cut_tree', tool='axe', drops=[['log',1,1],['hardwood',0,1]], yields=4, respawn_hours=120, respawn_mode='time'),
+ dict(id='deposit_ruin', kind='deposit', x=664, y=146, r=20, label='Mine the deposit', activity='mine', tool='pickaxe', drops=[['stone',1,2],['copper_ore',1,2],['quartz',0,1],['coal',0,1]], yields=5, respawn_hours=96, respawn_mode='time', night_extra=[['moonstone',0,1]]),
+ dict(id='deposit_west', kind='deposit', x=96, y=352, r=20, label='Mine the deposit', activity='mine', tool='pickaxe', drops=[['stone',1,2],['iron_ore',1,1],['amethyst',0,1],['geode',0,1]], yields=4, respawn_hours=96, respawn_mode='time'),
+ dict(id='scrap_ruin', kind='scrap_pile', x=676, y=112, r=18, label='Search the rubble', activity='search', tool='hand', drops=[['scrap_metal',1,2],['bolt',0,2],['glass_shard',1,1],['rusted_gear',0,1],['battery',0,1]], yields=4, respawn_hours=72, respawn_mode='time'),
+ dict(id='scrap_beam', kind='scrap_pile', x=606, y=130, r=16, label='Search under the beam', activity='search', tool='hand', drops=[['wire',1,2],['scrap_metal',0,1],['circuit',0,1],['photo',0,1],['tin_cup',0,1]], yields=2, respawn_hours=120, respawn_mode='time', unique=['photo','tin_cup']),
  dict(id='lintel_key', kind='hidden', x=612, y=98, r=14, label='Feel along the lintel', activity='search', tool='hand', drops=[['key_old',1,1]], yields=1, respawn_hours=None, respawn_mode='none', unique=['key_old']),
  # nocturnal / conditional
  dict(id='moondew_ruin', kind='glowcap', x=596, y=134, r=16, label='Collect moondew', activity='pick_plant', tool='hand', drops=[['moondew',1,1]], yields=1, respawn_hours=24, respawn_mode='time', time='night'),
@@ -121,7 +121,7 @@ NODES = [
  dict(id='spore_patch', kind='spore_patch', x=150, y=300, r=16, label='Shake the spores loose', activity='pick_plant', tool='hand', drops=[['luminous_spores',1,2]], yields=1, respawn_hours=24, respawn_mode='time', time='night'),
  dict(id='worm_bed', kind='worm_bed', x=526, y=318, r=16, label='Dig for worms', activity='pick_plant', tool='hand', drops=[['worm',2,4]], yields=2, respawn_hours=12, respawn_mode='time'),
  dict(id='reed_insects', kind='reed_insects', x=612, y=212, r=16, label='Catch insects', activity='pick_plant', tool='hand', seasons='spring,summer,autumn', drops=[['insect_bait',2,3]], yields=2, respawn_hours=8, respawn_mode='time', time='day'),
- dict(id='clay_bank', kind='clay', x=572, y=222, r=16, label='Dig clay', activity='gather_stones', tool='hand', drops=[['clay',1,2]], yields=3, respawn_hours=24, respawn_mode='time', weather='rain,after_rain'),
+ dict(id='clay_bank', kind='clay', x=572, y=222, r=16, label='Dig clay', activity='gather_stones', tool='hand', drops=[['clay',1,2]], yields=4, respawn_hours=18, respawn_mode='time', weather='rain,after_rain'),
  dict(id='feather_meadow', kind='feather', x=360, y=120, r=14, label='Pick up the feather', activity='search', tool='hand', drops=[['feather',1,1]], yields=1, respawn_hours=36, respawn_mode='time'),
 ]
 # ---------------- icons: 12x12, drawn from (shape, family)

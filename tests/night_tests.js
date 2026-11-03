@@ -3,6 +3,7 @@ const { chromium } = require('playwright'); const fs = require('fs'); const PORT
 const check = (n, ok, d) => { res.push({ name: n, ok: !!ok, detail: d }); console.log((ok ? 'PASS ' : 'FAIL ') + n + (d !== undefined ? '  — ' + d : '')); };
 (async () => { const b = await chromium.launch(); const p = await b.newPage({ viewport: { width: 2000, height: 1200 } }); const errs = []; p.on('pageerror', e => errs.push(e.message));
   await p.goto(`http://127.0.0.1:${PORT}/preview/play.html?dev=1`); await p.waitForFunction(() => window.Monsters && Monsters.cfg() && document.getElementById('clock').textContent.includes(':'), { timeout: 30000 });
+  await p.evaluate(() => { Build.unlockAllStages(true); Survival.Weather.enabled = false; });   // these suites test the parts themselves, not home progression (atmosphere/progression suites cover that); weather is set by hand here
   const ev = (f, a) => p.evaluate(f, a); const shot = async n => { await p.waitForTimeout(350); await (await p.$('#c')).screenshot({ path: `/root/mosslight/renders/night_${n}.png` }); };
   await ev(() => { setPreset(1); WorldClock.paused = true; window.M = Monsters; window.run = (sec, ax = [0, 0]) => { for (let i = 0; i < sec * 20; i++) { if (ax[0] || ax[1]) { SIM.step(ax, 3); Player.moving = true; } M.tick(.05); } }; window.at = h => { Survival.Clock.setHour(h); }; window.only = (t, x, y) => { M.clearAll(); M.Director.t = 999; M.Health.cur = 100; M.Health.inv = 0; return M.spawn(t, x, y); }; window.hold = () => { M.Director.t = 999; }; });
   // day peace

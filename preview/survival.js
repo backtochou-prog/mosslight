@@ -121,10 +121,12 @@ window.Survival = (() => {
         if (m >= wakeM) { W.WorldClock.minutes = wakeM; Clock.day += 1; emit('day', Clock.day); } else { W.WorldClock.minutes = wakeM; }
         Clock.lastHour = -1; Clock.lastPhase = null; Clock.afterTick(W.WorldClock.minutes);
         const full = (sleptHour >= CFG.sleep.full_restore_before_hour + 12 || sleptHour < CFG.sleep.full_restore_before_hour);   // before ~02:00 (incl. evening) = full night
-        Energy.set(full ? Energy.max : Math.min(Energy.max, Math.max(Energy.current, CFG.sleep.short_night_restore)));
+        const B = window.Build && Build.homeBonus ? Build.homeBonus() : {}, home = !!(window.Build && Build.sheltered && Build.sheltered(W.Player.x, W.Player.y));   // your own room: always a full night, and a bed of your own adds to the morning
+        Energy.max = CFG.energy.max + (home ? (B.maxEnergy || 0) : 0); const rested = full || (home && B.fullRest);
+        Energy.set(rested ? Energy.max : Math.min(Energy.max, Math.max(Energy.current, CFG.sleep.short_night_restore)));
         Energy._walkAcc = 0;
         Record.start(Clock.day, season);
-        this.lastSummary = Record.summary(rec); this.summaryT = 7.0; emit('wake', Clock.day, rec);
+        Weather.apply(true); this.lastSummary = Record.summary(rec) + ` Today: ${Weather.forecast(Clock.day)}.`; this.summaryT = 7.0; emit('wake', Clock.day, rec);
       };
       if (opts.instant) { this._apply(); this.sleeping = false; this.fade = 0; this._phase = null; }
       return true;
@@ -142,13 +144,33 @@ window.Survival = (() => {
 
   // ---------------- Save / restore (prepared for the future save system; one store, versioned)
   const SaveState = {
-    KEY: 'mosslight.save',
-    snapshot() { return { version: CFG.version, day: Clock.day, season: W.SeasonState.season, minutes: W.WorldClock.minutes, energy: Energy.current, maxEnergy: Energy.max, sleeping: false, record: Record.cur, days: Record.days }; },
-    save() { const s = this.snapshot(); try { localStorage.setItem(this.KEY, JSON.stringify(s)); } catch (_) {} return s; },
-    load(s) { s = s || JSON.parse(localStorage.getItem(this.KEY) || 'null'); if (!s) return false;
-      Clock.day = s.day; W.SeasonState.season = s.season; W.WorldClock.minutes = s.minutes; Energy.max = s.maxEnergy; Energy.set(s.energy);
+    KEY: 'mosslight.save', VERSION: 2, problems: [], lastSource: null, lastSaved: null,
+    // v2 envelope: { app, v, sum, len, body }. The body is the game snapshot as JSON; sum is FNV-1a over the body, so a torn or edited save is caught.
+    sum(str) { let h = 0x811c9dc5; for (let i = 0; i < str.length; i++) { h ^= str.charCodeAt(i); h = Math.imul(h, 0x01000193) >>> 0; } return h.toString(16); },
+    snapshot() { const P = W.Player, WS = window.WeatherState || {}; return { version: this.VERSION, day: Clock.day, season: W.SeasonState.season, minutes: W.WorldClock.minutes, energy: Energy.current, maxEnergy: Energy.max, sleeping: false, record: Record.cur, days: Record.days,
+      player: P ? { x: Math.round(P.x * 10) / 10, y: Math.round(P.y * 10) / 10, facing: P.facing, flip: !!P.flip } : null, weather: { kind: WS.kind || 'clear', intensity: WS.intensity || 0, target: WS.target || 0, wind: WS.wind || 0, plan: Weather.snapshot() } }; },
+    // read the best save there is: the main slot, else the backup, else the half-written temp; older plain saves are migrated
+    read() { this.problems = []; const tryKey = k => { const raw = (() => { try { return localStorage.getItem(k); } catch (_) { return null; } })(); if (!raw) return null; try { const o = JSON.parse(raw);
+        if (o && o.app === 'mosslight' && typeof o.body === 'string') { if (o.body.length !== o.len || this.sum(o.body) !== o.sum) { this.problems.push(k + ': checksum mismatch'); return null; } return this.migrate(JSON.parse(o.body)); }
+        if (o && typeof o === 'object' && o.day && o.minutes !== undefined) return this.migrate(o); this.problems.push(k + ': not a save'); return null; } catch (e) { this.problems.push(k + ': unreadable (' + e.message + ')'); return null; } };
+      for (const k of [this.KEY, this.KEY + '.bak', this.KEY + '.tmp']) { const s = tryKey(k); if (s) { this.lastSource = k; return s; } } this.lastSource = null; return null; },
+    migrate(s) { if (!s.version || s.version < 2) { s.version = 2; if (!s.player) s.player = null; if (!s.weather) s.weather = null; } return s; },
+    exists() { return !!this.read(); },
+    save() { const s = this.snapshot(); s.savedAt = Date.now(); let body; try { body = JSON.stringify(s); JSON.parse(body); } catch (e) { this.problems = ['could not serialise: ' + e.message]; return null; }
+      const env = JSON.stringify({ app: 'mosslight', v: this.VERSION, sum: this.sum(body), len: body.length, body });
+      try { localStorage.setItem(this.KEY + '.tmp', env); const prev = localStorage.getItem(this.KEY); if (prev && prev !== env) localStorage.setItem(this.KEY + '.bak', prev); localStorage.setItem(this.KEY, env); localStorage.removeItem(this.KEY + '.tmp'); }
+      catch (e) { this.problems = ['storage refused the save (' + (e.name || e.message) + ')']; return null; }
+      this.lastSaved = s.savedAt; emit('saved', s); return s; },
+    guard(name, fn) { try { fn(); return true; } catch (e) { this.problems.push(name + ' could not be restored: ' + e.message); console.warn('[save]', name, e); return false; } },
+    load(s) { s = s || this.read(); if (!s) return false;
+      if (s.app === 'mosslight' && typeof s.body === 'string') { try { s = this.migrate(JSON.parse(s.body)); } catch (_) { return false; } }          // handed a raw envelope
+      if (!isFinite(s.day) || !isFinite(s.minutes)) { this.problems.push('save has no day or time'); return false; }
+      if (!['spring', 'summer', 'autumn', 'winter'].includes(s.season)) s.season = 'spring'; if (!isFinite(s.energy)) s.energy = CFG.energy.max;
+      Clock.day = s.day; W.SeasonState.season = s.season; W.WorldClock.minutes = s.minutes; Energy.max = s.maxEnergy || CFG.energy.max; Energy.set(s.energy);
       Record.cur = s.record || Record.cur; Record.days = s.days || []; Sleep.sleeping = false; Sleep.fade = 0;
       Clock.lastHour = Math.floor(s.minutes / 60); Clock.lastPhase = Clock.phase();   // no duplicate day/phase events on load
+      if (s.player && W.Player && W.Player.setPos && isFinite(s.player.x) && isFinite(s.player.y)) { W.Player.setPos(s.player.x, s.player.y); if (W.Player.blocked && W.Player.blocked(s.player.x, s.player.y) && W.DATA) { const sp = W.DATA.play.spawn; W.Player.setPos(sp[0], sp[1]); } W.Player.facing = s.player.facing || 'down'; W.Player.flip = !!s.player.flip; }
+      if (s.weather && window.WeatherState) { const WS = window.WeatherState; WS.kind = s.weather.kind; WS.intensity = s.weather.intensity; WS.target = s.weather.target; WS.prevIntensity = 0; WS.wind = s.weather.wind || 0; Weather.restore(s.weather.plan); Weather.setKind = WS.kind; }
       emit('load', s); return true; },
   };
 
@@ -181,6 +203,34 @@ window.Survival = (() => {
     },
   };
 
+  // ---------------- Weather: a plan for each day, so rain, fog and snow come and go on their own
+  // Five blocks a day, each likely to keep the last one's sky; fog only in the morning; snow only in winter. Seeded, so a
+  // loaded save sees the same skies. Outside winter there is rain at least every third day, so rain-only finds never stall.
+  // Anything that sets the weather by hand (the dev menu, a preset, a test) holds it until the next morning.
+  const Weather = { enabled: true, seed: 0, lastRainDay: 0, setKind: null, hold: false, holdDay: 0,
+    BLOCKS: [0, 6, 10, 15, 20],
+    ODDS: { spring: { clear: .47, light_rain: .28, heavy_rain: .07, fog: .12, wind: .06 }, summer: { clear: .64, light_rain: .14, heavy_rain: .1, fog: .04, wind: .08 },
+      autumn: { clear: .36, light_rain: .26, heavy_rain: .12, fog: .16, wind: .1 }, winter: { clear: .42, snow: .4, fog: .1, wind: .08 } },
+    rng(day, k) { let a = (this.seed * 2654435761 + day * 40503 + k * 9973) >>> 0; a ^= a << 13; a >>>= 0; a ^= a >> 17; a ^= a << 5; return ((a >>> 0) % 100000) / 100000; },
+    plan(day, season) { season = season || W.SeasonState.season; const odds = this.ODDS[season] || this.ODDS.spring; const out = []; let prev = null;
+      if (day <= 1) return this.BLOCKS.map(h => ({ h, kind: 'clear', i: 0 }));                       // a gentle first day
+      this.BLOCKS.forEach((h, k) => { let kind;
+        if (prev && this.rng(day, k * 7 + 1) < .62) kind = prev; else { let r = this.rng(day, k * 7 + 2), acc = 0; kind = 'clear'; for (const [w, p] of Object.entries(odds)) { acc += p; if (r < acc) { kind = w; break; } } }
+        if (kind === 'fog' && h >= 10) kind = 'clear'; prev = kind; out.push({ h, kind, i: kind === 'clear' ? 0 : .45 + this.rng(day, k * 7 + 3) * .45 }); });
+      const rainy = out.some(b => b.kind === 'light_rain' || b.kind === 'heavy_rain');
+      if (season !== 'winter' && !rainy && day - this.lastRainDay >= 3) out[3] = { h: 15, kind: 'light_rain', i: .55 };
+      return out; },
+    blockAt(hour, day) { const p = this.plan(day || Clock.day); let b = p[0]; for (const x of p) if (hour >= x.h) b = x; return b; },
+    forecast(day) { const p = this.plan(day); const words = { clear: 'clear', light_rain: 'showers', heavy_rain: 'heavy rain', fog: 'morning fog', snow: 'snow', wind: 'wind' }; const parts = []; const when = ['night', 'early morning', 'late morning', 'afternoon', 'evening'];
+      p.forEach((b, k) => { if (b.kind !== 'clear' && k > 0 && (k === 1 || p[k - 1].kind !== b.kind)) parts.push(`${words[b.kind]} in the ${when[k]}`); }); return parts.length ? parts.join(', then ') : 'clear skies all day'; },
+    apply(force) { const WS = window.WeatherState; if (!this.enabled || !WS) return;
+      if (this.hold) { if (Clock.day === this.holdDay && !force) return; this.hold = false; }          // a hand-picked sky lasts the rest of that day
+      else if (this.setKind && WS.kind !== this.setKind && !force) { this.hold = true; this.holdDay = Clock.day; return; }   // someone chose the weather by hand
+      const b = this.blockAt(Clock.hour());
+      if (WS.kind !== b.kind || Math.abs(WS.target - b.i) > .05) WS.set(b.kind, b.i); this.setKind = b.kind; if (b.kind === 'light_rain' || b.kind === 'heavy_rain') this.lastRainDay = Clock.day; },
+    snapshot() { return { seed: this.seed, lastRainDay: this.lastRainDay, hold: this.hold, holdDay: this.holdDay, setKind: this.setKind }; },
+    restore(o) { if (!o) return; Object.assign(this, { seed: o.seed || 0, lastRainDay: o.lastRainDay || 0, hold: !!o.hold, holdDay: o.holdDay || 0, setKind: o.setKind || null }); } };
+
   // ---------------- Dev tools (header buttons; only with ?dev=1 or the dev toggle)
   const Dev = {
     actions: {
@@ -194,10 +244,10 @@ window.Survival = (() => {
   function init(cfg, world) {
     CFG = cfg; W = world;
     Energy.max = CFG.energy.max; Energy.current = CFG.energy.start;
-    Record.start(Clock.day, W.SeasonState.season); Clock.lastPhase = Clock.phase();
+    Record.start(Clock.day, W.SeasonState.season); Clock.lastPhase = Clock.phase(); Weather.seed = (Math.random() * 1e9) >>> 0; on('hour', () => Weather.apply());
     const origTick = W.WorldClock.tick.bind(W.WorldClock);
     W.WorldClock.tick = function (dtReal) { const prev = this.minutes; origTick(dtReal); if (!this.paused) { const d = (this.minutes - prev + 1440) % 1440; Record.minutes(d); Clock.afterTick(prev); } };
   }
   function tick(dt, gameMinutes, moving) { Sleep.tick(dt); Activities.tick(dt); if (!Sleep.sleeping) { Energy.tickMovement(gameMinutes, moving); if (moving) Record.moving(gameMinutes); } }
-  return { init, tick, on, Clock, Energy, Activities, Record, Sleep, SaveState, HUD, Dev, cfg: () => CFG };
+  return { init, tick, on, Clock, Energy, Activities, Record, Sleep, SaveState, HUD, Dev, Weather, cfg: () => CFG };
 })();

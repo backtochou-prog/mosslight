@@ -13,17 +13,17 @@
   {
    "name": "night ramps: early budget smaller than deep; creatures appear gradually",
    "ok": true,
-   "detail": "2,2,7,7,wanderer/burrower/howler/stalker"
+   "detail": "1,1,3,3,wanderer/stalker"
   },
   {
    "name": "dawn: creatures retreat gradually, not instantly",
    "ok": true,
-   "detail": "5,8.3,0"
+   "detail": "3,4.2,0"
   },
   {
    "name": "lantern extends how far you are seen",
    "ok": true,
-   "detail": "true,true,true"
+   "detail": "true,true,false"
   },
   {
    "name": "sneaking is quieter than walking",
@@ -47,7 +47,7 @@
   {
    "name": "Stalker will not enter campfire light to reach a player beside it",
    "ok": true,
-   "detail": "light,85"
+   "detail": "light,48"
   },
   {
    "name": "Stalker cycles stalk, pounce, attack, retreat",
@@ -156,7 +156,7 @@
   {
    "name": "fog shrinks sight and raises activity",
    "ok": true,
-   "detail": "true,true,7,9"
+   "detail": "true,true,6,8"
   },
   {
    "name": "save/load: health, drops and journal restored; no duplicated creatures or drops",
@@ -166,12 +166,12 @@
   {
    "name": "AI cost with 12 creatures",
    "ok": true,
-   "detail": "0.07 ms/tick"
+   "detail": "0.04 ms/tick"
   },
   {
    "name": "frame time with creatures (software Chromium)",
    "ok": true,
-   "detail": "43.5 ms"
+   "detail": "22.4 ms"
   },
   {
    "name": "real keys: L lantern, F strike, K guide, Shift sneak",

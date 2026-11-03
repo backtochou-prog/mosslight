@@ -6,7 +6,7 @@ def I(id, name, desc, stack=20, value=2, weight=0.3, sprite=None):
     return dict(id=id, name=name, description=desc, category='crafted', rarity='common', icon=id, stack=stack, value=value, weight=weight, gathering='crafted', tool=None,
                 seasons='all', time='any', weather='any', habitat='made by hand', crafting='', collectible='crafted', sprite=sprite)
 MATERIALS = [I('plank', 'Plank', 'A split board, still smelling of the tree.', 30), I('cord', 'Cord', 'Plant fibre twisted until it holds.', 30), I('nails', 'Nails', 'Cut from old scrap and hammered straight.', 50, 1, .02),
-             I('stone_block', 'Stone block', 'Squared on four faces, near enough.', 20, 3, 1.2), I('iron_ingot', 'Iron ingot', 'Rough, dark and honest.', 10, 12, 1.5), I('glass_pane', 'Glass pane', 'Old glass melted and poured flat. A little wavy.', 10, 6, .4),
+             I('stone_block', 'Stone block', 'Squared on four faces, near enough.', 20, 3, 1.2), I('iron_ingot', 'Iron ingot', 'Rough, dark and honest.', 10, 12, 1.5), I('copper_ingot', 'Copper ingot', 'Soft, warm-coloured, and easy to work cold.', 10, 8, 1.2), I('glass_pane', 'Glass pane', 'Old glass melted and poured flat. A little wavy.', 10, 6, .4),
              I('hinge', 'Hinge', 'Two leaves and a pin. It makes a door a door.', 10, 5, .2), I('cloth', 'Woven cloth', 'Coarse, warm, and yours.', 20, 4, .1)]
 def N(id, name, desc, cat, rarity, value=8, stack=10, use=None):
     d = I(id, name, desc, stack, value, .1); d.update(category=cat, rarity=rarity, gathering='creature' if cat == 'creature' else 'hand', collectible='creature' if cat == 'creature' else 'rare', use=use); return d
@@ -45,9 +45,18 @@ for _f in _FD.RECORDS:
 # id: name, description, station built to craft it, ingredients, minutes, energy
 def R(id, station, ingredients, minutes, energy, qty=1, unlock=None, cat='material', result=None, name=None, desc=''):
     return dict(id=id, name=name, description=desc, station=station, ingredients=ingredients, minutes=minutes, energy=energy, result=result or id, qty=qty, unlock=unlock or {'type': 'start'}, category=cat, icon=result or id)
+def TOOLR(id, station, ing, minutes, tool, what, name, desc):
+    r = R(id, station, ing, minutes, 1, 1, {'type': 'start'} if what == 'repair' else {'type': 'item', 'id': next(k for k in ing if k.endswith('ingot'))}, cat='tool', result=None, name=name, desc=desc)
+    r['tool'] = tool; r['result'] = None; r['qty'] = 0
+    if what == 'repair': r['repair'] = tool
+    else: r['tier'] = what
+    r['icon'] = 'tool_' + tool; return r
 RECIPES = [
  R('cord', 'hand', {'fiber': 2}, 4, 0, 1), R('plank', 'workbench', {'log': 1}, 10, 2, 4, {'type': 'item', 'id': 'log'}), R('plank_fine', 'wood_station', {'log': 1}, 8, 1, 6, {'type': 'station', 'id': 'wood_station'}, result='plank', name='Plank (sawn)', desc='A saw wastes less than an axe.'),
- R('nails', 'workbench', {'scrap_metal': 1}, 8, 1, 6, {'type': 'item', 'id': 'scrap_metal'}), R('stone_block', 'stone_station', {'stone': 2}, 12, 2, 1, {'type': 'station', 'id': 'stone_station'}),
+ R('nails', 'workbench', {'scrap_metal': 1}, 8, 1, 8, {'type': 'item', 'id': 'scrap_metal'}), R('stone_block', 'stone_station', {'stone': 3}, 15, 2, 2, {'type': 'station', 'id': 'stone_station'}),
+ R('copper_ingot', 'furnace', {'copper_ore': 2, 'coal': 1}, 30, 2, 1, {'type': 'item', 'id': 'copper_ore'}), R('charcoal', 'furnace', {'log': 2}, 30, 1, 1, {'type': 'station', 'id': 'furnace'}, result='coal', name='Charcoal', desc='Two logs smothered in the furnace come out as one clean lump of fuel.'),
+ R('wire_drawn', 'workbench', {'scrap_metal': 1}, 12, 1, 2, {'type': 'item', 'id': 'scrap_metal'}, result='wire', name='Drawn wire', desc='Old scrap heated and pulled thin through a hole in a plate.'),
+ R('bolts', 'furnace', {'scrap_metal': 1}, 15, 1, 3, {'type': 'station', 'id': 'furnace'}, result='bolt', name='Bolts', desc='Scrap softened in the furnace and hammered round over a die.'),
  R('iron_ingot', 'furnace', {'iron_ore': 2, 'coal': 1}, 40, 3, 1, {'type': 'item', 'id': 'iron_ore'}), R('glass_pane', 'furnace', {'glass_shard': 2, 'branch': 2}, 25, 1, 1, {'type': 'station', 'id': 'furnace'}),
  R('hinge', 'workbench', {'scrap_metal': 1, 'bolt': 1}, 8, 1, 2, {'type': 'item', 'id': 'bolt'}), R('cloth', 'workbench', {'cord': 3}, 20, 1, 1, {'type': 'item', 'id': 'fiber'}),
  R('crate', 'hand', {'branch': 6, 'cord': 2}, 15, 2, cat='storage'), R('workbench', 'hand', {'branch': 6, 'stone': 2, 'cord': 2}, 30, 4, cat='station'), R('stone_station', 'workbench', {'stone': 8, 'plank': 2}, 30, 5, cat='station', unlock={'type': 'station', 'id': 'workbench'}),
@@ -69,6 +78,16 @@ RECIPES = [
  R('baitfish', 'hand', {'minnow': 1}, 2, 0, 2, cat='tackle', unlock={'type': 'item', 'id': 'minnow'}), R('dough_bait', 'hand', {'seeds_wild': 1, 'mushroom_brown': 1}, 4, 0, 4, cat='tackle', unlock={'type': 'item', 'id': 'seeds_wild'}), R('night_bait', 'hand', {'worm': 2, 'moondew': 1}, 4, 0, 3, cat='tackle', unlock={'type': 'item', 'id': 'moondew'}),
  R('lure_spinner', 'workbench', {'scrap_metal': 1, 'wire': 1}, 15, 1, cat='tackle', unlock={'type': 'item', 'id': 'wire'}), R('lure_fly', 'hand', {'feather': 2, 'cord': 1}, 10, 0, cat='tackle', unlock={'type': 'item', 'id': 'feather'}), R('lure_moth', 'workbench', {'lantern_moth': 1, 'wire': 1}, 15, 1, cat='tackle', unlock={'type': 'item', 'id': 'lantern_moth'}), R('lure_glow', 'workbench', {'luminous_spores': 2, 'nightglass': 1, 'wire': 1}, 25, 2, cat='tackle', unlock={'type': 'item', 'id': 'nightglass'}),
  R('garden_bed', 'workbench', {'plank': 4, 'clay': 2}, 25, 3, cat='garden', unlock={'type': 'station', 'id': 'workbench'}),
+ TOOLR('mend_knife', 'hand', {'stone': 1, 'cord': 1}, 10, 'knife', 'repair', 'Hone and rewrap the knife', 'A flat stone for the edge, fresh cord for the grip. Good as it was.'),
+ TOOLR('mend_axe', 'hand', {'stone': 1, 'cord': 1, 'branch': 1}, 15, 'axe', 'repair', 'Hone and rehaft the axe', 'Sharpen the head and wedge it onto a new handle.'),
+ TOOLR('mend_pickaxe', 'hand', {'stone': 2, 'cord': 1, 'branch': 1}, 15, 'pickaxe', 'repair', 'Dress and rehaft the pickaxe', 'Grind the points back and fit a new handle.'),
+ TOOLR('mend_rod', 'hand', {'branch': 2, 'cord': 2}, 10, 'rod', 'repair', 'Rebind the reed rod', 'New cord for the guides and a straight reed.'),
+ TOOLR('knife_t1', 'workbench', {'copper_ingot': 1, 'hardwood': 1}, 25, 'knife', 1, 'Copper knife', 'A copper blade on a hardwood grip: cuts more and lasts longer.'),
+ TOOLR('axe_t1', 'workbench', {'copper_ingot': 2, 'hardwood': 1, 'cord': 1}, 30, 'axe', 1, 'Copper axe', 'Heavier head, better haft. Trees give more for the same swing.'),
+ TOOLR('pickaxe_t1', 'workbench', {'copper_ingot': 2, 'plank': 1, 'cord': 1}, 30, 'pickaxe', 1, 'Copper pickaxe', 'Bites deeper into the deposits.'),
+ TOOLR('knife_t2', 'adv_bench', {'iron_ingot': 1, 'hardwood': 1, 'cord': 1}, 30, 'knife', 2, 'Iron knife', 'Holds an edge for a season.'),
+ TOOLR('axe_t2', 'adv_bench', {'iron_ingot': 2, 'hardwood': 2}, 40, 'axe', 2, 'Iron axe', 'The best axe the clearing will ever see.'),
+ TOOLR('pickaxe_t2', 'adv_bench', {'iron_ingot': 2, 'hardwood': 1, 'plank': 1}, 40, 'pickaxe', 2, 'Iron pickaxe', 'Rock gives up its seams.'),
 ]
 NAMES = {'crate': ('Crate', 'Rough slats lashed tight. Holds what you cannot carry.'), 'workbench': ('Workbench', 'A plank top, a vise, and the first real tool you own.'), 'stone_station': ('Stoneworking block', 'A low boulder dressed flat, for squaring stone.'),
  'wood_station': ('Sawhorses', 'Two trestles and a saw: boards come cleaner here.'), 'furnace': ('Smelting furnace', 'A stone dome and a hot mouth. Ore goes in, metal comes out.'), 'adv_bench': ('Advanced workbench', 'Salvaged drawers, a working gear train, and a lamp that still glows.'),
@@ -96,7 +115,7 @@ C = [
  dict(id='wall_cottage', name='Timber-frame wall', cat='Wall', layer='wall', mat='cottage', cost={'plank': 2, 'clay': 1}, minutes=25, energy=2, durability=170, stage=3),
  dict(id='wall_reinforced', name='Reinforced wall', cat='Wall', layer='wall', mat='reinforced', cost={'plank': 3, 'nails': 2, 'scrap_metal': 1}, minutes=40, energy=4, durability=300, stage=4),
  dict(id='wall_stone', name='Stone wall', cat='Wall', layer='wall', mat='stone', cost={'stone_block': 2, 'clay': 1}, minutes=90, energy=6, durability=500, stage=4),
- dict(id='wall_metal', name='Metal-plated wall', cat='Wall', layer='wall', mat='metal', cost={'plank': 2, 'scrap_metal': 2, 'bolt': 2}, minutes=70, energy=6, durability=450, stage=5),
+ dict(id='wall_metal', name='Metal-plated wall', cat='Wall', layer='wall', mat='metal', cost={'plank': 2, 'scrap_metal': 1, 'bolt': 2}, minutes=70, energy=6, durability=450, stage=5),
  dict(id='door', name='Plank door', cat='Opening', layer='opening', kind='door', cost={'plank': 2, 'cord': 2}, minutes=15, energy=1, durability=80, stage=2),
  dict(id='door_hinged', name='Hinged door', cat='Opening', layer='opening', kind='door', cost={'plank': 3, 'hinge': 2}, minutes=20, energy=1, durability=160, stage=3),
  dict(id='window', name='Shuttered window', cat='Opening', layer='opening', kind='window', cost={'plank': 1, 'glass_shard': 1}, minutes=15, energy=1, durability=60, stage=2),

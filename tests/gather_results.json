@@ -3,7 +3,7 @@
   {
    "name": "data-driven catalog loaded: 50 gathered + crafted items, 33 nodes",
    "ok": true,
-   "detail": "219 items, 39 nodes"
+   "detail": "220 items, 39 nodes"
   },
   {
    "name": "1. find a branch (hand)",
@@ -43,7 +43,7 @@
   {
    "name": "pickaxe node refuses bare hands but auto-picks an owned compatible tool",
    "ok": true,
-   "detail": "picked up pickaxe automatically: [[\"stone\",1],[\"copper_ore\",2]]"
+   "detail": "picked up pickaxe automatically: [[\"stone\",2],[\"copper_ore\",2]]"
   },
   {
    "name": "knife node refused without a knife",
@@ -57,22 +57,22 @@
   {
    "name": "stacks merge: one slot per item type so far",
    "ok": true,
-   "detail": "[[\"branch\",3],[\"mushroom_brown\",1],[\"daisy\",1],[\"stone\",4],[\"log\",1],[\"hardwood\",1],[\"copper_ore\",2],[\"mint\",2]]"
+   "detail": "[[\"branch\",3],[\"mushroom_brown\",1],[\"daisy\",1],[\"stone\",5],[\"log\",1],[\"hardwood\",1],[\"copper_ore\",2],[\"mint\",2]]"
   },
   {
    "name": "stack limit 30 overflows into a second slot",
    "ok": true,
-   "detail": "[30,3]"
+   "detail": "[30,4]"
   },
   {
    "name": "split halves a stack",
    "ok": true,
-   "detail": "[15,3,15]"
+   "detail": "[15,4,15]"
   },
   {
    "name": "remove drops one",
    "ok": true,
-   "detail": "32 stones"
+   "detail": "33 stones"
   },
   {
    "name": "6. inventory panel opens",
@@ -147,12 +147,12 @@
   {
    "name": "save/load restores inventory exactly (no loss, no duplication)",
    "ok": true,
-   "detail": "16 stacks"
+   "detail": "15 stacks"
   },
   {
    "name": "save/load restores journal and tool durability",
    "ok": true,
-   "detail": "found 14, axe 39"
+   "detail": "found 13, axe 39"
   },
   {
    "name": "save/load keeps depleted nodes depleted",
