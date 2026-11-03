@@ -660,3 +660,7 @@ The field book is parchment and ink in a serif face, with silhouettes for fish n
 ## The river and adopted art (v1.2)
 
 The river enters from the east, feeds the pond and leaves south under the footbridge, and its banks stay clear of trees so it reads as one channel. North shores show an earth cut face, other shores damp mud. Generated sprites must be mapped by region: leaves only to a foliage ramp, emissive ramps only on hand-picked glass, doorway and flame pixels. Props are sized against the 16x32 player.
+
+## Inhabitants (Prompt 13)
+
+Friendly beings are never animals in costumes and never resemble the hostile creatures: each has its own body plan (a head rising from water, a burr on twig legs, a cloak of wings under a paper lantern, a stump with a face, a three-legged survey dome, a curl of mist). World sprites use the world palette so night and seasons apply; lantern glass, eyes and the mask's eye-light glow by themselves. Portraits are 48 px in the plate palette, three expressions each (calm, glad, troubled), on a wash of their own place. The dialogue box and journal use the field-book parchment and serif, not the dark HUD.

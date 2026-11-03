@@ -39,7 +39,7 @@
   <span id="dev" class="presets" style="display:none"></span>
   <label>sound <input type="range" id="vol" min="0" max="100" value="70" style="width:60px"></label>
   <label><input type="checkbox" id="devtoggle"> dev tools</label>
-  <span class="hint">WASD move · E interact · I pack · J field guide · C craft · B build · N fish book · F strike · Shift sneak · L lantern · K creatures · 1-4 tools · space pause · [ ] time</span>
+  <span class="hint">WASD move · E interact · I pack · J field guide · C craft · B build · N fish book · H neighbours · F strike · Shift sneak · L lantern · K creatures · 1-4 tools · space pause · [ ] time</span>
 </header>
 <main><canvas id="c"></canvas></main>
 <script src="survival.js"></script>
@@ -47,6 +47,7 @@
 <script src="build.js"></script>
 <script src="monsters.js"></script>
 <script src="fishing.js"></script>
+<script src="social.js"></script>
 <script>
 // ---------------------------------------------------------------- modules
 // WorldClock: game time, configurable scale, pause/advance.  (mirrors godot/WorldClock.gd)
@@ -98,6 +99,7 @@ async function boot() {
   DATA.nodeIdx = nodeIdx; DATA.nodeAtlasW = 6 * 28;
   Gather.init(gdata, { Survival, WorldClock, SeasonState, WeatherState, Player, Camera, iconIdx, iconIdx32, iconW: gdata.icons.cols * gdata.icons.size });
   const BL = '../assets/build/';
+  const CAST = await loadJSON('../assets/social/cast.json'); Social.preStamp(CAST, DATA.col);   // the rooted elder is solid ground before anything else reads the collision map
   Build.init({ atlas: await loadJSON(BL + 'build_atlas.json'), idx: await loadIdx(BL + 'build_idx.png'), recipes: await loadJSON(BL + 'recipes.json'), components: await loadJSON(BL + 'components.json') }, { Survival, Gather, WorldClock, SeasonState, Player, Camera, DATA, relight: () => buildLightMap(EventState.current ? EventState.current.extra_lights : []) });
   Monsters.init({ cfg: await loadJSON('../assets/monsters/monsters.json'), atlas: await loadJSON('../assets/monsters/monsters_atlas.json'), idx: await loadIdx('../assets/monsters/monsters_idx.png') }, { Survival, Gather, Build, WorldClock, SeasonState, WeatherState, Player, Camera, DATA, Input,
     isWater: (x, y) => CLS[DATA.idx[SeasonState.season][y * 768 + x]] & 2,
@@ -106,6 +108,8 @@ async function boot() {
   classify(); { const FB = '../assets/fishing/'; const vistas = {}; for (const h of ['stream', 'marsh', 'lake', 'reservoir']) vistas[h] = await loadIdx(FB + 'vista_' + h + '_idx.png');
     Fishing.init({ cfg: await loadJSON(FB + 'fishing.json'), atlas: await loadJSON(FB + 'fish_atlas.json'), idx: await loadIdx(FB + 'fish_idx.png'), vistas, sign: await loadIdx(FB + 'trail_sign_idx.png') }, { Survival, Gather, Build, Monsters, WorldClock, SeasonState, WeatherState, Player, Camera, DATA, Input, CLS,
       isWater: (x, y) => CLS[DATA.idx[SeasonState.season][y * 768 + x]] & 2, touchOn: () => Touch.enabled, tableDark: () => tableAt(SeasonState.season, WorldClock.hour()).darkness }); }
+  Social.init({ cast: CAST, atlas: await loadJSON('../assets/social/folk_atlas.json'), idx: await loadIdx('../assets/social/folk_idx.png'), portraits: await loadJSON('../assets/social/portraits.json'), pidx: await loadIdx('../assets/social/portraits_idx.png') },
+    { Survival, Gather, Build, Monsters, Fishing, WorldClock, SeasonState, WeatherState, Player, Camera, DATA, touchOn: () => Touch.enabled });
   Survival.Dev.mount(document.getElementById('dev'));
   if (location.search.includes('dev=1')) { document.getElementById('dev').style.display = ''; document.getElementById('devtoggle').checked = true; }
   WorldClock.paused = false;
@@ -186,7 +190,7 @@ const Input = {
     const L = Math.hypot(x, y); return L > 1 ? [x / L, y / L] : [x, y]; },   // diagonal never faster than cardinal
   consumeAction() { const p = this.actionPressed && !this._actionLatch; this._actionLatch = this.actionPressed; return p; },
 };
-addEventListener('keydown', e => { const k = e.key.toLowerCase(); if (window.Fishing && Fishing.key(k)) { e.preventDefault(); return; } if (window.Monsters && Monsters.key(k)) { e.preventDefault(); return; } if (window.Build && Build.UI.key(k)) { e.preventDefault(); return; } if (window.Gather && Gather.UI.key(k)) { e.preventDefault(); return; } Input.keys[k] = true; if (k === 'e' || k === 'enter') Input.actionPressed = true; if (['arrowup','arrowdown','arrowleft','arrowright',' '].includes(k)) e.preventDefault(); });
+addEventListener('keydown', e => { const k = e.key.toLowerCase(); if (window.Social && Social.key(k)) { e.preventDefault(); return; } if (window.Fishing && Fishing.key(k)) { e.preventDefault(); return; } if (window.Monsters && Monsters.key(k)) { e.preventDefault(); return; } if (window.Build && Build.UI.key(k)) { e.preventDefault(); return; } if (window.Gather && Gather.UI.key(k)) { e.preventDefault(); return; } Input.keys[k] = true; if (k === 'e' || k === 'enter') Input.actionPressed = true; if (['arrowup','arrowdown','arrowleft','arrowright',' '].includes(k)) e.preventDefault(); });
 addEventListener('keyup', e => { const k = e.key.toLowerCase(); Input.keys[k] = false; if (window.Fishing) Fishing.keyup(k); if (k === 'e' || k === 'enter') Input.actionPressed = false; });
 
 // ---------------------------------------------------------------- Player (movement only; mirrors godot/play/Player.gd)
@@ -226,10 +230,11 @@ const Camera = { x: 0, y: 0, smooth: 8, deadzone: 0.25, vw: 640, vh: 360, init: 
   ix() { return Math.round(this.x); }, iy() { return Math.round(this.y); } };
 // ---------------------------------------------------------------- Interaction (objects carry their own prompt; the player only asks "what is near?")
 const Interaction = { current: null, message: null, msgT: 0,
-  update(dt) { if (window.Fishing && (Fishing.busy() || Fishing.Book.open)) { this.current = null; Input.actionPressed = false; return; } let best = null, bd = 1e9; for (const it of DATA.play.interactables) { const d = Math.hypot(it.x - Player.x, it.y - Player.y); if (d < it.r && d < bd) { best = it; bd = d; } }
+  update(dt) { if (window.Fishing && (Fishing.busy() || Fishing.Book.open || Social.busy())) { this.current = null; Input.actionPressed = false; return; } let best = null, bd = 1e9; for (const it of DATA.play.interactables) { const d = Math.hypot(it.x - Player.x, it.y - Player.y); if (d < it.r && d < bd) { best = it; bd = d; } }
     const node = Gather.Nodes.nearest(Player.x, Player.y); if (node && (!best || Math.hypot(node.def.x - Player.x, node.def.y - Player.y) <= bd)) best = { id: 'node:' + node.def.id, label: node.def.label + (Gather.Tools.bestFor(node.def.tool) ? '' : ' (needs ' + node.def.tool + ')'), node, x: node.def.x, y: node.def.y, r: node.def.r };
     const mn = Monsters.nearest(Player.x, Player.y); if (mn && !best) best = mn;
-    const fsh = Fishing.nearest(Player.x, Player.y); if (fsh && (!best || best.id === 'dock')) best = fsh;
+    const soc = Social.nearest(Player.x, Player.y); if (soc) best = soc;
+    const fsh = !soc && Fishing.nearest(Player.x, Player.y); if (fsh && (!best || best.id === 'dock')) best = fsh;
     const bn = Build.nearest(Player.x, Player.y); if (bn && (!best || Math.hypot(bn.x - Player.x, bn.y - Player.y) < Math.hypot(best.x - Player.x, best.y - Player.y))) best = bn;
     this.current = best; if (this.msgT > 0) this.msgT -= dt; else this.message = null;
     if (Input.consumeAction() && best && !Survival.Sleep.sleeping) {
@@ -242,12 +247,12 @@ const Interaction = { current: null, message: null, msgT: 0,
 const Touch = { enabled: false, btn: { x: 0, y: 0, r: 26 },
   attach(cv) { const pos = e => { const r = cv.getBoundingClientRect(); const t = e.changedTouches ? e.changedTouches[0] : e; return [ (t.clientX - r.left) / r.width * cv.width / state.zoom, (t.clientY - r.top) / r.height * cv.height / state.zoom, t.identifier ]; };
     cv.addEventListener('touchstart', e => { if (!this.enabled) return; e.preventDefault(); for (const t of e.changedTouches) { const [x, y, id] = pos({ changedTouches: [t] });
-      if (window.Fishing && (Fishing.busy() || Fishing.Book.open || Fishing.buttons.length) && Fishing.pointer(x, y, true)) continue; if (this.book && Math.hypot(x - this.book.x, y - this.book.y) < this.book.r + 6) { Fishing.Book.open = true; continue; }
+      if (window.Social && Social.busy() && Social.pointer(x, y, true)) continue; if (window.Fishing && (Fishing.busy() || Fishing.Book.open || Fishing.buttons.length) && Fishing.pointer(x, y, true)) continue; if (this.book && Math.hypot(x - this.book.x, y - this.book.y) < this.book.r + 6) { Fishing.Book.open = true; continue; }
       if (Math.hypot(x - this.btn.x, y - this.btn.y) < this.btn.r + 8) { Input.actionPressed = true; } else if (this.pack && Math.hypot(x - this.pack.x, y - this.pack.y) < this.pack.r + 6) { Gather.UI.toggle('inventory'); } else if (!Input.touch.active) { Input.touch = { active: true, ax: x, ay: y, x, y, id }; } } }, { passive: false });
     cv.addEventListener('touchmove', e => { if (!this.enabled) return; e.preventDefault(); for (const t of e.changedTouches) { const [x, y, id] = pos({ changedTouches: [t] }); if (Input.touch.active && id === Input.touch.id) { Input.touch.x = x; Input.touch.y = y; } } }, { passive: false });
     const end = e => { if (!this.enabled) return; if (window.Fishing) Fishing.pointer(0, 0, false); for (const t of e.changedTouches) { if (Input.touch.active && t.identifier === Input.touch.id) Input.touch.active = false; } Input.actionPressed = false; };
     cv.addEventListener('touchend', end); cv.addEventListener('touchcancel', end); },
-  draw(g, vw, vh) { if (!this.enabled || (window.Fishing && (Fishing.busy() || Fishing.Book.open))) return; const sf = Camera.safe; this.btn.x = vw - 40 - sf; this.btn.y = vh - 40 - sf;
+  draw(g, vw, vh) { if (!this.enabled || (window.Fishing && (Fishing.busy() || Fishing.Book.open)) || (window.Social && Social.busy())) return; const sf = Camera.safe; this.btn.x = vw - 40 - sf; this.btn.y = vh - 40 - sf;
     g.fillStyle = 'rgba(20,30,28,0.45)'; g.strokeStyle = 'rgba(222,220,180,0.7)'; g.lineWidth = 1;
     if (Input.touch.active) { g.beginPath(); g.arc(Input.touch.ax, Input.touch.ay, 28, 0, 7); g.fill(); g.stroke(); const dx = Input.touch.x - Input.touch.ax, dy = Input.touch.y - Input.touch.ay, L = Math.hypot(dx, dy) || 1, k = Math.min(1, L / 28); g.fillStyle = 'rgba(222,220,180,0.8)'; g.beginPath(); g.arc(Input.touch.ax + dx / L * 28 * k, Input.touch.ay + dy / L * 28 * k, 9, 0, 7); g.fill(); }
     else { g.beginPath(); g.arc(44 + sf, vh - 44 - sf, 28, 0, 7); g.fill(); g.stroke(); }
@@ -260,7 +265,7 @@ const off = document.createElement('canvas'); off.width = W; off.height = H; con
 const cv = document.getElementById('c'), ctx = cv.getContext('2d');
 let last = performance.now(), T = 0, state = { zoom: 3, viewport: true, ox: 60, oy: 90 }, simAcc = 0;
 const SIM_DT = 1 / 60;
-function simulate(dt) { simAcc += dt; let n = 0; const ax = (Survival.Sleep.sleeping || Survival.Activities.current || Gather.UI.open || Build.UI.busy() || Monsters.Journal.open || Fishing.busy() || Fishing.Book.open) ? [0, 0] : Input.axis(); while (simAcc >= SIM_DT && n < 5) { Player.step(SIM_DT, ax); simAcc -= SIM_DT; n++; } Camera.update(dt); Interaction.update(dt); Survival.tick(dt, WorldClock.paused ? 0 : dt * WorldClock.scale / 60, Player.moving); Gather.tick(dt); Build.tick(dt); if (!Gather.UI.open && !Build.UI.open && !Monsters.Journal.open && !Fishing.Book.open && !Fishing.render.inVista()) Monsters.tick(dt); Fishing.tick(dt); }
+function simulate(dt) { simAcc += dt; let n = 0; const ax = (Survival.Sleep.sleeping || Survival.Activities.current || Gather.UI.open || Build.UI.busy() || Monsters.Journal.open || Fishing.busy() || Fishing.Book.open || Social.busy()) ? [0, 0] : Input.axis(); while (simAcc >= SIM_DT && n < 5) { Player.step(SIM_DT, ax); simAcc -= SIM_DT; n++; } Camera.update(dt); Interaction.update(dt); Survival.tick(dt, WorldClock.paused ? 0 : dt * WorldClock.scale / 60, Player.moving); Gather.tick(dt); Build.tick(dt); if (!Gather.UI.open && !Build.UI.open && !Monsters.Journal.open && !Fishing.Book.open && !Fishing.render.inVista() && !Social.busy()) Monsters.tick(dt); Fishing.tick(dt); Social.tick(dt); }
 function frame(now) {
   const dt = Math.min(0.1, (now - last) / 1000); last = now; T += dt;
   WorldClock.tick(dt); WeatherState.tick(dt); tickParticles(dt, T); simulate(dt);
@@ -315,7 +320,7 @@ function frame(now) {
   { // the fire is alive: flame pixels step through their own ramp, so it flickers in the palette at any hour
     if (!window.FIREPX) { const fam = DATA.entries.entries; const rk = []; fam.forEach((e, i) => { if (e.family === 'fire') rk[e.rank] = i; }); window.FIRERK = rk; const pos = {}; rk.forEach((v, r) => pos[v] = r); window.FIREPX = []; const sp = DATA.idx.spring; for (let i = 0; i < W * H; i++) if (pos[sp[i]] !== undefined) FIREPX.push([i, pos[sp[i]], i % W, (i / W) | 0]); }
     for (const [i, rk, x, y] of FIREPX) { if (!(CLS[idx[i]] !== undefined)) continue; const w = Math.sin(T * 13 + y * 1.1 + x * .6) + Math.sin(T * 7.1 - y * .8 + x * 1.7); const nr = Math.max(0, Math.min(FIRERK.length - 1, rk + Math.round(w))); const c = tab[FIRERK[nr]], o = i * 4; if (season === 'winter' && idx[i] !== DATA.idx.spring[i]) continue; d[o] = c[0]; d[o + 1] = c[1]; d[o + 2] = c[2]; } }
-  buildCtx.idx = idx; Fishing.render.sign(buildCtx, tab); Monsters.render.lantern(buildCtx); Build.render.items(buildCtx, false); Monsters.render.items(buildCtx, false);
+  buildCtx.idx = idx; Fishing.render.sign(buildCtx, tab); Monsters.render.lantern(buildCtx); Build.render.items(buildCtx, false); Monsters.render.items(buildCtx, false); Social.render.items(buildCtx, false);
   // ---- player: y-sorted against the baked scene through the depth map, lit by the same table
   { const dep = DATA.depth[season === 'winter' ? 'winter' : 'spring']; const pm = DATA.player, pidx = DATA.pidx; const fw = pm.frame_w, fh = pm.frame_h;
     const act = Survival.Activities.current || Fishing.active(); const row = pm.facings.indexOf(act && act.anim ? act.anim : Player.facing), colf = Player.frame(); const px0 = Math.round(Player.x) - pm.origin[0], py0 = Math.round(Player.y) - pm.origin[1];
@@ -329,7 +334,7 @@ function frame(now) {
   { const nIdx = DATA.nodeIdx; const aw = DATA.nodeAtlasW; const pyBase = Math.round(Player.y);   // nodes nearer the camera than the player overdraw the player
     for (const n of Gather.Nodes.list) { if (n.def.y <= pyBase || !Gather.Nodes.visible(n)) continue; const sp = Gather.nodeSprite(n); if (!sp) continue; if (Math.abs(n.def.x - Player.x) > 24 || n.def.y - pyBase > 30) continue; const x0 = n.def.x - sp.ox, y0 = n.def.y - sp.oy;
       for (let yy = 0; yy < sp.h; yy++) for (let xx = 0; xx < sp.w; xx++) { const pi = nIdx[(sp.y + yy) * aw + sp.x + xx]; if (!pi) continue; const x = x0 + xx, y = y0 + yy; if (x < 0 || y < 0 || x >= W || y >= H) continue; const i = y * W + x; const c = tab[pi]; const o = i * 4; d[o] = c[0]; d[o + 1] = c[1]; d[o + 2] = c[2]; } } }
-  Build.render.items(buildCtx, true); Monsters.render.items(buildCtx, true); Build.render.roofs(buildCtx); Build.render.ghost(buildCtx);
+  Build.render.items(buildCtx, true); Monsters.render.items(buildCtx, true); Social.render.items(buildCtx, true); Build.render.roofs(buildCtx); Build.render.ghost(buildCtx);
   og.putImageData(img, 0, 0);
   // particles drawn in palette-ish colours, 1-2 px, no blur
   og.fillStyle = 'rgba(190,205,215,0.55)'; for (const p of P.rain) { og.fillRect(p.x | 0, p.y | 0, 1, p.near ? 5 : 3); if (p.near) og.fillRect((p.x | 0) + 1, (p.y | 0) + 2, 1, 2); }
@@ -348,7 +353,7 @@ function frame(now) {
     ctx.fillStyle = 'rgba(24,30,28,0.86)'; const sf = Camera.safe; ctx.fillRect(Math.round(vw / 2 - tw / 2), vh - 64 - sf, Math.round(tw), 30); ctx.strokeStyle = 'rgba(222,220,180,0.55)'; ctx.strokeRect(Math.round(vw / 2 - tw / 2) + 0.5, vh - 63.5 - sf, Math.round(tw) - 1, 29);
     ctx.fillStyle = '#eedcb0'; ctx.textAlign = 'center'; ctx.fillText(Interaction.message, vw / 2, vh - 45 - sf); }
   if (Fishing.render.inVista()) { const pm = DATA.player, pidx = DATA.pidx, fw = pm.frame_w, fh = pm.frame_h; Fishing.render.vista(ctx, vw, vh, tab, tableAt(season, 1).table, (g, sx, sy, tt) => { const row = pm.facings.indexOf('up'); for (let yy = 0; yy < fh; yy++) for (let xx = 0; xx < fw; xx++) { const pi = pidx[(row * fh + yy) * (fw * pm.frames.length) + xx]; if (!pi) continue; const c = tt[pi]; g.fillStyle = `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`; g.fillRect(sx - pm.origin[0] + xx, sy - pm.origin[1] + yy, 1, 1); } g.fillStyle = `rgb(${tt[60][0] | 0},${tt[60][1] | 0},${tt[60][2] | 0})`; g.fillStyle = 'rgba(70,46,24,.95)'; for (let k = 0; k < 22; k++) g.fillRect(sx + 4 + k * .3, sy - 8 - k * .8, 1, 1); }); }
-  Touch.draw(ctx, vw, vh); Survival.HUD.draw(ctx, vw, vh, Camera.safe, T); Gather.UI.draw(ctx, vw, vh, Camera.safe, tab); Monsters.render.overlay(ctx, vw, vh, Camera.safe, tab); Build.UI.draw(ctx, vw, vh, Camera.safe, tab); Fishing.render.overlay(ctx, vw, vh, Camera.safe, tab); ctx.restore();
+  Touch.draw(ctx, vw, vh); Survival.HUD.draw(ctx, vw, vh, Camera.safe, T); Gather.UI.draw(ctx, vw, vh, Camera.safe, tab); Monsters.render.overlay(ctx, vw, vh, Camera.safe, tab); Build.UI.draw(ctx, vw, vh, Camera.safe, tab); Fishing.render.overlay(ctx, vw, vh, Camera.safe, tab); Social.render.overlay(ctx, vw, vh, Camera.safe, tab); ctx.restore();
   document.getElementById('clock').textContent = `${WorldClock.label()} · day ${Survival.Clock.day} · ${season} · ${Survival.Clock.phase()} · ${WeatherState.kind} ${(WeatherState.intensity * 100) | 0}%`;
   if (!WorldClock.paused) document.getElementById('time').value = WorldClock.minutes | 0;
   requestAnimationFrame(frame);
@@ -369,8 +374,8 @@ Touch.attach(cv);
 function fitTouch() { if (!('ontouchstart' in window)) return; const a = innerWidth / innerHeight, sel = $('aspect'); const want = a > 1.95 ? '780x360' : a > 1.7 ? '640x360' : '480x360'; if (sel.value !== want) { sel.value = want; if (sel.onchange) sel.onchange({ target: sel }); } const [vw, vh] = want.split('x').map(Number); Object.assign(cv.style, { position: 'fixed', top: '0', left: Math.round((innerWidth - innerHeight * vw / vh) / 2) + 'px', height: innerHeight + 'px', width: Math.round(innerHeight * vw / vh) + 'px', zIndex: 50 }); document.body.style.background = '#000'; }
 fitTouch(); addEventListener('resize', fitTouch);
 { const lp = e => { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * cv.width / state.zoom, (e.clientY - r.top) / r.height * cv.height / state.zoom]; };
-  cv.addEventListener('mousemove', e => { const [x, y] = lp(e); Build.UI.pointer(x, y, false); }); cv.addEventListener('mousedown', e => { const [x, y] = lp(e); if (Fishing.pointer(x, y, true)) e.stopPropagation(); }); addEventListener('mouseup', () => Fishing.pointer(0, 0, false)); cv.addEventListener('click', e => { const [x, y] = lp(e); if (Fishing.busy() || Fishing.Book.open) return; Build.UI.pointer(x, y, true); }); }
-window.DATA = DATA; window.tableAt = tableAt; window.Player = Player; window.Camera = Camera; window.WorldClock = WorldClock; window.WeatherState = WeatherState; window.SeasonState = SeasonState; window.Interaction = Interaction; window.Input = Input; window.SIM = { step: (axis, n) => { for (let i = 0; i < n; i++) Player.step(SIM_DT, axis); }, depthAt: (x, y) => DATA.depth[SeasonState.season === 'winter' ? 'winter' : 'spring'][y * W + x], blocked: (x, y) => Player.blocked(x, y) };
+  cv.addEventListener('mousemove', e => { const [x, y] = lp(e); Build.UI.pointer(x, y, false); }); cv.addEventListener('mousedown', e => { const [x, y] = lp(e); if (Social.busy()) { Social.pointer(x, y, true); return; } if (Fishing.pointer(x, y, true)) e.stopPropagation(); }); addEventListener('mouseup', () => Fishing.pointer(0, 0, false)); cv.addEventListener('click', e => { const [x, y] = lp(e); if (Fishing.busy() || Fishing.Book.open || Social.busy()) return; Build.UI.pointer(x, y, true); }); }
+window.CLSX = () => CLS; window.DATA = DATA; window.tableAt = tableAt; window.Player = Player; window.Camera = Camera; window.WorldClock = WorldClock; window.WeatherState = WeatherState; window.SeasonState = SeasonState; window.Interaction = Interaction; window.Input = Input; window.SIM = { step: (axis, n) => { for (let i = 0; i < n; i++) Player.step(SIM_DT, axis); }, depthAt: (x, y) => DATA.depth[SeasonState.season === 'winter' ? 'winter' : 'spring'][y * W + x], blocked: (x, y) => Player.blocked(x, y) };
 $('event').onchange = e => applyEvent(e.target.value);
 function applyEvent(name) { const ev = DATA.events[name]; EventState.current = ev || null; buildLightMap(ev ? ev.extra_lights : []);
   if (ev) { SeasonState.season = ev.season; $('season').value = ev.season; WorldClock.minutes = ev.hour * 60; $('time').value = WorldClock.minutes | 0; WeatherState.set(ev.weather, ev.intensity); $('weather').value = ev.weather; $('intensity').value = ev.intensity * 100; } }

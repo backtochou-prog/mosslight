@@ -10,6 +10,7 @@ function check(name, ok, detail) { results.push({ name, ok: !!ok, detail }); con
   const errs = []; p.on('pageerror', e => errs.push(e.message));
   await p.goto(`http://127.0.0.1:${PORT}/preview/play.html`);
   await p.waitForFunction(() => window.Player && window.SIM && document.getElementById('clock').textContent.includes(':'), { timeout: 30000 });
+  await p.evaluate(() => window.Social && Social.setEnabled(false));   // movement and world prompts are tested without inhabitants; tests/social_tests.js covers them
   await p.evaluate(() => { setPreset(1); WorldClock.paused = true; });
   const shot = async (name) => { await p.waitForTimeout(250); const c = await p.$('#c'); await c.screenshot({ path: `/root/mosslight/renders/play_${name}.png` }); };
   const at = (x, y) => p.evaluate(([x, y]) => Player.setPos(x, y), [x, y]);

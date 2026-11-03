@@ -252,3 +252,7 @@ Walk to the pond and press **E** to open the tackle panel. Choose rod, bait, nea
 Data: `assets/fishing/fishing.json`, written by `tools/build_fishing.py` from `tools/fish_data.py`. Plates: `tools/pixelart/fish_species.py`, built by `tools/build_fish.py`. Scenes: `tools/pixelart/vistas.py`. Engine: `preview/fishing.js`, which names no species. To add a fish, add one art entry and one data record. Tests: `tests/fishing_tests.js`.
 
 The Godot port does not include this system. Fish art is code-drawn with no human artist pass. Sounds reuse the Prompt 11 synthesised placeholders.
+
+## Neighbours (Prompt 13)
+
+Six inhabitants live in the clearing on their own schedules: Ebb in the pond, Pip the forager, Wick the lantern keeper at night, Burl the rootbound stump, Tessel the survey machine, and Lull, who only comes in fog, snow or after rain. Walk up and press **E** to talk. **H** opens the neighbours journal. See `docs/SOCIAL.md`. Tests: `tests/social_tests.js`.

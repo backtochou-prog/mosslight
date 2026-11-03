@@ -1,0 +1,3987 @@
+{
+"version": 1,
+"dims": [
+"trust",
+"familiarity",
+"affection",
+"respect",
+"reliability",
+"shared"
+],
+"anchors": {
+"camp_fire": [
+340,
+298
+],
+"tent_mouth": [
+286,
+266
+],
+"hollow_log": [
+446,
+374
+],
+"lone_rowan": [
+404,
+200
+],
+"meadow": [
+388,
+338
+],
+"pond_bank": [
+604,
+330
+],
+"junction": [
+500,
+252
+],
+"sign": [
+470,
+350
+],
+"bridge": [
+654,
+382
+],
+"ruin_floor": [
+596,
+146
+],
+"ruin_arch": [
+616,
+112
+],
+"oak_shelter": [
+198,
+252
+],
+"burl_home": [
+170,
+284
+],
+"north_glade": [
+330,
+160
+],
+"outcrop": [
+296,
+248
+],
+"east_bank": [
+704,
+380
+],
+"river_east": [
+730,
+232
+],
+"lantern": [
+226,
+290
+],
+"birch_a": [
+130,
+172
+],
+"birch_b": [
+104,
+210
+],
+"birch_c": [
+186,
+178
+]
+},
+"water": {
+"dock_end": [
+606,
+282
+],
+"pond_centre": [
+636,
+262
+],
+"willow_shallows": [
+700,
+286
+],
+"inflow": [
+728,
+196
+],
+"ice_hole": [
+612,
+286
+]
+},
+"memory_kinds": {
+"met": {
+"sig": 0.5,
+"sign": 1
+},
+"visit": {
+"sig": 0.15,
+"sign": 1
+},
+"gift_loved": {
+"sig": 0.7,
+"sign": 1
+},
+"gift_liked": {
+"sig": 0.4,
+"sign": 1
+},
+"gift_disliked": {
+"sig": 0.45,
+"sign": -1
+},
+"gift_neutral": {
+"sig": 0.2,
+"sign": 1
+},
+"gift_repeat": {
+"sig": 0.1,
+"sign": 0
+},
+"showed": {
+"sig": 0.5,
+"sign": 1
+},
+"told": {
+"sig": 0.55,
+"sign": 1
+},
+"fact_learned": {
+"sig": 0.3,
+"sign": 1
+},
+"fact_mentioned": {
+"sig": 0.6,
+"sign": 1
+},
+"advice": {
+"sig": 0.7,
+"sign": 0
+},
+"advice_outcome": {
+"sig": 0.6,
+"sign": 0
+},
+"promise_made": {
+"sig": 0.6,
+"sign": 1
+},
+"promise_kept": {
+"sig": 0.75,
+"sign": 1
+},
+"promise_broken": {
+"sig": 0.8,
+"sign": -1
+},
+"quest_help": {
+"sig": 0.85,
+"sign": 1
+},
+"quest_choice": {
+"sig": 0.8,
+"sign": 0
+},
+"shared_catch": {
+"sig": 0.65,
+"sign": 1
+},
+"protected": {
+"sig": 0.9,
+"sign": 1
+},
+"witnessed": {
+"sig": 0.6,
+"sign": 1
+},
+"took": {
+"sig": 0.7,
+"sign": -1
+},
+"against_wish": {
+"sig": 0.75,
+"sign": -1
+},
+"ignored": {
+"sig": 0.6,
+"sign": -1
+},
+"trees_cut": {
+"sig": 0.5,
+"sign": -1
+},
+"lied": {
+"sig": 0.85,
+"sign": -1
+},
+"discovery": {
+"sig": 0.65,
+"sign": 1
+}
+},
+"moods": {
+"happy": "glad",
+"excited": "glad",
+"grateful": "glad",
+"curious": "calm",
+"relaxed": "calm",
+"worried": "troubled",
+"sad": "troubled",
+"frustrated": "troubled",
+"lonely": "troubled",
+"suspicious": "troubled"
+},
+"tiers": [
+[
+0,
+"stranger"
+],
+[
+12,
+"acquainted"
+],
+[
+30,
+"friendly"
+],
+[
+55,
+"close"
+],
+[
+80,
+"kindred"
+]
+],
+"characters": {
+"ebb": {
+"id": "ebb",
+"name": "Ebb",
+"species": "Pond elder",
+"epithet": "Keeper of the pond",
+"communication": "speech, slow, in water images",
+"sprite": "ebb",
+"frames": {
+"idle": [
+0,
+1,
+2,
+3
+],
+"submerged": 4
+},
+"portrait": "ebb",
+"movement": "swim",
+"speed": 9,
+"solid": false,
+"talk_radius": 46,
+"traits": {
+"caution": 0.5,
+"curiosity": 0.5,
+"practicality": 0.4,
+"pride": 0.3,
+"warmth": 0.6
+},
+"weights": {
+"trust": 1.2,
+"familiarity": 0.8,
+"affection": 0.8,
+"respect": 1,
+"reliability": 1,
+"shared": 1.3
+},
+"memory": {
+"showed": 1.5,
+"shared_catch": 1.4,
+"promise_broken": 1.2
+},
+"appearance": "A broad, old, wet head rising from the pond, wearing a mask of grey driftwood. Duckweed fronds for gills; a lily growing on its crown.",
+"description": "Something has lived in the pond for longer than the ruin has been a ruin. It surfaces when it chooses, mostly at the edges of the day.",
+"background": "Ebb remembers the pond before the dock, and the dock before it went grey. It counts the fish the way others count days.",
+"secret": "Ebb once took bread from a child who sat on the dock every evening. It kept the child's carved fish for forty years, at the bottom of the pond.",
+"interests": [
+[
+"fish",
+"Fish, and which ones come back"
+],
+[
+"weather",
+"Rain, especially the first rain after a dry week"
+],
+[
+"old_world",
+"The people who built the pipes"
+],
+[
+"quiet",
+"Quiet water"
+]
+],
+"dislikes": [
+[
+"noise",
+"Splashing for no reason"
+],
+[
+"given_fish",
+"Being handed its neighbours as gifts"
+]
+],
+"habits": "Rises at the dock at dawn and dusk; dozes in the willow shallows through the day; reads the moon on clear nights; under the ice in winter except at noon.",
+"schedule": [
+{
+"when": {
+"season": [
+"winter"
+]
+},
+"frm": 11,
+"to": 14,
+"at": "ice_hole",
+"act": "breathing at the ice hole"
+},
+{
+"when": {
+"season": [
+"winter"
+]
+},
+"frm": 0,
+"to": 24,
+"at": "pond_centre",
+"act": "asleep under the ice",
+"state": "submerged",
+"asleep": true
+},
+{
+"when": {
+"weather": [
+"rain"
+]
+},
+"frm": 6,
+"to": 21,
+"at": "pond_centre",
+"act": "drinking the rain"
+},
+{
+"frm": 5,
+"to": 9,
+"at": "dock_end",
+"act": "watching the mist lift"
+},
+{
+"frm": 9,
+"to": 15,
+"at": "willow_shallows",
+"act": "dozing under the willow",
+"state": "submerged",
+"asleep": true
+},
+{
+"frm": 15,
+"to": 20,
+"at": "dock_end",
+"act": "counting the evening rise"
+},
+{
+"when": {
+"weather": [
+"clear"
+]
+},
+"frm": 20,
+"to": 23,
+"at": "pond_centre",
+"act": "reading the moon on the water"
+},
+{
+"frm": 0,
+"to": 24,
+"at": "pond_centre",
+"act": "asleep in the deep",
+"state": "submerged",
+"asleep": true
+}
+],
+"climate": [
+{
+"when": {
+"weather": [
+"rain"
+]
+},
+"mood": "happy",
+"cause": "rain on the pond"
+},
+{
+"when": {
+"pond_pressure": 0.35
+},
+"mood": "worried",
+"cause": "the pond feels thin"
+}
+],
+"baseline": "relaxed",
+"gifts": {
+"loves": [
+"moonstone",
+"nightlily",
+"quartz",
+"starshard"
+],
+"likes": [
+"stone",
+"flint",
+"lily",
+"moss",
+"insect_bait",
+"worm"
+],
+"dislikes": [
+"cat:fish",
+"scrap_metal",
+"coal"
+]
+},
+"shows": {
+"cats": [
+"fish"
+],
+"label": "Show it a fish"
+},
+"greet": [
+{
+"id": "e_first",
+"text": "Hm. A new shape on my dock. The ripples said something was coming. They exaggerate.",
+"when": {
+"met": false
+},
+"expr": "calm"
+},
+{
+"id": "e_g_dawn",
+"text": "Morning comes up out of the water here. Watch. ... There. That was it.",
+"when": {
+"period": [
+"dawn"
+]
+}
+},
+{
+"id": "e_g_dusk",
+"text": "This is the hour the pond breathes out. Stand still and you can hear it.",
+"when": {
+"period": [
+"dusk"
+]
+}
+},
+{
+"id": "e_g_rain",
+"text": "Rain! Every drop is a small visitor. I greet them all. It takes a while.",
+"when": {
+"weather": [
+"rain"
+]
+},
+"expr": "glad"
+},
+{
+"id": "e_g_night",
+"text": "The moon is on the water. I am reading it. It mostly says the same thing, but slowly.",
+"when": {
+"period": [
+"night",
+"deep"
+]
+}
+},
+{
+"id": "e_g_winter",
+"text": "Ah. The ice lets me up for an hour. Talk fast. No. Talk slow. I have an hour.",
+"when": {
+"season": [
+"winter"
+]
+}
+},
+{
+"id": "e_g_worried",
+"text": "There you are. Good. The water is thin today, and I do not like to be alone with that.",
+"when": {
+"mood": [
+"worried"
+]
+},
+"expr": "troubled"
+},
+{
+"id": "e_g_absent",
+"text": "You were gone {absent} days. The pond noticed. I said nothing. The pond is a gossip.",
+"when": {
+"absent": 4,
+"bond": "acquainted"
+},
+"w": 3
+},
+{
+"id": "e_g_plain",
+"text": "Back again. The water remembers your footsteps. So do I.",
+"when": {
+"met": true,
+"bond": "acquainted"
+}
+},
+{
+"id": "e_g_0",
+"text": "Hm.",
+"when": {
+"met": true
+},
+"w": 0.3
+}
+],
+"chat": [
+{
+"id": "e_c_rise",
+"text": "Watch the dock at dusk. The perch come up to taste the light going. Or they used to.",
+"w": 2
+},
+{
+"id": "e_c_rain",
+"text": "The first rain after a dry week is the best one. The pond smells like the beginning of something.",
+"fact": "first_rain",
+"w": 2
+},
+{
+"id": "e_c_weather",
+"text": "Fog tomorrow, maybe. The water is warmer than the air. The pond always knows first and tells no one.",
+"when": {
+"weather": [
+"clear"
+]
+},
+"w": 1
+},
+{
+"id": "e_c_pipes",
+"text": "People built the pipes under the ruin. They sang while they worked. Badly. I liked it anyway.",
+"when": {
+"bond": "friendly"
+},
+"learn": "old_world"
+},
+{
+"id": "e_c_fishers",
+"text": "You fish here. Good. Fish that are never caught grow proud. Mind you put the small ones back.",
+"when": {
+"fished": 1
+},
+"learn": "fish"
+},
+{
+"id": "e_c_ice",
+"text": "Under the ice it is very quiet. I think about everything I have ever eaten. It is a short list, and a long time.",
+"when": {
+"season": [
+"winter"
+]
+}
+},
+{
+"id": "e_c_summer",
+"text": "In summer the water gets lazy at the top. So do I. We understand each other.",
+"when": {
+"season": [
+"summer"
+]
+}
+},
+{
+"id": "e_c_fog",
+"text": "Fog is just the pond trying to get up and walk around. It never gets far.",
+"when": {
+"weather": [
+"fog"
+]
+}
+},
+{
+"id": "e_c_noise",
+"text": "You walk softly. Some things splash for no reason. I keep a list of those things.",
+"learn": "quiet",
+"w": 0.7
+}
+],
+"recall": [
+{
+"id": "e_r_show_again",
+"text": "You found another one? I remember the {mem.itemName} you showed me, {mem.ago}. The water must be changing again.",
+"mem": {
+"type": "showed",
+"min_age": 1
+},
+"when": {
+"showing": true
+},
+"w": 6
+},
+{
+"id": "e_r_show",
+"text": "I still think about that {mem.itemName} you brought to the dock. {mem.ago}. I had not seen one in years.",
+"mem": {
+"type": "showed",
+"min_age": 2,
+"sig": 0.6
+},
+"w": 3
+},
+{
+"id": "e_r_why",
+"text": "You told me you came here {mem.detailText}. I have thought about that. The pond has been both of those things for me.",
+"mem": {
+"type": "told",
+"key": "why_here",
+"min_age": 2
+},
+"w": 3
+},
+{
+"id": "e_r_catch",
+"text": "The day you pulled the {mem.itemName} out of my pond, right in front of me. I pretended not to watch. I watched.",
+"mem": {
+"type": "shared_catch",
+"min_age": 1
+},
+"w": 4
+},
+{
+"id": "e_r_gift",
+"text": "The {mem.itemName} you gave me is at the bottom of the pond now, where I keep the good things.",
+"mem": {
+"type": "gift_loved",
+"min_age": 1
+},
+"w": 3
+},
+{
+"id": "e_r_fact",
+"text": "You remembered about the first rain. Hm. Most things that walk forget what the pond tells them.",
+"mem": {
+"type": "fact_mentioned",
+"min_age": 1
+},
+"w": 2
+},
+{
+"id": "e_r_promise_broken",
+"text": "You said you would look upstream. I waited at the inflow three nights. Then I stopped. That is all.",
+"mem": {
+"type": "promise_broken",
+"min_age": 0
+},
+"w": 5,
+"expr": "troubled"
+},
+{
+"id": "e_r_advice",
+"text": "You told me to {mem.adviceShort}. {mem.outcomeText}",
+"mem": {
+"type": "advice_outcome",
+"min_age": 0
+},
+"w": 4
+}
+],
+"asleep": [
+{
+"id": "e_s1",
+"text": "Only two eyes above the water, and they are closed. A slow bubble rises."
+},
+{
+"id": "e_s2",
+"text": "The willow shadow moves over a long shape that does not move."
+}
+],
+"tells": [
+{
+"id": "why_here",
+"ask": "Why did you come to this clearing? Walkers usually pass it.",
+"when": {
+"met_days": 1
+},
+"options": [
+{
+"text": "I was lost.",
+"value": "because you were lost",
+"rel": {
+"trust": 2
+}
+},
+{
+"text": "I wanted somewhere quiet.",
+"value": "looking for somewhere quiet",
+"rel": {
+"affection": 2
+},
+"learn": "quiet"
+},
+{
+"text": "I don't remember.",
+"value": "without remembering why",
+"rel": {
+"familiarity": 2
+}
+}
+]
+}
+],
+"facts": [
+{
+"id": "first_rain",
+"learn_line": "e_c_rain",
+"mention": "The first rain after a dry week. Like you said.",
+"when": {
+"weather": [
+"rain"
+]
+},
+"react": "You remembered that. ... Hm. The pond is pleased. I am also, a little."
+}
+],
+"gift_lines": {
+"loved": [
+"Oh. {item}. That goes at the bottom, with the good things. Thank you.",
+"{item}! The water will like this. I like this."
+],
+"liked": [
+"{item}. Useful to a pond. Thank you."
+],
+"neutral": [
+"{item}. Hm. I will find somewhere for it."
+],
+"disliked": [
+"You bring me my neighbours. ... I know you meant well. Take it back.",
+"That does not belong in a pond. Or near one."
+],
+"repeat": [
+"Another {item}? You gave me one {mem.ago}. The pond is not a shop."
+],
+"sleepy": [
+"It does not open its eyes. The gift sinks a little way and stops."
+]
+},
+"show_lines": {
+"new": [
+"A {item}! Look at the colour on it. I had not seen one in years.",
+"So the {item} still lives in this water. Good. Good."
+],
+"seen": [
+"A {item}. Yes. They come up at {when} sometimes."
+],
+"rare": [
+"That is a {item}. Do you know how few of those there are? I do. I count them."
+]
+},
+"concerns": [
+{
+"id": "water_changing",
+"when": {
+"bond": "acquainted",
+"met_days": 2
+},
+"lean": "compromise",
+"resists": "encourage",
+"intro": "The water is not what it was. Warmer at the edges, quieter in the middle. I have kept this pond the same way for longer than your kind kept calendars. Should an old thing change its ways, or hold still and let the water come back to it?",
+"ask": "What feels different, exactly?",
+"reveal": "The young perch do not come to the shallows. The eels left the inflow. Something upstream, I think. Something old.",
+"options": {
+"encourage": "Change with it. Find out what the water wants now.",
+"reassure": "Hold still. You've seen worse, and it came back.",
+"compromise": "Watch it closely for a season, then decide.",
+"practical": "Let me find out what's changing. I'll look upstream."
+},
+"promise": {
+"stance": "practical",
+"what": "look upstream at the inflow at night",
+"days": 4,
+"check": {
+"be_at": "river_east",
+"period": [
+"night",
+"deep"
+]
+}
+},
+"reactions": {
+"accept": [
+"Hm. Yes. That is what I would have told me, if I listened better."
+],
+"consider": [
+"Perhaps. I will turn it over, like a stone."
+],
+"reject": [
+"No. I have done that before. It did not suit the pond."
+]
+},
+"followup": {
+"days": 3,
+"outcomes": {
+"compromise": [
+"good",
+"I watched, as you said. The fish move upriver at dusk now, not dawn. Knowing that is half of keeping a pond."
+],
+"encourage": [
+"mixed",
+"I tried new ways. I waited in the inflow at night. It was cold, and I learned little. Still, I learned the cold."
+],
+"reassure": [
+"bad",
+"I held still. The water did not come back. Perhaps holding still was a kind of hiding."
+],
+"practical": [
+"promise",
+"You went upstream, like you said. The silt. The rust. Now I know what I am fighting.|You said you would look upstream. You did not. I looked myself. I am too slow for rivers."
+]
+}
+}
+}
+],
+"quest": {
+"id": "thinning",
+"title": "The Thinning",
+"stages": [
+{
+"id": "ask",
+"when": {
+"familiarity": 10
+},
+"talk": "The perch used to rise under the dock at dusk, seven or eight of them. Now two. I am old; maybe I count badly. Would you catch three different kinds from my pond and tell me? Not to keep. To know.",
+"journal": "Ebb wants to know which fish still live in the pond: three different kinds.",
+"objective": {
+"type": "catch_distinct",
+"habitat": "pond",
+"n": 3
+},
+"accept": "I will look. Three kinds."
+},
+{
+"id": "upstream",
+"talk": "Three kinds: {quest.fish}. So they are not gone. They are leaving. The inflow, then. Go and look at night, when the river talks louder. Take a light.",
+"journal": "Look at the river inflow at night, with a light.",
+"objective": {
+"type": "be_at",
+"at": "river_east",
+"radius": 40,
+"period": [
+"night",
+"deep"
+],
+"lantern": true,
+"found": "In your lantern light the inflow runs cloudy: orange silt and flakes of rust, washing down from the old pipes under the ruin."
+}
+},
+{
+"id": "decide",
+"talk": "Rust from the old pipes. So that is it. What should be done? I am a pond. I cannot climb.",
+"journal": "Decide with Ebb what to do about the rust in the inflow.",
+"objective": {
+"type": "choice",
+"options": [
+{
+"id": "clear",
+"text": "I will clear the old culvert myself.",
+"needs": {
+"stone": 3,
+"plank": 1
+},
+"result": "good",
+"line": "You did it with your own hands. The water will clear by the next rain. I will remember this, and the pond will remember it longer.",
+"rel": {
+"trust": 6,
+"respect": 4,
+"reliability": 4
+}
+},
+{
+"id": "tessel",
+"text": "Tessel knows those pipes. Let me ask it.",
+"needs_met": "tessel",
+"result": "good",
+"line": "The metal one? Hm. It talks too much and counts the wrong things. But it knows pipes. Yes. Ask.",
+"rel": {
+"respect": 3
+},
+"followup_flag": "tessel_pipes"
+},
+{
+"id": "wait",
+"text": "Let the river find its own way. It always has.",
+"result": "mixed",
+"line": "Perhaps. Rivers are patient. So am I. Fewer perch this year, then. More the year after, if the river is kind.",
+"rel": {
+"familiarity": 2
+}
+}
+]
+}
+}
+],
+"complete": "The perch rose under the dock tonight. Five of them. I counted twice.",
+"reward_secret": true
+}
+},
+"pip": {
+"id": "pip",
+"name": "Pip",
+"species": "Burrling",
+"epithet": "The little forager",
+"communication": "quick speech, in fragments and tangents",
+"sprite": "pip",
+"frames": {
+"idle": [
+0,
+2
+],
+"walk": [
+0,
+1,
+2,
+3
+]
+},
+"portrait": "pip",
+"movement": "walk",
+"speed": 30,
+"solid": false,
+"talk_radius": 26,
+"traits": {
+"caution": 0.65,
+"curiosity": 0.95,
+"practicality": 0.3,
+"pride": 0.2,
+"warmth": 0.9
+},
+"weights": {
+"trust": 0.9,
+"familiarity": 1.3,
+"affection": 1.2,
+"respect": 0.6,
+"reliability": 0.9,
+"shared": 1.4
+},
+"memory": {
+"shared_catch": 1.3,
+"showed": 1.2,
+"discovery": 1.4,
+"took": 1.3
+},
+"appearance": "A chestnut burr the size of a fist, on twig legs, under one enormous leaf it wears as a hat. A moss satchel full of finds.",
+"description": "Something small runs from cover to cover in the clearing, talking to itself, filling a satchel with anything that looks interesting.",
+"background": "Pip fell from a chestnut tree that no longer exists and has been collecting the world ever since, one small thing at a time.",
+"secret": "Pip's satchel holds one thing it never shows anyone: a brass button with a face on it. Pip thinks it is a very small person, asleep.",
+"interests": [
+[
+"mushrooms",
+"Mushrooms, especially ones that glow"
+],
+[
+"flowers",
+"Flowers, all of them"
+],
+[
+"shiny",
+"Small interesting objects"
+],
+[
+"north",
+"The north woods, which it has never seen"
+]
+],
+"dislikes": [
+[
+"rain",
+"Getting its hat wet"
+],
+[
+"loud",
+"Sudden loud things"
+],
+[
+"metal",
+"Cold metal"
+]
+],
+"owns": [
+"mush_log"
+],
+"habits": "Up at dawn at the lone rowan, foraging by the hollow log in the morning, chasing beetles in the meadow at noon, watching dragonflies at the pond in the afternoon. Sleeps in the hollow log.",
+"schedule": [
+{
+"when": {
+"weather": [
+"rain"
+]
+},
+"frm": 6,
+"to": 20,
+"at": "oak_shelter",
+"act": "sheltering under the big oak, wringing out its hat"
+},
+{
+"when": {
+"season": [
+"winter"
+]
+},
+"frm": 9,
+"to": 16,
+"at": "camp_fire",
+"act": "warming itself at your fire"
+},
+{
+"when": {
+"season": [
+"winter"
+]
+},
+"frm": 0,
+"to": 24,
+"at": "hollow_log",
+"act": "asleep in the hollow log",
+"hidden": true,
+"asleep": true
+},
+{
+"frm": 5.5,
+"to": 8,
+"at": "lone_rowan",
+"act": "collecting dew from the rowan"
+},
+{
+"frm": 8,
+"to": 12,
+"at": "hollow_log",
+"act": "turning over leaves"
+},
+{
+"frm": 12,
+"to": 15,
+"at": "meadow",
+"act": "chasing a beetle"
+},
+{
+"frm": 15,
+"to": 18,
+"at": "pond_bank",
+"act": "watching dragonflies"
+},
+{
+"when": {
+"familiarity": 25
+},
+"frm": 18,
+"to": 20.5,
+"at": "camp_fire",
+"act": "warming its twig hands at your fire"
+},
+{
+"frm": 18,
+"to": 20.5,
+"at": "hollow_log",
+"act": "tidying its satchel"
+},
+{
+"frm": 0,
+"to": 24,
+"at": "hollow_log",
+"act": "asleep in the hollow log",
+"hidden": true,
+"asleep": true
+}
+],
+"climate": [
+{
+"when": {
+"weather": [
+"rain"
+]
+},
+"mood": "sad",
+"cause": "its hat is soaked"
+},
+{
+"when": {
+"weather": [
+"fog"
+]
+},
+"mood": "worried",
+"cause": "the fog makes everything quiet"
+},
+{
+"when": {
+"season": [
+"spring"
+],
+"weather": [
+"clear"
+]
+},
+"mood": "excited",
+"cause": "spring, and everything growing"
+}
+],
+"baseline": "curious",
+"gifts": {
+"loves": [
+"mushroom_red",
+"mushroom_brown",
+"feather",
+"bellflower",
+"ghostcap",
+"eggshell",
+"glass_shard"
+],
+"likes": [
+"daisy",
+"poppy",
+"yarrow",
+"seeds_wild",
+"blackberry",
+"rowan_berry",
+"moss",
+"fern_frond"
+],
+"dislikes": [
+"scrap_metal",
+"bolt",
+"iron_ingot",
+"coal",
+"nails"
+]
+},
+"shows": {
+"cats": [
+"natural",
+"botanical",
+"rare_find"
+],
+"label": "Show it something you found"
+},
+"greet": [
+{
+"id": "p_first",
+"text": "Oh! Oh. Hello. Did you see the \u2014 no. Never mind. Hello! You're very big. That's fine. I'm Pip.",
+"when": {
+"met": false
+},
+"expr": "glad"
+},
+{
+"id": "p_g_morning",
+"text": "Morning! The rowan had eleven dew drops. I drank nine. Nine is plenty.",
+"when": {
+"period": [
+"dawn"
+]
+}
+},
+{
+"id": "p_g_rain",
+"text": "Everything is wet and my hat is wet and the hat is the whole point of the hat.",
+"when": {
+"weather": [
+"rain"
+]
+},
+"expr": "troubled"
+},
+{
+"id": "p_g_fog",
+"text": "It's so quiet in the fog. Too quiet. Can you talk? Just say things. Anything.",
+"when": {
+"weather": [
+"fog"
+]
+},
+"expr": "troubled"
+},
+{
+"id": "p_g_fire",
+"text": "Your fire is the best fire. I have only seen one other fire. Yours is better.",
+"when": {
+"at": [
+"camp_fire"
+]
+}
+},
+{
+"id": "p_g_lonely",
+"text": "You were gone {absent} days! I counted. I'm not upset. I made a pile of leaves for every day. It's a big pile.",
+"when": {
+"absent": 3,
+"bond": "acquainted"
+},
+"w": 3,
+"expr": "troubled"
+},
+{
+"id": "p_g_excited",
+"text": "Spring spring spring! Everything is coming up at once and I can only look at one thing at a time!",
+"when": {
+"mood": [
+"excited"
+]
+}
+},
+{
+"id": "p_g_plain",
+"text": "Hi! Hi. What did you find today? I found a beetle. It found me first, actually.",
+"when": {
+"met": true
+}
+}
+],
+"chat": [
+{
+"id": "p_c_mush",
+"text": "Mushrooms don't grow, they arrive. One morning, there they are. Like they walked in at night.",
+"learn": "mushrooms",
+"w": 2
+},
+{
+"id": "p_c_north",
+"text": "There's a moss in the north woods that glows blue. Everyone says. Nobody I know has been.",
+"learn": "north",
+"w": 1.5
+},
+{
+"id": "p_c_hat",
+"text": "This hat's name is Fennel. Don't tell anyone. Hats get embarrassed.",
+"fact": "hat_name",
+"when": {
+"bond": "acquainted"
+},
+"w": 2
+},
+{
+"id": "p_c_flowers",
+"text": "Daisies close at night. Bellflowers ring but too quiet to hear. I put my ear right up close.",
+"learn": "flowers",
+"when": {
+"season": [
+"spring",
+"summer"
+]
+}
+},
+{
+"id": "p_c_patch",
+"text": "The mushrooms by the hollow log are mine. I mean, nobody owns mushrooms. But they are mine.",
+"when": {
+"met_days": 1
+},
+"sets": "told_patch"
+},
+{
+"id": "p_c_beetle",
+"text": "I chased a beetle for an hour. Then it chased me. Then we both sat down.",
+"when": {
+"period": [
+"day"
+]
+}
+},
+{
+"id": "p_c_winter",
+"text": "Winter is when the world is asleep and I'm not. It's lonely. Your fire helps.",
+"when": {
+"season": [
+"winter"
+]
+}
+},
+{
+"id": "p_c_autumn",
+"text": "Autumn is the best because everything falls down to where I can reach it.",
+"when": {
+"season": [
+"autumn"
+]
+}
+},
+{
+"id": "p_c_loud",
+"text": "Something big crashed in the trees last night. I hid in my log until my legs stopped wobbling.",
+"when": {
+"monsters_seen": 1
+},
+"learn": "loud"
+}
+],
+"recall": [
+{
+"id": "p_r_pref",
+"text": "You said you love {mem.detailText}! Did you do some today? You should. Every day. That is my advice.",
+"mem": {
+"type": "told",
+"key": "favourite"
+},
+"w": 3
+},
+{
+"id": "p_r_pref_fish",
+"text": "You said you love fishing \u2014 and you caught a {ctx.lastFish} today! I knew it. I knew it about you.",
+"mem": {
+"type": "told",
+"key": "favourite",
+"value": "fishing"
+},
+"when": {
+"caught_today": true
+},
+"w": 6,
+"expr": "glad"
+},
+{
+"id": "p_r_tip",
+"text": "I looked {mem.detailText} like you said. You were right! There were three of them! I ate one. Sorry. It was there.",
+"mem": {
+"type": "told",
+"key": "tip",
+"min_age": 1
+},
+"w": 6,
+"expr": "glad"
+},
+{
+"id": "p_r_shared",
+"text": "Remember when you caught that {mem.itemName} and I was right there? I tell everyone. Well, I tell the beetle.",
+"mem": {
+"type": "shared_catch",
+"min_age": 1
+},
+"w": 4
+},
+{
+"id": "p_r_gift",
+"text": "I still have the {mem.itemName} you gave me! It lives in my satchel. It has its own pocket.",
+"mem": {
+"type": "gift_loved",
+"min_age": 1
+},
+"w": 3
+},
+{
+"id": "p_r_took",
+"text": "Somebody took the mushrooms by the hollow log. I'm not saying it was you. I saw you. I'm not saying it.",
+"mem": {
+"type": "took",
+"min_age": 0,
+"recent": 6
+},
+"w": 7,
+"expr": "troubled"
+},
+{
+"id": "p_r_fact",
+"text": "You asked about Fennel! Nobody ever asks about Fennel. Fennel is fine. Fennel says hello.",
+"mem": {
+"type": "fact_mentioned",
+"min_age": 1
+},
+"w": 2
+},
+{
+"id": "p_r_promise",
+"text": "You made me the jar! I keep it lit at night. My log looks like a little house now.",
+"mem": {
+"type": "promise_kept",
+"min_age": 0
+},
+"w": 5,
+"expr": "glad"
+},
+{
+"id": "p_r_promise_broken",
+"text": "I waited for the lantern. I didn't go north. It's fine. It's fine! I'm small anyway.",
+"mem": {
+"type": "promise_broken",
+"min_age": 0
+},
+"w": 6,
+"expr": "troubled"
+},
+{
+"id": "p_r_advice",
+"text": "You told me to {mem.adviceShort}. {mem.outcomeText}",
+"mem": {
+"type": "advice_outcome",
+"min_age": 0
+},
+"w": 4
+}
+],
+"asleep": [
+{
+"id": "p_s1",
+"text": "From inside the hollow log: a very small snore, and a leaf going up and down."
+}
+],
+"tells": [
+{
+"id": "favourite",
+"ask": "What do you like doing most? Tell me. I collect those too.",
+"when": {
+"met_days": 0,
+"bond": "acquainted"
+},
+"options": [
+{
+"text": "Fishing.",
+"value": "fishing",
+"rel": {
+"familiarity": 2
+}
+},
+{
+"text": "Foraging, like you.",
+"value": "foraging",
+"rel": {
+"affection": 3
+}
+},
+{
+"text": "Building things.",
+"value": "building",
+"rel": {
+"familiarity": 2
+}
+},
+{
+"text": "Exploring.",
+"value": "exploring",
+"rel": {
+"affection": 2
+}
+},
+{
+"text": "Sitting by the fire.",
+"value": "sitting by the fire",
+"rel": {
+"affection": 2
+}
+}
+]
+},
+{
+"id": "tip",
+"ask": "Have you seen anything that glows at night? I am looking for something.",
+"when": {
+"quest": "morel:ask"
+},
+"options": [
+{
+"text": "Pale caps glow by the hollow log at night.",
+"value": "by the hollow log at night",
+"needs_found": "moondew",
+"rel": {
+"trust": 2
+}
+},
+{
+"text": "There is a ghostly cap in the west woods after rain.",
+"value": "in the west woods after the rain",
+"needs_found": "ghostcap",
+"rel": {
+"trust": 2
+}
+},
+{
+"text": "Not yet. I will watch for it.",
+"value": null,
+"rel": {
+"familiarity": 1
+}
+}
+]
+}
+],
+"facts": [
+{
+"id": "hat_name",
+"learn_line": "p_c_hat",
+"mention": "How is Fennel?",
+"when": {
+"met_days": 1
+},
+"react": "You remembered Fennel! Nobody remembers Fennel. Fennel is very well, thank you, Fennel is blushing."
+}
+],
+"gift_lines": {
+"loved": [
+"For me? A {item}? For me! It is going in the satchel. It is going in the special pocket.",
+"{item}!! I had one once, for one minute, then I dropped it in the pond. Now I have one forever."
+],
+"liked": [
+"Ooh, {item}. Thank you! I will look at it a lot."
+],
+"neutral": [
+"A {item}. Huh. I will find out what it is for. Everything is for something."
+],
+"disliked": [
+"Oh. It is cold. Cold things make my twigs ache. Thank you though. Can you keep it for me? Far away?"
+],
+"repeat": [
+"Another {item}! You gave me one {mem.ago}. I still have it. Now they can talk to each other."
+],
+"sleepy": [
+"It is asleep. You leave the gift by the log. In the morning it will think the log made it."
+]
+},
+"show_lines": {
+"new": [
+"Oh! What is that? A {item}! Can I hold it? I will not drop it. I might drop it."
+],
+"seen": [
+"A {item}! I have seen those. Not as good as that one though."
+],
+"rare": [
+"A {item}?! Where did you \u2014 no don't tell me. Yes tell me. No. Yes."
+]
+},
+"concerns": [
+{
+"id": "north_woods",
+"when": {
+"bond": "acquainted",
+"met_days": 1
+},
+"lean": "compromise",
+"resists": "reassure",
+"intro": "I want to go and see the north woods. The blue moss. But it's dark there, even in the day, and I'm... small. I'm very small.",
+"ask": "What scares you most about it?",
+"reveal": "The quiet. Here the pond talks all day. There, nothing talks. I'd be the only thing talking.",
+"options": {
+"encourage": "Go. You'll always wonder if you don't.",
+"reassure": "Stay. The clearing needs you.",
+"compromise": "Go in daylight, and come back before dusk.",
+"practical": "I'll make you a light to carry first."
+},
+"promise": {
+"stance": "practical",
+"what": "bring Pip a spore jar",
+"days": 4,
+"check": {
+"give": "spore_jar"
+}
+},
+"reactions": {
+"accept": [
+"Yes. Yes! That's it. That's exactly it."
+],
+"consider": [
+"Maybe? Maybe. I will think about it while I chase something."
+],
+"reject": [
+"No... no, I don't think so. I think I want to see it."
+]
+},
+"followup": {
+"days": 2,
+"outcomes": {
+"compromise": [
+"good",
+"Daylight only, like you said! I found the blue moss! It doesn't glow in the day. I'm going back to see it glow."
+],
+"encourage": [
+"mixed",
+"I went! I ran most of the way back. It was beautiful for one whole minute."
+],
+"reassure": [
+"bad",
+"I stayed. It's fine. Everything's fine. I keep looking north though."
+],
+"practical": [
+"promise",
+"Your jar lit the whole path! I saw it \u2014 the blue moss, glowing! I sat with it until I got sleepy.|I waited for the light. I did not go."
+]
+}
+}
+}
+],
+"quest": {
+"id": "morel",
+"title": "The Lantern Morel",
+"stages": [
+{
+"id": "ask",
+"when": {
+"familiarity": 8
+},
+"talk": "There is a mushroom. The lantern morel. It glows from inside, like it swallowed a firefly. The old stump says it comes up where something old fell down, the night after rain. I have looked for three autumns.",
+"journal": "Pip is looking for a lantern morel: it comes up where something old fell, the night after rain.",
+"objective": {
+"type": "be_at",
+"at": "hollow_log",
+"radius": 30,
+"period": [
+"night",
+"deep"
+],
+"after_rain": true,
+"found": "Under the hollow log something glows faint orange from inside: a lantern morel, small as your thumb."
+}
+},
+{
+"id": "decide",
+"talk": "You found it? You found it! Where? What did you do with it?",
+"journal": "Tell Pip about the lantern morel.",
+"objective": {
+"type": "choice",
+"options": [
+{
+"id": "bring",
+"text": "Come and see it. It is under the hollow log.",
+"result": "good",
+"line": "It was right there under my own log the whole time! It glows like a tiny window. We sat with it. I will never forget sitting with it.",
+"rel": {
+"shared": 6,
+"affection": 4
+},
+"cross": {
+"burl": {
+"type": "witnessed",
+"detail": "left the lantern morel to grow",
+"rel": {
+"respect": 3
+}
+}
+}
+},
+{
+"id": "pick",
+"text": "I picked it for you.",
+"result": "mixed",
+"line": "For me? Oh... oh, it's going dim. It wanted to stay in the ground, didn't it. I'll keep it anyway. I'll keep it until it's just a mushroom.",
+"rel": {
+"affection": 2
+},
+"cross": {
+"burl": {
+"type": "against_wish",
+"detail": "picked the lantern morel",
+"rel": {
+"respect": -3
+}
+}
+}
+},
+{
+"id": "leave",
+"text": "I left it to spread its spores. Next year there will be more.",
+"result": "mixed",
+"line": "More next year? ...That is a long time to wait. But more. You did a patient thing. I am not very patient. I will try.",
+"rel": {
+"respect": 3,
+"trust": 2
+},
+"cross": {
+"burl": {
+"type": "witnessed",
+"detail": "let the lantern morel spread its spores",
+"rel": {
+"respect": 4
+}
+}
+}
+}
+]
+}
+}
+],
+"complete": "Whenever I see something glow now, I think: maybe.",
+"reward_secret": true
+}
+},
+"wick": {
+"id": "wick",
+"name": "Wick",
+"species": "Lamp moth",
+"epithet": "The lantern keeper",
+"communication": "light and gesture; it does not speak",
+"sprite": "wick",
+"frames": {
+"idle": [
+0,
+1,
+2,
+3
+]
+},
+"portrait": "wick",
+"movement": "float",
+"speed": 16,
+"solid": false,
+"talk_radius": 30,
+"gesture": true,
+"traits": {
+"caution": 0.85,
+"curiosity": 0.4,
+"practicality": 0.6,
+"pride": 0.4,
+"warmth": 0.5
+},
+"weights": {
+"trust": 1.5,
+"familiarity": 0.7,
+"affection": 0.7,
+"respect": 1,
+"reliability": 1.2,
+"shared": 1.1
+},
+"memory": {
+"protected": 1.6,
+"promise_broken": 1.3,
+"witnessed": 1.2
+},
+"appearance": "Tall and narrow, wrapped in its own folded wings like a dusty coat. Where a head would be, a paper lantern with a small steady flame.",
+"description": "On some nights a small light walks the clearing that is not a lantern anyone lit.",
+"background": "Wick visits every light in the clearing at night, one by one, like someone checking on sleeping children.",
+"secret": "Wick was a moth once. It flew into the last lamp still burning in the reservoir, the night the valley flooded, and came out as this.",
+"interests": [
+[
+"light",
+"Light, every kind"
+],
+[
+"dusk_fire",
+"The light of a fire just before it goes out"
+],
+[
+"safety",
+"Keeping others away from dark places"
+]
+],
+"dislikes": [
+[
+"coal",
+"Coal: \"dead light\""
+],
+[
+"dark_door",
+"The door in the ruin"
+]
+],
+"habits": "Only at night. Visits your lantern after dusk, keeps watch at the ruin arch, lights the crossing after midnight. Never in rain.",
+"schedule": [
+{
+"when": {
+"weather": [
+"rain"
+]
+},
+"frm": 0,
+"to": 24,
+"at": null,
+"act": "away from the rain"
+},
+{
+"when": {
+"weather": [
+"fog"
+]
+},
+"frm": 19.5,
+"to": 24,
+"at": "ruin_arch",
+"act": "keeping watch at the dark door"
+},
+{
+"when": {
+"weather": [
+"fog"
+]
+},
+"frm": 0,
+"to": 5.5,
+"at": "ruin_arch",
+"act": "keeping watch at the dark door"
+},
+{
+"when": {
+"season": [
+"winter"
+]
+},
+"frm": 19.5,
+"to": 24,
+"at": "camp_fire",
+"act": "warming its wings at your fire"
+},
+{
+"frm": 19.5,
+"to": 22,
+"at": "lantern",
+"act": "visiting your lantern"
+},
+{
+"frm": 22,
+"to": 24,
+"at": "ruin_arch",
+"act": "keeping watch at the dark door"
+},
+{
+"frm": 0,
+"to": 3,
+"at": "bridge",
+"act": "lighting the crossing"
+},
+{
+"frm": 3,
+"to": 5.5,
+"at": "ruin_arch",
+"act": "keeping watch at the dark door"
+},
+{
+"frm": 0,
+"to": 24,
+"at": null,
+"act": "somewhere in the daylight, folded"
+}
+],
+"climate": [
+{
+"when": {
+"monsters_near": 3
+},
+"mood": "worried",
+"cause": "too many unlit things about"
+},
+{
+"when": {
+"weather": [
+"clear"
+],
+"period": [
+"night",
+"deep"
+]
+},
+"mood": "relaxed",
+"cause": "a clear night"
+}
+],
+"baseline": "relaxed",
+"gifts": {
+"loves": [
+"lantern_moth",
+"glass_shard",
+"nightglass",
+"luminous_spores",
+"resin",
+"spore_jar"
+],
+"likes": [
+"moondew",
+"starshard",
+"quartz",
+"feather"
+],
+"dislikes": [
+"coal",
+"mud",
+"cat:fish"
+]
+},
+"greet": [
+{
+"id": "w_first",
+"text": "*A small light stops at the edge of the dark and looks at you. The flame inside it leans toward you, then away.* (It is deciding whether you are dangerous.)",
+"when": {
+"met": false
+},
+"expr": "calm"
+},
+{
+"id": "w_g_lantern",
+"text": "*It bends close to your lantern, flame to flame, and its own light steadies.* (It approves of your lantern.)",
+"when": {
+"lantern": true
+}
+},
+{
+"id": "w_g_dark",
+"text": "*It holds its lantern up to your face, then points at your empty hand.* (You are walking at night without a light.)",
+"when": {
+"lantern": false,
+"period": [
+"night",
+"deep"
+]
+},
+"expr": "troubled"
+},
+{
+"id": "w_g_worried",
+"text": "*Its light flickers fast, three times, toward the trees.* (Something unlit is moving out there.)",
+"when": {
+"mood": [
+"worried"
+]
+},
+"expr": "troubled"
+},
+{
+"id": "w_g_fire",
+"text": "*It settles by the fire and opens its wings a little. You see they are patterned like dusty eyes.* (It is content.)",
+"when": {
+"at": [
+"camp_fire"
+]
+}
+},
+{
+"id": "w_g_absent",
+"text": "*It brightens, slowly, all the way. Then dims back to normal, as if embarrassed.* (It missed you. {absent} nights.)",
+"when": {
+"absent": 3,
+"bond": "acquainted"
+},
+"w": 3,
+"expr": "glad"
+},
+{
+"id": "w_g_plain",
+"text": "*A slow pulse of light, the same rhythm as before.* (It recognises you.)",
+"when": {
+"met": true
+}
+}
+],
+"chat": [
+{
+"id": "w_c_dusk",
+"text": "*It points at your campfire, then makes its own flame very small and very red, then waits.* (It loves the light a fire gives just before it goes out.)",
+"fact": "dusk_fire",
+"when": {
+"bond": "acquainted"
+},
+"w": 2
+},
+{
+"id": "w_c_door",
+"text": "*It turns toward the ruin and covers its lantern with a wing until there is no light at all.* (Do not go to the arch at night.)",
+"learn": "safety",
+"w": 1.5
+},
+{
+"id": "w_c_stars",
+"text": "*It holds its lantern up at the sky, then lowers it, as if comparing.* (The stars are lanterns too far away to check on.)",
+"when": {
+"weather": [
+"clear"
+]
+}
+},
+{
+"id": "w_c_lamps",
+"text": "*It visits each of your lights in turn, then comes back and dips once.* (All your lights are well.)",
+"when": {
+"lights": 2
+}
+},
+{
+"id": "w_c_coal",
+"text": "*At the smell of coal, its flame shrinks and turns away.* (Coal is dead light.)",
+"learn": "coal",
+"when": {
+"has": "coal"
+}
+},
+{
+"id": "w_c_moths",
+"text": "*Small moths come and circle its head. It does not mind. It seems to know them.*",
+"when": {
+"season": [
+"summer"
+]
+}
+}
+],
+"recall": [
+{
+"id": "w_r_protected",
+"text": "*It shows you, with its light, the shape of the thing you drove off that night, and then your shape, standing between.* (It remembers that you protected it.)",
+"mem": {
+"type": "protected",
+"min_age": 0
+},
+"w": 6,
+"expr": "glad"
+},
+{
+"id": "w_r_fact",
+"text": "*It looks at the low red embers of your fire, then at you, a long time.* (You remembered what it loves.)",
+"mem": {
+"type": "fact_mentioned",
+"min_age": 0
+},
+"w": 3,
+"expr": "glad"
+},
+{
+"id": "w_r_light_kept",
+"text": "*It flies to the light you set by the arch and circles it twice.* (The light by the door still burns. It checks on it every night.)",
+"mem": {
+"type": "promise_kept",
+"min_age": 0
+},
+"w": 5
+},
+{
+"id": "w_r_broken",
+"text": "*It goes to the arch, where a light was supposed to be, and stays there with its back to you.*",
+"mem": {
+"type": "promise_broken",
+"min_age": 0
+},
+"w": 6,
+"expr": "troubled"
+},
+{
+"id": "w_r_gift",
+"text": "*It turns the {mem.itemName} you gave it this way and that in its own light.* (It still has it.)",
+"mem": {
+"type": "gift_loved",
+"min_age": 1
+},
+"w": 3
+},
+{
+"id": "w_r_fear",
+"text": "*It remembers what you said about the dark. It makes its light a little brighter on your side.*",
+"mem": {
+"type": "told",
+"key": "dark"
+},
+"w": 2
+},
+{
+"id": "w_r_advice",
+"text": "*It shows you, in light, the choice you advised.* ({mem.adviceShort}.) {mem.outcomeText}",
+"mem": {
+"type": "advice_outcome",
+"min_age": 0
+},
+"w": 4
+}
+],
+"asleep": [
+{
+"id": "w_s1",
+"text": "Nothing here but a faint warmth in the air where a light has been."
+}
+],
+"tells": [
+{
+"id": "dark",
+"ask": "*It holds its lantern between you and the dark trees, then tilts its head.* (Are you afraid of the dark?)",
+"when": {
+"met_days": 0
+},
+"options": [
+{
+"text": "Yes.",
+"value": "afraid of the dark",
+"rel": {
+"trust": 3
+}
+},
+{
+"text": "No.",
+"value": "not afraid of the dark",
+"rel": {
+"respect": 1
+}
+},
+{
+"text": "Only of what is in it.",
+"value": "afraid only of what is in the dark",
+"rel": {
+"trust": 2,
+"respect": 2
+}
+}
+]
+}
+],
+"facts": [
+{
+"id": "dusk_fire",
+"learn_line": "w_c_dusk",
+"mention": "I let the fire burn down slowly tonight, for you.",
+"when": {
+"period": [
+"night",
+"deep"
+]
+},
+"react": "*It goes very still and its flame turns the exact red of embers.* (It is moved.)"
+}
+],
+"gift_lines": {
+"loved": [
+"*It takes the {item} and holds it inside its own light, where it glows.* (It will keep this.)"
+],
+"liked": [
+"*It inspects the {item} and dips its lantern once.* (Thank you.)"
+],
+"neutral": [
+"*It looks at the {item}, then politely at you.*"
+],
+"disliked": [
+"*Its flame shrinks from the {item}. It steps back.* (Not that.)"
+],
+"repeat": [
+"*It already has a {item} from you, {mem.ago}. It holds both up and the light doubles.*"
+],
+"sleepy": [
+"There is no one here to take it."
+]
+},
+"concerns": [
+{
+"id": "tell_others",
+"when": {
+"bond": "acquainted",
+"met_days": 1
+},
+"lean": "practical",
+"resists": "encourage",
+"intro": "*It shows you the dark arch, then the camp, then covers its lantern with a wing.* (It is asking: should the others know what is behind the door?)",
+"ask": "What is behind it?",
+"reveal": "*Its light gutters to almost nothing. It holds very still for a long time.* (Something that eats light.)",
+"options": {
+"encourage": "Tell them. They deserve to know.",
+"reassure": "Keep it to yourself. Don't frighten them.",
+"compromise": "Tell only the ones who go near it.",
+"practical": "Let's put a light by the door so nobody wanders in."
+},
+"promise": {
+"stance": "practical",
+"what": "set a light by the ruin arch",
+"days": 3,
+"check": {
+"light_near": "ruin_arch",
+"radius": 48
+}
+},
+"reactions": {
+"accept": [
+"*Its flame brightens and steadies.* (Yes.)"
+],
+"consider": [
+"*It tilts, one way, then the other.* (Maybe.)"
+],
+"reject": [
+"*Its flame turns away.* (No.)"
+]
+},
+"followup": {
+"days": 2,
+"outcomes": {
+"practical": [
+"promise",
+"*It takes you to the light by the arch and stands beside it, very straight.* (Nobody has gone in since.)|*It stands at the arch in the dark, where a light was supposed to be.*"
+],
+"compromise": [
+"good",
+"*It shows you the small one, the burr, turning away from the arch.* (It told only the one who wanders. It worked.)"
+],
+"encourage": [
+"bad",
+"*It shows you the burr hiding in its log for two nights.* (It told everyone. Now they are afraid of everything.)"
+],
+"reassure": [
+"mixed",
+"*It shows you itself, alone at the arch every night.* (It kept the secret. It is tired.)"
+]
+}
+}
+}
+],
+"quest": {
+"id": "door",
+"title": "The Unlit Door",
+"stages": [
+{
+"id": "ask",
+"when": {
+"trust": 10,
+"period": [
+"night",
+"deep"
+]
+},
+"talk": "*It leads your eye to the arch in the ruin. It dims its lantern to nothing, then flares, then dims.* (There is a door that light does not come out of.)",
+"journal": "Wick wants you to see the dark door in the ruin: at deep night, with a light.",
+"objective": {
+"type": "be_at",
+"at": "ruin_arch",
+"radius": 34,
+"period": [
+"deep"
+],
+"lantern": true,
+"found": "At the arch your lantern light stops a hand-width into the dark, as if it had hit deep water. Something breathes, slowly, very far down."
+}
+},
+{
+"id": "decide",
+"talk": "*It waits for you to say what should be done.*",
+"journal": "Decide with Wick what to do about the door.",
+"objective": {
+"type": "choice",
+"options": [
+{
+"id": "seal",
+"text": "Board it shut.",
+"needs": {
+"plank": 3,
+"nails": 2
+},
+"result": "good",
+"line": "*It helps you hold the last board. When it is done, it rests its lantern against the planks, listening.* (It is quieter now.)",
+"rel": {
+"trust": 6,
+"reliability": 4
+}
+},
+{
+"id": "light",
+"text": "Keep a light burning at the mouth instead.",
+"needs_light": "ruin_arch",
+"result": "good",
+"line": "*It sits beside the light you set and its own flame matches it, flicker for flicker.* (Two lights are a watch. One is only a hope.)",
+"rel": {
+"trust": 5,
+"shared": 4
+}
+},
+{
+"id": "leave",
+"text": "Leave it. Whatever is down there was here first.",
+"result": "mixed",
+"line": "*It looks at you a long time. Then it turns its lantern toward the door and does not look back at you.* (It will keep watching. Alone.)",
+"rel": {
+"respect": 2,
+"trust": -2
+}
+}
+]
+}
+}
+],
+"complete": "*Every night now it stops at the arch, then comes to your lantern last.*",
+"reward_secret": true
+}
+},
+"burl": {
+"id": "burl",
+"name": "Burl",
+"species": "Rootbound",
+"epithet": "The rootbound elder",
+"communication": "very slow speech, a few words at a time",
+"sprite": "burl",
+"frames": {
+"idle": [
+0,
+1
+],
+"asleep": 2,
+"drowsy": 3
+},
+"portrait": "burl",
+"movement": "rooted",
+"speed": 0,
+"solid": true,
+"talk_radius": 34,
+"traits": {
+"caution": 0.8,
+"curiosity": 0.2,
+"practicality": 0.5,
+"pride": 0.8,
+"warmth": 0.3
+},
+"weights": {
+"trust": 1.2,
+"familiarity": 0.6,
+"affection": 0.6,
+"respect": 1.6,
+"reliability": 1,
+"shared": 0.8
+},
+"memory": {
+"trees_cut": 1.6,
+"against_wish": 1.4,
+"lied": 1.5,
+"witnessed": 1.2
+},
+"appearance": "A great stump with a face in the bark, knotholes for eyes, a beard of moss, and a sapling of its own growing from its crown.",
+"description": "At the west edge of the clearing there is a stump that is too old, and too wide, and sometimes it is facing a different way.",
+"background": "Burl was the oldest oak in the valley before it was cut. It did not agree to stop. It grew a new tree out of its own top instead.",
+"secret": "The people who cut Burl down sat on it afterward and ate their lunch. It remembers what they talked about. It has never told anyone.",
+"interests": [
+[
+"trees",
+"Every tree in the valley, by name"
+],
+[
+"seasons",
+"The turning of the year"
+],
+[
+"slowness",
+"Slowness"
+]
+],
+"dislikes": [
+[
+"axes",
+"Axes"
+],
+[
+"lies",
+"Being told one thing and shown another"
+]
+],
+"habits": "Never moves. Awake from dawn to dusk, asleep at night. Through winter it barely wakes, and only at noon on clear days.",
+"schedule": [
+{
+"when": {
+"season": [
+"winter"
+],
+"weather": [
+"clear"
+]
+},
+"frm": 11,
+"to": 14,
+"at": "burl_home",
+"act": "barely stirring"
+},
+{
+"when": {
+"season": [
+"winter"
+]
+},
+"frm": 0,
+"to": 24,
+"at": "burl_home",
+"act": "asleep for the winter",
+"asleep": true
+},
+{
+"when": {
+"weather": [
+"rain"
+]
+},
+"frm": 6,
+"to": 20,
+"at": "burl_home",
+"act": "drinking the rain"
+},
+{
+"frm": 5,
+"to": 8,
+"at": "burl_home",
+"act": "drinking the dew"
+},
+{
+"frm": 8,
+"to": 17,
+"at": "burl_home",
+"act": "sunning its bark"
+},
+{
+"frm": 17,
+"to": 20,
+"at": "burl_home",
+"act": "listening to the birds settle"
+},
+{
+"frm": 0,
+"to": 24,
+"at": "burl_home",
+"act": "asleep",
+"asleep": true
+}
+],
+"climate": [
+{
+"when": {
+"weather": [
+"rain"
+]
+},
+"mood": "happy",
+"cause": "rain at its roots"
+},
+{
+"when": {
+"trees_cut_recent": 2
+},
+"mood": "suspicious",
+"cause": "the sound of axes"
+}
+],
+"baseline": "relaxed",
+"gifts": {
+"loves": [
+"heartwood_seed",
+"seeds_wild",
+"moss",
+"rowan_berry"
+],
+"likes": [
+"fern_frond",
+"mushroom_brown",
+"clay",
+"yarrow",
+"moondew"
+],
+"dislikes": [
+"log",
+"plank",
+"hardwood",
+"bark",
+"coal",
+"scrap_metal"
+]
+},
+"greet": [
+{
+"id": "b_first",
+"text": "...Hm. ... Something small. ... Walking. ... They always walk.",
+"when": {
+"met": false
+}
+},
+{
+"id": "b_g_dawn",
+"text": "...Dew. ... Good dew today. ... Sit.",
+"when": {
+"period": [
+"dawn"
+]
+}
+},
+{
+"id": "b_g_rain",
+"text": "...Rain. ... Ah. ... Rain.",
+"when": {
+"weather": [
+"rain"
+]
+},
+"expr": "glad"
+},
+{
+"id": "b_g_axe",
+"text": "...You smell of cut wood. ... I know that smell.",
+"when": {
+"cut_today": true
+},
+"expr": "troubled"
+},
+{
+"id": "b_g_suspicious",
+"text": "...The axes again. ... I hear them in my roots.",
+"when": {
+"mood": [
+"suspicious"
+]
+},
+"expr": "troubled"
+},
+{
+"id": "b_g_winter",
+"text": "...Cold. ... Speak. ... Quickly. ... For me, that is quickly.",
+"when": {
+"season": [
+"winter"
+]
+}
+},
+{
+"id": "b_g_absent",
+"text": "...You were away. ... {absent} days. ... That is nothing. ... I noticed.",
+"when": {
+"absent": 5,
+"bond": "acquainted"
+},
+"w": 3
+},
+{
+"id": "b_g_plain",
+"text": "...The small walker. ... Again.",
+"when": {
+"met": true
+}
+}
+],
+"chat": [
+{
+"id": "b_c_rings",
+"text": "...I have four hundred and twelve rings. ... Or thirteen. ... I lost count in a dry year.",
+"fact": "rings",
+"when": {
+"bond": "acquainted"
+},
+"w": 2
+},
+{
+"id": "b_c_names",
+"text": "...That oak by your tent. ... Her name is long. ... You would not finish saying it.",
+"learn": "trees",
+"w": 1.5
+},
+{
+"id": "b_c_autumn",
+"text": "...The birches go first. ... Then the oaks. ... The pines pretend nothing is happening.",
+"when": {
+"season": [
+"autumn"
+]
+},
+"learn": "seasons"
+},
+{
+"id": "b_c_spring",
+"text": "...The sapling on my head woke before I did. ... Rude.",
+"when": {
+"season": [
+"spring"
+]
+}
+},
+{
+"id": "b_c_slow",
+"text": "...You talk fast. ... Everything young talks fast. ... Rivers too.",
+"learn": "slowness"
+},
+{
+"id": "b_c_burrling",
+"text": "...The small chestnut one. ... Pip. ... It talks to me all day. ... I listen to every third word.",
+"when": {
+"met_char": "pip"
+}
+}
+],
+"recall": [
+{
+"id": "b_r_lied",
+"text": "...You told me you {mem.detailText}. ... Then I heard the axe. ... Twice. ... Do not do that.",
+"mem": {
+"type": "lied",
+"min_age": 0
+},
+"w": 8,
+"expr": "troubled"
+},
+{
+"id": "b_r_cut",
+"text": "...You cut {mem.count} trees since we met. ... I know each one. ... I do not forgive. ... I only remember.",
+"mem": {
+"type": "trees_cut",
+"min_age": 0,
+"sig": 0.4
+},
+"w": 4,
+"expr": "troubled"
+},
+{
+"id": "b_r_morel",
+"text": "...The lantern morel. ... You {mem.detailText}. ... The forest heard.",
+"mem": {
+"type": [
+"witnessed",
+"against_wish"
+],
+"tags": [
+"morel"
+]
+},
+"w": 5
+},
+{
+"id": "b_r_fact",
+"text": "...You remembered my rings. ... Hm. ... I will remember that you remembered.",
+"mem": {
+"type": "fact_mentioned",
+"min_age": 1
+},
+"w": 3,
+"expr": "glad"
+},
+{
+"id": "b_r_promise",
+"text": "...You came. ... Three days. ... As you said. ... The sapling grew a leaf.",
+"mem": {
+"type": "promise_kept",
+"min_age": 0
+},
+"w": 5,
+"expr": "glad"
+},
+{
+"id": "b_r_broken",
+"text": "...You said you would watch the sapling. ... The sapling watched for you.",
+"mem": {
+"type": "promise_broken",
+"min_age": 0
+},
+"w": 6,
+"expr": "troubled"
+},
+{
+"id": "b_r_birch",
+"text": "...The birches. ... You {mem.detailText}. ... {mem.outcomeText}",
+"mem": {
+"type": "quest_choice",
+"tags": [
+"birches"
+]
+},
+"w": 5
+},
+{
+"id": "b_r_gift",
+"text": "...The {mem.itemName}. ... I put it at my roots. ... It is growing.",
+"mem": {
+"type": "gift_loved",
+"min_age": 2
+},
+"w": 3
+},
+{
+"id": "b_r_advice",
+"text": "...You told me to {mem.adviceShort}. ... {mem.outcomeText}",
+"mem": {
+"type": "advice_outcome",
+"min_age": 0
+},
+"w": 4
+}
+],
+"asleep": [
+{
+"id": "b_s1",
+"text": "The knotholes are closed. Sap moves somewhere very deep, very slowly."
+},
+{
+"id": "b_s2",
+"text": "The stump is asleep. Its moss beard moves a little with its breathing, or with the wind."
+}
+],
+"tells": [
+{
+"id": "axe",
+"ask": "...Do you cut trees, small walker?",
+"when": {
+"met_days": 0
+},
+"options": [
+{
+"text": "Yes. I need the wood.",
+"value": "cut trees because you need the wood",
+"claim": "honest",
+"rel": {
+"trust": 3,
+"respect": 2
+}
+},
+{
+"text": "Only fallen ones.",
+"value": "only take fallen wood",
+"claim": "fallen",
+"rel": {
+"respect": 2
+}
+},
+{
+"text": "Never.",
+"value": "never cut trees",
+"claim": "never",
+"rel": {
+"affection": 2
+}
+}
+]
+}
+],
+"facts": [
+{
+"id": "rings",
+"learn_line": "b_c_rings",
+"mention": "Four hundred and twelve rings. Or thirteen?",
+"when": {
+"met_days": 1
+},
+"react": "...Thirteen. ... I decided. ... Because you asked."
+}
+],
+"gift_lines": {
+"loved": [
+"...{item}. ... For my roots. ... Yes."
+],
+"liked": [
+"...{item}. ... Good."
+],
+"neutral": [
+"...{item}. ... Hm."
+],
+"disliked": [
+"...That is one of mine. ... Cut. ... Take it away."
+],
+"repeat": [
+"...Another {item}. ... You brought one {mem.ago}. ... I am still deciding about that one."
+],
+"sleepy": [
+"The stump is asleep. You leave the gift at its roots."
+]
+},
+"concerns": [
+{
+"id": "wake_spring",
+"when": {
+"bond": "acquainted",
+"met_days": 3
+},
+"lean": "compromise",
+"resists": "encourage",
+"intro": "...Every spring I wake a little less. ... Should I keep waking? ... Or let the sapling on my crown have the light?",
+"ask": "What would the sapling need?",
+"reveal": "...Light. ... Time. ... Someone to keep the deer off it. ... There are no deer anymore. ... I forget that.",
+"options": {
+"encourage": "Keep waking. The forest needs your memory.",
+"reassure": "Rest. You've earned it.",
+"compromise": "Wake for the days that matter.",
+"practical": "I'll watch the sapling for you. Three days."
+},
+"promise": {
+"stance": "practical",
+"what": "visit Burl on three different days",
+"days": 6,
+"check": {
+"visit_days": 3
+}
+},
+"reactions": {
+"accept": [
+"...Yes. ... That is right."
+],
+"consider": [
+"...Hm. ... I will think. ... Come back next year."
+],
+"reject": [
+"...No. ... You are young. ... You think everything should go on."
+]
+},
+"followup": {
+"days": 4,
+"outcomes": {
+"compromise": [
+"good",
+"...I slept through the dull days. ... I woke for the rain. ... It was a good choice."
+],
+"reassure": [
+"good",
+"...I rested. ... The sapling grew. ... I dreamed of being a seed."
+],
+"encourage": [
+"mixed",
+"...I stayed awake. ... I am very tired. ... But I saw the swallows come back."
+],
+"practical": [
+"promise",
+"...You came. Three days. ... As you said. ... The sapling grew a leaf.|...You said you would watch the sapling. ... The sapling watched for you."
+]
+}
+}
+}
+],
+"quest": {
+"id": "birches",
+"title": "The Grey Birches",
+"stages": [
+{
+"id": "ask",
+"when": {
+"respect": 8,
+"period": [
+"dawn",
+"day",
+"dusk"
+]
+},
+"talk": "...The birches. ... Their bark is greying in spots. ... Like lichen. ... Not lichen. ... The three at the west edge. ... Touch the bark. ... Come back.",
+"journal": "Burl wants you to touch the bark of the three birches at the west edge, by day.",
+"objective": {
+"type": "visit_all",
+"at": [
+"birch_a",
+"birch_b",
+"birch_c"
+],
+"radius": 26,
+"period": [
+"dawn",
+"day",
+"dusk"
+],
+"found": "The bark under your hand is cold and dry, and comes away grey on your fingers."
+}
+},
+{
+"id": "decide",
+"talk": "...Cold. ... Dry. ... I was afraid of that. ... What would you do?",
+"journal": "Advise Burl about the grey birches.",
+"objective": {
+"type": "choice",
+"options": [
+{
+"id": "cut",
+"text": "Cut the sick ones before it spreads.",
+"result": "mixed",
+"line_by_trust": {
+"high": "...You would cut them. ... I hear why. ... I hate it. ... Do it, then. ... Quickly.",
+"low": "...No. ... You would. ... I know."
+},
+"rel": {
+"respect": -2,
+"trust": 1
+},
+"tags": [
+"birches"
+],
+"detail": "said to cut the sick birches"
+},
+{
+"id": "ash",
+"text": "Burn fallen branches and spread the ash at their roots.",
+"needs": {
+"branch": 4,
+"coal": 1
+},
+"result": "good",
+"line": "...Ash. ... Old remedy. ... The birches will drink it. ... You know more than you look.",
+"rel": {
+"respect": 5,
+"trust": 3
+},
+"tags": [
+"birches"
+],
+"detail": "spread ash at their roots"
+},
+{
+"id": "leave",
+"text": "Leave them. The forest knows what to do.",
+"result": "mixed",
+"line": "...Yes. ... And no. ... One will go grey all through. ... The other two may drink the rain. ... We will see.",
+"rel": {
+"respect": 3
+},
+"tags": [
+"birches"
+],
+"detail": "left them to the forest"
+}
+]
+}
+}
+],
+"complete": "...The birches. ... Better. ... Come in spring. ... See.",
+"reward_secret": true
+}
+},
+"tessel": {
+"id": "tessel",
+"name": "Tessel",
+"species": "Survey unit",
+"epithet": "The mechanical wanderer",
+"communication": "precise speech, numbered, socially awkward",
+"sprite": "tessel",
+"frames": {
+"idle": [
+0,
+2
+],
+"walk": [
+0,
+1,
+2,
+3
+]
+},
+"portrait": "tessel",
+"movement": "walk",
+"speed": 18,
+"solid": false,
+"talk_radius": 28,
+"traits": {
+"caution": 0.4,
+"curiosity": 0.8,
+"practicality": 0.95,
+"pride": 0.5,
+"warmth": 0.3
+},
+"weights": {
+"trust": 1,
+"familiarity": 0.8,
+"affection": 0.6,
+"respect": 1,
+"reliability": 1.7,
+"shared": 0.9
+},
+"memory": {
+"promise_kept": 1.4,
+"promise_broken": 1.6,
+"showed": 1.1,
+"quest_help": 1.2
+},
+"appearance": "A rusted survey dome on three jointed legs, one big lens, an antenna with a scrap of red cloth. Moss and a small white flower grow on its back.",
+"description": "Something clicks and whirs among the ruin stones, counting them.",
+"background": "Tessel was built to measure the valley before the flood. It finished the survey. Nobody came to collect it. It started again.",
+"secret": "Tessel's record zero is a woman laughing at a kettle. Tessel does not know who she was. It has never deleted it.",
+"interests": [
+[
+"machines",
+"Mechanical objects of every kind"
+],
+[
+"measuring",
+"Counting and measuring"
+],
+[
+"weather",
+"Weather data"
+],
+[
+"people",
+"People, which it finds confusing"
+]
+],
+"dislikes": [
+[
+"rain",
+"Rain: rust"
+],
+[
+"vague",
+"Vague answers"
+]
+],
+"habits": "Tinkers in the ruin in the morning, surveys the path junction before noon, reads the signpost in the afternoon, powers down in the arch at night. Shelters from rain.",
+"schedule": [
+{
+"when": {
+"weather": [
+"rain"
+]
+},
+"frm": 0,
+"to": 24,
+"at": "ruin_arch",
+"act": "sheltering from the rain"
+},
+{
+"frm": 7,
+"to": 10,
+"at": "ruin_floor",
+"act": "tinkering with salvaged parts"
+},
+{
+"frm": 10,
+"to": 13,
+"at": "junction",
+"act": "surveying the path (counting stones)"
+},
+{
+"frm": 13,
+"to": 16,
+"at": "sign",
+"act": "reading the signpost, again"
+},
+{
+"frm": 16,
+"to": 19,
+"at": "ruin_floor",
+"act": "sorting what it found"
+},
+{
+"frm": 0,
+"to": 24,
+"at": "ruin_arch",
+"act": "in low-power mode",
+"drowsy": true
+}
+],
+"climate": [
+{
+"when": {
+"weather": [
+"rain"
+]
+},
+"mood": "worried",
+"cause": "humidity 94 percent"
+},
+{
+"when": {
+"weather": [
+"clear"
+],
+"period": [
+"day"
+]
+},
+"mood": "curious",
+"cause": "good surveying weather"
+}
+],
+"baseline": "curious",
+"gifts": {
+"loves": [
+"rusted_gear",
+"circuit",
+"battery",
+"wire",
+"bolt",
+"key_old"
+],
+"likes": [
+"scrap_metal",
+"copper_ore",
+"iron_ingot",
+"glass_shard",
+"quartz",
+"nails",
+"hinge"
+],
+"dislikes": [
+"mud",
+"moss",
+"cat:fish",
+"blackberry"
+]
+},
+"shows": {
+"cats": [
+"abandoned"
+],
+"label": "Show it something old"
+},
+"greet": [
+{
+"id": "t_first",
+"text": "Greeting. You are the human-shaped unit. Correction: the human. Apologies. My social routines are at thirty-one percent. I am Tessel.",
+"when": {
+"met": false
+}
+},
+{
+"id": "t_g_rain",
+"text": "Query: why does it rain? Answer: to test me. I am remaining in the arch.",
+"when": {
+"weather": [
+"rain"
+]
+},
+"expr": "troubled"
+},
+{
+"id": "t_g_night",
+"text": "Low-power mode. Speak slowly. Correction: speak normally. I will be slow.",
+"when": {
+"drowsy": true
+}
+},
+{
+"id": "t_g_survey",
+"text": "Today the path has six hundred and twelve stones. Yesterday it had six hundred and eleven. One of them is you.",
+"when": {
+"at": [
+"junction"
+]
+}
+},
+{
+"id": "t_g_absent",
+"text": "You were absent for {absent} days. I logged it. I logged it more times than necessary.",
+"when": {
+"absent": 3,
+"bond": "acquainted"
+},
+"w": 3
+},
+{
+"id": "t_g_plain",
+"text": "Greeting again. Recognition: one hundred percent.",
+"when": {
+"met": true
+}
+}
+],
+"chat": [
+{
+"id": "t_c_activation",
+"text": "Fact: every ninth day I run a full diagnostic. It is my activation cycle. Nobody has observed it.",
+"fact": "activation",
+"when": {
+"bond": "acquainted"
+},
+"w": 2
+},
+{
+"id": "t_c_survey",
+"text": "I measured the valley before the flood. The valley was 11.4 kilometres long. Now it is 11.4 kilometres long and full of water.",
+"learn": "measuring"
+},
+{
+"id": "t_c_people",
+"text": "Observation: people say \"fine\" when they are not fine. I have recorded this. I do not yet understand it.",
+"learn": "people"
+},
+{
+"id": "t_c_weather",
+"text": "Weather report: {weather}. Confidence: high. I say it out loud because there used to be listeners.",
+"learn": "weather"
+},
+{
+"id": "t_c_moss",
+"text": "There is a flower growing on my back. I have not removed it. I am conducting a long experiment called \"letting it\"."
+},
+{
+"id": "t_c_sign",
+"text": "The signpost says four places. I have been to all of them. Two are underwater. The sign does not know.",
+"when": {
+"at": [
+"sign"
+]
+}
+}
+],
+"recall": [
+{
+"id": "t_r_promise_broken",
+"text": "You know, I kept that little space open on my workbench. For the {mem.detailText}. I suppose you found something more interesting to do.",
+"mem": {
+"type": "promise_broken",
+"min_age": 0
+},
+"w": 8,
+"expr": "troubled"
+},
+{
+"id": "t_r_promise_kept",
+"text": "Status: you said you would bring the {mem.detailText}, and you did. Reliability rating revised upward. I do not do that often.",
+"mem": {
+"type": "promise_kept",
+"min_age": 0
+},
+"w": 5,
+"expr": "glad"
+},
+{
+"id": "t_r_function",
+"text": "Earlier you told me your function is: \"{mem.detailText}\". I have thought about it for {mem.agoHours} hours. It is a good function.",
+"mem": {
+"type": "told",
+"key": "function",
+"min_age": 1
+},
+"w": 3
+},
+{
+"id": "t_r_show",
+"text": "I still have the scan of the {mem.itemName} you showed me. I look at it during low-power mode. That is not efficient. I do it anyway.",
+"mem": {
+"type": "showed",
+"min_age": 1
+},
+"w": 3
+},
+{
+"id": "t_r_parts",
+"text": "Inventory of parts you have brought me: {quest.partsList}. I remember each delivery. I do not usually remember deliveries.",
+"mem": {
+"type": "quest_help",
+"tags": [
+"parts"
+]
+},
+"w": 4
+},
+{
+"id": "t_r_fact",
+"text": "You observed my activation cycle. Logged. Logged again. Saving to protected memory.",
+"mem": {
+"type": "fact_mentioned",
+"min_age": 0
+},
+"w": 4,
+"expr": "glad"
+},
+{
+"id": "t_r_gift",
+"text": "The {mem.itemName} you gave me is now part of my left leg. You are, technically, in my left leg.",
+"mem": {
+"type": "gift_loved",
+"min_age": 1
+},
+"w": 3
+},
+{
+"id": "t_r_advice",
+"text": "You advised me to {mem.adviceShort}. Result: {mem.outcomeText}",
+"mem": {
+"type": "advice_outcome",
+"min_age": 0
+},
+"w": 4
+}
+],
+"asleep": [
+{
+"id": "t_s1",
+"text": "Its lens is dark. A slow green light blinks on its side: low power."
+}
+],
+"tells": [
+{
+"id": "function",
+"ask": "Query: what is your function? Mine was surveying. I am asking to understand yours.",
+"when": {
+"met_days": 0
+},
+"options": [
+{
+"text": "To survive.",
+"value": "to survive",
+"rel": {
+"respect": 1
+}
+},
+{
+"text": "To make things.",
+"value": "to make things",
+"rel": {
+"respect": 2
+}
+},
+{
+"text": "To look after this place.",
+"value": "to look after this place",
+"rel": {
+"trust": 2,
+"affection": 1
+}
+},
+{
+"text": "I don't have one.",
+"value": "to not have one",
+"rel": {
+"affection": 2
+}
+}
+]
+}
+],
+"facts": [
+{
+"id": "activation",
+"learn_line": "t_c_activation",
+"mention": "Is today a diagnostic day? Happy activation.",
+"when": {
+"day_mod": 9
+},
+"react": "... Diagnostic interrupted. Reason: unexpected kindness. Resuming. ... Thank you. That is the correct phrase. I checked."
+}
+],
+"gift_lines": {
+"loved": [
+"A {item}. Analysis: excellent. Gratitude: also excellent.",
+"{item}. I will integrate this. You will be part of a machine now. That is a compliment."
+],
+"liked": [
+"{item}. Useful. Logged."
+],
+"neutral": [
+"{item}. Purpose unknown. I will run tests."
+],
+"disliked": [
+"{item}. That will cause corrosion. Declining. Politely. Was that polite? I am still calibrating."
+],
+"repeat": [
+"A second {item}. The first arrived {mem.ago}. Duplicate logged. Still appreciated."
+],
+"sleepy": [
+"It is in low-power mode. You set the gift beside it; a green light blinks once."
+]
+},
+"show_lines": {
+"new": [
+"Scanning. A {item}. Pre-flood. I have a record of these. I did not have a record of you holding one."
+],
+"seen": [
+"A {item}. Logged before. Logged again."
+],
+"rare": [
+"A {item}! That is very old. Older than me. That is difficult to be."
+]
+},
+"concerns": [
+{
+"id": "memory_banks",
+"when": {
+"bond": "acquainted",
+"met_days": 2
+},
+"lean": "practical",
+"resists": "reassure",
+"intro": "Query. My storage is ninety-eight point six percent full. To record new things I must erase old ones. Which should I keep: the old world, or you? Rephrase: old records, or new ones.",
+"ask": "What are your oldest records?",
+"reveal": "Record zero: a woman laughing at a kettle. I do not know who she was. I do not know why I kept it.",
+"options": {
+"encourage": "Make new memories. Let the old ones go.",
+"reassure": "Keep the old world. It matters.",
+"compromise": "Write the old ones down somewhere, then make room.",
+"practical": "I'll find you another battery for storage."
+},
+"promise": {
+"stance": "practical",
+"what": "battery",
+"days": 5,
+"check": {
+"give": "battery"
+}
+},
+"reactions": {
+"accept": [
+"Recommendation accepted. Logging the reason: you said it."
+],
+"consider": [
+"Processing. This may take several days. That is normal for me."
+],
+"reject": [
+"Recommendation declined. Not because it is wrong. Because it is not mine."
+]
+},
+"followup": {
+"days": 2,
+"outcomes": {
+"compromise": [
+"good",
+"I described the old records to the signpost. The signpost has excellent storage. Then I made room. I still have record zero."
+],
+"practical": [
+"promise",
+"The battery doubled my storage. I kept everything. I kept you.|I did not erase anything while I waited for the battery. Nothing new could be saved. Including today."
+],
+"encourage": [
+"mixed",
+"I erased the oldest records. I do not remember what they were. That is the point. I think it is the point."
+],
+"reassure": [
+"bad",
+"I kept the old records. There is no room left for new ones. I will not remember this conversation. I am sorry."
+]
+}
+}
+}
+],
+"quest": {
+"id": "beacon",
+"title": "Reassembly",
+"stages": [
+{
+"id": "ask",
+"when": {
+"familiarity": 10
+},
+"talk": "Project: Beacon. A device that told the weather to anyone listening. Parts missing: rusted gear, circuit, wire (two), battery. Will you assist? This is a request, not a command. I am told those feel different.",
+"journal": "Bring Tessel the parts for its beacon: a rusted gear, a circuit, two wires and a battery.",
+"objective": {
+"type": "deliver",
+"items": {
+"rusted_gear": 1,
+"circuit": 1,
+"wire": 2,
+"battery": 1
+}
+},
+"accept": "I will bring them.",
+"promise": {
+"what": "beacon parts",
+"days": 6
+}
+},
+{
+"id": "decide",
+"talk": "Beacon assembled. It needs a purpose. Options: weather, like before; music, from the old records; or a call. Simple. \"Someone is here.\" What should it do?",
+"journal": "Help Tessel decide what the beacon should do.",
+"objective": {
+"type": "choice",
+"agency": true,
+"options": [
+{
+"id": "weather",
+"text": "The weather, like it used to.",
+"result": "good",
+"line": "Agreed. That was its purpose. Things should be allowed to keep their purpose.",
+"rel": {
+"respect": 3,
+"reliability": 2
+}
+},
+{
+"id": "music",
+"text": "Music. Whatever it has.",
+"result": "good",
+"line": "Analysis: the beacon has one song. It is about a river. I will play it at dusk. You may listen. That is an invitation.",
+"rel": {
+"affection": 4,
+"shared": 3
+}
+},
+{
+"id": "call",
+"text": "A call. \"Someone is here.\"",
+"result": "mixed",
+"line": "Risk assessment: unknown. Curiosity: very high. I will send it once a day. If something answers, I will tell you first.",
+"rel": {
+"trust": 4
+}
+}
+]
+}
+}
+],
+"complete": "The beacon pings at dusk. I do not know who hears it. That is acceptable. It is better than not pinging.",
+"reward_secret": true
+}
+},
+"lull": {
+"id": "lull",
+"name": "Lull",
+"species": "Fogling",
+"epithet": "The dreaming creature",
+"communication": "pictures; it shows rather than speaks",
+"sprite": "lull",
+"frames": {
+"idle": [
+0,
+1,
+2,
+3
+],
+"awake": 4
+},
+"portrait": "lull",
+"movement": "float",
+"speed": 8,
+"solid": false,
+"talk_radius": 36,
+"pictures": true,
+"traits": {
+"caution": 0.2,
+"curiosity": 0.7,
+"practicality": 0.1,
+"pride": 0.1,
+"warmth": 0.8
+},
+"weights": {
+"trust": 1,
+"familiarity": 1,
+"affection": 1.3,
+"respect": 0.6,
+"reliability": 0.7,
+"shared": 1.5
+},
+"memory": {
+"showed": 1.6,
+"witnessed": 1.4,
+"discovery": 1.2
+},
+"appearance": "A curled drift of mist and pollen, many small eyes mostly closed, a long tail of fog behind it.",
+"description": "On foggy mornings there is a piece of fog in the meadow that drifts against the wind.",
+"background": "Lull is half asleep all the time. It shows you pictures from its dreams, and some of them are memories.",
+"secret": "Lull is what remains of the reservoir's last summer: the mist that rose off the water the day the valley flooded. Its pictures are that town's last afternoon.",
+"interests": [
+[
+"pictures",
+"Pictures, and old things that hold them"
+],
+[
+"bells",
+"Bellflowers, and the sound they almost make"
+],
+[
+"weather",
+"Fog, snow, the hour after rain"
+]
+],
+"dislikes": [
+[
+"wind",
+"Wind"
+]
+],
+"habits": "Only in fog, in snow, or at dawn after rain. Drifts over the meadow and the pond bank.",
+"schedule": [
+{
+"when": {
+"weather": [
+"fog"
+]
+},
+"frm": 0,
+"to": 24,
+"at": "meadow",
+"act": "drifting over the meadow",
+"wander": [
+"meadow",
+"pond_bank",
+"lone_rowan"
+]
+},
+{
+"when": {
+"weather": [
+"snow"
+]
+},
+"frm": 8,
+"to": 18,
+"at": "north_glade",
+"act": "watching the snow fall upward",
+"wander": [
+"north_glade",
+"lone_rowan"
+]
+},
+{
+"when": {
+"after_rain": true
+},
+"frm": 4.5,
+"to": 8.5,
+"at": "lone_rowan",
+"act": "dreaming under the rowan"
+},
+{
+"frm": 0,
+"to": 24,
+"at": null,
+"act": "dreaming somewhere else"
+}
+],
+"climate": [
+{
+"when": {
+"weather": [
+"fog"
+]
+},
+"mood": "happy",
+"cause": "fog, its favourite"
+},
+{
+"when": {
+"wind": 0.5
+},
+"mood": "worried",
+"cause": "the wind pulls at it"
+}
+],
+"baseline": "relaxed",
+"gifts": {
+"loves": [
+"bellflower",
+"photo",
+"moondew",
+"nightlily",
+"feather"
+],
+"likes": [
+"daisy",
+"tin_cup",
+"eggshell",
+"luminous_spores",
+"mint"
+],
+"dislikes": [
+"coal",
+"scrap_metal"
+]
+},
+"shows": {
+"cats": [
+"abandoned",
+"rare_find"
+],
+"label": "Show it something"
+},
+"greet": [
+{
+"id": "l_first",
+"text": "*It shows you a picture: your own face, but blurred, as if seen through water.* (It has noticed you.)",
+"pics": [
+"moondew"
+],
+"when": {
+"met": false
+}
+},
+{
+"id": "l_g_fog",
+"text": "*A picture of a field of white, and something small and happy in the middle of it.* (It loves the fog.)",
+"pics": [
+"mint"
+],
+"when": {
+"weather": [
+"fog"
+]
+},
+"expr": "glad"
+},
+{
+"id": "l_g_snow",
+"text": "*It shows you snow falling \u2014 upward, slowly, back into the sky.*",
+"when": {
+"weather": [
+"snow"
+]
+}
+},
+{
+"id": "l_g_dawn",
+"text": "*A picture of the rowan with every leaf holding a drop of rain, and in each drop, a tiny sun.*",
+"pics": [
+"rowan_berry"
+],
+"when": {
+"period": [
+"dawn"
+]
+}
+},
+{
+"id": "l_g_absent",
+"text": "*It shows you an empty path, many times over, each time a little more faded.* (You were gone {absent} days.)",
+"when": {
+"absent": 3,
+"bond": "acquainted"
+},
+"w": 3,
+"expr": "troubled"
+},
+{
+"id": "l_g_plain",
+"text": "*It opens two of its small eyes, which it does not do for everyone.*",
+"when": {
+"met": true
+},
+"expr": "glad"
+}
+],
+"chat": [
+{
+"id": "l_c_bells",
+"text": "*A picture of a bellflower, and then the sound of a very small bell, though nothing rang.*",
+"pics": [
+"bellflower"
+],
+"fact": "bells",
+"w": 2
+},
+{
+"id": "l_c_town",
+"text": "*Houses. A street. A boy on a bicycle. Then water, slowly, over all of it, and the picture goes still.*",
+"pics": [
+"photo"
+],
+"when": {
+"bond": "friendly"
+},
+"learn": "pictures"
+},
+{
+"id": "l_c_pond",
+"text": "*The pond, but much larger, with lights along its edge.*",
+"pics": [
+"nightlily"
+]
+},
+{
+"id": "l_c_wind",
+"text": "*A picture of itself pulled into long threads.* (It does not like wind.)",
+"learn": "wind",
+"when": {
+"wind": 0.3
+}
+},
+{
+"id": "l_c_you",
+"text": "*You, sitting by your fire. Then you again, smaller, from far away.* (It watches you sometimes.)",
+"when": {
+"bond": "acquainted"
+}
+}
+],
+"recall": [
+{
+"id": "l_r_show",
+"text": "*It shows you the {mem.itemName} you showed it, {mem.ago}, and then a picture that came after: {mem.fragment}*",
+"mem": {
+"type": "showed",
+"min_age": 1,
+"tags": [
+"fragment"
+]
+},
+"w": 5
+},
+{
+"id": "l_r_fact",
+"text": "*It shows you yourself holding out a bellflower, and the small bell sound again, louder.* (It remembers that you remembered.)",
+"pics": [
+"bellflower"
+],
+"mem": {
+"type": "fact_mentioned",
+"min_age": 0
+},
+"w": 3,
+"expr": "glad"
+},
+{
+"id": "l_r_gift",
+"text": "*A picture of the {mem.itemName} you gave it, floating inside it, safe.*",
+"mem": {
+"type": "gift_loved",
+"min_age": 1
+},
+"w": 3
+},
+{
+"id": "l_r_shared",
+"text": "*It shows the day you both watched {mem.detailText}. In its picture you are smiling. You were.*",
+"mem": {
+"type": "witnessed",
+"min_age": 1
+},
+"w": 4
+},
+{
+"id": "l_r_advice",
+"text": "*It shows you the answer you gave.* ({mem.adviceShort}.) {mem.outcomeText}",
+"mem": {
+"type": "advice_outcome",
+"min_age": 0
+},
+"w": 4
+}
+],
+"asleep": [
+{
+"id": "l_s1",
+"text": "Only ordinary air here."
+}
+],
+"tells": [],
+"facts": [
+{
+"id": "bells",
+"learn_line": "l_c_bells",
+"mention": "You like bellflowers, don't you?",
+"when": {
+"met_days": 1
+},
+"react": "*Every one of its eyes opens at once. The bell sound comes again, and again.* (Yes. Yes.)"
+}
+],
+"gift_lines": {
+"loved": [
+"*It folds around the {item} until it is inside, and shows you a picture of you, bright at the edges.*"
+],
+"liked": [
+"*A small picture: the {item}, and a smile without a face.*"
+],
+"neutral": [
+"*It looks at the {item} for a long time and shows you nothing.*"
+],
+"disliked": [
+"*It shows you smoke, and draws back.*"
+],
+"repeat": [
+"*It shows you the other {item} you gave it, {mem.ago}, beside this one.*"
+],
+"sleepy": [
+"There is nothing here to give it to."
+]
+},
+"show_lines": {
+"new": [
+"*It looks at the {item}. Its eyes open, one by one.*"
+],
+"seen": [
+"*It has seen one before. It shows you that one.*"
+],
+"rare": [
+"*At the {item}, the whole fog of it holds still.*"
+]
+},
+"fragments": {
+"photo": "two people on the dock, younger than the dock",
+"key_old": "a green door with a bell above it",
+"tin_cup": "a kitchen, a kettle, someone laughing",
+"nightglass": "lights along a much bigger water",
+"moonstone": "a ring on a hand, the hand waving",
+"eggshell": "a garden of hens behind a fence",
+"glass_shard": "a window, then the same window under water",
+"starshard": "children counting stars from a roof"
+},
+"concerns": [
+{
+"id": "remember_forget",
+"when": {
+"bond": "acquainted",
+"met_days": 1
+},
+"lean": "compromise",
+"resists": "practical",
+"pics": [
+"photo"
+],
+"intro": "*It shows you a small grey cloud over a sad shape. Then the cloud gone, and the shape smiling, but blank.* (It is asking: is it better to remember sad things, or forget them?)",
+"ask": "Do you have sad memories?",
+"reveal": "*A door. Water rising past the handle. Then nothing at all.*",
+"options": {
+"encourage": "Remember them. They're yours.",
+"reassure": "It's alright to let them go.",
+"compromise": "Keep them, but don't carry them every day.",
+"practical": "I'll help you find the rest, and then you can decide."
+},
+"reactions": {
+"accept": [
+"*Every eye opens, then closes softly.* (Yes.)"
+],
+"consider": [
+"*It drifts in a slow circle.* (It is thinking.)"
+],
+"reject": [
+"*It shows you the blank shape again, and turns away.*"
+]
+},
+"followup": {
+"days": 2,
+"outcomes": {
+"compromise": [
+"good",
+"*It shows the sad picture, small, in one corner of a bright one.* (It kept it, but only in the corner.)"
+],
+"encourage": [
+"mixed",
+"*The sad pictures, all of them, very large. It is crying, if fog can.* (It remembers. It is heavy.)"
+],
+"reassure": [
+"mixed",
+"*It shows you a white field with nothing in it.* (It let them go. It does not know what it lost.)"
+],
+"practical": [
+"good",
+"*It shows you, holding each thing you showed it, one after another.* (It is ready to look.)"
+]
+}
+}
+}
+],
+"quest": {
+"id": "fogforgot",
+"title": "What the Fog Forgot",
+"stages": [
+{
+"id": "ask",
+"when": {
+"met_days": 0
+},
+"talk": "*It shows you three empty frames, with holes where the pictures should be.* (It has lost something and wants it back.)",
+"journal": "Show Lull old things: they wake pictures in it. Three fragments.",
+"objective": {
+"type": "fragments",
+"n": 3
+}
+},
+{
+"id": "decide",
+"talk": "*It shows you the three pictures together: {quest.fragments}.* (What were they?)",
+"journal": "Tell Lull what its pictures were.",
+"objective": {
+"type": "choice",
+"options": [
+{
+"id": "people",
+"text": "They were the people who lived here.",
+"result": "good",
+"line": "*It shows you the town again, and this time the people turn and wave.*",
+"rel": {
+"affection": 4,
+"shared": 4
+}
+},
+{
+"id": "drowned",
+"text": "It was the town under the reservoir.",
+"result": "mixed",
+"line": "*It goes very thin and grey, and drifts low over the grass for a long time.* (True. It hurts to be true.)",
+"rel": {
+"trust": 4,
+"respect": 2
+}
+},
+{
+"id": "now",
+"text": "It doesn't matter what it was. You're here now.",
+"result": "mixed",
+"line": "*It shows you the clearing, today, with you in it. It holds that picture a long time.*",
+"rel": {
+"affection": 3
+}
+}
+]
+}
+}
+],
+"complete": "*Now when it shows you the town, it shows you too, standing at the edge of it, looking.*",
+"reward_secret": true
+}
+}
+}
+}

@@ -1,0 +1,175 @@
+{
+ "results": [
+  {
+   "name": "six different daily routines",
+   "ok": true,
+   "detail": "{\"ebb\":[\"dock_end\",\"willow_shallows\",\"willow_shallows\",\"dock_end\",\"pond_centre\",\"pond_centre\"],\"pip\":[\"lone_rowan\",\"hollow_log\",\"meadow\",\"hollow_log\",\"hollow_log\",\"hollow_log\"],\"wick\":[\"-\",\"-\",\"-\",\"-\",\"lantern\",\"bridge\"],\"burl\":[\"burl_home\",\"burl_home\",\"burl_home\",\"burl_home\",\"burl_home\",\"burl_home\"],\"tessel\":[\"ruin_arch\",\"junction\",\"sign\",\"ruin_floor\",\"ruin_arch\",\"ruin_arch\"],\"lull\":[\"-\",\"-\",\"-\",\"-\",\"-\",\"-\"]}"
+  },
+  {
+   "name": "nocturnal and conditional inhabitants: Wick only at night, Lull absent on a clear day",
+   "ok": true,
+   "detail": "-,-,-,-,lantern,bridge / -,-,-,-,-,-"
+  },
+  {
+   "name": "weather and season change routines: rain shelter, fog brings Lull, winter ice",
+   "ok": true,
+   "detail": "oak_shelter | ruin_arch | false | pond_centre | false | true | meadow | asleep under the ice | breathing at the ice hole"
+  },
+  {
+   "name": "characters walk to their next place through the world, respecting collision",
+   "ok": true,
+   "detail": "388,338,602,330,6.7,0"
+  },
+  {
+   "name": "each character keeps its own memory; repeat visits consolidate into one record",
+   "ok": true,
+   "detail": "met,visit | met | 0 | 1 | 8"
+  },
+  {
+   "name": "memory is bounded and keeps the important records",
+   "ok": true,
+   "detail": "40,true"
+  },
+  {
+   "name": "Pip shares a concern; asking first reveals more; advice gets a reaction",
+   "ok": true,
+   "detail": "I want to go and see the north woods. The blue moss. But it's dark there, even in the day, and I'm... small. I'm very small. || The quiet. Here the pond talks all day. There, nothing talks. I'd be the only thing talking. || Yes. Yes! That's it. That's exactly it. || accept || compromise"
+  },
+  {
+   "name": "three days later Pip remembers the advice and says how it went",
+   "ok": true,
+   "detail": "You were gone 3 days! I counted. I'm not upset. I made a pile of leaves for every day. It's a big pile. || Daylight only, like you said! I found the blue moss! It doesn't glow in the day. I'm going back to see it glow."
+  },
+  {
+   "name": "later, ordinary talk recalls the advice with its real content",
+   "ok": true,
+   "detail": "You told me to go in daylight, and come back before dusk. Daylight only, like you said! I found the blue moss! It doesn't glow in the day. I'm going back to see it glow. || Mushrooms don't grow, they arrive. One morning, there they are. Like they walked in at night. || This hat's name is Fennel. Don't tell anyone. Hats get embarrassed."
+  },
+  {
+   "name": "a personal detail told to Pip comes back days later, tied to what you did today",
+   "ok": true,
+   "detail": "What do you like doing most? Tell me. I collect those too. >> You said you love fishing — and you caught a Roach today! I knew it. I knew it about you. || The mushrooms by the hollow log are mine. I mean, nobody owns mushrooms. But they are mine. || You told me to go in daylight, and come back before dusk. Daylight only, like you said! I found the blue moss! It doesn't glow in the day. I'm going back to see it glow."
+  },
+  {
+   "name": "Ebb recognises a second fish and recalls the first one by name",
+   "ok": true,
+   "detail": "A Roach! Look at the colour on it. I had not seen one in years. >> You found another one? I remember the Roach you showed me, 2 days ago. The water must be changing again."
+  },
+  {
+   "name": "a broken promise is remembered and comes up later in its own words",
+   "ok": true,
+   "detail": "Recommendation accepted. Logging the reason: you said it. >> broken >> 0 >> You know, I kept that little space open on my workbench. For the battery. I suppose you found something more interesting to do. || Weather report: clear. Confidence: high. I say it out loud because there used to be listeners. || There is a flower growing on my back. I have not removed it. I am conducting a long experiment called \"letting it\"."
+  },
+  {
+   "name": "the same character greets differently by hour, weather and absence",
+   "ok": true,
+   "detail": "Morning comes up out of the water here. Watch. ... There. That was it. || Rain! Every drop is a small visitor. I greet them all. It takes a while. || The moon is on the water. I am reading it. It mostly says the same thing, but slowly. || This is the hour the pond breathes out. Stand still and you can hear it. || You were gone 5 days. The pond noticed. I said nothing. The pond is a gossip."
+  },
+  {
+   "name": "chatting over several days does not repeat itself back to back",
+   "ok": true,
+   "detail": "...The sapling on my head woke before I did. ... Rude. || ...The small chestnut one. ... Pip. ... It talks to me all day. ... I listen to every third word. || ...That oak by your tent. ... Her name is long. ... You would not finish saying it. || ...You talk fast. ... Everything young talks fast. ... Rivers too. || ...The sapling on my head woke before I did. ... Rude. || ...The small chestnut one. ... Pip. ... It talks to me all day. ... I listen to every third word."
+  },
+  {
+   "name": "no single answer is right for everyone; trust changes how advice lands",
+   "ok": true,
+   "detail": "[{\"ebb\":\"0.00/0.35/0.80/0.44\",\"pip\":\"0.84/0.17/0.99/0.56\",\"wick\":\"-0.34/0.39/0.45/0.71\",\"burl\":\"-0.42/0.41/0.72/0.35\",\"tessel\":\"0.54/-0.26/0.45/0.92\",\"lull\":\"0.42/0.01/0.55/-0.24\"},0.6949999999999998,0.9449999999999998]"
+  },
+  {
+   "name": "a proud, cautious elder rejects being pushed",
+   "ok": true,
+   "detail": "...No. ... You are young. ... You think everything should go on. | reject"
+  },
+  {
+   "name": "relationships move on separate dimensions, each with a stated reason",
+   "ok": true,
+   "detail": "{\"day\":21,\"d\":{\"affection\":6,\"trust\":1},\"why\":\"you gave it Wild seeds (loved)\"}"
+  },
+  {
+   "name": "moods have causes and pass: rain cheers the pond elder, then it settles",
+   "ok": true,
+   "detail": "happy | rain on the pond | relaxed"
+  },
+  {
+   "name": "a broken promise leaves a lasting mood with its cause",
+   "ok": true,
+   "detail": "curious | its usual self"
+  },
+  {
+   "name": "the same gift: one loves it, one dislikes it; a repeat is noticed and recalled",
+   "ok": true,
+   "detail": "Moss. That will cause corrosion. Declining. Politely. Was that polite? I am still calibrating. >> -4 >> ...Moss. ... For my roots. ... Yes. >> 7 >> ...Another Moss. ... You brought one yesterday. ... I am still deciding about that one."
+  },
+  {
+   "name": "Ebb's storyline: observe fish, investigate the inflow at night, decide together",
+   "ok": true,
+   "detail": "The perch used to rise under the dock at dusk, seven or eight of them. Now two. I am old; maybe I count badly. Would you catch three different kinds from my pond and tell me? Not to keep. To know. >> true >> Three kinds: Perch, Bleak, Tench. So they are not gone. They are leaving. The inflow, then. Go and look at night, when the river talks louder. Take a light. >> true >> I will clear the old culvert myself. (needs 1 Plank) | Tessel knows those pipes. Let me ask it. | Let the river find its own way. It always has. | Not yet. >> Perhaps. Rivers are patient. So am I. Fewer perch this year, then. More the year after, if the river is kind. The perch rose under the dock tonight. Five of them. I counted twice. >> true >> true"
+  },
+  {
+   "name": "Lull's storyline: old objects wake its pictures; you name what they were",
+   "ok": true,
+   "detail": "true >> *It shows you the three pictures together: two people on the dock, younger than the dock; a green door with a bell above it; a kitchen, a kettle, someone laughing.* (What were they?) >> *It shows you the town again, and this time the people turn and wave.* *Now when it shows you the town, it shows you too, standing at the edge of it, looking.* >> true"
+  },
+  {
+   "name": "Burl's storyline: examine the birches, choose a remedy; some need materials",
+   "ok": true,
+   "detail": "true >> Cut the sick ones before it spreads. | Burn fallen branches and spread the ash at their roots. (needs 1 Coal) | Leave them. The forest knows what to do. | Not yet. >> ...Yes. ... And no. ... One will go grey all through. ... The other two may drink the rain. ... We will see. ...The birches. ... Better. ... Come in spring. ... See. >> true"
+  },
+  {
+   "name": "Tessel's storyline: parts arrive over several visits; the promise is kept; a decision",
+   "ok": true,
+   "detail": "Received: Rusted gear, Broken circuit board, Copper wire. Still needed: Copper wire (1), Old battery (1). >> All parts received. Assembling. Beacon assembled. It needs a purpose. Options: weather, like before; music, from the old records; or a call. Simple. \"Someone is here.\" What should it do? >> Analysis: the beacon has one song. It is about a river. I will play it at dusk. You may listen. That is an invitation. The beacon pings at dusk. I do not know who hears it. That is acceptable. It is better than not pinging. >> true >> 1"
+  },
+  {
+   "name": "Pip's storyline crosses into Burl's memory",
+   "ok": true,
+   "detail": "true >> It was right there under my own log the whole time! It glows like a tiny window. We sat with it. I will never forget sitting with it. Whenever I see something glow now, I think: maybe. >> true >> witnessed"
+  },
+  {
+   "name": "social journal shows profiles, relationship, reasons, storyline and diary",
+   "ok": true
+  },
+  {
+   "name": "save and load keep memories, relationships, quests, promises; reloading twice duplicates nothing",
+   "ok": true,
+   "detail": "13,13,true,true"
+  },
+  {
+   "name": "older saves without social data still load",
+   "ok": true,
+   "detail": "true,true"
+  },
+  {
+   "name": "after loading, characters still remember and still talk from memory",
+   "ok": true,
+   "detail": "Remember when you caught that Roach and I was right there? I tell everyone. Well, I tell the beetle. | 13"
+  },
+  {
+   "name": "from a fresh start, nobody recalls anything that did not happen (every recall is tied to a real, earlier memory)",
+   "ok": true,
+   "detail": "156 | 6 | 0 | 0 | met/visit"
+  },
+  {
+   "name": "a future AI voice is checked: a line citing a memory that does not exist is refused",
+   "ok": true,
+   "detail": "You said you love fishing — and you caught a Tench today! I knew it. I knew it about you. | 0"
+  },
+  {
+   "name": "works offline: no request leaves the machine",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "name": "touch: tap through a line and tap a choice on a phone",
+   "ok": true,
+   "detail": "[3,[1,1]]"
+  },
+  {
+   "name": "no page errors",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "passed": 34,
+ "total": 34
+}
