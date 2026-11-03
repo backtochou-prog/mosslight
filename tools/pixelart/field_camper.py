@@ -20,7 +20,7 @@ W, H = 16, 32
 OX, OY = 8, 31
 FACINGS = ['down', 'up', 'side', 'gather', 'fish', 'build', 'run_down', 'run_up', 'run_side', 'blink', 'hurt', 'sleep']
 FRAMES = ['idle0', 'idle1', 'walk0', 'walk1', 'walk2', 'walk3']
-IDLE_COLS, WALK_COLS, CONTACTS = [0, 1], [2, 3, 4, 5], [2, 4]
+IDLE_COLS, WALK_COLS, CONTACTS = [0, 1], [2, 3, 4, 5], [3, 5]          # footsteps when the raised foot comes down
 
 def r(f, k): return PAL.i(f, k)
 PALETTE = {
@@ -77,11 +77,13 @@ FRONT_LEGS = {  # rows 23..31: hands, belt, legs, boots
     'stand': ['..mSSmEdddEmSSm.', '..mscmdDDDdmscm.', '...mm.dDDdD.mm..', '.....odDoDdo....', '.....odDoDdo....', '....obBBoBBbo...', '....oBnBoBnBo...', '....ooooooooo...', '................'],
     'left':  ['..mSSmEdddEmSSm.', '..mscmdDDDdmscm.', '...mm.dDDdD.mm..', '.....odDoDdo....', '.....odDoBBo....', '....obBBoBnBo...', '....oBnBoooo....', '....ooooo.......', '................'],   # left foot forward and down, right foot lifts
     'right': ['..mSSmEdddEmSSm.', '..mscmdDDDdmscm.', '...mm.dDDdD.mm..', '.....odDoDdo....', '.....oBBoDdo....', '....oBnBobBBo...', '.....ooooBnBo...', '........ooooo...', '................'],
+    # foot up: the right knee comes up toward you, the boot lifts clear of the ground and shows its sole
+    'up':    ['..mSSmEdddEmSSm.', '..mscmdDDDdmscm.', '...mm.dDDdDd.mm.', '.....odDodDDo...', '.....odDobBBo...', '.....odDoBnBo...', '....obBBoooo....', '....oBnBo.......', '....ooooo.......'],
 }
 # arm swing (front): the hand on the stepping side moves back (up a row), the other forward
 def swing(rows, legs):
     """the hand on the side of the forward foot swings back (up a row), the other forward (down a row)"""
-    if legs == 'stand': return rows
+    if legs not in ('left', 'right'): return rows
     up, down = ((2, 6), (11, 15)) if legs == 'left' else ((11, 15), (2, 6))
     def shift(x0, x1, dy):
         src = [r[x0:x1] for r in rows]
@@ -160,6 +162,8 @@ SIDE_TOP = [
 SIDE_LEGS = {
     'stand':  ['.....oommSSm....', '.....odDmscm....', '.....odDDmmo....', '.....odDDDo.....', '.....odDDDo.....', '.....obBBBBo....', '.....oBnBBBBo...', '.....oooooooo...', '................'],
     'stride': ['.....oommSSm....', '.....odDmscm....', '.....odDDmmo....', '.....odDDDo.....', '....odDodDDo....', '....obBo.oBBo...', '...oBnBo.oBnBBo.', '...oooo..oooooo.', '................'],   # contact: a short, honest step
+    # foot up 90 degrees: the near thigh level with the hip, the shin hanging straight down, the boot off the ground
+    'up':     ['.....oommSSm....', '.....odDmscm....', '.....odDDDDDo...', '.....odDddDDDo..', '.....odDo.oDDo..', '.....obBBooBBBo.', '.....oBnBBooooo.', '.....oooooo.....', '................'],
     'pass':   ['.....oommSSm....', '.....odDmscm....', '.....odDDmmo....', '.....odDDDo.....', '.....odDBBo.....', '.....obBnBBo....', '.....oBBBBBBo...', '.....oooooooo...', '................'],   # passing: the back foot lifts
 }
 def side(legs='stand', arm='rest', blink=False, hurt=False):
@@ -184,20 +188,17 @@ def bob(c, dy):
     return o
 
 def walk_frames(facing, run=False):
-    if facing == 'down': seq = [front('walk', 'left'), bob(front('walk'), -1), front('walk', 'right'), bob(front('walk'), -1)]
-    elif facing == 'up': seq = [back('left'), bob(back(), -1), back('right'), bob(back(), -1)]
-    else: seq = [side('stride', 'back'), bob(side('pass', 'rest'), -1), side('stride', 'fwd'), bob(side('pass', 'rest'), -1)]
-    if run: seq = [bob(f, -1) if i % 2 == 0 else f for i, f in enumerate(seq)]          # running: airborne on the strides
-    return seq
+    """two images only: foot up, standing, foot up, standing (the user's brief: no in-betweens, no bob, no swing)"""
+    up = {'down': front('walk', 'up'), 'up': back('up'), 'side': side('up')}[facing]
+    stand = {'down': front('idle'), 'up': back(), 'side': side()}[facing]
+    return [up, stand, up, stand]
 
 def idle_frames(facing):
     base = {'down': front('idle'), 'up': back(), 'side': side()}[facing]
-    return [base, breathe(base)]
+    return [base, base]                                                   # standing still means standing still
 
 def breathe(c):
-    """breath: the shoulders and head lift one pixel, the legs stay planted"""
-    o = Canvas(W, H); o.a[:] = c.a; o.a[1:H - 9] = c.a[2:H - 8]; o.a[H - 9] = c.a[H - 9]
-    o.a[0] = 0; return o
+    o = Canvas(W, H); o.a[:] = c.a; return o                              # kept for the blink row layout; no motion
 
 def action(kind, k):
     if kind == 'gather':   # crouch and reach (front)
@@ -245,7 +246,7 @@ def build_sheet():
             sheet.blit(cell(facing, ci), ci * W, fi * H)
     meta = {'name': 'camper v4 (original, hand-drawn; slim proportions under a wide felt hat)', 'frame_w': W, 'frame_h': H, 'origin': [OX, OY],
             'facings': FACINGS, 'frames': FRAMES, 'rows': 'facing', 'cols': 'frame', 'side_flips_for_left': True,
-            'idle_cols': IDLE_COLS, 'walk_cols': WALK_COLS, 'contacts': CONTACTS, 'walk_fps': 7, 'run_fps': 11, 'idle_fps': 1.2, 'foot_box': [8, 4],
+            'idle_cols': IDLE_COLS, 'walk_cols': WALK_COLS, 'contacts': CONTACTS, 'walk_fps': 6, 'run_fps': 10, 'idle_fps': 1.0, 'foot_box': [8, 4],
             'action_frames': 4, 'action_fps': 6, 'shadow': [6, 2],
             'run': {'rows': {'down': 'run_down', 'up': 'run_up', 'side': 'run_side'}, 'cols': WALK_COLS},
             'blink': {'row': 'blink', 'cols': {'down': 0, 'side': 1, 'up': 2}, 'lifted_offset': 3},

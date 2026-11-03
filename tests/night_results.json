@@ -171,7 +171,7 @@
   {
    "name": "frame time with creatures (software Chromium)",
    "ok": true,
-   "detail": "21.7 ms"
+   "detail": "20.1 ms"
   },
   {
    "name": "real keys: L lantern, F strike, K guide, Shift sneak",

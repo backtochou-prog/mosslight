@@ -42,12 +42,12 @@
   5
  ],
  "contacts": [
-  2,
-  4
+  3,
+  5
  ],
- "walk_fps": 7,
- "run_fps": 11,
- "idle_fps": 1.2,
+ "walk_fps": 6,
+ "run_fps": 10,
+ "idle_fps": 1.0,
  "foot_box": [
   8,
   4
