@@ -100,73 +100,195 @@ window.Gather = (() => {
   const Journal = {
     found: {},    // id -> {first: {day, hour, season, weather, nodeKind}, count}
     record(id, n) { const f = this.found[id]; const ctx = { day: W.Survival.Clock.day, hour: Math.round(W.WorldClock.hour() * 10) / 10, season: W.SeasonState.season, weather: W.WeatherState.kind, phase: W.Survival.Clock.phase(), node: n ? n.def.kind : null };
-      if (!f) { this.found[id] = { first: ctx, count: 1 }; emit('discovered', id, ctx); } else f.count += 1; },
+      if (!f) { this.found[id] = { first: ctx, count: 1 }; emit('discovered', id, ctx);
+        const U = window.UIKit, it = ITEMS[id]; if (U && it && UI.cats.includes(it.category)) U.toast({ kicker: 'New in the field guide', title: it.name, sub: oneLine(it.description, 34), icon: id, rare: DB.rarityRank(it.rarity) >= 2, rarity: it.rarity }); }
+      else f.count += 1; },
     progress(cat) { const items = cat ? DB.byCategory(cat) : DB.all().filter(i => !['crafted', 'creature', 'fish', 'bait', 'tackle', 'festival', 'keepsake'].includes(i.category)); const n = items.filter(i => this.found[i.id]).length; return [n, items.length]; },
     entry(id) { const it = ITEMS[id]; const f = this.found[id]; if (!f) return { id, known: false, name: '???', rarity: it.rarity, category: it.category };
       return { id, known: true, name: it.name, description: it.description, rarity: it.rarity, category: it.category, habitat: it.habitat, seasons: it.seasons, time: it.time, weather: it.weather, first: f.first, count: f.count }; },
   };
 
-  // ---------------- feedback: floating pickup text
-  const FX = { pops: [], pop(x, y, got) { this.pops.push({ x, y, t: 0, text: got.map(([id, q]) => `+${q} ${ITEMS[id].name}`).join('  '), rare: got.some(([id]) => DB.rarityRank(ITEMS[id].rarity) >= 2) }); },
+  // ---------------- feedback: pickups fly into the pack, one calm note line, a puff of motes where it was picked
+  const FX = { pops: [],
+    pop(x, y, got) { if (!got || !got.length) return; const rare = got.some(([id]) => ITEMS[id] && DB.rarityRank(ITEMS[id].rarity) >= 2);
+      const text = got.map(([id, q]) => `+${q} ${ITEMS[id] ? ITEMS[id].name : id}`).join(', ');
+      this.pops.push({ x, y, t: 0, text, rare });                       // kept for callers; drawn as motes by UI.drawWorld
+      const U = K(); if (U) { got.forEach(([id], i) => U.fly(id, Math.round(x + (i - (got.length - 1) / 2) * 7), y + 10)); U.note(text, 2.6); } },
     tick(dt) { this.pops = this.pops.filter(p => (p.t += dt) < 1.6); } };
 
-  // ---------------- UI: inventory + journal panels, tool bar, prompts
+  // ---------------- UI helpers: everything is drawn in the field-journal language of UIKit
+  const K = () => window.UIKit;
+  const TOOLBAR = ['hand', 'knife', 'axe', 'pickaxe'];
+  const CAT_LABEL = { natural: 'Natural', geological: 'Geological', botanical: 'Botanical', abandoned: 'Abandoned', rare_find: 'Rare finds', festival: 'Festival' };
+  const CAT_SHORT = { natural: 'Nature', geological: 'Stone', botanical: 'Plants', abandoned: 'Ruins', rare_find: 'Rare', festival: 'Fest' };
+  const BLACK = Array.from({ length: 256 }, () => [0, 0, 0]);
+  const iconCache = new WeakMap(), silCache = {};
+  const cap = s => s ? s[0].toUpperCase() + s.slice(1) : s;
+  const fit = (s, w, face = 1) => { const U = K(); s = String(s); if (U.measure(s, face) <= w) return s; while (s.length > 1 && U.measure(s + '…', face) > w) s = s.slice(0, -1).trimEnd(); return s + '…'; };
+  const oneLine = (s, n) => { s = String(s || '').split(/(?<=\.)\s/)[0]; if (s.length <= n) return s; s = s.slice(0, n - 1); return s.slice(0, Math.max(8, s.lastIndexOf(' '))) + '…'; };
+  const hhmm = h => { const m = Math.round((h || 0) * 60); return String(Math.floor(m / 60) % 24).padStart(2, '0') + ':' + String(m % 60).padStart(2, '0'); };
+  function clueOf(it) { const h = it.habitat || ''; if (it.category === 'festival') return 'Given at one of the year\'s festivals'; if (/made by hand/.test(h)) return 'Made, not found: a recipe will show it';
+    let c = DB.rarityRank(it.rarity) >= 4 ? 'Rumoured: ' + h.split(',')[0] : cap(h); if (it.tool && it.tool !== 'hand') c += ' (' + it.tool + ')'; return c || 'Somewhere in the clearing'; }
+  function whenOf(it) { const p = []; if (it.seasons && it.seasons !== 'all') p.push(it.seasons.split(',').join(', ')); if (it.time === 'night') p.push('after dark'); if (it.time === 'deep_night') p.push('after midnight'); if (it.time === 'day') p.push('by day');
+    if (it.weather && it.weather !== 'any') p.push(/rain/.test(it.weather) ? 'in or after rain' : it.weather === 'clear' ? 'under a clear sky' : it.weather.replace(/_/g, ' ')); return p.join(' · '); }
+  // light colours meant for the old dark cards are re-inked so text stays readable on parchment
+  function inkFor(col) { const U = K(); if (typeof col !== 'string') return U.C.ink; let r, g, b, a = 1; let m = /^#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/i.exec(col);
+    if (m) { r = parseInt(m[1], 16); g = parseInt(m[2], 16); b = parseInt(m[3], 16); } else if ((m = /rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)\s*(?:,\s*([\d.]+))?/.exec(col))) { r = +m[1]; g = +m[2]; b = +m[3]; a = m[4] === undefined ? 1 : +m[4]; } else return col;
+    if (r * .3 + g * .59 + b * .11 > 150) return a < .7 ? U.C.faint : U.C.ink2; return a < 1 ? `rgb(${r | 0},${g | 0},${b | 0})` : col; }
+  // a pencil outline of an undiscovered thing: its edge pixels, plus a light hatch
+  function silhouette(g, id, x, y, size) { const key = id + '@' + size; let s = silCache[key];
+    if (!s) { const c = document.createElement('canvas'); c.width = c.height = size + 2; const cg = c.getContext('2d'); UI.drawIcon(cg, id, 1, 1, size / 16, BLACK, size >= 32); const d = cg.getImageData(0, 0, size + 2, size + 2).data; const A = (xx, yy) => xx < 0 || yy < 0 || xx >= size + 2 || yy >= size + 2 ? 0 : d[(yy * (size + 2) + xx) * 4 + 3] > 110;
+      s = { o: [], h: [] }; for (let yy = 0; yy < size + 2; yy++) for (let xx = 0; xx < size + 2; xx++) { if (!A(xx, yy)) continue; if (!A(xx - 1, yy) || !A(xx + 1, yy) || !A(xx, yy - 1) || !A(xx, yy + 1)) s.o.push(xx - 1, yy - 1); else if ((xx + yy) % 4 === 0) s.h.push(xx - 1, yy - 1); } silCache[key] = s; }
+    x = Math.round(x); y = Math.round(y); g.fillStyle = 'rgba(94,74,50,.55)'; for (let i = 0; i < s.o.length; i += 2) g.fillRect(x + s.o[i], y + s.o[i + 1], 1, 1); g.fillStyle = 'rgba(94,74,50,.16)'; for (let i = 0; i < s.h.length; i += 2) g.fillRect(x + s.h[i], y + s.h[i + 1], 1, 1); }
+  // wrapped body text that stops (with an ellipsis) before maxY; returns the next free baseline
+  function para(g, str, x, y, w, lh, maxY, o = {}) { const U = K(); const ls = U.lines(str, w, o.face || 1); let yy = y; for (let i = 0; i < ls.length; i++) { if (yy > maxY) break; let l = ls[i]; if (yy + lh > maxY && i < ls.length - 1) l = fit(l + ' …', w); U.text(g, l, x, yy, o); yy += lh; } return yy; }
+
+  // ---------------- UI: pack, field guide, tool strip
   const UI = {
     open: null, cursor: 0, journalCat: 0, journalCursor: 0, cats: ['natural', 'geological', 'botanical', 'abandoned', 'rare_find', 'festival'],
+    toolBump: -9, turnT: -9, slotBump: null,
     toggle(which) { this.open = this.open === which ? null : which; },
     drawIcon(g, id, x, y, scale = 1, table, hi = true) { if (W.extraIcon && W.extraIcon(g, id, x, y, scale)) return; const pos = ICON.index[id]; if (!pos) return;
       // hi-res (32 px) art by default; the 16 px grid remains the editable source
       const s = hi && W.iconIdx32 ? ICON.size * 2 : ICON.size; const src = hi && W.iconIdx32 ? W.iconIdx32 : W.iconIdx; const px0 = hi && W.iconIdx32 ? pos[0] * 2 : pos[0], py0 = hi && W.iconIdx32 ? pos[1] * 2 : pos[1]; const k = hi && W.iconIdx32 ? scale / 2 : scale;
       for (let yy = 0; yy < s; yy++) for (let xx = 0; xx < s; xx++) { const pi = src[(py0 + yy) * (ICON.cols * s) + px0 + xx]; if (!pi) continue; const c = table[pi]; g.fillStyle = `rgb(${c[0] | 0},${c[1] | 0},${c[2] | 0})`; g.fillRect(x + xx * k, y + yy * k, k, k); } },
-    card(g, x, y, w, h) { g.fillStyle = 'rgba(40,34,26,0.94)'; g.fillRect(x, y, w, h); g.strokeStyle = 'rgba(222,220,180,0.5)'; g.lineWidth = 1; g.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1); g.strokeStyle = 'rgba(222,220,180,0.18)'; g.strokeRect(x + 3.5, y + 3.5, w - 7, h - 7); },
-    draw(g, vw, vh, safe, table) {
-      // tool bar (always): four small slots, active one lit
-      const tb = ['hand', 'knife', 'axe', 'pickaxe']; const tx0 = vw - 8 - safe - tb.length * 24, ty0 = 8 + safe;
-      tb.forEach((id, i) => { const x = tx0 + i * 24; g.fillStyle = Tools.active === id ? 'rgba(90,70,40,0.9)' : 'rgba(24,30,28,0.72)'; g.fillRect(x, ty0, 23, 23); g.strokeStyle = Tools.active === id ? '#ffd98a' : 'rgba(222,220,180,0.4)'; g.strokeRect(x + 0.5, ty0 + 0.5, 22, 22); this.drawIcon(g, 'tool_' + id, x + 1.5, ty0 + 1.5, 1.25, table);
-        const o = Tools.owned[id]; if (o && o.durability !== null) { g.fillStyle = 'rgba(0,0,0,0.5)'; g.fillRect(x + 2, ty0 + 21, 19, 1); g.fillStyle = o.durability > 10 ? '#8cc452' : '#c0392b'; g.fillRect(x + 2, ty0 + 21, Math.round(19 * o.durability / TOOLS[id].durability), 1); } });
-      // pickup pops
-      for (const p of FX.pops) { g.globalAlpha = Math.min(1, 1.6 - p.t); g.font = '9px ui-monospace, monospace'; g.textAlign = 'center'; g.fillStyle = p.rare ? '#ffd98a' : '#eedcb0'; g.fillText(p.text, p.x - W.Camera.ix(), p.y - W.Camera.iy() - p.t * 14); g.globalAlpha = 1; }
+    // crisp icon at any pixel size: rendered once at 16 or 32 px, then scaled nearest-neighbour
+    icon(g, id, x, y, size, table) { x = Math.round(x); y = Math.round(y); if (W.extraIcon && !ICON.index[id]) { this.drawIcon(g, id, x, y, size / 16, table); return; }
+      const hi = !(size <= 16 || (size % 16 === 0 && size < 32)); let m = iconCache.get(table); if (!m) iconCache.set(table, m = {}); const key = id + (hi ? '@2' : '@1');
+      if (!m[key]) { const n = hi ? 32 : 16, c = document.createElement('canvas'); c.width = c.height = n; this.drawIcon(c.getContext('2d'), id, 0, 0, hi ? 2 : 1, table, hi); m[key] = c; }
+      const sm = g.imageSmoothingEnabled; g.imageSmoothingEnabled = false; g.drawImage(m[key], x, y, size, size); g.imageSmoothingEnabled = sm; },
+    // an opaque parchment card (other modules use this for their own panels)
+    card(g, x, y, w, h) { const U = K(); if (U) { U.paper(g, Math.round(x), Math.round(y), Math.round(w), Math.round(h), { flat: h < 40, rule: h >= 60 && w >= 60 }); return; }
+      g.fillStyle = '#ecdfbd'; g.fillRect(x, y, w, h); g.strokeStyle = '#5a3820'; g.lineWidth = 1; g.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1); },
+    // word wrap in the Mossbook face; same signature as before, returns the baseline of the last line
+    wrap(g, text, x, y, w, lh, col) { const U = K(); if (!U) { g.fillStyle = col; g.fillText(text, x, y); return y; } const f = g.font || ''; const px = +((/(\d+(?:\.\d+)?)px/.exec(f) || [0, 9])[1]); const face = /mossbook/i.test(f) && px >= 11 ? 2 : 1, bold = /bold/.test(f) && face === 1;
+      const ls = U.lines(String(text), w, face); const align = g.textAlign === 'center' ? 'center' : (g.textAlign === 'right' || g.textAlign === 'end') ? 'right' : 'left'; const color = inkFor(col);
+      ls.forEach((l, i) => U.text(g, l, x, y + i * lh, { face, bold, color, align })); return y + Math.max(0, ls.length - 1) * lh; },
+    selectTool(id) { if (!Tools.owned[id]) return false; Tools.select(id); this.toolBump = K() ? K().now() : 0; return true; },
+    act(a) { const i = this.cursor, sl = Inventory.slots[i]; if (!sl) return false; const it = ITEMS[sl.id]; let ok = false;
+      if (a === 'use') ok = !!(it && it.use && W.onUse && W.onUse(it)) && Inventory.remove(i, 1) > 0;
+      else if (a === 'split') ok = Inventory.split(i); else if (a === 'drop') ok = Inventory.remove(i, 1) > 0;
+      if (ok && K()) this.slotBump = { i, t: K().now() }; return ok; },
+    setCat(i) { const n = this.cats.length; i = ((i % n) + n) % n; if (i !== this.journalCat) this.turnT = K() ? K().now() : 0; this.journalCat = i; this.journalCursor = 0; },
+    draw(g, vw, vh, safe, table) { const U = K(); if (!U) return;
+      this.drawToolbar(g, vw, vh, safe, table);
+      if (this.open !== 'inventory') U.openT('pack', false); if (this.open !== 'journal') U.openT('guide', false);
       if (this.open === 'inventory') this.drawInventory(g, vw, vh, safe, table);
       if (this.open === 'journal') this.drawJournal(g, vw, vh, safe, table);
-    },
-    drawInventory(g, vw, vh, safe, table) {
-      const cols = 6, cell = 36, rows = Inventory.size / cols; const pw = cols * cell + 16 + 160, ph = rows * cell + 40; const x0 = Math.round(vw / 2 - pw / 2), y0 = Math.round(vh / 2 - ph / 2);
-      this.card(g, x0, y0, pw, ph); g.font = '9px ui-monospace, monospace'; g.textAlign = 'left'; g.fillStyle = '#eedcb0'; g.fillText('Pack', x0 + 10, y0 + 14); g.fillStyle = 'rgba(238,220,176,0.55)'; g.fillText(`${Inventory.slots.filter(Boolean).length}/${Inventory.size} · ${Inventory.weight().toFixed(1)} kg`, x0 + 40, y0 + 14);
-      for (let i = 0; i < Inventory.size; i++) { const cx = x0 + 10 + (i % cols) * cell, cy = y0 + 22 + Math.floor(i / cols) * cell; const sel = i === this.cursor;
-        g.fillStyle = sel ? 'rgba(90,70,40,0.9)' : 'rgba(24,30,28,0.6)'; g.fillRect(cx, cy, cell - 2, cell - 2); g.strokeStyle = sel ? '#ffd98a' : 'rgba(222,220,180,0.25)'; g.strokeRect(cx + 0.5, cy + 0.5, cell - 3, cell - 3);
-        const s = Inventory.slots[i]; if (s) { this.drawIcon(g, s.id, cx + 1, cy + 1, 2, table); g.fillStyle = RCOL[ITEMS[s.id].rarity]; g.fillRect(cx + 2, cy + cell - 4, 4, 1); if (s.qty > 1) { g.font = '8px ui-monospace, monospace'; g.textAlign = 'right'; g.fillStyle = '#eedcb0'; g.fillText(s.qty, cx + cell - 4, cy + cell - 4); } } }
-      const dx = x0 + 10 + cols * cell + 6, dy = y0 + 22; const s = Inventory.slots[this.cursor];
-      g.textAlign = 'left'; g.font = '9px ui-monospace, monospace';
-      if (s) { const it = ITEMS[s.id]; this.drawIcon(g, s.id, dx, dy, 3, table); g.fillStyle = '#eedcb0'; g.fillText(it.name, dx + 54, dy + 10); g.fillStyle = RCOL[it.rarity]; g.fillText(it.rarity.replace('_', ' '), dx + 54, dy + 21); g.fillStyle = 'rgba(238,220,176,0.55)'; g.fillText(`${it.category} · ×${s.qty}`, dx + 54, dy + 32);
-        if (s.meta && s.meta.cm) { g.fillStyle = '#ffd98a'; g.fillText(`${s.meta.cm} cm, ${s.meta.kg} kg, ${s.meta.quality}`, dx + 54, dy + 32); } const yy = this.wrap(g, it.description, dx, dy + 58, 150, 10, '#d9cfae'); g.fillStyle = 'rgba(238,220,176,0.55)'; this.wrap(g, 'found: ' + (it.habitat || '—'), dx, yy + 14, 150, 10, 'rgba(238,220,176,0.55)'); }
-      else { g.fillStyle = 'rgba(238,220,176,0.45)'; g.fillText('empty slot', dx, dy + 10); }
-      g.fillStyle = 'rgba(238,220,176,0.45)'; g.font = '8px ui-monospace, monospace'; g.fillText('arrows · S split · X drop · U use · I close', x0 + 10, y0 + ph - 8);
-    },
-    wrap(g, text, x, y, w, lh, col) { g.fillStyle = col; const words = text.split(' '); let line = '', yy = y; for (const wd of words) { const t = line ? line + ' ' + wd : wd; if (g.measureText(t).width > w) { g.fillText(line, x, yy); line = wd; yy += lh; } else line = t; } if (line) g.fillText(line, x, yy); return yy; },
-    drawJournal(g, vw, vh, safe, table) {
-      const pw = Math.min(vw - 20, 380), ph = Math.min(vh - 20, 190); const x0 = Math.round(vw / 2 - pw / 2), y0 = Math.round(vh / 2 - ph / 2);
-      this.card(g, x0, y0, pw, ph); g.font = '9px ui-monospace, monospace'; g.textAlign = 'left';
-      const cat = this.cats[this.journalCat]; const items = DB.byCategory(cat); const [n, tot] = Journal.progress(cat); const [na, ta] = Journal.progress();
-      g.fillStyle = '#eedcb0'; g.fillText('Field guide', x0 + 10, y0 + 14); g.fillStyle = 'rgba(238,220,176,0.55)'; g.fillText(`${na}/${ta} found`, x0 + 80, y0 + 14);
-      this.cats.forEach((c, i) => { g.fillStyle = i === this.journalCat ? '#ffd98a' : 'rgba(238,220,176,0.5)'; g.fillText(c.replace('_', ' '), x0 + 10 + i * 62, y0 + 28); });
-      g.fillStyle = 'rgba(222,220,180,0.3)'; g.fillRect(x0 + 10, y0 + 32, pw - 20, 1);
-      const cols = 6, cell = 28; items.forEach((it, i) => { const cx = x0 + 10 + (i % cols) * cell, cy = y0 + 38 + Math.floor(i / cols) * cell; const sel = i === this.journalCursor; const known = !!Journal.found[it.id];
-        g.fillStyle = sel ? 'rgba(90,70,40,0.9)' : 'rgba(24,30,28,0.5)'; g.fillRect(cx, cy, cell - 2, cell - 2); if (sel) { g.strokeStyle = '#ffd98a'; g.strokeRect(cx + 0.5, cy + 0.5, cell - 3, cell - 3); }
-        if (known) this.drawIcon(g, it.id, cx + 1, cy + 1, 1.5, table); else { g.globalAlpha = 0.28; this.drawIcon(g, it.id, cx + 1, cy + 1, 1.5, table.map(() => [70, 66, 80])); g.globalAlpha = 1; g.fillStyle = 'rgba(238,220,176,0.6)'; g.font = '8px ui-monospace, monospace'; g.fillText('?', cx + 11, cy + 17); g.font = '9px ui-monospace, monospace'; } });
-      const it = items[Math.min(this.journalCursor, items.length - 1)]; if (!it) return; const e = Journal.entry(it.id); const dx = x0 + 10 + cols * cell + 8, dy = y0 + 40; const dw = pw - (dx - x0) - 10;
-      if (e.known) { this.drawIcon(g, it.id, dx, dy, 3, table); g.fillStyle = '#eedcb0'; g.fillText(e.name, dx + 54, dy + 10); g.fillStyle = RCOL[e.rarity]; g.fillText(e.rarity.replace('_', ' '), dx + 54, dy + 21);
-        let yy = this.wrap(g, e.description, dx, dy + 58, dw, 10, '#d9cfae') + 14; g.fillStyle = 'rgba(238,220,176,0.6)';
-        g.fillText('habitat: ' + (e.habitat || 'unknown'), dx, yy); yy += 10; g.fillText('season: ' + e.seasons + '   time: ' + e.time, dx, yy); yy += 10; if (e.weather !== 'any') { g.fillText('weather: ' + e.weather, dx, yy); yy += 10; }
-        this.wrap(g, `first found day ${e.first.day}, ${e.first.season}, ${e.first.phase.replace('_', ' ')} · ×${e.count}`, dx, yy, dw, 10, 'rgba(238,220,176,0.6)'); }
-      else { g.fillStyle = 'rgba(238,220,176,0.5)'; g.fillText('Not yet found.', dx, dy + 10); g.fillStyle = RCOL[e.rarity]; g.fillText(e.rarity.replace('_', ' '), dx, dy + 21); this.wrap(g, 'Keep looking. Some things show only in certain seasons, weather or hours.', dx, dy + 36, dw, 10, 'rgba(217,207,174,0.6)'); }
-      g.fillStyle = 'rgba(238,220,176,0.45)'; g.font = '8px ui-monospace, monospace'; g.fillText('← → entries · Q/E category · J close', x0 + 10, y0 + ph - 8);
-    },
+      g.textAlign = 'left'; g.globalAlpha = 1; },
+    // world-anchored: a small puff of motes where something was picked (view scale, under the UI layer)
+    drawWorld(g, vw, vh, tab) { const U = K(); if (!FX.pops.length || !W.Camera) return; const cx = W.Camera.ix(), cy = W.Camera.iy();
+      if (!U) { for (const p of FX.pops) { g.globalAlpha = Math.min(1, 1.6 - p.t); g.fillStyle = '#eedcb0'; g.textAlign = 'center'; g.fillText(p.text, p.x - cx, p.y - cy - p.t * 14); } g.globalAlpha = 1; return; }
+      if (U.S.reduceMotion || U.S.particles === 'reduced') return;
+      for (const p of FX.pops) { if (p.t > .6) continue; const k = p.t / .6, n = p.rare ? 9 : 6; g.globalAlpha = 1 - k;
+        for (let i = 0; i < n; i++) { const a = (i / n) * Math.PI * 2 + p.x * .1, r = 3 + k * (8 + (i % 3) * 2); const x = Math.round(p.x - cx + Math.cos(a) * r), y = Math.round(p.y + 8 - cy + Math.sin(a) * r * .6 - k * 6);
+          g.fillStyle = p.rare && i % 2 ? '#f0c860' : '#f6ecd2'; g.fillRect(x, y, 1, 1); if (i % 3 === 0 && k < .5) g.fillRect(x, y - 1, 1, 1); } }
+      g.globalAlpha = 1; },
+    // the tool strip: paper slots on a stitched leather band, top-right; tap a slot to take that tool
+    drawToolbar(g, vw, vh, safe, table) { const U = K(), C = U.C; if (U.anyBook() || U.Map.open || U.paused() || this.open) return;
+      const touch = U.touch(), s = touch ? 28 : 22, gap = touch ? 4 : 1, isz = touch ? 24 : 16, packW = touch ? 0 : s + 5, now = U.now(), P = U.Ptr;
+      const w = TOOLBAR.length * (s + gap) - gap + 6 + packW, right = vw - safe - (touch ? 38 : 6), x0 = Math.round(right - w), y0 = 5 + safe, h = s + 6;
+      g.fillStyle = C.shadow; g.fillRect(x0 + 1, y0 + 2, w, h); g.fillStyle = C.leather; g.fillRect(x0, y0, w, h); g.fillStyle = C.leather2; g.fillRect(x0, y0, w, 1);
+      g.fillStyle = 'rgba(246,236,210,.22)'; for (let k = x0 + 3; k < x0 + w - 3; k += 4) { g.fillRect(k, y0 + 1, 2, 1); g.fillRect(k, y0 + h - 2, 2, 1); }      // stitching
+      const over = (x, y) => P.over && P.x >= x && P.y >= y && P.x < x + s && P.y < y + s; let sx = x0 + 3, tip = null;
+      if (!touch) { const lift = now - U.bumpT() < .18 && !U.S.reduceMotion ? 1 : 0, by = y0 + 3 - lift; U.slot(g, sx, by, s, { hover: over(sx, by) }); U.glyph(g, 'pack', sx + 6, by + 7, lift ? C.rust : C.ink2, 2 > s / 11 ? 1 : 2);
+        U.hit(sx, y0 + 3, s, s, () => U.openBook('pack'), 'pack'); if (over(sx, y0 + 3)) tip = [sx, 'Pack', null, 'I']; sx += s + 2; g.fillStyle = 'rgba(246,236,210,.3)'; g.fillRect(sx, y0 + 4, 1, s - 2); sx += 3; }
+      TOOLBAR.forEach((id, i) => { const o = Tools.owned[id], on = Tools.active === id, x = sx + i * (s + gap); const lift = on && now - this.toolBump < .16 && !U.S.reduceMotion ? 1 : 0, y = y0 + 3 - lift;
+        U.slot(g, x, y, s, { sel: on, empty: !o, hover: over(x, y) });
+        if (o) { const broken = o.durability === 0; if (broken) g.globalAlpha = .4; this.icon(g, 'tool_' + id, x + (s - isz) / 2, y + (s - isz) / 2 - 1, isz, table); g.globalAlpha = 1;
+          if (o.durability !== null && TOOLS[id].durability) { const f = o.durability / TOOLS[id].durability, bw = s - 6; g.fillStyle = 'rgba(58,42,26,.28)'; g.fillRect(x + 3, y + s - 3, bw, 1); g.fillStyle = f > .25 ? C.moss : C.danger; g.fillRect(x + 3, y + s - 3, broken ? 0 : Math.max(1, Math.round(bw * f)), 1); } }
+        else silhouette(g, 'tool_' + id, x + (s - 16) / 2, y + (s - 16) / 2 - 1, 16);
+        U.hit(x, y0 + 3, s, s, () => this.selectTool(id), 'tool'); if (over(x, y0 + 3)) tip = [x, o ? TOOLS[id].name : 'No ' + id + ' yet', o && o.durability !== null ? `${o.durability}/${TOOLS[id].durability}` : null, String(i + 1)]; });
+      if (tip && !touch) { const [tx, name, dur, key] = tip; const extra = (dur ? '  ' + dur : '') + (U.S.hints ? '  [' + key + ']' : ''); const tw = U.measure(name) + U.measure(extra) + 12, x = Math.max(4, Math.min(tx, vw - safe - 6 - tw)), y = y0 + h + 4;
+        U.tag(g, x, y, tw, 14); U.text(g, name, x + 6, y + 10); if (extra) U.text(g, extra, x + 6 + U.measure(name), y + 10, { color: C.faint }); } },
+    drawInventory(g, vw, vh, safe, table) { const U = K(), C = U.C, touch = U.touch(), now = U.now(), P = U.Ptr;
+      const cols = 6, rows = Math.ceil(Inventory.size / cols), pw = Math.min(vw - 16, 480), availH = vh - 26;
+      const cell = Math.max(24, Math.min(38, Math.floor((availH - 56) / rows), Math.floor((pw - 24 - 140) / cols))), ph = Math.min(availH, 34 + rows * cell + (!U.touch() && U.S.hints ? 22 : 14));
+      const x0 = Math.round(vw / 2 - pw / 2), y0 = Math.max(22, Math.min(vh - ph - 4, Math.round((vh - ph) / 2 + 8)));
+      g.save(); U.enter(g, 'pack', true, x0, y0, pw, ph);
+      const used = Inventory.slots.filter(Boolean).length; U.paper(g, x0, y0, pw, ph, { title: 'Pack', sub: `${used}/${Inventory.size} · ${Inventory.weight().toFixed(1)} kg`, close: () => { this.open = null; } });
+      const gx = x0 + 12, gy = y0 + 34, s = cell - 2, isz = s >= 34 ? 32 : s >= 26 ? 24 : 16;
+      for (let i = 0; i < Inventory.size; i++) { const sl = Inventory.slots[i], bump = this.slotBump && this.slotBump.i === i && now - this.slotBump.t < .14 && !U.S.reduceMotion ? 1 : 0;
+        const x = gx + (i % cols) * cell, y = gy + Math.floor(i / cols) * cell + bump, hov = P.over && P.x >= x && P.y >= y && P.x < x + s && P.y < y + s;
+        U.slot(g, x, y, s, { sel: i === this.cursor, empty: !sl, hover: hov });
+        if (sl && ITEMS[sl.id]) { const it = ITEMS[sl.id]; this.icon(g, sl.id, x + (s - isz) / 2, y + (s - isz) / 2, isz, table);
+          if (DB.rarityRank(it.rarity) >= 1) { const n = DB.rarityRank(it.rarity) + 1; g.fillStyle = 'rgba(236,223,189,.85)'; g.fillRect(x + 1, y + 1, n * 4 + 1, 5); U.pips(g, x + 2, y + 2, it.rarity); }
+          if (sl.qty > 1) { const q = String(sl.qty), qw = U.measure(q); g.fillStyle = 'rgba(236,223,189,.9)'; g.fillRect(x + s - qw - 4, y + s - 10, qw + 3, 9); U.text(g, q, x + s - 2, y + s - 2, { align: 'right' }); } }
+        U.hit(x, y, s, s, () => { this.cursor = i; }, 'slot'); }
+      if (!touch && U.S.hints) U.text(g, 'arrows move · I close', gx, gy + rows * cell + 9, { color: C.faint });
+      // detail page: what the selected thing is, and what can be done with it
+      const dx = gx + cols * cell + 10, dw = x0 + pw - 12 - dx, dy = gy, sl = Inventory.slots[this.cursor], bh = touch ? 18 : 16, by = y0 + ph - 12 - bh;
+      g.fillStyle = 'rgba(58,42,26,.18)'; for (let yy = gy; yy < y0 + ph - 12; yy += 3) g.fillRect(dx - 6, yy, 1, 2);
+      const hints = !touch && U.S.hints;
+      if (sl && ITEMS[sl.id]) { const it = ITEMS[sl.id], rk = DB.rarityRank(it.rarity);
+        U.tag(g, dx, dy, 36, 36, { edge: rk >= 2 ? C.gold : C.leather }); this.icon(g, sl.id, dx + 2, dy + 2, 32, table);
+        const nx = dx + 42, nw = dw - 42; if (U.measure(it.name, 2) <= nw) U.text(g, it.name, nx, dy + 13, { face: 2 }); else U.text(g, fit(it.name, nw), nx, dy + 10, { bold: true });
+        const pw2 = U.pips(g, nx, dy + 20, it.rarity); U.text(g, U.rarityLabel(it.rarity), nx + pw2 + 3, dy + 25, { color: U.RCOL[it.rarity] || C.ink2 });
+        U.text(g, fit(`${(CAT_LABEL[it.category] || cap(it.category)).toLowerCase()} · ×${sl.qty}`, nw), nx, dy + 35, { color: C.faint });
+        U.divider(g, dx, dy + 44, dw); let yy = dy + 56; const maxY = by - 6;
+        if (sl.meta && sl.meta.cm) { U.text(g, fit(`${sl.meta.cm} cm · ${sl.meta.kg} kg · ${sl.meta.quality}`, dw), dx, yy, { color: C.gold }); yy += 11; }
+        yy = para(g, it.description, dx, yy, dw, 10, maxY - 22, { color: C.ink }) + 3;
+        const use = it.use && it.use.heal ? `Use: restores ${it.use.heal} health` : it.crafting ? 'Used for: ' + it.crafting : null; if (use && yy <= maxY - 10) { yy = para(g, use, dx, yy, dw, 10, maxY - 11, { color: C.ink2 }); }
+        if (it.habitat && yy <= maxY) para(g, 'Found: ' + it.habitat, dx, yy, dw, 10, maxY, { color: C.faint });
+      } else { U.text(g, 'An empty pocket', dx, dy + 12, { bold: true }); para(g, 'Things you gather, catch and make land here. Tap a filled slot to look at it.', dx, dy + 28, dw, 10, by - 8, { color: C.faint }); }
+      const it = sl && ITEMS[sl.id], canUse = !!(it && it.use), canSplit = !!(sl && sl.qty > 1 && Inventory.slots.includes(null));
+      const btns = [['Use', 'u', 'use', canUse, true], ['Split', 's', 'split', canSplit], ['Drop', 'x', 'drop', !!sl]]; if (dw >= 200) btns.push(['Close', 'i', 'close', true]);
+      const bw = Math.floor((dw - (btns.length - 1) * 4) / btns.length);
+      btns.forEach(([l, k, a, en, prim], i) => { const lab = hints && U.measure(l + ' ' + k.toUpperCase()) + 8 <= bw ? l + ' ' + k.toUpperCase() : l; U.button(g, dx + i * (bw + 4), by, bw, bh, lab, () => { if (a === 'close') this.open = null; else this.act(a); }, { primary: prim && en, disabled: !en }); });
+      g.restore(); },
+    drawJournal(g, vw, vh, safe, table) { const U = K(), C = U.C, touch = U.touch(), now = U.now();
+      const pw = Math.min(vw - 16, 480), ph = Math.min(vh - 26, 264), x0 = Math.round(vw / 2 - pw / 2), y0 = Math.max(22, Math.min(vh - ph - 4, Math.round((vh - ph) / 2 + 8)));
+      const cat = this.cats[this.journalCat], items = DB.byCategory(cat), [n, tot] = Journal.progress(cat), [na, ta] = Journal.progress();
+      if (this.journalCursor > items.length - 1) this.journalCursor = Math.max(0, items.length - 1);
+      g.save(); U.enter(g, 'guide', true, x0, y0, pw, ph);
+      U.paper(g, x0, y0, pw, ph, { title: 'Field guide', sub: `${na} of ${ta} found`, close: () => { this.open = null; } });
+      // section tabs: page markers laid out from the measured labels
+      const ty = y0 + 31, avail = pw - 24; let labs = this.cats.map(c => CAT_LABEL[c]), pad = 12; const bw0 = l => U.measure(l) + l.length; const tot2 = (ls, p) => ls.reduce((a, l) => a + bw0(l) + p + 2, 0);
+      if (tot2(labs, pad) > avail) pad = 8; if (tot2(labs, pad) > avail) { labs = this.cats.map(c => CAT_SHORT[c]); pad = 10; }
+      g.fillStyle = 'rgba(58,42,26,.4)'; g.fillRect(x0 + 10, ty + 14, pw - 20, 1); let tx = x0 + 12;
+      labs.forEach((l, i) => { const tw = bw0(l) + pad, on = i === this.journalCat;
+        if (on) { g.fillStyle = C.paper; g.fillRect(tx, ty, tw, 15); g.fillStyle = C.rust; g.fillRect(tx, ty, tw, 1); g.fillStyle = 'rgba(58,42,26,.45)'; g.fillRect(tx, ty + 1, 1, 14); g.fillRect(tx + tw - 1, ty + 1, 1, 14); }
+        else { g.fillStyle = C.paper3; g.fillRect(tx, ty + 3, tw, 11); g.fillStyle = 'rgba(58,42,26,.25)'; g.fillRect(tx, ty + 3, tw, 1); }
+        U.text(g, l, tx + Math.floor((tw - (on ? bw0(l) : U.measure(l))) / 2), ty + 11, { color: on ? C.ink : C.ink2, bold: on }); U.hit(tx, ty, tw, 15, () => this.setCat(i), 'tab'); tx += tw + 2; });
+      // entries: one row each, paginated
+      const lx = x0 + 14, lw = Math.max(120, Math.min(190, Math.round(avail * .42))), rowH = 20, rTop = ty + 20, bottom = y0 + ph - 10, per = Math.max(1, Math.floor((bottom - 18 - rTop) / rowH));
+      const pages = Math.max(1, Math.ceil(items.length / per)), page = Math.min(pages - 1, Math.floor(this.journalCursor / per));
+      items.slice(page * per, page * per + per).forEach((it, k) => { const i = page * per + k, ry = rTop + k * rowH, on = i === this.journalCursor, known = !!Journal.found[it.id];
+        if (on) { g.fillStyle = 'rgba(138,58,26,.08)'; g.fillRect(lx - 3, ry, lw + 5, rowH - 1); g.fillStyle = C.rust; g.fillRect(lx - 3, ry + rowH - 2, lw + 5, 1); g.fillRect(lx - 3, ry + 3, 1, rowH - 6); }
+        if (known) { this.icon(g, it.id, lx + 1, ry + 2, 16, table); const rk = DB.rarityRank(it.rarity), pwid = rk >= 1 ? (rk + 1) * 4 + 3 : 0; U.text(g, fit(it.name, lw - 24 - pwid - (on ? it.name.length : 0)), lx + 22, ry + 13, { color: C.ink, bold: on }); if (rk >= 1) U.pips(g, lx + lw - pwid + 3, ry + 8, it.rarity); }
+        else { silhouette(g, it.id, lx + 1, ry + 2, 16); U.text(g, fit(clueOf(it), lw - 24), lx + 22, ry + 13, { color: C.faint }); }
+        U.hit(lx - 3, ry, lw + 5, rowH, () => { this.journalCursor = i; }, 'entry'); });
+      const py = bottom - 14; U.text(g, `${n} of ${tot} here`, lx, py + 10, { color: C.faint });
+      if (pages > 1) { const bx = lx + lw - 52; U.button(g, bx, py, 16, 14, '<', () => { this.journalCursor = Math.max(0, (page - 1) * per); this.turnT = U.now(); }, { disabled: page === 0 }); U.text(g, `${page + 1}/${pages}`, bx + 26, py + 10, { align: 'center', color: C.ink2 }); U.button(g, bx + 36, py, 16, 14, '>', () => { this.journalCursor = Math.min(items.length - 1, (page + 1) * per); this.turnT = U.now(); }, { disabled: page >= pages - 1 }); }
+      // the entry itself
+      const dx = lx + lw + 14, dw = x0 + pw - 14 - dx, dy = rTop + 2, hints = !touch && U.S.hints, maxY = bottom - (hints ? 12 : 2);
+      g.fillStyle = 'rgba(58,42,26,.18)'; for (let yy = rTop; yy < bottom; yy += 3) g.fillRect(dx - 7, yy, 1, 2);
+      const it = items[this.journalCursor];
+      if (it) { const e = Journal.entry(it.id), rk = DB.rarityRank(it.rarity);
+        U.tag(g, dx, dy, 36, 36, { fill: e.known ? C.paper : C.paper2, edge: e.known && rk >= 2 ? C.gold : C.leather }); if (e.known) this.icon(g, it.id, dx + 2, dy + 2, 32, table); else silhouette(g, it.id, dx + 2, dy + 2, 32);
+        const nx = dx + 42, nw = dw - 42, title = e.known ? e.name : 'Not yet found'; if (U.measure(title, 2) <= nw) U.text(g, title, nx, dy + 13, { face: 2, color: e.known ? C.ink : C.ink2 }); else U.text(g, fit(title, nw), nx, dy + 10, { bold: true });
+        const pw2 = U.pips(g, nx, dy + 20, it.rarity); U.text(g, U.rarityLabel(it.rarity), nx + pw2 + 3, dy + 25, { color: U.RCOL[it.rarity] || C.ink2 }); U.text(g, fit((CAT_LABEL[it.category] || cap(it.category)).toLowerCase(), nw), nx, dy + 35, { color: C.faint });
+        U.divider(g, dx, dy + 44, dw); let yy = dy + 56; const w2 = whenOf(it);
+        if (e.known) { const f = e.first || {};
+          yy = para(g, e.description, dx, yy, dw, 10, maxY - 32, { color: C.ink }) + 4;
+          if (yy <= maxY) { yy = para(g, 'Habitat: ' + (e.habitat || 'unknown'), dx, yy, dw, 10, maxY - 21, { color: C.ink2 }); }
+          if (w2 && yy <= maxY - 21) yy = para(g, 'When: ' + w2, dx, yy, dw, 10, maxY - 21, { color: C.ink2 });
+          if (yy <= maxY) { const node = f.node ? ', ' + f.node.replace(/_/g, ' ') : ''; yy = para(g, `First found day ${f.day}, ${hhmm(f.hour)}, ${f.season || ''}, ${(f.phase || '').replace(/_/g, ' ')}${f.weather && f.weather !== 'clear' ? ', ' + f.weather.replace(/_/g, ' ') : ''}${node}.`, dx, yy + 2, dw, 10, maxY - 10, { color: C.moss }); }
+          if (yy <= maxY) U.text(g, e.count === 1 ? 'Found once so far.' : `Found ${e.count} times.`, dx, yy, { color: C.faint }); }
+        else { yy = para(g, 'Pencilled note: ' + clueOf(it) + '.', dx, yy, dw, 10, maxY - 12, { color: C.ink2 }) + 3;
+          if (yy <= maxY - 10) yy = para(g, w2 && rk <= 2 ? 'Seen ' + w2 + '.' : rk > 2 ? 'Conditions unknown.' : 'Any season, any hour.', dx, yy, dw, 10, maxY - 10, { color: C.ink2 }) + 3;
+          if (yy <= maxY) para(g, 'Gather it once to fill in this page.', dx, yy, dw, 10, maxY, { color: C.faint }); } }
+      else U.text(g, 'Nothing in this section yet.', dx, dy + 12, { color: C.faint });
+      if (hints) { const h = '↑↓ entry · Q E section · J close'; if (U.measure(h) <= dw) U.text(g, h, x0 + pw - 14, bottom, { align: 'right', color: C.faint }); }
+      // a quick page turn when the section or page changes
+      const tt = (now - this.turnT) / .28; if (tt >= 0 && tt < 1 && !U.S.reduceMotion) { const sx = Math.round(x0 + 8 + (pw - 16) * (1 - tt)); g.fillStyle = 'rgba(255,248,226,.55)'; g.fillRect(sx, rTop, 3, bottom - rTop); g.fillStyle = 'rgba(90,60,30,.18)'; g.fillRect(sx + 3, rTop, 6, bottom - rTop); }
+      g.restore(); },
     key(k) {   // returns true if consumed
       if (k === 'i') { this.toggle('inventory'); return true; } if (k === 'j') { this.toggle('journal'); return true; }
-      if (['1', '2', '3', '4'].includes(k)) { Tools.select(['hand', 'knife', 'axe', 'pickaxe'][+k - 1]); return true; }
+      if (['1', '2', '3', '4'].includes(k)) { this.selectTool(TOOLBAR[+k - 1]); return true; }
       if (this.open === 'inventory') { const cols = 6; if (k === 'arrowleft') this.cursor = Math.max(0, this.cursor - 1); if (k === 'arrowright') this.cursor = Math.min(Inventory.size - 1, this.cursor + 1); if (k === 'arrowup') this.cursor = Math.max(0, this.cursor - cols); if (k === 'arrowdown') this.cursor = Math.min(Inventory.size - 1, this.cursor + cols);
-        if (k === 'u') { const sl = Inventory.slots[this.cursor]; const it = sl && ITEMS[sl.id]; if (it && it.use && W.onUse && W.onUse(it)) Inventory.remove(this.cursor, 1); } if (k === 's') Inventory.split(this.cursor); if (k === 'x') Inventory.remove(this.cursor, 1); if (k === 'escape') this.open = null; return true; }
-      if (this.open === 'journal') { const items = DB.byCategory(this.cats[this.journalCat]); if (k === 'arrowleft') this.journalCursor = Math.max(0, this.journalCursor - 1); if (k === 'arrowright') this.journalCursor = Math.min(items.length - 1, this.journalCursor + 1); if (k === 'q') { this.journalCat = (this.journalCat + 4) % 5; this.journalCursor = 0; } if (k === 'e') { this.journalCat = (this.journalCat + 1) % 5; this.journalCursor = 0; } if (k === 'escape') this.open = null; return true; }
+        if (k === 'u') this.act('use'); if (k === 's') this.act('split'); if (k === 'x') this.act('drop'); if (k === 'escape') this.open = null; return true; }
+      if (this.open === 'journal') { const items = DB.byCategory(this.cats[this.journalCat]); if (k === 'arrowleft' || k === 'arrowup') this.journalCursor = Math.max(0, this.journalCursor - 1); if (k === 'arrowright' || k === 'arrowdown') this.journalCursor = Math.min(items.length - 1, this.journalCursor + 1); if (k === 'q') this.setCat(this.journalCat - 1); if (k === 'e') this.setCat(this.journalCat + 1); if (k === 'escape') this.open = null; return true; }
       return false; },
   };
 

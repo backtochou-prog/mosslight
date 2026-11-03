@@ -127,6 +127,10 @@ async function boot() {
     ['creatures', 'Beasts', () => !!Monsters.Journal.open, () => { Monsters.Journal.open = true; }],
     ['folk', 'Folk', () => !!Social.UI.journal, () => { Social.UI.journal = true; }],
     ['calendar', 'Days', () => !!Festival.UI.open, () => { Festival.UI.open = true; }]]) UIKit.register({ id, label, isOpen, open: () => { shut(); open(); }, close: shut });
+  mountSound();
+  { const SS = Survival.SaveState, snap = SS.snapshot.bind(SS), load = SS.load.bind(SS);          // the map remembers where you have been
+    SS.snapshot = () => Object.assign(snap(), { map: UIKit.Map.seen ? Array.from(UIKit.Map.seen).join('') : null });
+    SS.load = st => { st = st || JSON.parse(localStorage.getItem(SS.KEY) || 'null'); const ok = load(st); if (ok && st && st.map) UIKit.Map.seen = Uint8Array.from(st.map, c => +c); return ok; }; }
   Survival.Dev.mount(document.getElementById('dev'));
   if (location.search.includes('dev=1')) { document.getElementById('dev').style.display = ''; document.getElementById('devtoggle').checked = true; }
   WorldClock.paused = false;
@@ -162,8 +166,15 @@ function buildLightMap(extra = []) {
   const bay = [[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]];
   LIGHTS.forEach((L, li) => { const r = L.radius; const x0 = Math.max(0, L.x - r | 0), x1 = Math.min(W - 1, L.x + r | 0), y0 = Math.max(0, L.y - r | 0), y1 = Math.min(H - 1, L.y + r | 0);
     for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) { const d = Math.hypot(x - L.x, (y - L.y) * 1.25) / r; if (d >= 1) continue;
-      let w = Math.pow(1 - d, 1.6) * L.intensity; w = Math.min(1, Math.floor(w * 5 + bay[y & 3][x & 3] / 16 * 0.9) / 5); const i = y * W + x; if (w > LW[i]) { LW[i] = w; LI[i] = li; } } });
+      let w = Math.pow(1 - d, 1.6) * L.intensity; w = Math.min(1, Math.floor(w * 5 + bay[y & 3][x & 3] / 16 * 0.9) / 5); const i = y * W + x; if (w > LW[i]) { LW[i] = w; LI[i] = li; } }
+    if (L.kind === 'fire' || L.kind === 'lantern') { const R2 = r * (L.kind === 'fire' ? 2.2 : 1.7), sp = L.kind === 'fire' ? .58 : .3; const a0 = Math.max(0, L.x - R2 | 0), a1 = Math.min(W - 1, L.x + R2 | 0), b0 = Math.max(0, L.y - R2 | 0), b1 = Math.min(H - 1, L.y + R2 | 0);   // the warm spill: what makes a camp read as a pool of light in real dark
+      for (let y = b0; y <= b1; y++) for (let x = a0; x <= a1; x++) { const d = Math.hypot(x - L.x, (y - L.y) * 1.25) / R2; if (d >= 1) continue; let w = Math.pow(1 - d, 1.1) * sp * L.intensity; w = Math.floor(w * 10 + bay[y & 3][x & 3] / 16 * 0.9) / 10; const i = y * W + x; if (w > LW[i]) { LW[i] = w; LI[i] = li; } } } });
 }
+// lamplight maps luminance onto one warm ramp (deep umber -> ochre -> candle -> cream) so lit grass stays grass-dark, not olive
+const WARM = [[40, 24, 14], [116, 68, 30], [212, 148, 76], [252, 224, 172]];
+function warmRamp(l) { const t = Math.max(0, Math.min(2.999, l / 255 * 3)), k = t | 0, f = t - k, a = WARM[k], b = WARM[k + 1]; return [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f, a[2] + (b[2] - a[2]) * f]; }
+const SW = { a: new Float32Array(768), gs: new Float32Array(768), gc: new Float32Array(768), cs: Float32Array.from({ length: 768 }, (_, x) => Math.sin(x * .013)), cc: Float32Array.from({ length: 768 }, (_, x) => Math.cos(x * .013)), rs: new Float32Array(480), rc: new Float32Array(480), ys: Float32Array.from({ length: 480 }, (_, y) => Math.sin(y * .03)), yc: Float32Array.from({ length: 480 }, (_, y) => Math.cos(y * .03)) };
+let SNOWACC = 0, CANVASPX = null, CANVRK = null, FLAGGED = false;
 // ---------------------------------------------------------------- palette table for "now"
 function lerp3(a, b, t) { return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t]; }
 function tableAt(season, hour) { const kf = DATA.keyframes[season]; const hs = kf.hours, n = hs.length;
@@ -182,7 +193,7 @@ function gradeTable(table, wkind, wi, ev) { // weather + event grades on the 200
   return out; }
 
 // ---------------------------------------------------------------- weather particles
-const P = { rain: [], snow: [], leaves: [], splash: [], fire: [], ff: [] };
+const P = { rain: [], snow: [], leaves: [], splash: [], fire: [], ff: [], ripple: [] };
 function rnd(a, b) { return a + Math.random() * (b - a); }
 function spawn(kind, n, wind) {
   for (let i = 0; i < n; i++) {
@@ -202,7 +213,12 @@ function tickParticles(dt, time) {
   P.splash = P.splash.filter(p => { p.t += dt * 6; return p.t < 1; });
   P.snow = P.snow.filter(p => { p.ph += dt * 1.6; p.y += p.v * dt * (p.big ? 1.3 : 1); p.x += (Math.sin(p.ph) * 10 + 18 + 70 * wind) * dt; if (p.y > H + 4 || p.x > W + 60) return false; return P.snow.length <= want.snow + 20; });
   P.leaves = P.leaves.filter(p => { p.ph += dt * 3; p.life -= dt; p.x += (50 + 120 * wind) * dt; p.y += (Math.sin(p.ph) * 18 + p.v * 0.25) * dt; return p.life > 0 && p.x < W + 20; });
-  // night: fireflies drift gently; only when dark
+  // fires breathe smoke and spit embers; drift follows the wind; fewer with reduced particles
+  const few = UIKit.S.particles === 'reduced' ? .4 : 1; for (const L of LIGHTS) { if (L.kind !== 'fire') continue; if (Math.random() < dt * 5 * few) P.fire.push({ k: 'ember', x: L.x + rnd(-4, 4), y: L.y + 6, sx: L.x, sy: L.y, vx: rnd(-6, 6), vy: -rnd(14, 30), t: 0, life: rnd(.7, 1.5) }); if (Math.random() < dt * 2.4 * few) P.fire.push({ k: 'smoke', x: L.x + rnd(-3, 3), y: L.y - 2, sx: L.x, sy: L.y, vx: rnd(-2, 2), vy: -rnd(6, 10), t: 0, life: rnd(2.5, 4) }); }
+  P.fire = P.fire.filter(p => { p.t += dt; p.x += (p.vx + wind * (p.k === 'smoke' ? 26 : 14)) * dt + (p.k === 'ember' ? Math.sin(p.t * 9 + p.sx) * .25 : 0); p.y += p.vy * dt; if (p.k === 'smoke') p.vy *= 1 - dt * .15; return p.t < p.life; }); if (P.fire.length > 160) P.fire.splice(0, P.fire.length - 160);
+  // rain rings on open water
+  if ((wk === 'light_rain' || wk === 'heavy_rain') && CLS) { const n = (wk === 'heavy_rain' ? 40 : 14) * inten * dt * few * 3; for (let k = 0; k < n; k++) { const x = Camera.ix() + rnd(0, Camera.vw) | 0, y = Camera.iy() + rnd(0, Camera.vh) | 0; if (x >= 0 && y >= 0 && x < W && y < H && (CLS[DATA.idx[SeasonState.season][y * W + x]] & 2) && depthNow()[y * W + x] === 0) P.ripple.push({ x, y, t: 0 }); } }
+  P.ripple = P.ripple.filter(p => { p.t += dt * 1.6; return p.t < 1; }); if (P.ripple.length > 120) P.ripple.splice(0, P.ripple.length - 120);
 }
 
 // ---------------------------------------------------------------- fog field (small noise, nearest-upscaled, Bayer-thresholded)
@@ -240,7 +256,8 @@ const Player = {
       if (xx < 0 || yy < 0 || xx >= W || yy >= H) return true; if (col[yy * W + xx]) return true; } return false; },
   step(dt, axis) {                                   // fixed-step; called 60x per second
     const [ix, iy] = axis; const c = this.cfg;
-    const sp = c.speed * (c.speedMul || 1); const tx = ix * sp, ty = iy * sp;
+    this.running = !!(this.wantRun && (ix || iy) && !(window.Monsters && Monsters.Health && Monsters.Health.sneak) && Survival.Energy.current > 5);
+    const sp = c.speed * (c.speedMul || 1) * (this.running ? 1.55 : 1); const tx = ix * sp, ty = iy * sp;
     const a = (ix || iy) ? c.accel : c.decel;
     this.vx += Math.max(-a * dt, Math.min(a * dt, tx - this.vx)); this.vy += Math.max(-a * dt, Math.min(a * dt, ty - this.vy));
     if (!ix && Math.abs(this.vx) < 2) this.vx = 0; if (!iy && Math.abs(this.vy) < 2) this.vy = 0;
@@ -250,9 +267,18 @@ const Player = {
     if (this.vy) { if (!mv(0, this.vy * dt)) { if (!(this.vx) && !mv(1, this.vy * dt)) mv(-1, this.vy * dt); if (this.blocked(this.x, this.y + Math.sign(this.vy))) this.vy = 0; } }
     this.moving = !!(ix || iy);
     if (this.moving) { if (Math.abs(ix) >= Math.abs(iy) * 0.9 && ix) { this.facing = 'side'; this.flip = ix < 0; } else this.facing = iy < 0 ? 'up' : 'down'; }
-    this.animT += dt * (this.moving ? c.walkFps : c.idleFps);
+    this.animT += dt * (this.moving ? (this.running ? 12 : c.walkFps) : c.idleFps);
   },
   frame() { const a = Survival.Activities.current || (window.Fishing && Fishing.active()); if (a && a.anim) return Math.floor(a.t * 6) % 4; const n = this.moving ? 2 + (Math.floor(this.animT) % 4) : (Math.floor(this.animT) % 2); return n; },
+  // which row and column of the sheet to draw: sleeping, flinching, working, running, blinking, or plain walk/idle
+  pose(T) { const pm = DATA.player, F = pm.facings; const H = window.Monsters && Monsters.Health; const act = Survival.Activities.current || (window.Fishing && Fishing.active());
+    if (Survival.Sleep.sleeping && F.includes('sleep')) return [F.indexOf('sleep'), Math.floor(T * .6) % 2];
+    const fcol = { down: 0, side: 1, up: 2 }[this.facing];
+    if (H && H.inv > 0 && H.cur < H.max && F.includes('hurt') && (H.inv % .5) > .25) return [F.indexOf('hurt'), fcol];
+    if (act && act.anim) return [F.indexOf(act.anim), this.frame()];
+    if (this.moving && this.running && F.includes('run_' + this.facing)) return [F.indexOf('run_' + this.facing), 2 + (Math.floor(this.animT) % 4)];
+    if (!this.moving && F.includes('blink') && !(window.UIKit && UIKit.S.reduceMotion) && (T % 3.7) < .13) { const lifted = Math.floor(this.animT) % 2 === 1; return [F.indexOf('blink'), (lifted ? 3 : 0) + fcol]; }
+    return [F.indexOf(this.facing), this.frame()]; },
   setPos(x, y) { this.x = x; this.y = y; this.vx = this.vy = 0; },
 };
 // ---------------------------------------------------------------- Camera (follows the player, clamps to the playable world, integer pixels)
@@ -294,7 +320,7 @@ const Touch = { enabled: false, btn: { x: 0, y: 0, r: 22 },
     cv.addEventListener('touchend', end); cv.addEventListener('touchcancel', end); },
   // stamped roundels on the paper colour: the action seal, then pack, journal and map in an arc; the menu sits top-right
   seal(g, x, y, r, glyph, fn, label, o = {}) { const K = UIKit, C = K.C; g.fillStyle = 'rgba(24,14,6,.32)'; g.beginPath(); g.arc(x + 1, y + 2, r, 0, 7); g.fill(); g.fillStyle = o.on ? C.leather2 : C.leather; g.beginPath(); g.arc(x, y, r, 0, 7); g.fill(); g.fillStyle = o.on ? '#f3e2b8' : C.paper; g.beginPath(); g.arc(x, y, r - 2, 0, 7); g.fill(); g.strokeStyle = 'rgba(58,42,26,.4)'; g.beginPath(); g.arc(x, y, r - 4.5, 0, 7); g.stroke();
-    const sc = r >= 18 ? 2 : 1; K.glyph(g, glyph, x - 2.5 * sc, y - 3.5 * sc - (label && r < 18 ? 2 : 0), o.dim ? C.faint : (o.color || C.ink), sc); if (label && r < 18) K.text(g, label, x, y + r - 4, { align: 'center', color: C.ink2 }); if (fn) K.hit(x - r, y - r, r * 2, r * 2, fn, label || glyph); },
+    const sc = r >= 18 ? 2 : 1; K.glyph(g, glyph, x - 2.5 * sc, y - 3.5 * sc, o.dim ? C.faint : (o.color || C.ink), sc); if (label && r < 18) { const lw = K.measure(label) + 6; K.tag(g, x - lw / 2, y + r + 1, lw, 10); K.text(g, label, x, y + r + 9, { align: 'center', color: C.ink }); } if (fn) K.hit(x - r, y - r, r * 2, r * 2, fn, label || glyph); },
   draw(g, vw, vh, sf) { if (!this.enabled || portrait() || UIKit.paused() || UIKit.Map.open) return; const K = UIKit, C = K.C;
     const book = UIKit.anyBook(); const fishing = window.Fishing && (Fishing.busy() || Fishing.Book.open), talking = window.Social && Social.busy();
     if (!book && !talking) this.seal(g, vw - 18 - sf, 16 + sf, 11, 'menu', () => { UIKit.Menu.open = 'pause'; }, null);
@@ -310,7 +336,7 @@ const Touch = { enabled: false, btn: { x: 0, y: 0, r: 22 },
     if (tableAt(SeasonState.season, WorldClock.hour()).darkness > .35 && window.Monsters) { const on = Monsters.Health && Monsters.Health.lantern; this.seal(g, bx - 88, by + 8, 15, 'lantern', () => Monsters.key('l'), 'lamp', { on }); this.seal(g, bx - 82, by - 30, 15, 'sneak', () => Monsters.key('f'), 'strike'); } } };
 
 // ---------------------------------------------------------------- the prompt line and short messages, drawn as journal tags
-let UI_SCALE = 1;
+let UI_SCALE = 1, RUN_ACC = 0, STEP_COL = -1;
 function drawPrompt(g, vw, vh, sf) { const K = UIKit, C = K.C;
   if (Interaction.current && !Interaction.message && !Survival.Sleep.sleeping) { const lab = Interaction.current.label, key = Touch.enabled ? null : 'E'; const tw = K.measure(lab) + (key ? 22 : 12); const x = Math.round(vw / 2 - tw / 2), y = vh - 44 - sf;
     K.tag(g, x, y, tw, 15); if (key) { g.fillStyle = C.leather; g.fillRect(x + 4, y + 3, 10, 9); K.text(g, key, x + 9, y + 10, { align: 'center', color: C.cream }); } K.text(g, lab, x + (key ? 18 : 6), y + 11); }
@@ -320,19 +346,34 @@ function drawPrompt(g, vw, vh, sf) { const K = UIKit, C = K.C;
 const portrait = () => Touch.enabled && innerHeight > innerWidth * 1.05;
 function drawPortraitCard(g, vw, vh) { const K = UIKit; g.fillStyle = 'rgba(16,10,4,.82)'; g.fillRect(0, 0, vw, vh); const w = Math.min(vw - 16, 220), h = 92, x = Math.round(vw / 2 - w / 2), y = Math.round(vh / 2 - h / 2); K.paper(g, x, y, w, h, { title: 'Turn sideways' });
   K.wrap(g, 'The clearing is wide. Hold your phone on its side to play; the game waits for you.', x + 14, y + 42, w - 28, 10); const t = K.now() % 3, a = Math.min(1, Math.max(0, t - .6)) * Math.PI / 2; g.save(); g.translate(x + w - 30, y + 20); g.rotate(-(K.S.reduceMotion ? 1 : a / (Math.PI / 2))); g.strokeStyle = K.C.ink; g.strokeRect(-4.5, -7.5, 9, 15); g.restore(); }
-function soundState() { const ev = EventState.current; return { season: SeasonState.season, hour: WorldClock.hour(), weather: WeatherState.kind, intensity: WeatherState.intensity, wind: WeatherState.wind, x: Player.x, y: Player.y, moving: Player.moving, running: !!Player.running, sheltered: !!(window.Build && Build.sheltered && Build.sheltered(Player.x, Player.y)), nearWater: !!(window.Fishing && Fishing.nearest && Fishing.waterAt && nearWaterCheap()), fire: Math.hypot(Player.x - 318, Player.y - 272), danger: window.Monsters ? Monsters.list.filter(m => m.state === 'pursue' || m.state === 'stalk' || m.state === 'attack').length : 0, festival: window.Festival && Festival.active ? (Festival.active() || null) : null, fishing: !!(window.Fishing && Fishing.busy()), dark: tableAt(SeasonState.season, WorldClock.hour()).darkness, event: ev ? ev.name : null, paused: UIKit.paused() }; }
-let _nwT = 0, _nw = false; function nearWaterCheap() { if (T - _nwT < .5) return _nw; _nwT = T; _nw = false; const px = Math.round(Player.x), py = Math.round(Player.y); for (let r = 0; r < 60 && !_nw; r += 6) for (let a = 0; a < 6.28; a += .8) { const x = Math.round(px + Math.cos(a) * r), y = Math.round(py + Math.sin(a) * r); if (x >= 0 && y >= 0 && x < 768 && y < 480 && (CLS[DATA.idx[SeasonState.season][y * 768 + x]] & 2)) { _nw = true; break; } } return _nw; }
+// ---------------------------------------------------------------- sound: the engine senses the world; the game tells it what happened
+function footsteps() { if (!Player.moving || Survival.Sleep.sleeping) { STEP_COL = -1; return; } const c = 2 + (Math.floor(Player.animT) % 4); if (c === STEP_COL) return; STEP_COL = c; if (c !== 3 && c !== 5) return;
+  const x = Math.round(Player.x), y = Math.round(Player.y); const e = DATA.entries.entries[DATA.idx[SeasonState.season][y * 768 + x]] || {}; const f = (e.family || '').replace('~', '');
+  const kind = (SeasonState.season === 'winter' || SNOWACC > .5 || f === 'snow' || f === 'ice') ? 'footstep_snow' : (f === 'wood' || f === 'wood_grey') ? 'footstep_wood' : ['dirt', 'earth', 'worn', 'mud', 'sand', 'pebble', 'stone', 'rubble'].includes(f) ? 'footstep_dirt' : 'footstep_grass';
+  Sound.play(kind, { x, y, gain: Player.running ? 1 : .7 }); }
+let _nwT = -9, _nwD = 400; function waterDistCheap() { if (T - _nwT < .5) return _nwD; _nwT = T; _nwD = 400; const px = Math.round(Player.x), py = Math.round(Player.y); for (let r = 0; r <= 160; r += 8) for (let a = 0; a < 6.28; a += .5) { const x = Math.round(px + Math.cos(a) * r), y = Math.round(py + Math.sin(a) * r); if (x >= 0 && y >= 0 && x < 768 && y < 480 && (CLS[DATA.idx[SeasonState.season][y * 768 + x]] & 2)) { _nwD = r; return r; } } return _nwD; }
+function mountSound() { if (!window.Sound) return; const FIRE = [318, 268], TENT = [272, 250];
+  Sound.init({ WorldClock, Survival, SeasonState, WeatherState, Player, Monsters, Fishing, get Festival() { return Festival; },
+    waterDist: () => waterDistCheap(), fireDist: (x, y) => Math.min(Math.hypot(x - FIRE[0], y - FIRE[1]), ...(LIGHTS || []).filter(L => L.kind === 'fire').map(L => Math.hypot(x - L.x, y - L.y))),
+    tentDist: (x, y) => Math.hypot(x - TENT[0], y - TENT[1]), treeDensity: (x, y) => { let n = 0, k = 0; for (let yy = y - 48; yy <= y + 48; yy += 16) for (let xx = x - 64; xx <= x + 64; xx += 16) { if (xx < 0 || yy < 0 || xx >= 768 || yy >= 480) continue; k++; if (CLS[DATA.idx[SeasonState.season][(yy | 0) * 768 + (xx | 0)]] & 1) n++; } return k ? n / k : 0; },
+    shelter: () => !!(Build.sheltered && Build.sheltered(Player.x, Player.y)) });
+  // creatures keep their own calls, voiced by the new engine (the old oscillator recipes stay as the fallback)
+  const MA = Monsters.Audio; MA.start = () => Sound.start(); MA.ambience = () => {}; MA.play = (k, x, y) => ['hurt', 'swing', 'hit'].includes(k) ? Sound.play(k, { x, y }) : Sound.creature(k, x, y); MA.ctx = null;
+  const kindSfx = (id, kind) => { const t = (id + ' ' + kind).toLowerCase(); return /berr/.test(t) ? 'berry_pop' : /branch|log|wood|bark|twig|resin|stick/.test(t) ? 'wood_gather' : /stone|flint|rock|ore|clay|shard|glass|pebble|salt|star/.test(t) ? 'stone_gather' : /water|dew/.test(t) ? 'water_splash' : /metal|iron|scrap|nail/.test(t) ? 'metal_gather' : 'plant_gather'; };
+  Gather.on('gathered', (n, got) => { const id = (got[0] || [])[0] || ''; Sound.play(kindSfx(id, n.def.kind), { x: n.def.x, y: n.def.y }); if (got.some(([i]) => Gather.DB.rarityRank(Gather.items()[i].rarity) >= 2)) Sound.play('rare_gather'); });
+  Survival.on('sleep_start', () => Sound.play('sleep')); Survival.on('wake', () => Sound.play('wake'));
+}
 // ---------------------------------------------------------------- frame
-const off = document.createElement('canvas'); off.width = W; off.height = H; const og = off.getContext('2d'); const img = og.createImageData(W, H);
+const off = document.createElement('canvas'); off.width = W; off.height = H; const og = off.getContext('2d'); const img = og.createImageData(W, H); const d32 = new Uint32Array(img.data.buffer);
 const cv = document.getElementById('c'), ctx = cv.getContext('2d');
 let last = performance.now(), T = 0, state = { zoom: 3, viewport: true, ox: 60, oy: 90 }, simAcc = 0;
 const SIM_DT = 1 / 60;
 const depthNow = () => (EventState.current && DATA.depth[EventState.current.name]) || DATA.depth[SeasonState.season === 'winter' ? 'winter' : 'spring'];
-function simulate(dt) { simAcc += dt; let n = 0; const ax = (Survival.Sleep.sleeping || Survival.Activities.current || Gather.UI.open || Build.UI.busy() || Monsters.Journal.open || Fishing.busy() || Fishing.Book.open || Social.UI.journal || Festival.UI.open) ? [0, 0] : Input.axis(); while (simAcc >= SIM_DT && n < 5) { Player.step(SIM_DT, ax); simAcc -= SIM_DT; n++; } Camera.update(dt); Interaction.update(dt); Survival.tick(dt, WorldClock.paused ? 0 : dt * WorldClock.scale / 60, Player.moving); Gather.tick(dt); Build.tick(dt); if (!Gather.UI.open && !Build.UI.open && !Monsters.Journal.open && !Fishing.Book.open && !Fishing.render.inVista() && !Social.busy()) Monsters.tick(dt); Fishing.tick(dt); Social.tick(dt); Festival.tick(dt); }
+function simulate(dt) { simAcc += dt; let n = 0; const ax = (Survival.Sleep.sleeping || Survival.Activities.current || Gather.UI.open || Build.UI.busy() || Monsters.Journal.open || Fishing.busy() || Fishing.Book.open || Social.UI.journal || Festival.UI.open) ? [0, 0] : Input.axis(); Player.wantRun = !!Input.keys['r'] || (Input.touch.active && Math.hypot(Input.touch.x - Input.touch.ax, Input.touch.y - Input.touch.ay) > 21 * UI_SCALE); if (Player.running && Player.moving) { RUN_ACC += dt; if (RUN_ACC > 20) { RUN_ACC = 0; Survival.Energy.spend(1, 'running'); } } while (simAcc >= SIM_DT && n < 5) { Player.step(SIM_DT, ax); simAcc -= SIM_DT; n++; } Camera.update(dt); Interaction.update(dt); Survival.tick(dt, WorldClock.paused ? 0 : dt * WorldClock.scale / 60, Player.moving); Gather.tick(dt); Build.tick(dt); if (!Gather.UI.open && !Build.UI.open && !Monsters.Journal.open && !Fishing.Book.open && !Fishing.render.inVista() && !Social.busy()) Monsters.tick(dt); Fishing.tick(dt); Social.tick(dt); Festival.tick(dt); }
 function frame(now) {
   const dt = Math.min(0.1, (now - last) / 1000); last = now; T += dt; const tf0 = performance.now();
   UIKit.tick(dt); const held = UIKit.paused() || UIKit.Map.open || portrait();
-  if (!held) { WorldClock.tick(dt); WeatherState.tick(dt); tickParticles(dt, T); simulate(dt); } UIKit.explore(Player.x, Player.y); if (window.Sound && Sound.update) Sound.update(dt, soundState());
+  if (!held) { WorldClock.tick(dt); WeatherState.tick(dt); tickParticles(dt, T); simulate(dt); } UIKit.explore(Player.x, Player.y); if (window.Sound) { Sound.tick(dt); footsteps(); }
   const season = SeasonState.season, hour = WorldClock.hour(), ev = EventState.current;
   const { table, darkness } = tableAt(season, hour);
   let tab = gradeTable(table, WeatherState.kind, WeatherState.intensity, ev);
@@ -346,58 +387,84 @@ function frame(now) {
   const wind = WeatherState.wind, sway = Math.sin(T * 1.7) * 0.5 + Math.sin(T * 2.9) * 0.5;
   const fogA = (WeatherState.kind === 'fog' ? WeatherState.intensity : 0) * 0.9 + (season === 'spring' && hour > 5 && hour < 8.5 && WeatherState.kind === 'clear' ? 0.25 * (1 - Math.abs(hour - 6.5) / 2) : 0);
   const fogShift = T * 6, fogCol = tab[DATA.entries.entries.findIndex(e => e.family === 'mist' && e.rank === 1)] || [200, 210, 215];
-  const flick = LIGHTS.map(L => L.kind === 'fire' ? 0.82 + 0.18 * Math.sin(T * 11 + L.x) * Math.sin(T * 7.3) : L.kind === 'lantern' ? 0.95 + 0.05 * Math.sin(T * 3 + L.y) : L.kind === 'firefly' ? 0.5 + 0.5 * Math.sin(T * 2.2 + L.x * 0.7) : L.kind === 'glow' ? 0.85 + 0.15 * Math.sin(T * 1.3 + L.y) : 1);
+  const calm = UIKit.S.reduceMotion; const gut = L => ((T * .37 + L.x * .013) % 7) < .14 ? .8 : 1;
+  const flick = LIGHTS.map(L => calm ? (L.kind === 'firefly' ? .75 : .93) : L.kind === 'fire' ? (0.84 + 0.1 * Math.sin(T * 11 + L.x) * Math.sin(T * 7.3) + 0.06 * Math.sin(T * 23 + L.y)) * gut(L) : L.kind === 'lantern' ? (0.9 + 0.06 * Math.sin(T * 2.1 + L.y) + 0.04 * Math.sin(T * 5.3 + L.x)) * gut(L) : L.kind === 'firefly' ? 0.5 + 0.5 * Math.sin(T * 2.2 + L.x * 0.7) : L.kind === 'glow' ? 0.85 + 0.15 * Math.sin(T * 1.3 + L.y) : 1);
   const lightAmount = Math.max(0, Math.min(1, (darkness - 0.08) / 0.6));
   const nightShow = Math.max(0, (darkness - 0.45) / 0.55);
   const wetDark = (WeatherState.kind === 'light_rain' || WeatherState.kind === 'heavy_rain') ? WeatherState.intensity : 0;
+  if (!FLAGGED) { FLAGGED = true; DATA.entries.entries.forEach((e, i) => { const b = e.family.replace('~', ''); if (['grass', 'flower_b', 'flower_p', 'flower_w', 'flower_y', 'fern', 'shroom'].includes(b)) CLS[i] |= 32; }); }
+  const depL = depthNow();
+  const lampT = dayTab.map((c, k) => { const l = c[0] * .3 + c[1] * .59 + c[2] * .11, wr = warmRamp(l * 1.08); return [c[0] + (wr[0] - c[0]) * .78, c[1] + (wr[1] - c[1]) * .78, c[2] + (wr[2] - c[2]) * .78]; });
+  const deep = (hour >= 22.5 ? Math.min(1, (hour - 22.5) / 1.5) : hour < 4.5 ? Math.min(1, (4.5 - hour) / 1.5) : 0) * lightAmount;          // the small hours are the darkest
+  const clearSky = (WeatherState.kind === 'clear' || WeatherState.kind === 'wind') ? 1 : WeatherState.kind === 'snow' ? .55 : .3; const moon = nightShow * clearSky * .2;   // moonlight: cool, low, shows form
+  const ambK = lightAmount * .4;          // outside the pools the night falls off toward blue-black
+  for (let x = 0; x < W; x++) { SW.a[x] = Math.sin(T * 1.3 - x * .035) * .6; SW.gs[x] = Math.sin(T * 1.7 - x * .05); SW.gc[x] = Math.cos(T * 1.7 - x * .05); }          // the breeze waves are separable: one sine per row and per column, not per pixel
+  for (let y = 0; y < H; y++) { SW.rs[y] = Math.sin(T * 2.3 + y * .09); SW.rc[y] = Math.cos(T * 2.3 + y * .09); }
+  const postT = tab.map((c, k) => { let r = c[0], g = c[1], b = c[2]; if (ambK > 0 && !(CLS[k] & 4)) { if (moon > 0) { const dc = dayTab[k], dl = (dc[0] * .3 + dc[1] * .59 + dc[2] * .11) / 255; r += (dl * 104 - r) * moon; g += (dl * 124 - g) * moon; b += (dl * 168 - b) * moon; } if (deep > 0) { const q = deep * .22; r += (14 - r) * q; g += (18 - g) * q; b += (40 - b) * q; } const f = 1 - ambK * .9; r *= f; g *= f; b *= f * 1.04; } return [r, g, b]; });
+  const breeze = calm ? wind : Math.max(wind, .22), swayA = .35 + wind * 2.2;
+  const snowing = WeatherState.kind === 'snow' ? WeatherState.intensity : 0; if (!held) SNOWACC = Math.max(0, Math.min(1, SNOWACC + dt * (snowing ? snowing / 90 : -(season === 'winter' ? 1 / 600 : 1 / 120)))); const snowC = tab[DATA.entries.entries.reduce((m, e, i) => e.family === 'snow' && (m < 0 || e.rank > DATA.entries.entries[m].rank) ? i : m, -1)] || [240, 244, 250];
   for (let y = 0; y < H; y++) {
     const fy = Math.min(FH - 1, (y / 8) | 0);
     for (let x = 0; x < W; x++) {
       const i = y * W + x; let ix = idx[i];
       // wind sway: canopy pixels sampled from a neighbour column
-      if (wind > 0.12 && (CLS[ix] & 1)) { const o = Math.round((sway + Math.sin(T * 2.3 + y * 0.09 + x * 0.013)) * wind * 1.2); if (o) { const j = y * W + Math.min(W - 1, Math.max(0, x - o)); if (CLS[idx[j]] & 1) ix = idx[j]; } }
+      if (breeze > 0.12 && (CLS[ix] & 1)) { const hg = depL[i] - y, wg = hg > 0 ? Math.min(1, hg / 34) : .5; const o = Math.round((SW.a[x] + (SW.rs[y] * SW.cc[x] + SW.rc[y] * SW.cs[x]) * .4) * swayA * wg); if (o) { const j = y * W + Math.min(W - 1, Math.max(0, x - o)); if (CLS[idx[j]] & 1) ix = idx[j]; } }
+      else if (!calm && (CLS[ix] & 32) && depL[i] > y) { const o = Math.round((SW.gs[x] * SW.yc[y] + SW.gc[x] * SW.ys[y]) * (.45 + wind * .9)); if (o) { const j = i - o; if (CLS[idx[j]] & 32) ix = idx[j]; } }
       if (shadowOn) { const a = shNoon[i], bL = shLong[i]; let sv = 0; if (longW < 0.5) sv = a ? a : (bL && longW > 0.2 ? 1 : 0); else sv = bL ? bL : (a && longW < 0.8 ? 1 : 0);
         if (sv) { const bt = BAYER[(y & 3) * 4 + (x & 3)] / 16; if (sv === 2 || bt < 0.5) { if (shadowStrength > bt * 0.6) ix = (sv === 2 && shadowStrength > 0.9 && (CLS[ix] & 2) === 0) ? shadeT[ix] : shadeT[ix]; } } }
-      let c = tab[ix]; let r = c[0], g = c[1], b = c[2];
+      let r, g, b; const nidx = night[i], lw = LW[i];
+      if (!(nidx && nightShow > 0) && !(lw > 0 && lightAmount > 0)) { const c = postT[ix]; r = c[0]; g = c[1]; b = c[2]; }          // most pixels: unlit, no night overlay, so the colour depends on the index alone
+      else { const c = tab[ix]; r = c[0]; g = c[1]; b = c[2];
       // night-only pixels fade in with darkness
-      const nidx = night[i]; if (nidx && nightShow > 0 && !(season === 'winter' && (CLS[nidx] & 16))) { const nc = tab[nidx]; r += (nc[0] - r) * nightShow; g += (nc[1] - g) * nightShow; b += (nc[2] - b) * nightShow; }
+      if (nidx && nightShow > 0 && !(season === 'winter' && (CLS[nidx] & 16))) { const nc = tab[nidx]; r += (nc[0] - r) * nightShow; g += (nc[1] - g) * nightShow; b += (nc[2] - b) * nightShow; }
       // light pools: mix the DAY colour back in, tinted, so lamplight reveals true colour
-      const lw = LW[i]; if (lw > 0 && lightAmount > 0) { const L = LIGHTS[LI[i]]; if (L.kind === 'firefly' && season === 'winter') { } else { const w = lw * lightAmount * flick[LI[i]] * (L.kind === 'firefly' && ev && ev.fireflies ? ev.fireflies : 1); const dc0 = dayTab[ix]; const lum = dc0[0] * .3 + dc0[1] * .59 + dc0[2] * .11; const dc = [dc0[0] + (lum - dc0[0]) * .42, dc0[1] + (lum - dc0[1]) * .42, dc0[2] + (lum - dc0[2]) * .42];   // lamplight warms colour, it does not make grass neon
-        r += (dc[0] * L.color[0] * 1.08 + 18 - r) * w; g += (dc[1] * L.color[1] * 1.08 + 18 - g) * w; b += (dc[2] * L.color[2] * 1.08 + 18 - b) * w; } }
+      let lit = 0; if (lw > 0 && lightAmount > 0) { const L = LIGHTS[LI[i]]; if (L.kind === 'firefly' && season === 'winter') { } else { const w = lw * lightAmount * flick[LI[i]] * (L.kind === 'firefly' && ev && ev.fireflies ? ev.fireflies : 1); lit = L.kind === 'fire' || L.kind === 'lantern' ? w : 0;
+        if (lit) { const lc = lampT[ix]; r += (lc[0] * L.color[0] * 1.06 + 10 - r) * w; g += (lc[1] * L.color[1] * 1.06 + 8 - g) * w; b += (lc[2] * L.color[2] * 1.06 + 4 - b) * w; }
+        else { const dc0 = dayTab[ix]; const lum = dc0[0] * .3 + dc0[1] * .59 + dc0[2] * .11; const dc = [dc0[0] + (lum - dc0[0]) * .42, dc0[1] + (lum - dc0[1]) * .42, dc0[2] + (lum - dc0[2]) * .42]; r += (dc[0] * L.color[0] * 1.08 + 18 - r) * w; g += (dc[1] * L.color[1] * 1.08 + 18 - g) * w; b += (dc[2] * L.color[2] * 1.08 + 18 - b) * w; } } }
+      if (ambK > 0 && !(CLS[ix] & 4)) { const bt = BAYER[(y & 3) * 4 + (x & 3)] / 16; const un = 1 - Math.min(1, lit * 2.2);
+        if (moon > 0 && un > 0) { const dc = dayTab[ix], dl = (dc[0] * .3 + dc[1] * .59 + dc[2] * .11) / 255; const m = moon * un; r += (dl * 104 - r) * m; g += (dl * 124 - g) * m; b += (dl * 168 - b) * m; }
+        if (deep > 0) { const k = deep * .22 * un; r += (14 - r) * k; g += (18 - g) * k; b += (40 - b) * k; }
+        const kb = ambK * un; if (kb > 0) { const f = 1 - kb * .9; r *= f; g *= f; b *= f * 1.04; } } }
+      // snow settles on open ground while it falls, in drifts, and melts slowly afterwards
+      if (SNOWACC > .02 && depL[i] === 0 && !(CLS[ix] & 6)) { const n = FOG[fy * FW + Math.min(FW - 1, (x / 8) | 0)]; if (n * .55 + BAYER[(y & 3) * 4 + (x & 3)] / 16 * .45 < SNOWACC * .8) { const k = .8; r += (snowC[0] - r) * k; g += (snowC[1] - g) * k; b += (snowC[2] - b) * k; } }
       // rain: wet surfaces darken a little, water sparkles
       if (wetDark > 0 && (CLS[ix] & 2) && ((x * 7 + y * 13 + (T * 30 | 0)) % 97) < 2) { r += 40; g += 40; b += 40; }
       // fog: ground mist, Bayer-thresholded so it stays crisp; thinner over emissives and the top band
       if (fogA > 0 && !(CLS[ix] & 4)) { const fx = Math.min(FW - 1, (((x + fogShift) / 8) | 0) % FW); const n = FOG[fy * FW + fx] * 0.6 + FOG2[fy * FW + ((fx + ((T * 2) | 0)) % FW)] * 0.4;
         const dens = Math.max(0, n - 0.34) * 3.2 * fogA * (0.55 + 0.45 * (y / H)); const bt = BAYER[(y & 3) * 4 + (x & 3)] / 16;
         if (dens > bt * 0.8) { const k = Math.min(0.62, dens * 0.6); r += (fogCol[0] - r) * k; g += (fogCol[1] - g) * k; b += (fogCol[2] - b) * k; } }
-      const o = i * 4; d[o] = r; d[o + 1] = g; d[o + 2] = b; d[o + 3] = 255;
+      d32[i] = 0xff000000 | ((b > 255 ? 255 : b) << 16) | ((g > 255 ? 255 : g) << 8) | (r > 255 ? 255 : r);          // one 32-bit store per pixel
     }
   }
-  const buildCtx = { d, W, H, tab, dayTab, dep: depthNow(), LW, LI, LIGHTS, lightAmount, flick, season, pyBase: Math.round(Player.y) };
+  const spriteRGB = (pi, i) => { const c = tab[pi]; let r = c[0], g = c[1], b = c[2]; const lw = LW[i]; let lit = 0; if (lw > 0 && lightAmount > 0) { const L = LIGHTS[LI[i]]; if (L.kind !== 'firefly') { const w = lw * lightAmount * flick[LI[i]]; lit = w; const lc = (L.kind === 'fire' || L.kind === 'lantern') ? lampT[pi] : dayTab[pi]; r += (lc[0] * L.color[0] * 1.06 + 10 - r) * w; g += (lc[1] * L.color[1] * 1.06 + 8 - g) * w; b += (lc[2] * L.color[2] * 1.06 + 4 - b) * w; } }
+    if (ambK > 0 && !(CLS[pi] & 4)) { const un = 1 - Math.min(1, lit * 2.2); if (moon > 0) { const dc = dayTab[pi], dl = (dc[0] * .3 + dc[1] * .59 + dc[2] * .11) / 255, m = moon * un; r += (dl * 104 - r) * m; g += (dl * 124 - g) * m; b += (dl * 168 - b) * m; } const f = 1 - ambK * un * .9; r *= f; g *= f; b *= f; } return [r, g, b]; };
+  const buildCtx = { spriteRGB, lampT, ambK, d, W, H, tab, dayTab, dep: depthNow(), LW, LI, LIGHTS, lightAmount, flick, season, pyBase: Math.round(Player.y) };
   Fishing.render.water(buildCtx, tab, Math.min(1, darkness)); Festival.render.world(buildCtx, Math.min(1, darkness)); Build.render.ground(buildCtx);
   // ---- resource nodes: live sprites from the atlas, hidden when their conditions fail, sorted against the player by base y
   { const dep = depthNow(); const nIdx = DATA.nodeIdx; const aw = DATA.nodeAtlasW; const pyBase = Math.round(Player.y);
     for (const n of Gather.Nodes.list) { if (!Gather.Nodes.visible(n)) continue; const sp = Gather.nodeSprite(n); if (!sp) continue; const x0 = n.def.x - sp.ox, y0 = n.def.y - sp.oy; const glow = ['glowcap', 'ghostcap', 'nightlily', 'moth', 'starshard', 'nightglass', 'ember_vent', 'spore_patch'].includes(n.def.kind) && n.state === 'full';
       for (let yy = 0; yy < sp.h; yy++) for (let xx = 0; xx < sp.w; xx++) { const pi = nIdx[(sp.y + yy) * aw + sp.x + xx]; if (!pi) continue; const x = x0 + xx, y = y0 + yy; if (x < 0 || y < 0 || x >= W || y >= H) continue; const i = y * W + x; if (dep[i] > n.def.y || (pyBase < n.def.y && false)) continue;
-        let c = tab[pi]; let r = c[0], g = c[1], b = c[2]; if (glow && darkness > 0.4) { const k = 0.35 + 0.15 * Math.sin(T * 2 + n.def.x); r += (200 - r) * k * 0.3; g += (255 - g) * k * 0.4; b += (230 - b) * k * 0.4; }
+        let [r, g, b] = spriteRGB(pi, i); if (glow && darkness > 0.4) { const k = 0.35 + 0.15 * Math.sin(T * 2 + n.def.x); r += (200 - r) * k * 0.3; g += (255 - g) * k * 0.4; b += (230 - b) * k * 0.4; }
         const o = i * 4; d[o] = r; d[o + 1] = g; d[o + 2] = b; } } }
   { // the fire is alive: flame pixels step through their own ramp, so it flickers in the palette at any hour
     if (!window.FIREPX) { const fam = DATA.entries.entries; const rk = []; fam.forEach((e, i) => { if (e.family === 'fire') rk[e.rank] = i; }); window.FIRERK = rk; const pos = {}; rk.forEach((v, r) => pos[v] = r); window.FIREPX = []; const sp = DATA.idx.spring; for (let i = 0; i < W * H; i++) if (pos[sp[i]] !== undefined) FIREPX.push([i, pos[sp[i]], i % W, (i / W) | 0]); }
     for (const [i, rk, x, y] of FIREPX) { if (!(CLS[idx[i]] !== undefined)) continue; const w = Math.sin(T * 13 + y * 1.1 + x * .6) + Math.sin(T * 7.1 - y * .8 + x * 1.7); const nr = Math.max(0, Math.min(FIRERK.length - 1, rk + Math.round(w))); const c = tab[FIRERK[nr]], o = i * 4; if (season === 'winter' && idx[i] !== DATA.idx.spring[i]) continue; d[o] = c[0]; d[o + 1] = c[1]; d[o + 2] = c[2]; } }
+  if (!calm) { if (!CANVASPX) { const rk = []; DATA.entries.entries.forEach((e, k) => { if (e.family === 'canvas') rk[e.rank] = k; }); CANVRK = rk.filter(v => v !== undefined); const pos = {}; CANVRK.forEach((v, r) => pos[v] = r); CANVASPX = []; for (let k = 0; k < W * H; k++) { const v = DATA.idx.spring[k]; if (pos[v] !== undefined) CANVASPX.push([k, pos[v], k % W, (k / W) | 0]); } }
+    const amp = .35 + wind * 1.1; for (const [k, rk, x, y] of CANVASPX) { if (idx[k] !== DATA.idx.spring[k] && !ev) continue; const w = Math.sin(T * 1.1 - x * .16 + y * .05) * amp; const sh = Math.round(w); if (!sh) continue; const nr = Math.max(0, Math.min(CANVRK.length - 1, rk + sh)); const c = spriteRGB(CANVRK[nr], k), o = k * 4; d[o] = c[0]; d[o + 1] = c[1]; d[o + 2] = c[2]; } }
   buildCtx.idx = idx; Fishing.render.sign(buildCtx, tab); Monsters.render.lantern(buildCtx); Build.render.items(buildCtx, false); Monsters.render.items(buildCtx, false); Social.render.items(buildCtx, false);
   // ---- player: y-sorted against the baked scene through the depth map, lit by the same table
   { const dep = depthNow(); const pm = DATA.player, pidx = DATA.pidx; const fw = pm.frame_w, fh = pm.frame_h;
-    const act = Survival.Activities.current || Fishing.active(); const row = pm.facings.indexOf(act && act.anim ? act.anim : Player.facing), colf = Player.frame(); const px0 = Math.round(Player.x) - pm.origin[0], py0 = Math.round(Player.y) - pm.origin[1];
+    const [row, colf] = Player.pose(T); const px0 = Math.round(Player.x) - pm.origin[0], py0 = Math.round(Player.y) - pm.origin[1];
     const pyBase = Math.round(Player.y); const shade = DATA.play.shade;
     // soft contact shadow on the ground only
     for (let yy = -1; yy <= 1; yy++) for (let xx = -5; xx <= 5; xx++) { if ((xx * xx) / 25 + (yy * yy) / 1.5 > 1) continue; const sx = Math.round(Player.x) + xx, sy = pyBase + yy; if (sx < 0 || sy < 0 || sx >= W || sy >= H) continue; const i = sy * W + sx; if (dep[i] !== 0 || (CLS[idx[i]] & 2)) continue; const c = tab[shade[idx[i]]]; const o = i * 4; d[o] = c[0]; d[o + 1] = c[1]; d[o + 2] = c[2]; }
     for (let yy = 0; yy < fh; yy++) for (let xx = 0; xx < fw; xx++) { const sxx = Player.flip ? (fw - 1 - xx) : xx; const pi = pidx[(row * fh + yy) * (fw * pm.frames.length) + colf * fw + sxx]; if (!pi) continue;
       const x = px0 + xx, y = py0 + yy; if (x < 0 || y < 0 || x >= W || y >= H) continue; const i = y * W + x; if (dep[i] > pyBase) continue;   // something whose base is lower on screen is in front
-      let c = tab[pi]; let r = c[0], g = c[1], b = c[2]; const lw = LW[i]; if (lw > 0 && lightAmount > 0) { const L = LIGHTS[LI[i]]; if (!(L.kind === 'firefly')) { const w = lw * lightAmount * flick[LI[i]]; const dc = dayTab[pi]; r += (dc[0] * L.color[0] * 1.08 + 18 - r) * w; g += (dc[1] * L.color[1] * 1.08 + 18 - g) * w; b += (dc[2] * L.color[2] * 1.08 + 18 - b) * w; } }
+      const [r, g, b] = spriteRGB(pi, i);
       const o = i * 4; d[o] = r; d[o + 1] = g; d[o + 2] = b; } }
   { const nIdx = DATA.nodeIdx; const aw = DATA.nodeAtlasW; const pyBase = Math.round(Player.y);   // nodes nearer the camera than the player overdraw the player
     for (const n of Gather.Nodes.list) { if (n.def.y <= pyBase || !Gather.Nodes.visible(n)) continue; const sp = Gather.nodeSprite(n); if (!sp) continue; if (Math.abs(n.def.x - Player.x) > 24 || n.def.y - pyBase > 30) continue; const x0 = n.def.x - sp.ox, y0 = n.def.y - sp.oy;
-      for (let yy = 0; yy < sp.h; yy++) for (let xx = 0; xx < sp.w; xx++) { const pi = nIdx[(sp.y + yy) * aw + sp.x + xx]; if (!pi) continue; const x = x0 + xx, y = y0 + yy; if (x < 0 || y < 0 || x >= W || y >= H) continue; const i = y * W + x; const c = tab[pi]; const o = i * 4; d[o] = c[0]; d[o + 1] = c[1]; d[o + 2] = c[2]; } } }
+      for (let yy = 0; yy < sp.h; yy++) for (let xx = 0; xx < sp.w; xx++) { const pi = nIdx[(sp.y + yy) * aw + sp.x + xx]; if (!pi) continue; const x = x0 + xx, y = y0 + yy; if (x < 0 || y < 0 || x >= W || y >= H) continue; const i = y * W + x; const c = spriteRGB(pi, i); const o = i * 4; d[o] = c[0]; d[o + 1] = c[1]; d[o + 2] = c[2]; } } }
   Build.render.items(buildCtx, true); Monsters.render.items(buildCtx, true); Social.render.items(buildCtx, true); Build.render.roofs(buildCtx); Build.render.ghost(buildCtx);
   og.putImageData(img, 0, 0);
   // particles drawn in palette-ish colours, 1-2 px, no blur
@@ -405,6 +472,9 @@ function frame(now) {
   og.fillStyle = 'rgba(200,215,225,0.5)'; for (const p of P.splash) { const s = 1 + (p.t * 3 | 0); og.fillRect((p.x | 0) - s, p.y | 0, 1, 1); og.fillRect((p.x | 0) + s, p.y | 0, 1, 1); }
   for (const p of P.snow) { og.fillStyle = p.big ? 'rgba(246,251,255,0.95)' : 'rgba(226,235,243,0.75)'; og.fillRect(p.x | 0, p.y | 0, p.big ? 2 : 1, p.big ? 2 : 1); }
   for (const p of P.leaves) { og.fillStyle = `rgb(${p.col[0]},${p.col[1]},${p.col[2]})`; og.fillRect(p.x | 0, p.y | 0, 2, 1); og.fillRect((p.x | 0) + 1, (p.y | 0) - 1, 1, 1); }
+  for (const p of P.fire) { const a = 1 - p.t / p.life; if (p.k === 'ember') { const hot = a > .5; og.fillStyle = hot ? `rgba(255,${190 + (a * 50 | 0)},110,${Math.min(1, a * 1.4)})` : `rgba(220,110,50,${a})`; og.fillRect(p.x | 0, p.y | 0, 1, 1); }
+    else { const sz = 2 + (p.t / p.life * 4 | 0), lit = darkness > .4 ? Math.max(0, 1 - Math.hypot(p.x - p.sx, p.y - p.sy) / 40) : 0; og.fillStyle = lit > 0 ? `rgba(${150 + 60 * lit | 0},${110 + 30 * lit | 0},${90},${a * .22})` : `rgba(${darkness > .4 ? 70 : 150},${darkness > .4 ? 72 : 146},${darkness > .4 ? 80 : 140},${a * .2})`; og.fillRect(p.x - sz / 2 | 0, p.y - sz / 2 | 0, sz, sz - 1); } }
+  for (const p of P.ripple) { const rr = 1 + p.t * 4 | 0, a = (1 - p.t) * .6; og.fillStyle = `rgba(215,230,240,${a})`; og.fillRect((p.x | 0) - rr, p.y | 0, 1, 1); og.fillRect((p.x | 0) + rr, p.y | 0, 1, 1); og.fillRect((p.x | 0) - (rr >> 1), (p.y | 0) - 1, rr, 1); og.fillRect((p.x | 0) - (rr >> 1), (p.y | 0) + 1, rr, 1); }
   Festival.render.fx(og, Math.min(1, darkness));
   // present through the camera (integer source offset keeps pixels crisp), then HUD at native resolution
   const z = state.zoom; ctx.imageSmoothingEnabled = false;
@@ -415,7 +485,8 @@ function frame(now) {
   for (const M of [Gather.UI, Build.UI, Monsters.render, Fishing.render, Social.render, Festival.render]) if (M.drawWorld) M.drawWorld(ctx, vw, vh, tab);
   ctx.restore(); ctx.save(); const us = UIKit.scale(vh); ctx.scale(z * us, z * us); ctx.imageSmoothingEnabled = false; const uw = Math.floor(vw / us), uh = Math.floor(vh / us), usf = Math.round(Camera.safe / us), uiTab = UIW.tab(); UI_SCALE = us; UIKit.begin();
   if (!UIKit.anyBook() && !UIKit.Map.open) drawPrompt(ctx, uw, uh, usf);
-  Touch.draw(ctx, uw, uh, usf); Survival.HUD.draw(ctx, uw, uh, usf, T); Gather.UI.draw(ctx, uw, uh, usf, uiTab); Monsters.render.overlay(ctx, uw, uh, usf, uiTab); Build.UI.draw(ctx, uw, uh, usf, uiTab); Fishing.render.overlay(ctx, uw, uh, usf, uiTab); Social.render.overlay(ctx, uw, uh, usf, uiTab); Festival.render.calendar(ctx, uw, uh);
+  const book = UIKit.anyBook() || UIKit.Map.open; if (book) { ctx.fillStyle = 'rgba(16,10,4,.38)'; ctx.fillRect(0, 0, uw, uh); }          // a book takes the focus: the world dims, the HUD steps aside
+  Touch.draw(ctx, uw, uh, usf); if (!book) Survival.HUD.draw(ctx, uw, uh, usf, T); Gather.UI.draw(ctx, uw, uh, usf, uiTab); Monsters.render.overlay(ctx, uw, uh, usf, uiTab); Build.UI.draw(ctx, uw, uh, usf, uiTab); Fishing.render.overlay(ctx, uw, uh, usf, uiTab); Social.render.overlay(ctx, uw, uh, usf, uiTab); Festival.render.calendar(ctx, uw, uh);
   UIKit.drawRibbon(ctx, uw, uh); UIKit.drawMap(ctx, uw, uh, uiTab); UIKit.drawNotices(ctx, uw, uh, usf, uiTab); UIKit.drawMenu(ctx, uw, uh); if (portrait()) drawPortraitCard(ctx, uw, uh); ctx.restore();
   FRAME_MS += (performance.now() - tf0 - FRAME_MS) * .05;
   document.getElementById('clock').textContent = `${WorldClock.label()} · day ${Survival.Clock.day} · ${season} · ${Survival.Clock.phase()} · ${WeatherState.kind} ${(WeatherState.intensity * 100) | 0}%`;
@@ -431,7 +502,7 @@ $('season').onchange = e => { SeasonState.season = e.target.value; };
 $('weather').onchange = e => WeatherState.set(e.target.value, $('intensity').value / 100);
 $('intensity').oninput = e => WeatherState.set(WeatherState.kind, e.target.value / 100);
 $('zoom').onchange = e => state.zoom = +e.target.value; $('viewport').onchange = e => state.viewport = e.target.checked;
-$('vol').oninput = e => { Monsters.Audio.vol.master = e.target.value / 100; if (Monsters.Audio.master) Monsters.Audio.master.gain.value = Monsters.Audio.vol.master; }; $('touch').onchange = e => Touch.enabled = e.target.checked; $('devtoggle').onchange = e => $('dev').style.display = e.target.checked ? '' : 'none'; $('aspect').onchange = e => { const [w, h] = e.target.value.split('x').map(Number); Camera.vw = w; Camera.vh = h; }; $('safe').oninput = e => Camera.safe = +e.target.value; $('camsmooth').oninput = e => Camera.smooth = +e.target.value;
+$('vol').oninput = e => { if (window.Sound) { Sound.setVolume('master', e.target.value / 100); return; } Monsters.Audio.vol.master = e.target.value / 100; if (Monsters.Audio.master) Monsters.Audio.master.gain.value = Monsters.Audio.vol.master; }; $('touch').onchange = e => Touch.enabled = e.target.checked; $('devtoggle').onchange = e => $('dev').style.display = e.target.checked ? '' : 'none'; $('aspect').onchange = e => { const [w, h] = e.target.value.split('x').map(Number); Camera.vw = w; Camera.vh = h; }; $('safe').oninput = e => Camera.safe = +e.target.value; $('camsmooth').oninput = e => Camera.smooth = +e.target.value;
 if ('ontouchstart' in window) { Touch.enabled = true; $('touch').checked = true; }
 Touch.attach(cv);
 // on a phone the game is the page: the canvas fills the screen height and the widest matching view is used
@@ -443,7 +514,7 @@ let KIT_TOOK = false;
 { const lp = e => { const r = cv.getBoundingClientRect(); return [(e.clientX - r.left) / r.width * cv.width / state.zoom, (e.clientY - r.top) / r.height * cv.height / state.zoom]; };
   cv.addEventListener('mousemove', e => { const [x, y] = lp(e); UIKit.move(x / UI_SCALE, y / UI_SCALE); Build.UI.pointer(x, y, false); }); cv.addEventListener('mouseleave', () => { UIKit.Ptr.over = false; });
   cv.addEventListener('mousedown', e => { if (window.Sound && Sound.start) Sound.start(); const [x, y] = lp(e); if (UIKit.pointer(x / UI_SCALE, y / UI_SCALE)) { KIT_TOOK = true; return; } KIT_TOOK = false; if (UIKit.paused() || UIKit.Map.open) return; if (Festival.UI.open) { Festival.pointer(x, y, true); return; } if (Social.busy()) { Social.pointer(x, y, true); return; } if (Fishing.pointer(x, y, true)) e.stopPropagation(); }); addEventListener('mouseup', () => Fishing.pointer(0, 0, false)); cv.addEventListener('click', e => { if (KIT_TOOK) return; const [x, y] = lp(e); if (Fishing.busy() || Fishing.Book.open || Social.busy()) return; Build.UI.pointer(x, y, true); }); }
-window.CLSX = () => CLS; window.DATA = DATA; window.tableAt = tableAt; window.Player = Player; window.Camera = Camera; window.WorldClock = WorldClock; window.WeatherState = WeatherState; window.SeasonState = SeasonState; window.Interaction = Interaction; window.Input = Input; window.SIM = { step: (axis, n) => { for (let i = 0; i < n; i++) Player.step(SIM_DT, axis); }, depthAt: (x, y) => DATA.depth[SeasonState.season === 'winter' ? 'winter' : 'spring'][y * W + x], blocked: (x, y) => Player.blocked(x, y) };
+window.CLSX = () => CLS; window.OFFC = () => off; window.PFX = P; window.SNOW = v => (v === undefined ? SNOWACC : (SNOWACC = v)); window.portraitNow = () => portrait(); window.DATA = DATA; window.tableAt = tableAt; window.Player = Player; window.Camera = Camera; window.WorldClock = WorldClock; window.WeatherState = WeatherState; window.SeasonState = SeasonState; window.Interaction = Interaction; window.Input = Input; window.SIM = { step: (axis, n) => { for (let i = 0; i < n; i++) Player.step(SIM_DT, axis); }, depthAt: (x, y) => DATA.depth[SeasonState.season === 'winter' ? 'winter' : 'spring'][y * W + x], blocked: (x, y) => Player.blocked(x, y) };
 $('event').onchange = e => applyEvent(e.target.value);
 function applyEvent(name, keep) { const ev = DATA.events[name]; EventState.current = ev || null; buildLightMap(ev ? ev.extra_lights : []); if (keep) return;
   if (ev) { SeasonState.season = ev.season; $('season').value = ev.season; WorldClock.minutes = ev.hour * 60; $('time').value = WorldClock.minutes | 0; WeatherState.set(ev.weather, ev.intensity); $('weather').value = ev.weather; $('intensity').value = ev.intensity * 100; } }

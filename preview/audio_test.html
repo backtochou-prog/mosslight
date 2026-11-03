@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>MOSSlight audio bench</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root { --bg:#1d211b; --panel:#262b23; --ink:#d9d4c3; --dim:#8f8c7d; --moss:#7f9a5a; --line:#363c31; }
+  body { margin:0; background:var(--bg); color:var(--ink); font:14px/1.45 ui-monospace, Menlo, Consolas, monospace; }
+  main { max-width:980px; margin:0 auto; padding:24px; display:grid; gap:16px; grid-template-columns: 1fr 1fr; }
+  h1 { grid-column:1/-1; font-size:16px; font-weight:600; margin:0; color:var(--moss); letter-spacing:.04em; }
+  section { background:var(--panel); border:1px solid var(--line); border-radius:6px; padding:14px; }
+  h2 { font-size:12px; text-transform:uppercase; letter-spacing:.1em; color:var(--dim); margin:0 0 10px; font-weight:500; }
+  label { display:flex; justify-content:space-between; gap:8px; margin:4px 0; }
+  select, input[type=range] { width:55%; background:#1a1e18; color:var(--ink); border:1px solid var(--line); }
+  button { background:#1a1e18; color:var(--ink); border:1px solid var(--line); border-radius:4px; padding:4px 8px; margin:2px; font:inherit; font-size:12px; cursor:pointer; }
+  button:hover { border-color:var(--moss); }
+  #dbg { white-space:pre; font-size:12px; color:var(--dim); grid-column:1/-1; }
+  .wide { grid-column:1/-1; }
+</style></head>
+<body><main>
+<h1>MOSSlight / audio bench</h1>
+<section><h2>World</h2>
+  <label>hour <input id="hour" type="range" min="0" max="24" step=".1" value="10"></label>
+  <label>season <select id="season"><option>spring</option><option>summer</option><option>autumn</option><option>winter</option></select></label>
+  <label>weather <select id="kind"><option>clear</option><option>light_rain</option><option>heavy_rain</option><option>fog</option><option>snow</option><option>wind</option></select></label>
+  <label>intensity <input id="intensity" type="range" min="0" max="1" step=".01" value="0"></label>
+  <label>wind <input id="wind" type="range" min="0" max="1" step=".01" value=".25"></label>
+  <label>water dist <input id="water" type="range" min="0" max="400" value="400"></label>
+  <label>fire dist <input id="fire" type="range" min="0" max="400" value="400"></label>
+  <label>tent dist <input id="tent" type="range" min="0" max="400" value="400"></label>
+  <label>tree density <input id="trees" type="range" min="0" max="1" step=".01" value=".3"></label>
+  <label>shelter <input id="shelter" type="checkbox"></label>
+  <label>fishing <input id="fishing" type="checkbox"></label>
+  <label>monster pursuing (dist) <input id="mon" type="range" min="0" max="400" value="400"></label>
+  <label>festival <select id="fest"><option value="">none</option><option>fest_awakening</option><option>fest_fireflies</option><option>fest_forgotten</option><option>fest_silent_tide</option></select></label>
+</section>
+<section><h2>Mix</h2><div id="mix"></div><label>muted <input id="muted" type="checkbox"></label><label>reduce repetition <input id="rr" type="checkbox"></label>
+  <p><button id="go">start audio</button></p></section>
+<section class="wide"><h2>Sounds</h2><div id="btns"></div></section>
+<pre id="dbg"></pre>
+</main>
+<script src="audio.js"></script>
+<script>
+// ---- fake world: a plain config object; every accessor reads it. Shared by the bench UI and tests/audio_render.js.
+function makeWorld(c) {
+  c = Object.assign({ hour: 10, phase: null, season: 'spring', kind: 'clear', intensity: 0, wind: .25, x: 200, y: 200, water: 999, fire: 999, tent: 999, trees: .3, shelter: false, fishing: false, monsters: [], festival: null }, c || {});
+  const w = { cfg: c,
+    WorldClock: { hour: () => c.hour },
+    Survival: { Clock: { phase: () => c.phase || (c.hour < 5 ? 'deep_night' : c.hour < 6.5 ? 'dawn' : c.hour < 7.5 ? 'dawn_transition' : c.hour < 18 ? 'day' : c.hour < 20 ? 'sunset' : c.hour < 23 ? 'early_night' : 'deep_night') } },
+    SeasonState: { get season() { return c.season; } },
+    WeatherState: { get kind() { return c.kind; }, get intensity() { return c.intensity; }, get wind() { return c.wind; } },
+    Player: { get x() { return c.x; }, get y() { return c.y; }, moving: false },
+    Fishing: { busy: () => c.fishing },
+    Monsters: { get list() { return c.monsters; } },
+    Festival: { active: () => c.festival },
+    waterDist: () => c.water, fireDist: () => c.fire, tentDist: () => c.tent, treeDensity: () => c.trees, shelter: () => c.shelter };
+  return w;
+}
+// ---- scenarios used by the offline renders
+const BASE = { morning: { hour: 6.8, season: 'spring' }, day: { hour: 12, season: 'summer' }, sunset: { hour: 18.8, season: 'summer' }, night: { hour: 1.5, season: 'summer' },
+  danger: { hour: 1.5, season: 'autumn', monsters: [{ x: 260, y: 200, type: 'stalker', state: 'pursue' }] }, shelter: { hour: 22, season: 'autumn', fire: 20 },
+  fishing: { hour: 14, season: 'summer', fishing: true }, winter: { hour: 12, season: 'winter' },
+  fest_awakening: { hour: 20, festival: 'fest_awakening' }, fest_fireflies: { hour: 21, season: 'summer', festival: 'fest_fireflies' },
+  fest_forgotten: { hour: 21, season: 'autumn', festival: 'fest_forgotten' }, fest_silent_tide: { hour: 22, season: 'winter', festival: 'fest_silent_tide' } };
+const AMB = {
+  amb_spring_day_meadow: { hour: 10, season: 'spring', kind: 'clear', wind: .25, trees: .2 },
+  amb_summer_dusk_pond: { hour: 19.2, season: 'summer', kind: 'clear', wind: .1, water: 25, trees: .4 },
+  amb_autumn_rain_tent: { hour: 15, season: 'autumn', kind: 'light_rain', intensity: .7, wind: .4, tent: 12, trees: .5 },
+  amb_winter_night_wind: { hour: 2, season: 'winter', kind: 'wind', intensity: .8, wind: .85, trees: .6 },
+  amb_campfire_night: { hour: 22, season: 'spring', kind: 'clear', wind: .15, fire: 20, tent: 60, trees: .4 } };
+function b64(buf) { // 16-bit stereo WAV, base64
+  const n = buf.length, ch = buf.numberOfChannels, sr = buf.sampleRate, out = new DataView(new ArrayBuffer(44 + n * ch * 2));
+  const ws = (o, s) => { for (let i = 0; i < s.length; i++) out.setUint8(o + i, s.charCodeAt(i)); };
+  ws(0, 'RIFF'); out.setUint32(4, 36 + n * ch * 2, true); ws(8, 'WAVE'); ws(12, 'fmt '); out.setUint32(16, 16, true); out.setUint16(20, 1, true); out.setUint16(22, ch, true);
+  out.setUint32(24, sr, true); out.setUint32(28, sr * ch * 2, true); out.setUint16(32, ch * 2, true); out.setUint16(34, 16, true); ws(36, 'data'); out.setUint32(40, n * ch * 2, true);
+  const d = [...Array(ch)].map((_, i) => buf.getChannelData(i)); let o = 44;
+  for (let i = 0; i < n; i++) for (let c = 0; c < ch; c++) { const v = Math.max(-1, Math.min(1, d[c][i])); out.setInt16(o, v < 0 ? v * 32768 : v * 32767, true); o += 2; }
+  const bytes = new Uint8Array(out.buffer); let s = ''; for (let i = 0; i < bytes.length; i += 32768) s += String.fromCharCode.apply(null, bytes.subarray(i, i + 32768)); return btoa(s);
+}
+// renderScene(name) → {wav: base64, info}. Names: mood_<mood>, amb_*, xfade_day_to_danger, xfade_day_to_sunset, sfx_sheet
+async function renderScene(name) {
+  let spec, info = { name };
+  if (name.startsWith('mood_')) { const m = name.slice(5); const w = makeWorld(BASE[m]); spec = { seconds: 16, world: w, ambience: false, seed: 7 }; info.want = Sound._wantMood(w); }
+  else if (AMB[name]) { spec = { seconds: 8, world: makeWorld(AMB[name]), music: false, seed: 11 }; }
+  else if (name === 'xfade_day_to_danger') { const w = makeWorld(BASE.day); info.switchAt = 6; spec = { seconds: 16, world: w, ambience: false, seed: 7, onStep: t => { if (Math.abs(t - 6) < .05) w.cfg.monsters = [{ x: 260, y: 200, type: 'stalker', state: 'pursue' }]; } }; }
+  else if (name === 'xfade_day_to_sunset') { const w = makeWorld(BASE.day); info.switchAt = 6; spec = { seconds: 16, world: w, ambience: false, seed: 7, onStep: (t, e) => { if (Math.abs(t - 6) < .05) e.forceMood('sunset'); } }; }
+  else if (name === 'sfx_sheet') { // every one-shot, spaced, for a listen-through / clipping check
+    const w = makeWorld({}); const names = ['wood_gather','wood_chop','stone_gather','stone_pick','plant_gather','leaf_rustle','berry_pop','rare_gather','metal_gather','water_splash','cast','float_plop','nibble','bite','reel','catch','lose_fish','pickup','craft_tap','craft_done','build_knock','place','remove','eat','hurt','footstep_grass','footstep_dirt','footstep_wood','footstep_snow','door','sleep','wake','page','swing','hit'];
+    const uis = ['open','close','page_turn','hover','select','confirm','cancel','error','tab','slider','toast','toast_rare']; const cre = ['howl','call','tick','groan','rumble','thud','chime']; const st = ['discovery','rare','recipe','milestone','festival'];
+    const seq = [...names.map(n => e => e.play(n, { x: 200 + (Math.random() - .5) * 200, y: 200 })), ...uis.map(n => e => e.ui(n)), ...cre.map(n => e => e.creature(n, 300, 200)), ...st.map(n => e => e.sting(n))];
+    info.count = seq.length; info.played = 0;
+    spec = { seconds: seq.length * .6 + 3, world: w, ambience: false, music: false, seed: 3, onStep: (t, e) => { const i = Math.round(t / .6); if (Math.abs(t - i * .6) < .05 && seq[i - 1]) { if (seq[i - 1](e)) info.played++; } } };
+  }
+  const buf = await Sound._renderOffline(spec);
+  info.debug = spec.engine.debug(); info.seconds = spec.seconds;
+  return { wav: b64(buf), info };
+}
+window.makeWorld = makeWorld; window.renderScene = renderScene; window.SCENES = { moods: Object.keys(BASE), amb: Object.keys(AMB) };
+
+// ---- live bench UI
+const W = makeWorld({}); Sound.init(W);
+const $ = id => document.getElementById(id);
+const bind = () => { const c = W.cfg; c.hour = +$('hour').value; c.season = $('season').value; c.kind = $('kind').value; c.intensity = +$('intensity').value; c.wind = +$('wind').value;
+  c.water = +$('water').value; c.fire = +$('fire').value; c.tent = +$('tent').value; c.trees = +$('trees').value; c.shelter = $('shelter').checked; c.fishing = $('fishing').checked;
+  const md = +$('mon').value; c.monsters = md < 400 ? [{ x: c.x + md, y: c.y, type: 'stalker', state: 'pursue' }] : []; c.festival = $('fest').value || null; };
+document.querySelectorAll('input,select').forEach(e => e.addEventListener('input', bind)); bind();
+for (const b of ['master', 'music', 'ambient', 'sfx', 'ui', 'creatures']) { const l = document.createElement('label'); l.innerHTML = `${b} <input type="range" min="0" max="1" step=".01" value="${Sound.settings[b]}">`; l.querySelector('input').oninput = e => { Sound.setVolume(b, +e.target.value); Sound.ui('slider', { value: +e.target.value }); }; $('mix').appendChild(l); }
+$('muted').checked = Sound.settings.muted; $('muted').onchange = e => Sound.setMuted(e.target.checked);
+$('rr').checked = Sound.settings.reduceRepetition; $('rr').onchange = e => { Sound.settings.reduceRepetition = e.target.checked; Sound.save(); };
+const groups = { play: ['wood_gather','wood_chop','stone_gather','stone_pick','plant_gather','leaf_rustle','berry_pop','rare_gather','metal_gather','water_splash','cast','float_plop','nibble','bite','reel','catch','lose_fish','pickup','craft_tap','craft_done','build_knock','place','remove','eat','hurt','footstep_grass','footstep_dirt','footstep_wood','footstep_snow','door','sleep','wake','page','swing','hit'],
+  ui: ['open','close','page_turn','hover','select','confirm','cancel','error','tab','slider','toast','toast_rare'], creature: ['howl','call','tick','groan','rumble','thud','swing','hit','hurt','chime'], sting: ['discovery','rare','recipe','milestone','festival'] };
+for (const [fn, list] of Object.entries(groups)) { const d = document.createElement('div'); d.innerHTML = `<h2>${fn}</h2>`; for (const n of list) { const b = document.createElement('button'); b.textContent = n; b.onclick = () => fn === 'creature' ? Sound.creature(n, W.cfg.x + 120, W.cfg.y) : fn === 'play' ? Sound.play(n, { x: W.cfg.x + (Math.random() - .5) * 160, y: W.cfg.y }) : Sound[fn](n); d.appendChild(b); } $('btns').appendChild(d); }
+const kick = () => Sound.start(); ['pointerdown', 'touchstart', 'keydown'].forEach(e => addEventListener(e, kick, { once: true })); $('go').onclick = kick;
+let last = performance.now(); (function loop(t) { Sound.tick((t - last) / 1000); last = t; $('dbg').textContent = JSON.stringify(Sound.debug(), null, 1); requestAnimationFrame(loop); })(last);
+</script></body></html>

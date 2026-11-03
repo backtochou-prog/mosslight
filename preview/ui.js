@@ -14,8 +14,8 @@ window.UIKit = (() => {
   const F = { 1: null, 2: null }; const tint = {};
   function loadFace(n, img, meta) { const c = document.createElement('canvas'); c.width = img.width; c.height = img.height; const g = c.getContext('2d'); g.drawImage(img, 0, 0); const d = g.getImageData(0, 0, c.width, c.height); for (let i = 0; i < d.data.length; i += 4) { d.data[i + 3] = d.data[i]; d.data[i] = d.data[i + 1] = d.data[i + 2] = 255; } g.putImageData(d, 0, 0); F[n] = { c, m: meta }; }
   function tinted(n, col) { const k = n + '|' + col; if (tint[k]) return tint[k]; const f = F[n]; const c = document.createElement('canvas'); c.width = f.c.width; c.height = f.c.height; const g = c.getContext('2d'); g.drawImage(f.c, 0, 0); g.globalCompositeOperation = 'source-in'; g.fillStyle = col; g.fillRect(0, 0, c.width, c.height); return tint[k] = c; }
-  function measure(str, n = 1) { const f = F[n]; if (!f) return str.length * 4; let w = 0; for (const ch of String(str)) { const gl = f.m.glyphs[ch]; w += (gl ? gl[1] : f.m.space) + f.m.spacing; } return Math.max(0, w - f.m.spacing); }
-  function text(g, str, x, y, o = {}) { const n = o.face || 1, f = F[n]; if (!f) return 0; str = String(str); const col = o.color || (S.highContrast ? '#1c120a' : C.ink); const w = measure(str, n) + (o.bold ? 1 : 0);
+  function measure(str, n = 1, bold = false) { const f = F[n]; if (!f) return String(str).length * 4; let w = 0; for (const ch of String(str)) { const gl = f.m.glyphs[ch] || f.m.glyphs[ch.toLowerCase()]; w += (gl ? gl[1] + (bold ? 1 : 0) : f.m.space) + f.m.spacing; } return Math.max(0, w - f.m.spacing); }
+  function text(g, str, x, y, o = {}) { const n = o.face || 1, f = F[n]; if (!f) return 0; str = String(str); const col = o.color || (S.highContrast ? '#1c120a' : C.ink); const w = measure(str, n, !!o.bold);
     let cx = Math.round(o.align === 'right' ? x - w : o.align === 'center' ? x - w / 2 : x); const top = Math.round(y - f.m.baseline); const img = tinted(n, col); const sm = g.imageSmoothingEnabled; g.imageSmoothingEnabled = false;
     for (const ch of str) { const gl = f.m.glyphs[ch] || f.m.glyphs[ch.toLowerCase()]; if (!gl) { cx += f.m.space + f.m.spacing; continue; } g.drawImage(img, gl[0], 0, gl[1], f.m.height, cx, top, gl[1], f.m.height); if (o.bold) g.drawImage(img, gl[0], 0, gl[1], f.m.height, cx + 1, top, gl[1], f.m.height); cx += gl[1] + f.m.spacing + (o.bold ? 1 : 0); }
     g.imageSmoothingEnabled = sm; return w; }
@@ -25,7 +25,7 @@ window.UIKit = (() => {
   function install() { const P = CanvasRenderingContext2D.prototype, ft = P.fillText, mt = P.measureText;
     const parse = g => { const f = g.font || ''; if (!/mossbook/i.test(f)) return null; const m = /(\d+(?:\.\d+)?)px/.exec(f); const px = m ? +m[1] : 9; return { face: px >= 11 ? 2 : 1, bold: /bold/.test(f) && px < 11 }; };
     P.fillText = function (s, x, y, mw) { const p = parse(this); if (!p || !F[1]) return ft.call(this, s, x, y, mw); const col = typeof this.fillStyle === 'string' ? this.fillStyle : C.ink; text(this, s, x, y, { face: p.face, bold: p.bold, color: col, align: this.textAlign === 'center' ? 'center' : (this.textAlign === 'right' || this.textAlign === 'end') ? 'right' : 'left' }); };
-    P.measureText = function (s) { const p = parse(this); if (!p || !F[1]) return mt.call(this, s); return { width: measure(s, p.face) + (p.bold ? 1 : 0) }; }; }
+    P.measureText = function (s) { const p = parse(this); if (!p || !F[1]) return mt.call(this, s); return { width: measure(s, p.face, p.bold) }; }; }
   // ================================================================= surfaces
   const hash = (x, y) => (((x * 73856093) ^ (y * 19349663)) >>> 0) % 997;
   function paper(g, x, y, w, h, o = {}) { x = Math.round(x); y = Math.round(y); w = Math.round(w); h = Math.round(h);
@@ -57,8 +57,11 @@ window.UIKit = (() => {
   // ================================================================= hits (one tap router for the whole UI layer)
   let HITS = []; const Ptr = { x: -99, y: -99, over: false };
   const touch = () => S.touch === 'on' || (S.touch === 'auto' && W && W.touchOn());
-  function hit(x, y, w, h, fn, label) { const m = touch() ? 34 : 14; if (w < m) { x -= (m - w) / 2; w = m; } if (h < m) { y -= (m - h) / 2; h = m; } HITS.push({ x, y, w, h, fn, label }); }
-  function pointer(x, y) { for (let i = HITS.length - 1; i >= 0; i--) { const h = HITS[i]; if (x >= h.x && y >= h.y && x < h.x + h.w && y < h.y + h.h) { if (W && W.Sound) W.Sound.ui(h.label === 'close' ? 'close' : 'select'); h.fn(); return true; } } return false; }
+  function hit(x, y, w, h, fn, label) { const o = { x, y, w, h }; const m = touch() ? 34 : 14; if (w < m) { x -= (m - w) / 2; w = m; } if (h < m) { y -= (m - h) / 2; h = m; } HITS.push({ x, y, w, h, fn, label, o }); return o; }
+  function pointer(x, y) { Ptr.tx = x; Ptr.ty = y; let pick = null;
+    for (let i = HITS.length - 1; i >= 0 && !pick; i--) { const h = HITS[i], o = h.o; if (x >= o.x && y >= o.y && x < o.x + o.w && y < o.y + o.h) pick = h; }          // a tap inside a drawn control always means that control
+    if (!pick) { let best = 1e9; for (let i = HITS.length - 1; i >= 0; i--) { const h = HITS[i]; if (x >= h.x && y >= h.y && x < h.x + h.w && y < h.y + h.h) { const d = Math.hypot(x - (h.o.x + h.o.w / 2), y - (h.o.y + h.o.h / 2)); if (d < best) { best = d; pick = h; } } } }   // else the nearest enlarged target
+    if (!pick) return false; if (W && W.Sound) W.Sound.ui(pick.label === 'close' ? 'close' : 'select'); pick.fn(); return true; }
   function move(x, y) { Ptr.x = x; Ptr.y = y; Ptr.over = true; }
   // ================================================================= motion: quick, and optional
   const opened = {}; function openT(key, on) { if (!on) { delete opened[key]; return 1; } if (opened[key] === undefined) { opened[key] = T; if (W && W.Sound) W.Sound.ui('open'); } return S.reduceMotion ? 1 : Math.min(1, (T - opened[key]) / .16); }
@@ -71,18 +74,22 @@ window.UIKit = (() => {
   function fly(id, wx, wy) { Flyers.push({ id, wx, wy, t0: T }); if (Flyers.length > 12) Flyers.shift(); }
   function drawNotices(g, vw, vh, safe, tab) { const now = T;
     // toasts: stacked top-right under the tool bar, never more than three at once
-    const live = Toasts.filter(t => now - t.t0 < t.life); Toasts.length = 0; Toasts.push(...live); let ty = 40 + safe;
-    live.slice(-3).forEach(t => { const age = now - t.t0, k = S.reduceMotion ? 1 : Math.min(1, age / .18), out = Math.max(0, Math.min(1, (t.life - age) / .4)); const w = 176, h = t.portrait || t.plate ? 40 : 30, x = vw - w - 10 - safe + Math.round((1 - k) * 30); g.save(); g.globalAlpha = out;
+    const covered = !!(anyBook() || Map.open || Menu.open); if (covered) for (const t of Toasts) t.t0 = Math.min(now, Math.max(t.t0, now - .3));          // a discovery waits until the page is put away
+    const live = Toasts.filter(t => now - t.t0 < t.life); Toasts.length = 0; Toasts.push(...live); let ty = 40 + safe; if (covered) return drawRest();
+    live.slice(-3).forEach(t => { const age = now - t.t0, k = S.reduceMotion ? 1 : Math.min(1, age / .18), out = Math.max(0, Math.min(1, (t.life - age) / .4)); const w = 176, h = t.plate ? 40 : t.sub ? 38 : 28, x = vw - w - 10 - safe + Math.round((1 - k) * 30); g.save(); g.globalAlpha = out;
       tag(g, x, ty, w, h, { edge: t.rare ? C.gold : C.leather }); if (t.rare) { g.fillStyle = 'rgba(200,150,40,.22)'; g.fillRect(x + 1, ty + 1, w - 2, 2); }
       if (t.plate && W.Fishing.plate) { g.imageSmoothingEnabled = false; g.drawImage(W.Fishing.plate(t.plate), x + 3, ty + 4, 32, 32); } else if (t.icon) W.Gather.UI.drawIcon(g, t.icon, x + 4, ty + (h - 24) / 2, 1.5, tab); else if (t.glyph) glyph(g, t.glyph, x + 8, ty + 10, C.rust, 2);
-      const tx = x + (t.plate ? 40 : 32); text(g, t.kicker || '', tx, ty + 10, { color: t.rare ? C.gold : C.faint }); text(g, t.title, tx, ty + 20, { bold: !!t.rare }); if (t.sub) text(g, t.sub.slice(0, 34), tx, ty + 30, { color: C.ink2 }); if (t.rare) pips(g, x + w - 28, ty + 5, t.rarity || 'rare');
+      const tx = x + (t.plate ? 40 : 32); const room = x + w - tx - (t.rare ? 30 : 6); text(g, t.kicker || '', tx, ty + 10, { color: t.rare ? C.gold : C.faint }); text(g, fit(t.title, room, !!t.rare), tx, ty + 20, { bold: !!t.rare }); if (t.sub) text(g, fit(t.sub, x + w - tx - 6), tx, ty + 31, { color: C.ink2 }); if (t.rare) pips(g, x + w - 28, ty + 5, t.rarity || 'rare');
       g.restore(); ty += h + 6; });
+    drawRest();
+    function drawRest() {
     // notes: short sentences at the bottom centre, above the prompt
     const nl = Notes.filter(n => now - n.t0 < n.life); Notes.length = 0; Notes.push(...nl); let ny = vh - 72 - safe;
     nl.slice(-2).reverse().forEach(n => { const ls = lines(n.msg, Math.min(vw - 60, 360)); const w = Math.max(...ls.map(l => measure(l))) + 16, h = ls.length * 10 + 7; const a = Math.max(0, Math.min(1, (n.life - (now - n.t0)) / .5)); g.save(); g.globalAlpha = a; tag(g, vw / 2 - w / 2, ny - h, w, h); ls.forEach((l, i) => text(g, l, vw / 2, ny - h + 10 + i * 10, { align: 'center' })); g.restore(); ny -= h + 6; });
     // pickups: the item lifts from where it was picked and drops into the pack
     const cx = W.Camera.ix(), cy = W.Camera.iy(); const dest = packPos(vw, vh, safe);
-    for (let i = Flyers.length - 1; i >= 0; i--) { const f = Flyers[i], t = (now - f.t0) / (S.reduceMotion ? .25 : .55); if (t >= 1) { Flyers.splice(i, 1); bump = now; continue; } const sx = (f.wx - cx) / US - 8, sy = (f.wy - cy) / US - 22; const e = t * t * (3 - 2 * t); const x = sx + (dest[0] - sx) * e, y = sy + (dest[1] - sy) * e - Math.sin(t * Math.PI) * 24; g.save(); g.globalAlpha = Math.min(1, 1.4 - t); W.Gather.UI.drawIcon(g, f.id, x, y, 1, tab); g.restore(); } }
+    for (let i = Flyers.length - 1; i >= 0; i--) { const f = Flyers[i], t = (now - f.t0) / (S.reduceMotion ? .25 : .55); if (t >= 1) { Flyers.splice(i, 1); bump = now; continue; } const sx = (f.wx - cx) / US - 8, sy = (f.wy - cy) / US - 22; const e = t * t * (3 - 2 * t); const x = sx + (dest[0] - sx) * e, y = sy + (dest[1] - sy) * e - Math.sin(t * Math.PI) * 24; g.save(); g.globalAlpha = Math.min(1, 1.4 - t); W.Gather.UI.drawIcon(g, f.id, x, y, 1, tab); g.restore(); } } }
+  function fit(str, w, bold) { str = String(str); if (measure(str, 1, bold) <= w) return str; while (str.length > 1 && measure(str + '…', 1, bold) > w) str = str.slice(0, -1); return str.trimEnd() + '…'; }
   let bump = -9; const packPos = (vw, vh, safe) => touch() ? [vw - 120 - safe, vh - 44 - safe] : [vw - 120 - safe, 14 + safe];
   // ================================================================= pause menu and settings
   const Menu = { open: null, tab: 'sound', last: null };
@@ -133,5 +140,5 @@ window.UIKit = (() => {
   function tick(dt) { T += dt; }
   let US = 1; function scale(vh) { US = S.uiScale !== 'auto' ? +S.uiScale : (touch() && vh <= 420 ? 1.5 : 1); return US; }
   function init(world, faces) { W = world; loadSettings(); loadFace(1, faces.img1, faces.meta1); loadFace(2, faces.img2, faces.meta2); install(); }
-  return { uiTab: () => W.tab(), init, tick, begin, C, RCOL, S, saveSettings, text, measure, wrap, lines, paper, tag, slot, pips, rarityLabel, button, bar, divider, glyph, hit, pointer, move, Ptr, touch, enter, pageTurn, openT, toast, note, fly, drawNotices, packPos, bumpT: () => bump, Menu, paused, drawMenu, closeMenu: close, Map, explore, drawMap, register, openBook, anyBook, lastTab: () => lastTab, drawRibbon, scale, hits: () => HITS, now: () => T };
+  return { scaleNow: () => US, fit, uiTab: () => W.tab(), init, tick, begin, C, RCOL, S, saveSettings, text, measure, wrap, lines, paper, tag, slot, pips, rarityLabel, button, bar, divider, glyph, hit, pointer, move, Ptr, touch, enter, pageTurn, openT, toast, note, fly, drawNotices, packPos, bumpT: () => bump, Menu, paused, drawMenu, closeMenu: close, Map, explore, drawMap, register, openBook, anyBook, lastTab: () => lastTab, drawRibbon, scale, hits: () => HITS, now: () => T };
 })();

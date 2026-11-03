@@ -5,7 +5,7 @@ window.Build = (() => {
   const T = 16; let uid = 1;
   const S = { list: [], F: new Map(), L: new Map(), Wl: new Map(), R: new Map(), N: new Map(), roofGroups: [], unlocked: {}, stationsBuilt: {} };
   const key = (x, y) => x + ',' + y;
-  const FX = { msg: null, t: 0, say(m, t = 2.6) { this.msg = m; this.t = t; } };
+  const FX = { msg: null, t: 0, say(m, t = 2.6) { this.msg = m; this.t = t; if (window.UIKit && UIKit.note) UIKit.note(m, t); } };   // short sentences go to the one note line
   const inv = () => W.Gather.Inventory, items = () => W.Gather.items();
   const finished = e => !e.work;
 
@@ -19,7 +19,7 @@ window.Build = (() => {
   const Craft = {
     job: null, station: 'hand',
     unlockedFor(st) { return RECIPES.filter(r => r.station === st && S.unlocked[r.id]); },
-    check() { for (const r of RECIPES) { if (S.unlocked[r.id]) continue; const u = r.unlock; const ok = u.type === 'start' || (u.type === 'station' && S.stationsBuilt[u.id]) || (u.type === 'item' && (W.Gather.Journal.found[u.id] || inv().count(u.id) > 0)); if (ok) { const first = Object.keys(S.unlocked).length > 0; S.unlocked[r.id] = true; if (first && u.type !== 'start') FX.say('New recipe: ' + r.name); } } },
+    check() { for (const r of RECIPES) { if (S.unlocked[r.id]) continue; const u = r.unlock; const ok = u.type === 'start' || (u.type === 'station' && S.stationsBuilt[u.id]) || (u.type === 'item' && (W.Gather.Journal.found[u.id] || inv().count(u.id) > 0)); if (ok) { const first = Object.keys(S.unlocked).length > 0; S.unlocked[r.id] = true; if (first && u.type !== 'start' && window.UIKit) UIKit.toast({ kicker: 'New recipe', title: r.name, icon: r.icon }); } } },
     start(id, station) { const r = RECIPES.find(x => x.id === id); if (!r) return { ok: false, reason: 'Unknown recipe.' }; if (this.job) return { ok: false, reason: 'Already working.' };
       if (!S.unlocked[id]) return { ok: false, reason: 'You have not worked out how to make that yet.' };
       if (r.station !== (station || this.station)) return { ok: false, reason: 'That needs a ' + STN[r.station] + '.' };
@@ -31,7 +31,7 @@ window.Build = (() => {
     tick(dt) { if (!this.job) return; this.job.t += dt; if (this.job.t >= this.job.dur) this.finish(); },
     finish() { const { r } = this.job; this.job = null; if (!have(r.ingredients)) return FX.say('Something went missing from your pack.');
       const a = W.Survival.Activities.performCustom('craft:' + r.id, { label: r.name, heavy: r.energy >= 5, energy: r.energy, minutes: r.minutes, anim: 'build' }); if (!a.ok) return FX.say(a.reason);
-      take(r.ingredients); const got = inv().add(r.result, r.qty); FX.say(got === r.qty ? `Made ${r.qty > 1 ? r.qty + ' × ' : ''}${r.name}.` : 'Your pack is full; some of it stays on the bench.'); W.Gather.FX.pop(W.Player.x, W.Player.y - 30, [[r.result, got]]); this.check(); return true; },
+      take(r.ingredients); const got = inv().add(r.result, r.qty); if (window.UIKit) UIKit.toast({ kicker: 'Crafted', title: r.name + (r.qty > 1 ? ' ×' + r.qty : ''), sub: got === r.qty ? null : 'Pack full: some stays on the bench', icon: r.icon || r.result }); if (got !== r.qty) FX.say('Your pack is full; some of it stays on the bench.'); if (window.Sound && Sound.play) Sound.play('craft_done'); W.Gather.FX.pop(W.Player.x, W.Player.y - 30, [[r.result, got]]); this.check(); return true; },
   };
 
   // ---------------- world model
@@ -117,7 +117,7 @@ window.Build = (() => {
     for (const e of S.list) { const d = COMP[e.type]; const isCell = d.layer !== 'object'; const x = isCell ? e.cx * T + 8 : e.x, y = isCell ? e.cy * T + 11 : e.y;
       if (e.work) { if (d.layer !== 'object' || true) consider(e, x, y, `Work on ${d.name}`, () => work(e)); continue; }
       if (e.dur < (d.durability || 60) * 0.5) { consider(e, x, y, `Repair ${d.name}`, () => { const r = repair(e); FX.say(r.ok ? 'Repaired.' : r.reason); }); continue; }
-      if (d.station) consider(e, x, y, `Use ${d.name}`, () => { Craft.station = d.station; UI.open = 'craft'; UI.cur = 0; }, 28);
+      if (d.station) consider(e, x, y, `Use ${d.name}`, () => { Craft.station = d.station; UI.open = 'craft'; UI.cur = 0; UI.ccat = 0; }, 28);
       else if (d.storage) consider(e, x, y, `Open ${d.name}`, () => { UI.open = 'storage'; UI.store = e; UI.side = 0; UI.cur = 0; });
       else if (d.sleep) consider(e, x, y, 'Rest until morning', () => W.Survival.Sleep.start());
       else if (d.toggle) consider(e, x, y, e.on ? `Put out ${d.name}` : `Light ${d.name}`, () => { e.on = !e.on; if (W.relight) W.relight(); });
@@ -134,47 +134,187 @@ window.Build = (() => {
     withdraw(e, i) { return this.transfer(e.slots, i, inv().slots); },
   };
 
-  // ---------------- UI
+  // ---------------- UI: the field-journal pages (see UI_STYLE_GUIDE.md). Every control is a kit hit, every key still works.
   const CATS = ['Foundation', 'Floor', 'Wall', 'Opening', 'Roof', 'Defense', 'Home'];
-  const UI = { open: null, cur: 0, cat: 0, side: 0, store: null, place: null, off: [0, 0], ptr: null, rot: 0, moving: null, hit: [],
+  const RCAT = { all: 'All', material: 'Materials', tackle: 'Tackle', furniture: 'Furniture', station: 'Stations', storage: 'Storage', lighting: 'Light', decor: 'Decor', kitchen: 'Kitchen', medicine: 'Medicine', garden: 'Garden' };
+  const LAYER_NOTE = { foundation: 'Laid on open ground. Floors, walls and roofs all stand on foundations.', floor: 'Laid over a foundation, inside the walls.', wall: 'Built on a foundation. Joins its neighbours; a straight east-west run can take a door or window.', opening: 'Set into a finished, straight east-west wall.', roof: 'Covers a foundation; needs walls or a support within three cells. Shelter from rain and snow.', fence: 'Runs along open ground and joins its neighbours.' };
+  const K = () => window.UIKit, rnd = Math.round;
+  const fit = (s, w, f = 1) => { const U = K(); s = String(s); if (U.measure(s, f) <= w) return s; while (s.length > 1 && U.measure(s + '.', f) > w) s = s.slice(0, -1); return s.replace(/[ ,·]+$/, '') + '.'; };
+  // component art for the icon wells: the item icon when the piece is carried, else its own atlas sprite (trimmed, integer scale)
+  const sprCache = new Map();
+  function spriteCanvas(name, tab) { const s = A.index[name]; if (!s) return null; let m = sprCache.get(tab); if (!m) sprCache.set(tab, m = {}); if (m[name] !== undefined) return m[name];
+    let x0 = s.w, y0 = s.h, x1 = -1, y1 = -1; for (let yy = 0; yy < s.h; yy++) for (let xx = 0; xx < s.w; xx++) if (IDX[(s.y + yy) * AW + s.x + xx]) { if (xx < x0) x0 = xx; if (xx > x1) x1 = xx; if (yy < y0) y0 = yy; if (yy > y1) y1 = yy; }
+    if (x1 < 0) return m[name] = null; const w = x1 - x0 + 1, h = y1 - y0 + 1, c = document.createElement('canvas'); c.width = w; c.height = h; const cg = c.getContext('2d'), im = cg.createImageData(w, h);
+    for (let yy = 0; yy < h; yy++) for (let xx = 0; xx < w; xx++) { const pi = IDX[(s.y + y0 + yy) * AW + s.x + x0 + xx]; if (!pi || !tab[pi]) continue; const t = tab[pi], o = (yy * w + xx) * 4; im.data[o] = t[0]; im.data[o + 1] = t[1]; im.data[o + 2] = t[2]; im.data[o + 3] = 255; }
+    cg.putImageData(im, 0, 0); return m[name] = c; }
+  function spriteName(d) { if (d.layer === 'foundation') return `fnd_${d.mat}_0`; if (d.layer === 'wall') return `wall_${d.mat}_10`; if (d.layer === 'roof') return `roof_${d.mat}_ridge_11`;
+    if (d.layer === 'opening') return d.kind === 'window' ? 'window_wood' : 'door_closed_wood'; if (d.layer === 'fence') return d.kind === 'gate' ? d.sprite + '_closed' : 'fence_10'; return d.sprite; }
+  function compIcon(g, d, x, y, size, tab) { x = rnd(x); y = rnd(y); if (d.item && items()[d.item]) { const s = size >= 32 ? 32 : 16; W.Gather.UI.icon(g, d.item, x + (size - s) / 2, y + (size - s) / 2, s, tab); return; }
+    const c = spriteCanvas(spriteName(d), tab); if (!c) return; const sc = c.width * 2 <= size && c.height * 2 <= size ? 2 : 1, vw = Math.min(c.width, size / sc | 0), vh = Math.min(c.height, size / sc | 0);
+    const sx = (c.width - vw) >> 1, sy = c.height - vh - ((c.height - vh) >> 2);      // crop tall pieces near their base, where the face is
+    const sm = g.imageSmoothingEnabled; g.imageSmoothingEnabled = false; g.drawImage(c, sx, sy, vw, vh, x + rnd((size - vw * sc) / 2), y + rnd((size - vh * sc) / 2), vw * sc, vh * sc); g.imageSmoothingEnabled = sm; }
+  // a little hammer, raised or striking (7x7)
+  const HAMMER = [['..###..', '..###..', '...#...', '...#...', '...#...', '...#...', '.......'], ['.......', '.......', '#......', '.####..', '#......', '.......', '.......']];
+  const drawHammer = (g, x, y, f, col) => { g.fillStyle = col; HAMMER[f].forEach((row, yy) => { for (let xx = 0; xx < 7; xx++) if (row[xx] === '#') g.fillRect(x + xx, y + yy, 1, 1); }); };
+  const xMark = (g, x, y, col) => { g.fillStyle = col; for (let k = 0; k < 3; k++) { g.fillRect(x + k, y + k, 1, 1); g.fillRect(x + 2 - k, y + k, 1, 1); } };
+
+  const UI = { open: null, cur: 0, cat: 0, ccat: 0, side: 0, store: null, place: null, off: [0, 0], ptr: null, rot: 0, moving: null, hit: [], turnT: -9, card: null, k: 1, strikes: 0,
     busy() { return !!(this.open || Craft.job); },
     listBuild() { const c = CATS[this.cat]; if (c === 'Home') return Object.values(COMP).filter(d => d.item && inv().count(d.item) > 0); return Object.values(COMP).filter(d => d.cat === c); },
+    craftCats(all) { const out = ['all']; for (const r of all) if (!out.includes(r.category)) out.push(r.category); return out; },
+    craftList() { const all = Craft.unlockedFor(Craft.station), cats = this.craftCats(all); if (this.ccat >= cats.length) this.ccat = 0; const c = cats[this.ccat]; return c === 'all' ? all : all.filter(r => r.category === c); },
     cursor() { if (this.ptr) return snap(this.ptr[0], this.ptr[1]); const P = W.Player; const dx = P.facing === 'side' ? (P.flip ? -1 : 1) : 0, dy = P.facing === 'up' ? -1 : P.facing === 'down' ? 1 : 0; return snap(P.x + dx * 18 + this.off[0] * 16, P.y - 4 + dy * 18 + this.off[1] * 16); },
+    // the actions every key and every button share
+    doBuild() { const l = this.listBuild(); if (l[this.cur]) { this.place = l[this.cur].id; this.open = null; this.rot = 0; this.off = [0, 0]; this.ptr = null; } },
+    doCraft() { const l = this.craftList(); if (l[this.cur]) { const r = Craft.start(l[this.cur].id); if (!r.ok) FX.say(r.reason); else this.strikes = 0; } },
+    doStore() { const e = this.store; if (!e) return; if (this.side) Storage.withdraw(e, this.cur); else Storage.deposit(e, this.cur); },
+    setCat(i, n) { this.cat = (i + n) % n; this.cur = 0; this.turnT = K() ? K().now() : 0; },
+    setCCat(i, n) { this.ccat = (i + n) % n; this.cur = 0; this.turnT = K() ? K().now() : 0; },
     key(k) { if (!W) return false;
       if (Craft.job) { if (k === 'escape' || k === 'x') Craft.cancel(); return true; }
-      if (this.place) { const type = this.place;
+      if (this.place) {
         if (k === 'escape' || k === 'b') { this.place = null; this.moving = null; this.ptr = null; this.off = [0, 0]; return true; }
         if (k === 'r') { this.rot = (this.rot + 1) % 4; return true; }
         if (k === 'arrowleft') { this.off[0]--; this.ptr = null; return true; } if (k === 'arrowright') { this.off[0]++; this.ptr = null; return true; } if (k === 'arrowup') { this.off[1]--; this.ptr = null; return true; } if (k === 'arrowdown') { this.off[1]++; this.ptr = null; return true; }
         if (k === 'e' || k === 'enter') { this.confirm(); return true; }
-        if (k === 'x') { const e = at(this.cursor()); if (e) { const r = remove(e); FX.say(r.ok ? 'Taken down; part of the material comes back.' : r.reason); } return true; }
-        if (k === 'm') { const e = at(this.cursor()); if (e && COMP[e.type].layer === 'object') { this.moving = e; this.place = e.type; this.rot = e.rot; FX.say('Moving ' + COMP[e.type].name + '.'); } return true; }
+        if (k === 'x') { const e = at(this.cursor()); if (e) { const r = remove(e); FX.say(r.ok ? 'Taken down; part of the material comes back.' : r.reason); } else FX.say('Nothing built here to take down.'); return true; }
+        if (k === 'm') { const e = at(this.cursor()); if (e && COMP[e.type].layer === 'object') { this.moving = e; this.place = e.type; this.rot = e.rot; FX.say('Moving ' + COMP[e.type].name + '.'); } else FX.say('Point at a piece of furniture to move it.'); return true; }
         return false; }
-      if (this.open === 'build') { const l = this.listBuild(); if (k === 'arrowup' || k === 'w') this.cur = Math.max(0, this.cur - 1); else if (k === 'arrowdown' || k === 's') this.cur = Math.min(l.length - 1, this.cur + 1); else if (k === 'arrowleft' || k === 'q') { this.cat = (this.cat + CATS.length - 1) % CATS.length; this.cur = 0; } else if (k === 'arrowright') { this.cat = (this.cat + 1) % CATS.length; this.cur = 0; } else if (k === 'e' || k === 'enter') { if (l[this.cur]) { this.place = l[this.cur].id; this.open = null; this.rot = 0; this.off = [0, 0]; } } else if (k === 'escape' || k === 'b') this.open = null; return true; }
-      if (this.open === 'craft') { const l = Craft.unlockedFor(Craft.station); if (k === 'arrowup' || k === 'w') this.cur = Math.max(0, this.cur - 1); else if (k === 'arrowdown' || k === 's') this.cur = Math.min(l.length - 1, this.cur + 1); else if (k === 'e' || k === 'enter') { if (l[this.cur]) { const r = Craft.start(l[this.cur].id); if (!r.ok) FX.say(r.reason); } } else if (k === 'escape' || k === 'c') this.open = null; return true; }
-      if (this.open === 'storage') { const e = this.store; const n = this.side ? e.slots.length : inv().size; if (k === 'arrowleft') this.cur = Math.max(0, this.cur - 1); else if (k === 'arrowright') this.cur = Math.min(n - 1, this.cur + 1); else if (k === 'arrowup') this.cur = Math.max(0, this.cur - 6); else if (k === 'arrowdown') this.cur = Math.min(n - 1, this.cur + 6); else if (k === 'tab' || k === 'q') { this.side = 1 - this.side; this.cur = 0; } else if (k === 'e' || k === 'enter') { if (this.side) Storage.withdraw(e, this.cur); else Storage.deposit(e, this.cur); } else if (k === 'escape') this.open = null; return true; }
+      if (this.open === 'build') { const l = this.listBuild(); if (k === 'arrowup' || k === 'w') this.cur = Math.max(0, this.cur - 1); else if (k === 'arrowdown' || k === 's') this.cur = Math.min(l.length - 1, this.cur + 1); else if (k === 'arrowleft' || k === 'q') this.setCat(this.cat - 1, CATS.length); else if (k === 'arrowright') this.setCat(this.cat + 1, CATS.length); else if (k === 'e' || k === 'enter') this.doBuild(); else if (k === 'escape' || k === 'b') this.open = null; return true; }
+      if (this.open === 'craft') { const l = this.craftList(), n = this.craftCats(Craft.unlockedFor(Craft.station)).length; if (k === 'arrowup' || k === 'w') this.cur = Math.max(0, this.cur - 1); else if (k === 'arrowdown' || k === 's') this.cur = Math.min(l.length - 1, this.cur + 1); else if (k === 'arrowleft' || k === 'q') this.setCCat(this.ccat - 1, n); else if (k === 'arrowright') this.setCCat(this.ccat + 1, n); else if (k === 'e' || k === 'enter') this.doCraft(); else if (k === 'escape' || k === 'c') this.open = null; return true; }
+      if (this.open === 'storage') { const e = this.store; const n = this.side ? e.slots.length : inv().size; if (k === 'arrowleft') this.cur = Math.max(0, this.cur - 1); else if (k === 'arrowright') this.cur = Math.min(n - 1, this.cur + 1); else if (k === 'arrowup') this.cur = Math.max(0, this.cur - 6); else if (k === 'arrowdown') this.cur = Math.min(n - 1, this.cur + 6); else if (k === 'tab' || k === 'q') { this.side = 1 - this.side; this.cur = 0; } else if (k === 'e' || k === 'enter') this.doStore(); else if (k === 'escape') this.open = null; return true; }
       if (W.Gather.UI.open) return false;
-      if (k === 'b') { this.open = 'build'; this.cur = 0; return true; } if (k === 'c') { Craft.station = 'hand'; this.open = 'craft'; this.cur = 0; return true; }
+      if (k === 'b') { this.open = 'build'; this.cur = 0; return true; } if (k === 'c') { Craft.station = 'hand'; this.open = 'craft'; this.cur = 0; this.ccat = 0; return true; }
       return false; },
-    confirm() { const p = this.cursor(), type = this.place; if (this.moving) { const r = move(this.moving, p, this.rot); FX.say(r.ok ? 'Moved.' : r.reason); if (r.ok) { this.moving = null; this.place = null; } return; } const r = place(type, p, this.rot); if (!r.ok) FX.say(r.reason); else if (COMP[type].item && !inv().count(COMP[type].item)) this.place = null; },
-    pointer(x, y, tap) { if (this.open) { if (tap) for (const h of this.hit) if (x >= h[0] && y >= h[1] && x < h[2] && y < h[3]) { h[4](); return true; } return false; } if (!this.place) return false; const wx = x + W.Camera.ix(), wy = y + W.Camera.iy(); if (tap) { const a = this.ptr ? snap(this.ptr[0], this.ptr[1]) : null, b = snap(wx, wy); if (a && a.cx === b.cx && a.cy === b.cy) this.confirm(); } this.ptr = [wx, wy]; return tap; },
-    row(g, x, y, w, h, sel) { g.fillStyle = sel ? 'rgba(90,70,40,0.9)' : 'rgba(24,30,28,0.45)'; g.fillRect(x, y, w, h); if (sel) { g.strokeStyle = '#ffd98a'; g.strokeRect(x + 0.5, y + 0.5, w - 1, h - 1); } },
-    costLine(g, cost, x, y, maxW) { g.font = '8px ui-monospace, monospace'; let cx = x; for (const [id, n] of Object.entries(cost || {})) { const t = `${inv().count(id)}/${n} ${items()[id].name}`; g.fillStyle = inv().count(id) >= n ? 'rgba(238,220,176,0.75)' : '#e8705b'; g.fillText(t, cx, y); cx += g.measureText(t).width + 8; if (cx > x + maxW) { cx = x; y += 9; } } return y; },
-    draw(g, vw, vh, safe, tab) { this.hit = []; const G = W.Gather.UI; g.textAlign = 'left';
-      if (FX.t > 0) { g.font = '9px ui-monospace, monospace'; const tw = g.measureText(FX.msg).width + 14; g.fillStyle = 'rgba(40,34,26,0.92)'; g.fillRect(Math.round(vw / 2 - tw / 2), 44 + safe, Math.round(tw), 14); g.fillStyle = '#eedcb0'; g.textAlign = 'center'; g.fillText(FX.msg, vw / 2, 54 + safe); g.textAlign = 'left'; }
-      if (Craft.job) { const pw = 120, x = vw / 2 - 60, y = vh - 78 - safe; G.card(g, x, y, pw, 26); g.font = '8px ui-monospace, monospace'; g.fillStyle = '#eedcb0'; g.fillText(Craft.job.r.name, x + 8, y + 11); g.fillStyle = 'rgba(0,0,0,.4)'; g.fillRect(x + 8, y + 15, pw - 16, 4); g.fillStyle = '#8cc452'; g.fillRect(x + 8, y + 15, (pw - 16) * Craft.job.t / Craft.job.dur, 4); }
-      if (this.place) { const d = COMP[this.place]; const p = this.cursor(); const why = this.moving ? validate(this.place, p, this.rot, this.moving) : validate(this.place, p, this.rot); const pw = Math.min(vw - 20, 300), x = vw / 2 - pw / 2, y = vh - 56 - safe; G.card(g, x, y, pw, 40); g.font = '9px ui-monospace, monospace'; g.fillStyle = '#eedcb0'; g.fillText((this.moving ? 'Move: ' : '') + d.name, x + 8, y + 12); if (!this.moving) { const nw = g.measureText(d.name).width + 16; this.costLine(g, costOf(d), x + nw, y + 12, pw - nw - 10); } g.font = '8px ui-monospace, monospace'; g.fillStyle = why ? '#e8705b' : '#8cc452'; g.fillText(why || 'E place', x + 8, y + 23); g.fillStyle = 'rgba(238,220,176,.5)'; g.fillText('arrows nudge · R rotate · M move · X take down · Esc done', x + 8, y + 33); }
-      if (this.open === 'build') { const l = this.listBuild(), pw = Math.min(vw - 20, 340), ph = Math.min(vh - 20, 210), x = Math.round(vw / 2 - pw / 2), y = Math.round(vh / 2 - ph / 2); G.card(g, x, y, pw, ph); g.font = '9px ui-monospace, monospace'; g.fillStyle = '#eedcb0'; g.fillText('Build', x + 10, y + 14);
-        let tx = x + 10; CATS.forEach((c, i) => { g.font = '8px ui-monospace, monospace'; g.fillStyle = i === this.cat ? '#ffd98a' : 'rgba(238,220,176,.5)'; g.fillText(c, tx, y + 27); const tw = g.measureText(c).width; this.hit.push([tx, y + 18, tx + tw, y + 30, () => { this.cat = i; this.cur = 0; }]); tx += tw + 7; });
-        const rh = 20, vis = Math.floor((ph - 48) / rh), top = Math.max(0, Math.min(this.cur - vis + 1, l.length - vis)); l.slice(Math.max(0, top), Math.max(0, top) + vis).forEach((d, k) => { const i = Math.max(0, top) + k, ry = y + 33 + k * rh; this.row(g, x + 8, ry, pw - 16, rh - 2, i === this.cur); g.font = '9px ui-monospace, monospace'; g.fillStyle = '#eedcb0'; g.fillText(d.name, x + 12, ry + 8); this.costLine(g, costOf(d), x + 12, ry + 16, pw - 30); this.hit.push([x + 8, ry, x + pw - 8, ry + rh - 2, () => { if (this.cur === i) { this.place = d.id; this.open = null; this.rot = 0; this.off = [0, 0]; } else this.cur = i; }]); });
-        if (!l.length) { g.fillStyle = 'rgba(238,220,176,.5)'; g.fillText('Nothing to place yet: craft furniture with C.', x + 12, y + 46); } g.font = '8px ui-monospace, monospace'; g.fillStyle = 'rgba(238,220,176,.45)'; g.fillText('← → category · ↑ ↓ choose · E select · Esc close', x + 10, y + ph - 6); }
-      if (this.open === 'craft') { const l = Craft.unlockedFor(Craft.station), pw = Math.min(vw - 20, 360), ph = Math.min(vh - 20, 220), x = Math.round(vw / 2 - pw / 2), y = Math.round(vh / 2 - ph / 2); G.card(g, x, y, pw, ph); g.font = '9px ui-monospace, monospace'; g.fillStyle = '#eedcb0'; g.fillText(STN[Craft.station], x + 10, y + 14);
-        const rh = 24, vis = Math.floor((ph - 36) / rh), top = Math.max(0, Math.min(this.cur - vis + 1, l.length - vis)); l.slice(Math.max(0, top), Math.max(0, top) + vis).forEach((r, k) => { const i = Math.max(0, top) + k, ry = y + 20 + k * rh; this.row(g, x + 8, ry, pw - 16, rh - 2, i === this.cur); G.drawIcon(g, r.icon, x + 11, ry + 2, 1.125, tab); g.font = '9px ui-monospace, monospace'; g.fillStyle = have(r.ingredients) ? '#eedcb0' : 'rgba(238,220,176,.5)'; g.fillText(r.name + (r.qty > 1 ? ' ×' + r.qty : ''), x + 32, ry + 9); g.font = '8px ui-monospace, monospace'; g.fillStyle = 'rgba(238,220,176,.5)'; g.textAlign = 'right'; g.fillText(`${r.minutes} min · ${r.energy} energy`, x + pw - 12, ry + 9); g.textAlign = 'left'; this.costLine(g, r.ingredients, x + 32, ry + 18, pw - 50); this.hit.push([x + 8, ry, x + pw - 8, ry + rh - 2, () => { if (this.cur === i) { const a = Craft.start(r.id); if (!a.ok) FX.say(a.reason); } else this.cur = i; }]); });
-        if (!l.length) { g.fillStyle = 'rgba(238,220,176,.5)'; g.fillText('Nothing here yet.', x + 12, y + 34); } g.font = '8px ui-monospace, monospace'; g.fillStyle = 'rgba(238,220,176,.45)'; g.fillText('↑ ↓ choose · E make · Esc stops work (nothing is used until done)', x + 10, y + ph - 6); }
-      if (this.open === 'storage') { const e = this.store, cell = 24, cols = 6, sl = [inv().slots, e.slots], pw = cols * cell * 2 + 34, rows = Math.ceil(Math.max(inv().size, e.slots.length) / cols), ph = rows * cell + 66, x = Math.round(vw / 2 - pw / 2), y = Math.round(vh / 2 - ph / 2); G.card(g, x, y, pw, ph); g.font = '9px ui-monospace, monospace';
-        [0, 1].forEach(sd => { const ox = x + 10 + sd * (cols * cell + 14); g.fillStyle = sd === this.side ? '#ffd98a' : 'rgba(238,220,176,.6)'; g.fillText(sd ? COMP[e.type].name : 'Pack', ox, y + 14); sl[sd].forEach((s, i) => { const cx = ox + (i % cols) * cell, cy = y + 20 + Math.floor(i / cols) * cell; const sel = sd === this.side && i === this.cur; g.fillStyle = sel ? 'rgba(90,70,40,.9)' : 'rgba(24,30,28,.6)'; g.fillRect(cx, cy, cell - 2, cell - 2); g.strokeStyle = sel ? '#ffd98a' : 'rgba(222,220,180,.25)'; g.strokeRect(cx + .5, cy + .5, cell - 3, cell - 3); if (s) { G.drawIcon(g, s.id, cx + 2, cy + 2, 1.125, tab); if (s.qty > 1) { g.font = '8px ui-monospace, monospace'; g.textAlign = 'right'; g.fillStyle = '#eedcb0'; g.fillText(s.qty, cx + cell - 4, cy + cell - 4); g.textAlign = 'left'; g.font = '9px ui-monospace, monospace'; } } this.hit.push([cx, cy, cx + cell, cy + cell, () => { if (this.side === sd && this.cur === i) { if (sd) Storage.withdraw(e, i); else Storage.deposit(e, i); } else { this.side = sd; this.cur = i; } }]); }); });
-        const sel = sl[this.side][this.cur]; g.font = '8px ui-monospace, monospace'; if (sel) { const it = items()[sel.id]; g.fillStyle = '#eedcb0'; g.fillText(it.name, x + 10, y + ph - 26); G.wrap(g, it.description, x + 10, y + ph - 16, pw - 20, 9, 'rgba(238,220,176,.6)'); } g.fillStyle = 'rgba(238,220,176,.4)'; g.textAlign = 'right'; g.fillText('Q switch · E move stack · Esc close', x + pw - 10, y + ph - 26); g.textAlign = 'left'; }
-    } };
+    confirm() { const p = this.cursor(), type = this.place; if (this.moving) { const r = move(this.moving, p, this.rot); FX.say(r.ok ? 'Moved.' : r.reason); if (r.ok) { this.moving = null; this.place = null; } return; } const r = place(type, p, this.rot); if (!r.ok) FX.say(r.reason); else { if (window.Sound && Sound.play) Sound.play('build_knock'); if (COMP[type].item && !inv().count(COMP[type].item)) { this.place = null; this.ptr = null; } } },
+    // world taps only (view coordinates): panels take their taps through the kit before this is reached
+    pointer(x, y, tap) { if (this.open) return !!tap; if (!this.place) return false;
+      const c = this.card, ux = x / this.k, uy = y / this.k; if (c && ux >= c[0] - 4 && uy >= c[1] - 10 && ux < c[0] + c[2] + 4 && uy < c[1] + c[3] + 4) return !!tap;   // the hovering pointer over the placement card leaves the ghost alone
+      const wx = x + W.Camera.ix(), wy = y + W.Camera.iy(); if (tap) { const a = this.ptr ? snap(this.ptr[0], this.ptr[1]) : null, b = snap(wx, wy); if (a && a.cx === b.cx && a.cy === b.cy && a.x === b.x && a.y === b.y) this.confirm(); } this.ptr = [wx, wy]; return tap; },
+    status() { const p = this.cursor(), U = K(), kk = [this.place, p.cx, p.cy, p.x, p.y, this.rot, this.moving && this.moving.uid, S.list.length, inv().slots.filter(Boolean).length, U ? U.now() : 0].join('|'); if (this._st && this._st.k === kk) return this._st;
+      const why = this.moving ? validate(this.place, p, this.rot, this.moving) : validate(this.place, p, this.rot); return this._st = { k: kk, p, why }; },
+    // ---- shared drawing helpers
+    frame(vw, vh, maxW = 500, maxH = 268) { const pw = Math.min(vw - 16, maxW), ph = Math.min(vh - 26, maxH), x0 = rnd(vw / 2 - pw / 2), y0 = Math.max(22, Math.min(vh - ph - 4, rnd((vh - ph) / 2 + 8))); return [x0, y0, pw, ph]; },
+    turn(g, x, y, w, h) { const U = K(), t = (U.now() - this.turnT) / .28; if (t >= 1 || t < 0 || U.S.reduceMotion) return; const sx = rnd(x + w * (1 - t)); g.fillStyle = 'rgba(255,248,226,.55)'; g.fillRect(sx, y, 3, h); g.fillStyle = 'rgba(90,60,30,.16)'; g.fillRect(sx + 3, y, 6, h); },
+    tabs(g, labs, cur, x, y, w, pick) { const U = K(), C = U.C; let pad = 12; const tot = p => labs.reduce((a, l) => a + U.measure(l) + p + 2, 0) + labs[cur].length; if (tot(pad) > w) pad = 6; let ls = labs; if (tot(pad) > w) ls = labs.map(l => l.slice(0, Math.max(3, Math.floor(l.length * .6)))); if (ls.reduce((a, l) => a + U.measure(l) + pad + 2, 0) + ls[cur].length > w) ls = labs.map(l => l.slice(0, 3));
+      g.fillStyle = 'rgba(58,42,26,.4)'; g.fillRect(x - 2, y + 14, w + 4, 1); let tx = x;
+      ls.forEach((l, i) => { const on = i === cur, tw = U.measure(l) + pad + (on ? l.length : 0);
+        if (on) { g.fillStyle = C.paper; g.fillRect(tx, y, tw, 15); g.fillStyle = C.rust; g.fillRect(tx, y, tw, 1); g.fillStyle = 'rgba(58,42,26,.45)'; g.fillRect(tx, y + 1, 1, 14); g.fillRect(tx + tw - 1, y + 1, 1, 14); }
+        else { g.fillStyle = C.paper3; g.fillRect(tx, y + 3, tw, 11); g.fillStyle = 'rgba(58,42,26,.25)'; g.fillRect(tx, y + 3, tw, 1); }
+        U.text(g, l, tx + tw / 2, y + 11, { align: 'center', color: on ? C.ink : C.ink2, bold: on }); U.hit(tx, y, tw, 15, () => pick(i), 'tab'); tx += tw + 2; }); },
+    // one ingredient line inside a row: icon + have/need, dim with an x when short
+    costRow(g, cost, x, y, w, tab, names) { const U = K(), C = U.C, G = W.Gather.UI, ents = Object.entries(cost || {}); if (!ents.length) { U.text(g, 'nothing needed', x, y, { color: C.faint }); return; }
+      const lab = ([id, n]) => `${inv().count(id)}/${n}` + (names ? ' ' + (items()[id] ? items()[id].name : id) : ''); const width = e => 10 + U.measure(lab(e)) + (inv().count(e[0]) < e[1] ? 5 : 0) + 7;
+      if (names && ents.reduce((a, e) => a + width(e), 0) > w) return this.costRow(g, cost, x, y, w, tab, false);
+      let cx = x; for (const e of ents) { const [id, n] = e, ok = inv().count(id) >= n, ew = width(e); if (cx + ew - 7 > x + w) { U.text(g, '...', cx, y, { color: C.faint }); break; }
+        G.icon(g, id, cx, y - 7, 8, tab); if (!ok) g.globalAlpha = .55; U.text(g, lab(e), cx + 10, y, { color: ok ? C.ink2 : C.faint }); g.globalAlpha = 1; if (!ok) xMark(g, cx + 11 + U.measure(lab(e)), y - 4, C.rust); cx += ew; } },
+    // a list column of 26 px rows with 20 px icon wells; paginated with tappable page buttons
+    list(g, arr, x, y, w, bottom, rowFn, onPick) { const U = K(), C = U.C, rowH = 26, per = Math.max(1, Math.floor((bottom - y - 16) / rowH)), pages = Math.max(1, Math.ceil(arr.length / per)); if (this.cur > arr.length - 1) this.cur = Math.max(0, arr.length - 1); const page = Math.min(pages - 1, Math.floor(this.cur / per));
+      arr.slice(page * per, page * per + per).forEach((it, k) => { const i = page * per + k, ry = y + k * rowH, on = i === this.cur, hov = U.Ptr.over && U.Ptr.x >= x - 3 && U.Ptr.x < x + w + 2 && U.Ptr.y >= ry && U.Ptr.y < ry + rowH - 1;
+        if (on) { g.fillStyle = 'rgba(138,58,26,.08)'; g.fillRect(x - 3, ry, w + 5, rowH - 1); g.fillStyle = C.rust; g.fillRect(x - 3, ry + rowH - 2, w + 5, 1); g.fillRect(x - 3, ry + 3, 1, rowH - 6); } else if (hov) { g.fillStyle = 'rgba(255,250,235,.35)'; g.fillRect(x - 3, ry, w + 5, rowH - 1); }
+        U.slot(g, x, ry + 3, 20, { sel: on }); rowFn(it, x, ry, on); U.hit(x - 3, ry, w + 5, rowH - 1, () => { if (this.cur === i) onPick(); this.cur = i; }, 'row'); });
+      if (pages > 1) { const py = bottom - 14, bx = x + w - 58; U.button(g, bx, py, 18, 14, '<', () => { this.cur = Math.max(0, (page - 1) * per); this.turnT = U.now(); }, { disabled: page === 0 }); U.text(g, `${page + 1}/${pages}`, bx + 29, py + 10, { align: 'center', color: C.ink2 }); U.button(g, bx + 40, py, 18, 14, '>', () => { this.cur = Math.min(arr.length - 1, (page + 1) * per); this.turnT = U.now(); }, { disabled: page >= pages - 1 }); }
+      return bottom - 14; },
+    // the craft job: recipe icon, a progress bar and a hammer that taps along
+    jobCard(g, x, y, w, tab, inPage) { const U = K(), C = U.C, j = Craft.job, f = Math.min(1, j.t / j.dur), h = 30; if (!inPage) U.tag(g, x, y, w, h);
+      U.slot(g, x + 5, y + 5, 20); W.Gather.UI.icon(g, j.r.icon || j.r.result, x + 7, y + 7, 16, tab);
+      const n = Math.floor(j.t / .3), fr = U.S.reduceMotion ? 0 : (j.t % .3 < .1 ? 1 : 0); if (n > this.strikes) { this.strikes = n; if (window.Sound && Sound.play) Sound.play('craft_tap'); }
+      drawHammer(g, x + 27, y + 9, fr, C.ink); if (fr) { g.fillStyle = C.gold; g.fillRect(x + 26, y + 13, 1, 1); g.fillRect(x + 25, y + 16, 1, 1); g.fillRect(x + 28, y + 17, 1, 1); }
+      const bw = w - 40 - 50; U.text(g, fit('Making ' + j.r.name, bw), x + 38, y + 12, { color: C.ink }); U.bar(g, x + 38, y + 19, bw, 4, f, { color: C.moss });
+      U.button(g, x + w - 42, y + 7, 36, 16, 'Stop', () => Craft.cancel()); },
+    detailHead(g, x, y, w, name, sub, drawIcon) { const U = K(), C = U.C; U.tag(g, x, y, 36, 36); drawIcon(x + 2, y + 2); const nx = x + 42, nw = w - 42;
+      if (U.measure(name, 2) <= nw) U.text(g, name, nx, y + 14, { face: 2 }); else U.text(g, fit(name, nw), nx, y + 12, { bold: true }); U.text(g, fit(sub, nw), nx, y + 28, { color: C.faint }); U.divider(g, x, y + 43, w); return y + 56; },
+    para(g, s, x, y, w, maxY, col) { const U = K(); const ls = U.lines(s, w); for (const l of ls) { if (y > maxY) break; U.text(g, l, x, y, { color: col }); y += 10; } return y; },
+    needs(g, cost, x, y, w, maxY, tab) { const U = K(), C = U.C; for (const [id, n] of Object.entries(cost || {})) { if (y > maxY) break; const c = inv().count(id), ok = c >= n; W.Gather.UI.icon(g, id, x, y - 11, 16, tab);
+        U.text(g, fit(items()[id] ? items()[id].name : id, w - 64), x + 20, y, { color: ok ? C.ink : C.ink2 }); U.text(g, `${c}/${n}`, x + w - 8, y, { align: 'right', color: ok ? C.moss : C.danger, bold: !ok }); if (!ok) xMark(g, x + w - 5, y - 5, C.danger); else { g.fillStyle = C.moss; g.fillRect(x + w - 5, y - 3, 1, 1); g.fillRect(x + w - 4, y - 2, 1, 1); g.fillRect(x + w - 3, y - 3, 1, 1); g.fillRect(x + w - 2, y - 4, 1, 1); } y += 17; } return y; },
+    hint(g, s, x, y) { const U = K(); if (!U.touch() && U.S.hints) U.text(g, s, x, y, { color: U.C.faint }); },
+
+    // ---- the crafting page
+    drawCraft(g, vw, vh, tab) { const U = K(), C = U.C, touch = U.touch(); const all = Craft.unlockedFor(Craft.station), cats = this.craftCats(all), l = this.craftList(); const [x0, y0, pw, ph] = this.frame(vw, vh);
+      g.save(); U.enter(g, 'craft', true, x0, y0, pw, ph); U.paper(g, x0, y0, pw, ph, { title: STN[Craft.station] === 'By hand' ? 'Crafting' : STN[Craft.station], sub: STN[Craft.station] === 'By hand' ? 'by hand' : `${all.length} recipes`, close: () => { this.open = null; } });
+      const ty = y0 + 31; this.tabs(g, cats.map(c => RCAT[c] || c), this.ccat, x0 + 12, ty, pw - 24, i => this.setCCat(i, cats.length));
+      const lx = x0 + 14, rTop = ty + 20, bottom = y0 + ph - 10, lw = Math.max(170, Math.min(240, rnd((pw - 28) * .5)));
+      this.list(g, l, lx, rTop, lw, bottom, (r, x, ry, on) => { const ok = have(r.ingredients); W.Gather.UI.icon(g, r.icon, x + 2, ry + 5, 16, tab);
+        const nm = r.name + (r.qty > 1 ? ' ×' + r.qty : ''); U.text(g, fit(nm, lw - 30), x + 26, ry + 11, { color: ok ? C.ink : C.ink2, bold: on }); if (ok) { g.fillStyle = C.moss; g.fillRect(x + lw - 4, ry + 6, 3, 3); }
+        this.costRow(g, r.ingredients, x + 26, ry + 22, lw - 28, tab, true); }, () => this.doCraft());
+      if (!l.length) this.para(g, Craft.station === 'hand' ? 'Nothing to make by hand yet. Gather fibre, branches and stones; recipes appear as you find things.' : 'Nothing to make here yet.', lx, rTop + 12, lw, bottom - 20, C.faint);
+      this.hint(g, '← → kind · ↑ ↓ choose · E make', lx, bottom + 2);
+      const dx = lx + lw + 14, dw = x0 + pw - 14 - dx, r = l[this.cur], bh = touch ? 18 : 16, by = bottom - bh; g.fillStyle = 'rgba(58,42,26,.18)'; for (let yy = rTop; yy < bottom; yy += 3) g.fillRect(dx - 7, yy, 1, 2);
+      if (r) { let yy = this.detailHead(g, dx, rTop + 2, dw, r.name, `${r.qty > 1 ? 'makes ' + r.qty + ' · ' : ''}${(RCAT[r.category] || r.category).toLowerCase()}`, (ix, iy) => W.Gather.UI.icon(g, r.icon, ix, iy, 32, tab));
+        const maxY = by - (Craft.job ? 22 : 8); yy = this.para(g, r.description || (items()[r.result] || {}).description || '', dx, yy, dw, maxY - 40, C.ink) + 3;
+        yy = this.needs(g, r.ingredients, dx, yy + 8, dw, maxY - 10, tab);
+        const unl = this.unlocks(r); if (unl && yy <= maxY - 10) yy = this.para(g, unl, dx, yy + 2, dw, maxY - 10, C.moss);
+        if (yy <= maxY) U.text(g, `${r.minutes} min · ${r.energy ? r.energy + ' energy' : 'no energy'}`, dx, yy + 2, { color: C.ink2 });
+        if (Craft.job) this.jobCard(g, dx - 5, by - 12, dw + 5, tab, true);
+        else { const ok = have(r.ingredients), bw = Math.floor((dw - 4) / 2); U.button(g, dx, by, bw, bh, 'Craft', () => this.doCraft(), { primary: ok, disabled: !ok }); U.button(g, dx + bw + 4, by, dw - bw - 4, bh, 'Close', () => { this.open = null; }); } }
+      else U.button(g, dx + dw - 60, by, 60, bh, 'Close', () => { this.open = null; });
+      this.turn(g, x0 + 2, y0 + 2, pw - 4, ph - 4); g.restore(); },
+    unlocks(r) { const st = Object.values(COMP).find(d => d.item === r.result && d.station); if (st) { const n = RECIPES.filter(x => x.station === st.station).length; return `Place it with Build to open ${n} more recipes.`; }
+      const by = RECIPES.filter(x => x.unlock.type === 'item' && x.unlock.id === r.result && x.id !== r.id); if (by.length) return 'Teaches: ' + by.map(x => x.name).join(', ') + '.';
+      if (Object.values(COMP).some(d => d.item === r.result)) return 'Placed from the Home page of Build.'; return null; },
+
+    // ---- the building page
+    drawBuild(g, vw, vh, tab) { const U = K(), C = U.C, touch = U.touch(); const l = this.listBuild(); const [x0, y0, pw, ph] = this.frame(vw, vh);
+      g.save(); U.enter(g, 'build', true, x0, y0, pw, ph); U.paper(g, x0, y0, pw, ph, { title: 'Build', sub: CATS[this.cat].toLowerCase(), close: () => { this.open = null; } });
+      const ty = y0 + 31; this.tabs(g, CATS, this.cat, x0 + 12, ty, pw - 24, i => this.setCat(i, CATS.length));
+      const lx = x0 + 14, rTop = ty + 20, bottom = y0 + ph - 10, lw = Math.max(170, Math.min(240, rnd((pw - 28) * .5)));
+      this.list(g, l, lx, rTop, lw, bottom, (d, x, ry, on) => { const cost = costOf(d), ok = have(cost); compIcon(g, d, x, ry + 3, 20, tab);
+        U.text(g, fit(d.name, lw - 30), x + 26, ry + 11, { color: ok ? C.ink : C.ink2, bold: on }); if (ok) { g.fillStyle = C.moss; g.fillRect(x + lw - 4, ry + 6, 3, 3); }
+        if (d.item) U.text(g, `in your pack: ${inv().count(d.item)}`, x + 26, ry + 22, { color: C.ink2 }); else this.costRow(g, cost, x + 26, ry + 22, lw - 28, tab, true); }, () => this.doBuild());
+      if (!l.length) this.para(g, CATS[this.cat] === 'Home' ? 'Nothing to place yet. Furniture you craft lands in your pack, then shows up here.' : 'Nothing here yet.', lx, rTop + 12, lw, bottom - 20, C.faint);
+      this.hint(g, '← → kind · ↑ ↓ choose · E place', lx, bottom + 2);
+      const dx = lx + lw + 14, dw = x0 + pw - 14 - dx, d = l[this.cur], bh = touch ? 18 : 16, by = bottom - bh; g.fillStyle = 'rgba(58,42,26,.18)'; for (let yy = rTop; yy < bottom; yy += 3) g.fillRect(dx - 7, yy, 1, 2);
+      if (d) { const stage = d.stage && CFG.stages[d.stage]; let yy = this.detailHead(g, dx, rTop + 2, dw, d.name, stage ? `stage ${d.stage} · ${stage.toLowerCase()}` : (d.layer === 'object' ? 'furniture' : d.layer), (ix, iy) => compIcon(g, d, ix, iy, 32, tab));
+        const maxY = by - 8; const note = LAYER_NOTE[d.layer] || this.objNote(d); yy = this.para(g, note, dx, yy, dw, maxY - 30, C.ink) + 3;
+        if (!d.item) yy = this.needs(g, costOf(d), dx, yy + 8, dw, maxY - 10, tab); else { if (yy <= maxY - 10) U.text(g, `In your pack: ${inv().count(d.item)}`, dx, yy + 2, { color: C.ink2 }); yy += 12; }
+        const mins = d.minutes || (d.item ? 5 : 10), stats = `${mins} min${d.energy ? ' · ' + d.energy + ' energy' : ''} · sturdiness ${d.durability || 60}`; if (yy <= maxY) U.text(g, fit(stats, dw), dx, yy + 2, { color: C.ink2 });
+        const bw = Math.floor((dw - 4) / 2); U.button(g, dx, by, bw, bh, 'Build', () => this.doBuild(), { primary: true }); U.button(g, dx + bw + 4, by, dw - bw - 4, bh, 'Close', () => { this.open = null; }); }
+      else U.button(g, dx + dw - 60, by, 60, bh, 'Close', () => { this.open = null; });
+      this.turn(g, x0 + 2, y0 + 2, pw - 4, ph - 4); g.restore(); },
+    objNote(d) { const bits = []; if (d.station) bits.push(`A place to work: opens the ${STN[d.station]} recipes.`); if (d.storage) bits.push(`Holds ${d.storage.slots} stacks${d.storage.filter ? ' of ' + d.storage.filter.join(', ') : ''}.`); if (d.sleep) bits.push('Rest here until morning.'); if (d.light) bits.push('Gives off light' + (d.toggle ? ' you can put out.' : '.'));
+      if (d.support) bits.push('Holds a roof up within three cells.'); if (d.kind === 'gate') bits.push('Opens and closes.'); if (d.ground) bits.push('Lies flat on the floor.'); if (d.mount) bits.push('Hangs on a south-facing wall.'); if (d.side) bits.push('Can be turned.'); return bits.join(' ') || 'Stands where you put it.'; },
+
+    // ---- the storage page: pack on the left, the chest on the right
+    drawStorage(g, vw, vh, tab) { const U = K(), C = U.C, touch = U.touch(), G = W.Gather.UI; const e = this.store; if (!e || !e.slots) { this.open = null; return; }
+      const sl = [inv().slots, e.slots], cols = 6, rows = Math.ceil(Math.max(inv().size, e.slots.length) / cols), [x0, y0, pw0, ph0] = this.frame(vw, vh, 480, 268);
+      const cell = Math.max(20, Math.min(30, Math.floor((ph0 - 34 - 46) / rows), Math.floor((pw0 - 24 - 14) / (cols * 2)))), pw = Math.min(pw0, cols * cell * 2 + 38), ph = Math.min(ph0, 40 + rows * cell + 44), x = rnd(vw / 2 - pw / 2), y = Math.max(22, rnd((vh - ph) / 2 + 8)), s = cell - 2, isz = s >= 26 ? 24 : 16;
+      g.save(); U.enter(g, 'storage', true, x, y, pw, ph); U.paper(g, x, y, pw, ph, { title: COMP[e.type].name, sub: `${e.slots.filter(Boolean).length}/${e.slots.length}`, close: () => { this.open = null; } });
+      [0, 1].forEach(sd => { const ox = x + 12 + sd * (cols * cell + 14), on = sd === this.side; U.text(g, sd ? 'In the ' + COMP[e.type].name.toLowerCase() : 'Your pack', ox, y + 40, { color: on ? C.ink : C.ink2, bold: on }); if (on) { g.fillStyle = C.rust; g.fillRect(ox, y + 42, U.measure(sd ? 'In the ' + COMP[e.type].name.toLowerCase() : 'Your pack') + 1, 1); }
+        sl[sd].forEach((st, i) => { const cx = ox + (i % cols) * cell, cy = y + 46 + Math.floor(i / cols) * cell, sel = on && i === this.cur, hov = U.Ptr.over && U.Ptr.x >= cx && U.Ptr.y >= cy && U.Ptr.x < cx + s && U.Ptr.y < cy + s;
+          U.slot(g, cx, cy, s, { sel, empty: !st, hover: hov }); if (st) { const dim = !sd && !Storage.allowed(e, st.id); if (dim) g.globalAlpha = .45; G.icon(g, st.id, cx + (s - isz) / 2, cy + (s - isz) / 2, isz, tab); g.globalAlpha = 1;
+            if (st.qty > 1) { const q = String(st.qty), qw = U.measure(q); g.fillStyle = 'rgba(236,223,189,.9)'; g.fillRect(cx + s - qw - 4, cy + s - 10, qw + 3, 9); U.text(g, q, cx + s - 2, cy + s - 2, { align: 'right' }); } }
+          U.hit(cx, cy, s, s, () => { if (this.side === sd && this.cur === i) this.doStore(); else { this.side = sd; this.cur = i; } }, 'slot'); }); });
+      g.fillStyle = 'rgba(58,42,26,.18)'; const mx = x + 12 + cols * cell + 5; for (let yy = y + 32; yy < y + 46 + rows * cell; yy += 3) g.fillRect(mx, yy, 1, 2);
+      const sel = sl[this.side][this.cur], fy = y + ph - 12, bh = touch ? 18 : 16, bw = 84; U.divider(g, x + 12, y + 50 + rows * cell, pw - 24);
+      if (sel && items()[sel.id]) { const it = items()[sel.id], ok = this.side || Storage.allowed(e, sel.id); U.text(g, fit(`${it.name} ×${sel.qty}`, pw - 24 - bw * 2 - 16), x + 14, fy - 9, { bold: true }); U.text(g, fit(ok ? (it.description || '') : 'That does not belong in here.', pw - 24 - bw * 2 - 16), x + 14, fy + 2, { color: ok ? C.ink2 : C.faint });
+        U.button(g, x + pw - 12 - bw * 2 - 4, fy - bh + 3, bw, bh, this.side ? 'Take out' : 'Put in', () => this.doStore(), { primary: !!ok, disabled: !ok }); }
+      else U.text(g, touch ? 'Tap a stack to choose it, tap again to move it.' : 'Choose a stack; E moves it across.', x + 14, fy - 4, { color: C.faint });
+      U.button(g, x + pw - 12 - bw, fy - bh + 3, bw, bh, 'Close', () => { this.open = null; }); this.hint(g, 'Q switch side · E move', x + 14, y + ph + 12);
+      g.restore(); },
+
+    // ---- placement: a card along the bottom, with buttons that do exactly what the keys do
+    drawPlace(g, vw, vh, safe, tab) { const U = K(), C = U.C, touch = U.touch(), d = COMP[this.place]; if (!d) { this.place = null; return; } const st = this.status(), why = st.why, hints = !touch && U.S.hints;
+      const x = touch ? 66 + safe : rnd(vw / 2 - Math.min(vw - 20, 330) / 2), w = touch ? Math.max(200, vw - 142 - safe - x) : Math.min(vw - 20, 330), bh = 16, h = 46, y = vh - h - 8 - safe; this.card = [x, y, w, h];
+      U.tag(g, x, y, w, h); compIcon(g, d, x + 4, y + 4, 20, tab);
+      const title = (this.moving ? 'Moving ' : '') + d.name; U.text(g, fit(title, w - 34), x + 28, y + 11, { bold: true });
+      if (!this.moving && !d.item) { const tw = U.measure(title) + title.length + 10; this.costRow(g, costOf(d), x + 28 + Math.min(w - 120, tw), y + 11, Math.max(60, w - 40 - tw), tab, false); }
+      else if (d.item && !this.moving) U.text(g, `×${inv().count(d.item)}`, x + w - 6, y + 11, { align: 'right', color: C.ink2 });
+      U.text(g, fit(why || (touch ? 'Tap the ground to move it, tap again or Place to build.' : 'Fits here.'), w - 34 - (hints ? 64 : 0)), x + 28, y + 22, { color: why ? C.danger : C.moss });
+      const acts = [['Rotate', 'r', d.layer === 'object' && !d.mount], [this.moving ? 'Put' : 'Place', 'e', true, true], ['Move', 'm', true], ['Remove', 'x', true], ['Done', 'escape', true]];
+      const keys = { r: 'R', e: 'E', m: 'M', x: 'X', escape: 'Esc' }, gap = 3, bw = Math.floor((w - 8 - gap * (acts.length - 1)) / acts.length);
+      acts.forEach(([l, k, en, prim], i) => { const lab = hints && U.measure(l + ' ' + keys[k]) + 8 <= bw ? l + ' ' + keys[k] : l; U.button(g, x + 4 + i * (bw + gap), y + h - bh - 4, bw, bh, lab, () => this.key(k), { primary: prim && !why, disabled: !en }); });
+      if (hints) U.text(g, 'arrows nudge', x + w - 6, y + 22, { align: 'right', color: C.faint }); },
+
+    draw(g, vw, vh, safe, tab) { this.hit = []; const U = K(); if (!U) return; g.textAlign = 'left'; this.k = (this._vw || vw) / vw || 1; this.card = null;
+      for (const k of ['craft', 'build', 'storage']) if (this.open !== k) U.openT(k, false);
+      if (this.place && !this.open) this.drawPlace(g, vw, vh, safe, tab);
+      if (this.open === 'build') this.drawBuild(g, vw, vh, tab); else if (this.open === 'craft') this.drawCraft(g, vw, vh, tab); else if (this.open === 'storage') this.drawStorage(g, vw, vh, tab);
+      if (Craft.job && this.open !== 'craft') { const w = Math.min(200, vw - 20); this.jobCard(g, rnd(vw / 2 - w / 2), vh - 80 - safe, w, tab, false); } },
+    // world-anchored: corner brackets around where the piece will go (view scale, before the UI layer)
+    drawWorld(g, vw, vh) { this._vw = vw; if (!W || !this.place || this.open) return; const U = K(), C = U ? U.C : { moss: '#4c6a28', danger: '#9a2e16' }; const d = COMP[this.place]; if (!d) return; const st = this.status(), p = st.p, cx = W.Camera.ix(), cy = W.Camera.iy();
+      let r; if (d.layer === 'object' && !d.mount) { const f = (this.rot % 2 && d.side_foot) || d.foot || [16, 4]; const fw = Math.max(8, f[0]), fh = Math.max(4, f[1]); r = [p.x - (fw >> 1), p.y - fh + 1, fw, fh]; } else r = [p.cx * T, p.cy * T, T, T];
+      const x = rnd(r[0] - cx) - 1, y = rnd(r[1] - cy) - 1, w = r[2] + 2, h = r[3] + 2; g.fillStyle = st.why ? C.danger : (C.cream || '#f6ecd2'); const L = Math.min(4, w >> 1);
+      for (const [a, b, dx, dy] of [[x, y, 1, 1], [x + w - 1, y, -1, 1], [x, y + h - 1, 1, -1], [x + w - 1, y + h - 1, -1, -1]]) { g.fillRect(dx > 0 ? a : a - L + 1, b, L, 1); g.fillRect(a, dy > 0 ? b : b - L + 1, 1, L); } } };
   function snap(x, y) { const cx = Math.floor(x / T), cy = Math.floor(y / T); const type = UI.place; const d = type && COMP[type]; if (d && d.layer === 'object' && !d.mount) return { cx, cy, x: Math.round(x / 8) * 8, y: Math.round(y / 8) * 8 }; return { cx, cy, x: cx * T + 8, y: cy * T + 8 }; }
 
   // ---------------- drawing into the indexed frame (same palette table + lamp pools as the world)

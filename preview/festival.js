@@ -22,7 +22,7 @@ window.Festival = (() => {
   let forced = null;
   function check() { const want = forced || (enabled ? Object.keys(D.festivals).find(isOnNow) || null : null); if (want === S.active) return;
     if (S.active) end(); if (want) begin(want); }
-  function begin(f) { S.active = f; S.since = T; const F = D.festivals[f]; W.applyEvent(F.scene, true); S.fx = []; S.floating = []; Cal.discover(f, 'attended'); const r = rec(f); const y = Cal.year(day()); if (!r.attended.includes(y)) r.attended.push(y); emit('begin', f); }
+  function begin(f) { S.active = f; S.since = T; const F = D.festivals[f]; W.applyEvent(F.scene, true); S.fx = []; S.floating = []; Cal.discover(f, 'attended'); const r = rec(f); const y = Cal.year(day()); if (!r.attended.includes(y)) r.attended.push(y); emit('begin', f); if (window.UIKit && UIKit.toast) UIKit.toast({ kicker: 'Festival', title: F.title, sub: `Today, ${F.from}:00 to ${F.to % 24}:00`, glyph: 'leaf', rare: true }); }
   function end() { const f = S.active; S.active = null; W.applyEvent('', true); S.fx = []; S.floating = []; Music.stop(); emit('end', f); }
   // ================================================================= INTERACTIONS: optional, found by walking up to them
   function spotsNow() { if (!S.active) return []; return D.festivals[S.active].spots || []; }
@@ -74,31 +74,65 @@ window.Festival = (() => {
       else if (m.voice === 'pad') { for (const k of [0, 3, 7]) tn(f0 * Math.pow(2, k / 12) / 2, 2.6, 'triangle', .025); this.t = 2.2; }
       else if (m.voice === 'kalimba') { tn(f0, .5, 'sine', .07); if (Math.random() < .3) tn(f0 / 4, 1.8, 'sawtooth', .012); this.t = .35 + Math.random() * .5; }
       else if (m.voice === 'bells') { tn(f0 * 2, 3.2, 'sine', .05); tn(f0 * 5.04, 1.6, 'sine', .012); this.t = 1.2 + Math.random() * 1.6; } } };
-  // ================================================================= CALENDAR SCREEN
-  const UI = { open: false, buttons: [], season: null };
-  function drawCal(g, vw, vh) { UI.buttons = []; const pw = Math.min(vw - 8, 600), ph = Math.min(vh - 8, 330), x0 = Math.round(vw / 2 - pw / 2), y0 = Math.round(vh / 2 - ph / 2); const INK = '#3a2c1c', INK2 = 'rgba(58,44,28,.62)';
-    g.fillStyle = '#2a2014'; g.fillRect(x0 - 2, y0 - 2, pw + 4, ph + 4); g.fillStyle = '#ece0bf'; g.fillRect(x0, y0, pw, ph); g.strokeStyle = 'rgba(58,44,28,.45)'; g.strokeRect(x0 + 3.5, y0 + 3.5, pw - 7, ph - 7);
-    const d = day(), s = UI.season || W.SeasonState.season, dos = Cal.dos(d); g.textAlign = 'left'; g.font = 'italic 12px Georgia, serif'; g.fillStyle = INK; g.fillText(`${s[0].toUpperCase() + s.slice(1)}, year ${Cal.year(d)}`, x0 + 14, y0 + 20); g.font = '8px Georgia, serif'; g.fillStyle = INK2; g.fillText(s === W.SeasonState.season ? `today is day ${dos} of ${Cal.len}` : 'another season', x0 + 14, y0 + 31);
-    SEASONS.forEach((ss, i) => { g.font = (ss === s ? 'bold ' : '') + '8.5px Georgia, serif'; g.fillStyle = ss === s ? INK : INK2; g.fillText(ss, x0 + 150 + i * 46, y0 + 20); UI.buttons.push({ x: x0 + 146 + i * 46, y: y0 + 10, w: 44, h: 14, fn: () => { UI.season = ss; } }); });
-    UI.buttons.push({ x: x0 + pw - 34, y: y0 + 6, w: 30, h: 16, fn: () => { UI.open = false; } }); g.textAlign = 'right'; g.fillText('close', x0 + pw - 10, y0 + 17); g.textAlign = 'left';
-    const cw = 34, chh = 30, gx = x0 + 14, gy = y0 + 42; const fests = Object.entries(D.festivals).filter(([, F]) => F.season === s);
-    for (let k = 0; k < Cal.len; k++) { const cx = gx + (k % 7) * cw, cy = gy + Math.floor(k / 7) * chh, dd = k + 1; const today = s === W.SeasonState.season && dd === dos; g.strokeStyle = 'rgba(58,44,28,.25)'; g.strokeRect(cx + .5, cy + .5, cw - 2, chh - 2); if (today) { g.fillStyle = 'rgba(120,90,50,.2)'; g.fillRect(cx + 1, cy + 1, cw - 3, chh - 3); }
-      g.font = '8px Georgia, serif'; g.fillStyle = s === W.SeasonState.season && dd < dos ? 'rgba(58,44,28,.35)' : INK; g.fillText(String(dd), cx + 3, cy + 9);
-      for (const [f, F] of fests) if (F.day === dd) { const known = Cal.discovered[f]; g.fillStyle = known ? F.color : 'rgba(58,44,28,.2)'; g.beginPath(); g.arc(cx + cw / 2, cy + 18, 5, 0, 7); g.fill(); if (known && rec(f).attended.length) { g.fillStyle = INK; g.fillText('✓', cx + cw - 10, cy + 9); } } }
-    let ry = y0 + 46; const rx = gx + 7 * cw + 14, rw = pw - (rx - x0) - 14;
-    for (const [f, F] of fests) { const known = Cal.discovered[f]; g.font = 'bold 9.5px Georgia, serif'; g.fillStyle = INK; g.fillText(known ? F.title : 'Something, this season', rx, ry); ry += 11; g.font = '8.5px Georgia, serif';
-      if (!known) { g.fillStyle = INK2; ry += 10 * wrap(g, F.hint, rx, ry, rw, 10) + 6; continue; }
-      const r = rec(f); g.fillStyle = INK2; g.fillText(`Day ${F.day}, from ${F.from}:00 · ${r.attended.length ? 'attended ' + r.attended.length + (r.attended.length > 1 ? ' times' : ' time') : 'not yet attended'}`, rx, ry); ry += 10; g.fillStyle = INK; ry += 10 * wrap(g, F.blurb, rx, ry, rw, 10);
-      const col = F.collectibles.map(id => r.found[id] || W.Gather.Journal.found[id] ? (W.Gather.DB.get(id) || {}).name : '???'); g.fillStyle = INK2; ry += 10 * wrap(g, `Found: ${col.join(', ')}`, rx, ry, rw, 10) + 8; }
-    const fishLeft = W.Fishing.data().fish.filter(f => (f.seasons.includes(s) || f.seasons.includes('any')) && !W.Fishing.Book.rec[f.id]).length; g.fillStyle = INK2; g.font = 'italic 8.5px Georgia, serif'; wrap(g, `Fish of ${s} not yet in your book: ${fishLeft}.`, rx, Math.max(ry, y0 + ph - 30), rw, 10); }
-  function wrap(g, t, x, y, w, lh) { const out = []; let line = ''; for (const wd of String(t).split(' ')) { const tt = line ? line + ' ' + wd : wd; if (g.measureText(tt).width > w && line) { out.push(line); line = wd; } else line = tt; } if (line) out.push(line); out.forEach((l, i) => g.fillText(l, x, y + i * lh)); return out.length; }
-  function key(k) { if (!D) return false; if (UI.open) { if (k === 'v' || k === 'escape') { UI.open = false; UI.season = null; } else if (k === 'arrowright' || k === 'd') UI.season = SEASONS[(SEASONS.indexOf(UI.season || W.SeasonState.season) + 1) % 4]; else if (k === 'arrowleft' || k === 'a') UI.season = SEASONS[(SEASONS.indexOf(UI.season || W.SeasonState.season) + 3) % 4]; return true; } if (k === 'v' && !W.Gather.UI.open && !W.Build.UI.busy()) { UI.open = true; return true; } return false; }
-  function pointer(x, y, down) { if (!UI.open || !down) return UI.open; const b = UI.buttons.find(b => x >= b.x && x < b.x + b.w && y >= b.y && y < b.y + b.h); if (b) b.fn(); return true; }
+  // ================================================================= CALENDAR SCREEN: one book page, the season as a ruled grid, a detail column
+  const UI = { open: false, buttons: [], season: null, sel: null };
+  const FGL = ['..#..', '.#.#.', '#.#.#', '.###.', '#.#.#', '.#.#.', '..#..'];   // an inked rosette: the festival mark
+  function mark(g, x, y, ink, fill, faint) { FGL.forEach((row, yy) => { for (let xx = 0; xx < 5; xx++) if (row[xx] === '#') { g.fillStyle = faint ? (((xx + yy) & 1) ? 'rgba(94,74,50,.45)' : 'rgba(94,74,50,.2)') : ink; g.fillRect(x + xx * 2, y + yy * 2, 2, 2); } }); if (!faint && fill) { g.fillStyle = fill; g.fillRect(x + 4, y + 6, 2, 2); g.fillRect(x + 2, y + 4, 1, 1); g.fillRect(x + 7, y + 4, 1, 1); g.fillRect(x + 2, y + 9, 1, 1); g.fillRect(x + 7, y + 9, 1, 1); } }
+  function ring(g, cx, cy, rx, ry, col) { g.fillStyle = col; const n = Math.ceil((rx + ry) * 3); for (let k = 0; k <= n + 3; k++) { const a = -2.2 + k / n * Math.PI * 2, w = 1 + .08 * Math.sin(a * 3); g.fillRect(Math.round(cx + Math.cos(a) * rx * w), Math.round(cy + Math.sin(a) * ry * w), 1, 1); } }   // hand-drawn: overshoots its start a little
+  const btn = (x, y, w, h, fn, label) => { UIKit.hit(x, y, w, h, fn, label); UI.buttons.push({ x, y, w, h, fn }); };
+  function untilDay(s, dd) { const d = day(); for (let k = 0; k < 112; k++) if (Cal.seasonOf(d + k) === s && Cal.dos(d + k) === dd) return k; return null; }
+  function drawCal(g, vw, vh) { UI.buttons = []; const K = UIKit, C = K.C, P = K.Ptr; const cur = W.SeasonState.season, s = UI.season || cur, d = day(), dos = Cal.dos(d), here = s === cur;
+    const pw = Math.min(vw - 16, 540), phMax = Math.min(vh - 28, 300), chF = Math.max(22, Math.min(40, Math.floor((phMax - 36 - 24) / 4))), ph = Math.min(phMax, 36 + chF * 4 + 26), x0 = Math.round(vw / 2 - pw / 2), y0 = Math.max(22, Math.round(vh / 2 - ph / 2) + 6);
+    g.save(); K.enter(g, 'calendar', true, x0, y0, pw, ph); const Sname = s[0].toUpperCase() + s.slice(1);
+    K.paper(g, x0, y0, pw, ph, { title: Sname, sub: `year ${Cal.year(d)}` + (here ? `, day ${dos} of ${Cal.len}` : ''), close: () => { UI.open = false; UI.season = null; UI.sel = null; } });
+    // season arrows, beside the close box
+    const turn = k => () => { UI.season = SEASONS[(SEASONS.indexOf(s) + k + 4) % 4]; UI.sel = null; }; const ax = x0 + pw - 30;
+    K.button(g, ax - 72, y0 + 9, 16, 13, '<', null); btn(ax - 72, y0 + 9, 16, 13, turn(-1), 'prev season'); K.button(g, ax - 20, y0 + 9, 16, 13, '>', null); btn(ax - 20, y0 + 9, 16, 13, turn(1), 'next season');
+    if (here) K.text(g, 'now', ax - 38, y0 + 19, { align: 'center', color: C.moss }); else { K.button(g, ax - 52, y0 + 9, 28, 13, 'now', null); btn(ax - 52, y0 + 9, 28, 13, () => { UI.season = null; UI.sel = null; }, 'this season'); }
+    const fests = Object.entries(D.festivals).filter(([, F]) => F.season === s); const festOn = dd => fests.find(([, F]) => +F.day === dd);
+    if (UI.sel == null) UI.sel = here ? dos : (fests.length && Cal.discovered[fests[0][0]] ? +fests[0][1].day : 1);
+    // the grid: 4 weeks of 7 days
+    const gx = x0 + 12, gy = y0 + 36, cw = Math.max(22, Math.min(38, Math.floor((pw * .58 - 16) / 7))), ch = chF, gw = cw * 7, gh = ch * 4;
+    g.fillStyle = C.paper2; g.fillRect(gx, gy, gw, gh);
+    for (let r = 0; r <= 4; r++) { g.fillStyle = r % 4 ? 'rgba(58,42,26,.22)' : 'rgba(58,42,26,.45)'; g.fillRect(gx, gy + r * ch, gw + 1, 1); }
+    for (let c = 0; c <= 7; c++) { g.fillStyle = c % 7 ? 'rgba(58,42,26,.22)' : 'rgba(58,42,26,.45)'; g.fillRect(gx + c * cw, gy, 1, gh + 1); }
+    let hover = null;
+    for (let k = 0; k < Cal.len; k++) { const dd = k + 1, cx = gx + (k % 7) * cw, cy = gy + Math.floor(k / 7) * ch, today = here && dd === dos, past = here && dd < dos, fe = festOn(dd);
+      const hot = P.over && P.x >= cx && P.x < cx + cw && P.y >= cy && P.y < cy + ch; if (hot) { hover = dd; g.fillStyle = 'rgba(255,250,235,.45)'; g.fillRect(cx + 1, cy + 1, cw - 1, ch - 1); }
+      if (past) { g.fillStyle = 'rgba(94,74,50,.16)'; for (let q = 3; q < cw - 2; q += 4) g.fillRect(cx + q, cy + ch - 4 - Math.round(q * (ch - 8) / cw), 1, 1); }
+      K.text(g, String(dd), cx + 4, cy + 10, { color: past ? C.faint : C.ink, bold: today });
+      if (today) ring(g, cx + 4 + K.measure(String(dd)) / 2, cy + 7, K.measure(String(dd)) / 2 + 4, 6, C.rust);
+      if (fe) { const [f, F] = fe, known = !!Cal.discovered[f]; mark(g, cx + Math.round(cw / 2) - 5, cy + ch - 17, C.ink2, F.color, !known); if (known && rec(f).attended.length) { g.fillStyle = C.moss; for (const [a, b] of [[0, 2], [1, 3], [2, 2], [3, 1], [4, 0]]) g.fillRect(cx + cw - 9 + a, cy + 4 + b, 1, 2); } }
+      if (dd === UI.sel) { g.fillStyle = C.rust; for (const [a, b, sx, sy] of [[cx + 1, cy + 1, 1, 1], [cx + cw - 1, cy + 1, -1, 1], [cx + 1, cy + ch - 1, 1, -1], [cx + cw - 1, cy + ch - 1, -1, -1]]) { g.fillRect(Math.min(a, a + sx * 4), b, 4, 1); g.fillRect(a, Math.min(b, b + sy * 4), 1, 4); } }
+      btn(cx, cy, cw, ch, () => { UI.sel = dd; }, 'day'); }
+    // festival name on hover (keyboard and mouse); the selected day's name is in the detail column
+    if (hover && festOn(hover) && hover !== UI.sel) { const [f, F] = festOn(hover), nm = Cal.discovered[f] ? F.title : 'something, this day?', k = hover - 1, tw = K.measure(nm) + 10, tx = Math.max(x0 + 6, Math.min(gx + (k % 7) * cw + cw / 2 - tw / 2, x0 + pw - tw - 6)), ty = gy + Math.floor(k / 7) * ch - 13; K.tag(g, Math.round(tx), Math.max(y0 + 26, ty), tw, 12); K.text(g, nm, Math.round(tx) + 5, Math.max(y0 + 26, ty) + 9, { color: C.ink2 }); }
+    if (!K.touch() && K.S.hints) K.text(g, 'A D  seasons   V  close', gx, gy + gh + 13, { color: C.faint });
+    // detail column: the selected day, from real festival records
+    const rx = gx + gw + 14, rw = x0 + pw - 12 - rx, bot = y0 + ph - 10; let ry = gy + 8; g.fillStyle = 'rgba(58,42,26,.3)'; g.fillRect(rx - 7, gy, 1, gh);
+    const line = (str, o = {}, lh = 10) => { for (const l of K.lines(str, rw)) { if (ry > bot) return; K.text(g, l, rx, ry, o); ry += lh; } };
+    const k = untilDay(s, UI.sel), when = here && UI.sel === dos ? 'today' : here && UI.sel < dos ? `${dos - UI.sel} ${dos - UI.sel === 1 ? 'day' : 'days'} ago` : k === 1 ? 'tomorrow' : k != null ? `in ${k} days` : '';
+    K.text(g, `Day ${UI.sel}`, rx, ry, { bold: true }); K.text(g, when, rx + rw, ry, { align: 'right', color: when === 'today' ? C.rust : C.faint }); ry += 5; K.divider(g, rx, ry, rw); ry += 12;
+    const fe = festOn(UI.sel);
+    if (fe) { const [f, F] = fe, known = Cal.discovered[f];
+      if (!known) { line('Something, this season', { bold: true }); ry += 2; line(F.hint, { color: C.ink2 }); }
+      else { const r = rec(f), n = r.attended.length; mark(g, rx, ry - 9, C.ink2, F.color); for (const l of K.lines(F.title, rw - 16)) { if (ry > bot) break; K.text(g, l, rx + 15, ry, { bold: true }); ry += 10; } ry += 1;
+        line(`${F.from}:00 to ${F.to % 24}:00${F.to > 24 ? ' (next day)' : ''}. ${n ? 'Attended ' + n + (n > 1 ? ' times.' : ' time.') : 'Not yet attended.'}`, { color: n ? C.moss : C.ink2 }); ry += 2;
+        line(F.blurb, { color: C.ink }); ry += 2;
+        const got = F.collectibles.filter(id => r.found[id] || W.Gather.Journal.found[id]).map(id => (W.Gather.DB.get(id) || {}).name || id), left = F.collectibles.length - got.length; line(got.length ? 'Found: ' + got.join(', ') + (left ? `, and ${left} still hidden.` : '.') : `${left} keepsakes to find here.`, { color: got.length ? C.moss : C.ink2 }); } }
+    else { line(here && UI.sel === dos ? 'An ordinary day in the clearing.' : 'Nothing marked for this day.', { color: C.ink2 }); ry += 4;
+      for (const [f, F] of fests) { const kn = Cal.discovered[f]; line(kn ? `This season: ${F.title}, day ${F.day}.` : 'Something happens this season. ' + F.hint, { color: C.faint }); ry += 2; } }
+    const fishLeft = W.Fishing.data().fish.filter(f => (f.seasons.includes(s) || f.seasons.includes('any')) && !W.Fishing.Book.rec[f.id]).length;
+    const fl = K.lines(fishLeft ? `Fish of ${s} not yet in your book: ${fishLeft}` : `Every fish of ${s} is in your book.`, rw); if (ry + fl.length * 10 + 2 < bot) { const fy = Math.max(ry + 4, bot - (fl.length - 1) * 10 - 2); fl.forEach((l, i) => K.text(g, l, rx, fy + i * 10, { color: C.faint })); }
+    K.pageTurn(g, 'calendar', x0, y0, pw, ph); g.restore(); }
+  function key(k) { if (!D) return false; if (UI.open) { if (k === 'v' || k === 'escape') { UI.open = false; UI.season = null; UI.sel = null; } else if (k === 'arrowright' || k === 'd') { UI.season = SEASONS[(SEASONS.indexOf(UI.season || W.SeasonState.season) + 1) % 4]; UI.sel = null; } else if (k === 'arrowleft' || k === 'a') { UI.season = SEASONS[(SEASONS.indexOf(UI.season || W.SeasonState.season) + 3) % 4]; UI.sel = null; } return true; } if (k === 'v' && !W.Gather.UI.open && !W.Build.UI.busy()) { UI.open = true; return true; } return false; }
+  // every calendar tap is a UIKit hit (UI coordinates); a tap the kit did not take still lands on the open book and goes no further
+  function pointer(x, y, down) { return !!UI.open; }
   // ================================================================= TICK, SAVE
   let acc = 0; function tick(dt) { if (!D) return; T += dt; acc += dt; if (acc > .5) { acc = 0; check(); } fxTick(dt); Music.tick(dt); }
   const Save = { snapshot() { return { version: 1, records: S.records, discovered: Cal.discovered, offset: Cal.offset }; }, restore(s) { if (S.active) end(); S.records = (s && s.records) || {}; Cal.discovered = (s && s.discovered) || {}; Cal.offset = s && s.offset != null ? s.offset : Cal.offset; Cal.sync(); check(); } };
   function blocked(x, y) { if (!S.active) return false; for (const [a, b, c, d] of D.festivals[S.active].blockers || []) if (x >= a && x <= c && y >= b && y <= d) return true; return false; }
   function init(data, world) { D = data; W = world; Cal.sync(); W.Fishing.on('catch', Lc => { if (W.Fishing.S.vista !== 'tide' || !S.active) return; const r = rec(S.active); r.tideCatches = (r.tideCatches || 0) + 1; if (r.tideCatches >= 2 && !r.found.drowned_bell) { giveItem('drowned_bell'); say('Something comes up tangled in your line with the fish: a small brass bell. Under water, faintly, it was ringing.', 6); } }); W.Survival.on('day', () => { Cal.onDay(); check(); }); W.Survival.on('wake', () => { Cal.onDay(); check(); });
     const SS = W.Survival.SaveState, sn = SS.snapshot.bind(SS), ld = SS.load.bind(SS); SS.snapshot = () => Object.assign(sn(), { festival: Save.snapshot() }); SS.load = s => { s = s || JSON.parse(localStorage.getItem(SS.KEY) || 'null'); const ok = ld(s); if (ok) Save.restore(s.festival); return ok; }; }
-  return { init, tick, key, pointer, nearest, blocked, on, Cal, S, UI, rec, act, Save, data: () => D, active: () => S.active, isOnNow, force: f => { forced = f; check(); }, setEnabled: v => { enabled = v; check(); }, render: { fx: drawFx, world, calendar: (g, vw, vh) => UI.open && drawCal(g, vw, vh) }, Music };
+  return { init, tick, key, pointer, nearest, blocked, on, Cal, S, UI, rec, act, Save, data: () => D, active: () => S.active, isOnNow, force: f => { forced = f; check(); }, setEnabled: v => { enabled = v; check(); }, render: { fx: drawFx, world, calendar: (g, vw, vh) => { if (!window.UIKit) return; if (UI.open) drawCal(g, vw, vh); else UIKit.openT('calendar', false); } }, Music };
 })();

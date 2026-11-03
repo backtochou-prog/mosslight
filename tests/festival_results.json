@@ -133,7 +133,7 @@
   {
    "name": "the calendar draws the season, upcoming and attended festivals, and turns its pages",
    "ok": true,
-   "detail": "5,autumn"
+   "detail": "30,autumn"
   },
   {
    "name": "the journal tells it as a story; numbers only appear if you ask for details",

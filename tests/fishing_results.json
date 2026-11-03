@@ -191,7 +191,7 @@
   {
    "name": "walking still works after fishing",
    "ok": true,
-   "detail": "420→443.0333333333333"
+   "detail": "420→443.67777777777775"
   },
   {
    "name": "touch: open, tap cast, tap strike, hold to reel, release, tap keep",
@@ -211,7 +211,7 @@
   {
    "name": "frame time with water pass (software Chromium)",
    "ok": true,
-   "detail": "16.2 ms"
+   "detail": "34.0 ms"
   },
   {
    "name": "no two plates share both silhouette and colour",

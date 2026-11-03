@@ -12,7 +12,13 @@
   "side",
   "gather",
   "fish",
-  "build"
+  "build",
+  "run_down",
+  "run_up",
+  "run_side",
+  "blink",
+  "hurt",
+  "sleep"
  ],
  "frames": [
   "idle0",
@@ -36,5 +42,48 @@
   "fish": "row 4, 4 frames, side facing",
   "build": "row 5, 4 frames"
  },
- "action_fps": 6
+ "action_fps": 6,
+ "run": {
+  "rows": {
+   "down": "run_down",
+   "up": "run_up",
+   "side": "run_side"
+  },
+  "frames": [
+   "walk0",
+   "walk1",
+   "walk2",
+   "walk3"
+  ],
+  "fps": 12,
+  "note": "idle0/idle1 of run rows copy the idle pose"
+ },
+ "blink": {
+  "row": "blink",
+  "down": "idle0",
+  "side": "idle1",
+  "up": "walk0",
+  "lifted": {
+   "down": "walk1",
+   "side": "walk2",
+   "up": "walk3"
+  },
+  "note": "eyes-closed twins of idle0 (and of breath-lifted idle1 via lifted); hold ~0.12 s"
+ },
+ "hurt": {
+  "row": "hurt",
+  "down": "idle0",
+  "side": "idle1",
+  "up": "walk0",
+  "note": "flinch pose; walk1..3 copy idle0/idle1/walk0"
+ },
+ "sleep": {
+  "row": "sleep",
+  "frames": [
+   "idle0",
+   "idle1"
+  ],
+  "fps": 0.6,
+  "note": "lying in a bedroll seen from above, lower 16 px of the cell; walk0..3 alternate copies"
+ }
 }

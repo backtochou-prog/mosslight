@@ -1,0 +1,304 @@
+{
+ "mood_morning": {
+  "peak": 0.2858,
+  "rms": 0.0567,
+  "centroid_hz": 549,
+  "seconds": 16,
+  "mood": "morning",
+  "want": "morning",
+  "layers": {},
+  "render_ms": 958
+ },
+ "mood_day": {
+  "peak": 0.2591,
+  "rms": 0.04315,
+  "centroid_hz": 484,
+  "seconds": 16,
+  "mood": "day",
+  "want": "day",
+  "layers": {},
+  "render_ms": 1175
+ },
+ "mood_sunset": {
+  "peak": 0.2769,
+  "rms": 0.05847,
+  "centroid_hz": 671,
+  "seconds": 16,
+  "mood": "sunset",
+  "want": "sunset",
+  "layers": {},
+  "render_ms": 1586
+ },
+ "mood_night": {
+  "peak": 0.1915,
+  "rms": 0.03497,
+  "centroid_hz": 613,
+  "seconds": 16,
+  "mood": "night",
+  "want": "night",
+  "layers": {},
+  "render_ms": 1155
+ },
+ "mood_danger": {
+  "peak": 0.2062,
+  "rms": 0.05202,
+  "centroid_hz": 293,
+  "seconds": 16,
+  "mood": "danger",
+  "want": "danger",
+  "layers": {},
+  "render_ms": 934
+ },
+ "mood_shelter": {
+  "peak": 0.2655,
+  "rms": 0.05399,
+  "centroid_hz": 620,
+  "seconds": 16,
+  "mood": "shelter",
+  "want": "shelter",
+  "layers": {},
+  "render_ms": 1097
+ },
+ "mood_fishing": {
+  "peak": 0.159,
+  "rms": 0.02748,
+  "centroid_hz": 290,
+  "seconds": 16,
+  "mood": "fishing",
+  "want": "fishing",
+  "layers": {},
+  "render_ms": 868
+ },
+ "mood_winter": {
+  "peak": 0.1597,
+  "rms": 0.02531,
+  "centroid_hz": 759,
+  "seconds": 16,
+  "mood": "winter",
+  "want": "winter",
+  "layers": {},
+  "render_ms": 917
+ },
+ "mood_fest_awakening": {
+  "peak": 0.2287,
+  "rms": 0.05324,
+  "centroid_hz": 475,
+  "seconds": 16,
+  "mood": "fest_awakening",
+  "want": "fest_awakening",
+  "layers": {},
+  "render_ms": 999
+ },
+ "mood_fest_fireflies": {
+  "peak": 0.2257,
+  "rms": 0.03554,
+  "centroid_hz": 703,
+  "seconds": 16,
+  "mood": "fest_fireflies",
+  "want": "fest_fireflies",
+  "layers": {},
+  "render_ms": 1324
+ },
+ "mood_fest_forgotten": {
+  "peak": 0.1776,
+  "rms": 0.0411,
+  "centroid_hz": 612,
+  "seconds": 16,
+  "mood": "fest_forgotten",
+  "want": "fest_forgotten",
+  "layers": {},
+  "render_ms": 1740
+ },
+ "mood_fest_silent_tide": {
+  "peak": 0.1715,
+  "rms": 0.03892,
+  "centroid_hz": 667,
+  "seconds": 16,
+  "mood": "fest_silent_tide",
+  "want": "fest_silent_tide",
+  "layers": {},
+  "render_ms": 1266
+ },
+ "amb_spring_day_meadow": {
+  "peak": 0.0429,
+  "rms": 0.00762,
+  "centroid_hz": 1989,
+  "seconds": 8,
+  "mood": "day",
+  "layers": {
+   "wind": 0.0676,
+   "leaves": 0.6,
+   "whistle": 0,
+   "birds": 0.9,
+   "insects": 0,
+   "night": 0,
+   "owls": 0,
+   "frogs": 0,
+   "water": 0,
+   "rain": 0,
+   "canvas": 0,
+   "thunder": 0,
+   "fire": 0
+  },
+  "render_ms": 1032
+ },
+ "amb_summer_dusk_pond": {
+  "peak": 0.2668,
+  "rms": 0.0465,
+  "centroid_hz": 2090,
+  "seconds": 8,
+  "mood": "sunset",
+  "layers": {
+   "wind": 0.0425,
+   "leaves": 0.6,
+   "whistle": 0,
+   "birds": 0,
+   "insects": 0.047,
+   "night": 0,
+   "owls": 0,
+   "frogs": 0.75,
+   "water": 0.4263,
+   "rain": 0,
+   "canvas": 0,
+   "thunder": 0,
+   "fire": 0
+  },
+  "render_ms": 626
+ },
+ "amb_autumn_rain_tent": {
+  "peak": 0.1767,
+  "rms": 0.0439,
+  "centroid_hz": 5837,
+  "seconds": 8,
+  "mood": "day",
+  "layers": {
+   "wind": 0.1042,
+   "leaves": 0.6,
+   "whistle": 0,
+   "birds": 0,
+   "insects": 0,
+   "night": 0,
+   "owls": 0,
+   "frogs": 0,
+   "water": 0,
+   "rain": 0.246,
+   "canvas": 0.5067,
+   "thunder": 0,
+   "fire": 0
+  },
+  "render_ms": 1156
+ },
+ "amb_winter_night_wind": {
+  "peak": 0.1625,
+  "rms": 0.03508,
+  "centroid_hz": 2781,
+  "seconds": 8,
+  "mood": "winter",
+  "layers": {
+   "wind": 0.2663,
+   "leaves": 0.25,
+   "whistle": 0.0481,
+   "birds": 0,
+   "insects": 0,
+   "night": 0.07,
+   "owls": 0.9,
+   "frogs": 0,
+   "water": 0,
+   "rain": 0,
+   "canvas": 0,
+   "thunder": 0,
+   "fire": 0
+  },
+  "render_ms": 817
+ },
+ "amb_campfire_night": {
+  "peak": 0.3545,
+  "rms": 0.02474,
+  "centroid_hz": 5411,
+  "seconds": 8,
+  "mood": "shelter",
+  "layers": {
+   "wind": 0.0494,
+   "leaves": 0.6,
+   "whistle": 0,
+   "birds": 0,
+   "insects": 0.0205,
+   "night": 0.035,
+   "owls": 0.9,
+   "frogs": 0,
+   "water": 0,
+   "rain": 0,
+   "canvas": 0,
+   "thunder": 0,
+   "fire": 0.3827
+  },
+  "render_ms": 587
+ },
+ "xfade_day_to_danger": {
+  "peak": 0.276,
+  "rms": 0.05141,
+  "centroid_hz": 369,
+  "seconds": 16,
+  "mood": "danger",
+  "layers": {},
+  "render_ms": 1483
+ },
+ "xfade_day_to_sunset": {
+  "peak": 0.2723,
+  "rms": 0.05681,
+  "centroid_hz": 597,
+  "seconds": 16,
+  "mood": "sunset",
+  "layers": {},
+  "render_ms": 1272
+ },
+ "sfx_sheet": {
+  "peak": 0.6206,
+  "rms": 0.03141,
+  "centroid_hz": 1710,
+  "seconds": 38.4,
+  "mood": "day",
+  "layers": {},
+  "played": 59,
+  "count": 59,
+  "render_ms": 2394
+ },
+ "_crossfade": {
+  "xfade_day_to_danger": {
+   "around_switch_max_step_up_db": 7.8,
+   "around_switch_max_step_down_db": 5.38,
+   "whole_file_max_step_up_db": 29.72,
+   "whole_file_max_step_down_db": 13.02,
+   "rms_500ms_before": 0.06794,
+   "rms_500ms_after": 0.06384,
+   "max_sample_delta_around": 0.0322,
+   "max_sample_delta_whole": 0.0322,
+   "final_mood": "danger",
+   "voices_at_end": [
+    {
+     "name": "danger",
+     "level": 1,
+     "to": 1
+    }
+   ]
+  },
+  "xfade_day_to_sunset": {
+   "around_switch_max_step_up_db": 8.25,
+   "around_switch_max_step_down_db": 3.91,
+   "whole_file_max_step_up_db": 29.72,
+   "whole_file_max_step_down_db": 4.59,
+   "rms_500ms_before": 0.06794,
+   "rms_500ms_after": 0.06395,
+   "max_sample_delta_around": 0.0324,
+   "max_sample_delta_whole": 0.0324,
+   "final_mood": "sunset",
+   "voices_at_end": [
+    {
+     "name": "sunset",
+     "level": 1,
+     "to": 1
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,170 @@
+{
+ "results": [
+  {
+   "name": "Mossbook body + heading faces load; fillText/measureText route mossbook fonts to the pixel face",
+   "ok": true,
+   "detail": "[59,118,70.43994140625,59,118]"
+  },
+  {
+   "name": "typeface covers 100+ glyphs on a 9 px cell",
+   "ok": true,
+   "detail": "105 glyphs"
+  },
+  {
+   "name": "no system fonts left in any game screen module",
+   "ok": true,
+   "detail": "[]"
+  },
+  {
+   "name": "Esc opens the pause page and holds the clock",
+   "ok": true,
+   "detail": "menu pause, clock 840.00→840.00"
+  },
+  {
+   "name": "pause › Save the game writes a save and confirms with a toast",
+   "ok": true,
+   "detail": "saved=true"
+  },
+  {
+   "name": "Settings › Reduce motion toggles by tap and is saved",
+   "ok": true,
+   "detail": "[true,true]"
+  },
+  {
+   "name": "Esc steps back settings → pause → game",
+   "ok": true,
+   "detail": "null"
+  },
+  {
+   "name": "the map uncovers where the player has been",
+   "ok": true,
+   "detail": "131 → 262 cells"
+  },
+  {
+   "name": "exploration survives save/load",
+   "ok": true,
+   "detail": "262"
+  },
+  {
+   "name": "M opens and closes the map",
+   "ok": true
+  },
+  {
+   "name": "the journal ribbon shows every book and switches between them",
+   "ok": true,
+   "detail": "[[\"pack\",8],[\"creatures\",null,true]]"
+  },
+  {
+   "name": "Tab moves to the next book",
+   "ok": true,
+   "detail": "folk"
+  },
+  {
+   "name": "on a touch phone the UI layer draws at 1.5x and every tap target is ≥34 UI px",
+   "ok": true,
+   "detail": "scale 1.5, 9 targets, smallest 34 [menu,act,pack,journal,map,tool,tool,tool,tool]"
+  },
+  {
+   "name": "the pack seal opens the pack by tap",
+   "ok": true,
+   "detail": "inventory"
+  },
+  {
+   "name": "every book closes from its paper close box by tap",
+   "ok": true,
+   "detail": "[true,false]"
+  },
+  {
+   "name": "map and menu seals work by tap",
+   "ok": true,
+   "detail": "true pause"
+  },
+  {
+   "name": "a phone held upright shows the turn-sideways page and the world waits",
+   "ok": true,
+   "detail": "portrait=true"
+  },
+  {
+   "name": "sound starts on a gesture and picks mood from danger, time and festival",
+   "ok": true,
+   "detail": "[true,\"running\",\"danger\",\"night\",\"fest_fireflies\"]"
+  },
+  {
+   "name": "music volume persists to storage",
+   "ok": true,
+   "detail": "0.3"
+  },
+  {
+   "name": "creature calls are voiced by the sound engine",
+   "ok": true,
+   "detail": "howl"
+  },
+  {
+   "name": "walking plays surface footsteps",
+   "ok": true,
+   "detail": "footstep_dirt,footstep_grass,footstep_grass,footstep_grass,footstep_grass"
+  },
+  {
+   "name": "holding R runs: faster, with run frames",
+   "ok": true,
+   "detail": "[true,\"run_side\",99.2]"
+  },
+  {
+   "name": "idle blink frames play",
+   "ok": true,
+   "detail": "blink"
+  },
+  {
+   "name": "taking damage shows the flinch frames",
+   "ok": true,
+   "detail": "hurt"
+  },
+  {
+   "name": "sleeping uses the bedroll frames",
+   "ok": true,
+   "detail": "sleep"
+  },
+  {
+   "name": "night: the camp spill is lit and warm, open ground away from camp falls into darkness",
+   "ok": true,
+   "detail": "camp lum 62 (r70/b61), far 33"
+  },
+  {
+   "name": "the small hours are darker than early night",
+   "ok": true,
+   "detail": "21:00 38.3 vs 01:30 36.0"
+  },
+  {
+   "name": "the fire breathes smoke and spits embers",
+   "ok": true,
+   "detail": "4 embers, 7 smoke"
+  },
+  {
+   "name": "a gentle breeze moves foliage even on a still day",
+   "ok": true,
+   "detail": "140038 px changed"
+  },
+  {
+   "name": "rain rings form on open water",
+   "ok": true,
+   "detail": "9 rings"
+  },
+  {
+   "name": "snow settles on the ground while it falls",
+   "ok": true,
+   "detail": "0.000 → 0.017"
+  },
+  {
+   "name": "reduce motion stills foliage sway and cloth (only fire, water and particles move)",
+   "ok": true,
+   "detail": "6608 px changed vs 140038"
+  },
+  {
+   "name": "no page errors",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "passed": 33,
+ "total": 33
+}

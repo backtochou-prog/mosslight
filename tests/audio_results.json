@@ -1,0 +1,322 @@
+[
+ {
+  "name": "mood_morning: no clipping (peak < 0.95)",
+  "ok": true,
+  "detail": 0.2858
+ },
+ {
+  "name": "mood_day: no clipping (peak < 0.95)",
+  "ok": true,
+  "detail": 0.2591
+ },
+ {
+  "name": "mood_sunset: no clipping (peak < 0.95)",
+  "ok": true,
+  "detail": 0.2769
+ },
+ {
+  "name": "mood_night: no clipping (peak < 0.95)",
+  "ok": true,
+  "detail": 0.1915
+ },
+ {
+  "name": "mood_danger: no clipping (peak < 0.95)",
+  "ok": true,
+  "detail": 0.2062
+ },
+ {
+  "name": "mood_shelter: no clipping (peak < 0.95)",
+  "ok": true,
+  "detail": 0.2655
+ },
+ {
+  "name": "mood_fishing: no clipping (peak < 0.95)",
+  "ok": true,
+  "detail": 0.159
+ },
+ {
+  "name": "mood_winter: no clipping (peak < 0.95)",
+  "ok": true,
+  "detail": 0.1597
+ },
+ {
+  "name": "mood_fest_awakening: no clipping (peak < 0.95)",
+  "ok": true,
+  "detail": 0.2287
+ },
+ {
+  "name": "mood_fest_fireflies: no clipping (peak < 0.95)",
+  "ok": true,
+  "detail": 0.2257
+ },
+ {
+  "name": "mood_fest_forgotten: no clipping (peak < 0.95)",
+  "ok": true,
+  "detail": 0.1776
+ },
+ {
+  "name": "mood_fest_silent_tide: no clipping (peak < 0.95)",
+  "ok": true,
+  "detail": 0.1715
+ },
+ {
+  "name": "amb_spring_day_meadow: no clipping (peak < 0.95)",
+  "ok": true,
+  "detail": 0.0429
+ },
+ {
+  "name": "amb_summer_dusk_pond: no clipping (peak < 0.95)",
+  "ok": true,
+  "detail": 0.2668
+ },
+ {
+  "name": "amb_autumn_rain_tent: no clipping (peak < 0.95)",
+  "ok": true,
+  "detail": 0.1767
+ },
+ {
+  "name": "amb_winter_night_wind: no clipping (peak < 0.95)",
+  "ok": true,
+  "detail": 0.1625
+ },
+ {
+  "name": "amb_campfire_night: no clipping (peak < 0.95)",
+  "ok": true,
+  "detail": 0.3545
+ },
+ {
+  "name": "xfade_day_to_danger: no clipping (peak < 0.95)",
+  "ok": true,
+  "detail": 0.276
+ },
+ {
+  "name": "xfade_day_to_sunset: no clipping (peak < 0.95)",
+  "ok": true,
+  "detail": 0.2723
+ },
+ {
+  "name": "sfx_sheet: no clipping (peak < 0.95)",
+  "ok": true,
+  "detail": 0.6206
+ },
+ {
+  "name": "mood_morning: not silent (rms > 0.002)",
+  "ok": true,
+  "detail": 0.0567
+ },
+ {
+  "name": "mood_day: not silent (rms > 0.002)",
+  "ok": true,
+  "detail": 0.04315
+ },
+ {
+  "name": "mood_sunset: not silent (rms > 0.002)",
+  "ok": true,
+  "detail": 0.05847
+ },
+ {
+  "name": "mood_night: not silent (rms > 0.002)",
+  "ok": true,
+  "detail": 0.03497
+ },
+ {
+  "name": "mood_danger: not silent (rms > 0.002)",
+  "ok": true,
+  "detail": 0.05202
+ },
+ {
+  "name": "mood_shelter: not silent (rms > 0.002)",
+  "ok": true,
+  "detail": 0.05399
+ },
+ {
+  "name": "mood_fishing: not silent (rms > 0.002)",
+  "ok": true,
+  "detail": 0.02748
+ },
+ {
+  "name": "mood_winter: not silent (rms > 0.002)",
+  "ok": true,
+  "detail": 0.02531
+ },
+ {
+  "name": "mood_fest_awakening: not silent (rms > 0.002)",
+  "ok": true,
+  "detail": 0.05324
+ },
+ {
+  "name": "mood_fest_fireflies: not silent (rms > 0.002)",
+  "ok": true,
+  "detail": 0.03554
+ },
+ {
+  "name": "mood_fest_forgotten: not silent (rms > 0.002)",
+  "ok": true,
+  "detail": 0.0411
+ },
+ {
+  "name": "mood_fest_silent_tide: not silent (rms > 0.002)",
+  "ok": true,
+  "detail": 0.03892
+ },
+ {
+  "name": "amb_spring_day_meadow: not silent (rms > 0.002)",
+  "ok": true,
+  "detail": 0.00762
+ },
+ {
+  "name": "amb_summer_dusk_pond: not silent (rms > 0.002)",
+  "ok": true,
+  "detail": 0.0465
+ },
+ {
+  "name": "amb_autumn_rain_tent: not silent (rms > 0.002)",
+  "ok": true,
+  "detail": 0.0439
+ },
+ {
+  "name": "amb_winter_night_wind: not silent (rms > 0.002)",
+  "ok": true,
+  "detail": 0.03508
+ },
+ {
+  "name": "amb_campfire_night: not silent (rms > 0.002)",
+  "ok": true,
+  "detail": 0.02474
+ },
+ {
+  "name": "xfade_day_to_danger: not silent (rms > 0.002)",
+  "ok": true,
+  "detail": 0.05141
+ },
+ {
+  "name": "xfade_day_to_sunset: not silent (rms > 0.002)",
+  "ok": true,
+  "detail": 0.05681
+ },
+ {
+  "name": "sfx_sheet: not silent (rms > 0.002)",
+  "ok": true,
+  "detail": 0.03141
+ },
+ {
+  "name": "mood_morning: world state selects mood 'morning'",
+  "ok": true,
+  "detail": "morning / morning"
+ },
+ {
+  "name": "mood_day: world state selects mood 'day'",
+  "ok": true,
+  "detail": "day / day"
+ },
+ {
+  "name": "mood_sunset: world state selects mood 'sunset'",
+  "ok": true,
+  "detail": "sunset / sunset"
+ },
+ {
+  "name": "mood_night: world state selects mood 'night'",
+  "ok": true,
+  "detail": "night / night"
+ },
+ {
+  "name": "mood_danger: world state selects mood 'danger'",
+  "ok": true,
+  "detail": "danger / danger"
+ },
+ {
+  "name": "mood_shelter: world state selects mood 'shelter'",
+  "ok": true,
+  "detail": "shelter / shelter"
+ },
+ {
+  "name": "mood_fishing: world state selects mood 'fishing'",
+  "ok": true,
+  "detail": "fishing / fishing"
+ },
+ {
+  "name": "mood_winter: world state selects mood 'winter'",
+  "ok": true,
+  "detail": "winter / winter"
+ },
+ {
+  "name": "mood_fest_awakening: world state selects mood 'fest_awakening'",
+  "ok": true,
+  "detail": "fest_awakening / fest_awakening"
+ },
+ {
+  "name": "mood_fest_fireflies: world state selects mood 'fest_fireflies'",
+  "ok": true,
+  "detail": "fest_fireflies / fest_fireflies"
+ },
+ {
+  "name": "mood_fest_forgotten: world state selects mood 'fest_forgotten'",
+  "ok": true,
+  "detail": "fest_forgotten / fest_forgotten"
+ },
+ {
+  "name": "mood_fest_silent_tide: world state selects mood 'fest_silent_tide'",
+  "ok": true,
+  "detail": "fest_silent_tide / fest_silent_tide"
+ },
+ {
+  "name": "every pair of moods differs (centroid > 5% or rms > 1 dB)",
+  "ok": true,
+  "detail": "66 pairs, min centroid diff 0.002"
+ },
+ {
+  "name": "xfade_day_to_danger: no amplitude discontinuity at the switch (10 ms RMS steps no larger than the file's own note onsets; no drop > 6 dB)",
+  "ok": true,
+  "detail": "{\"around_switch_max_step_up_db\":7.8,\"around_switch_max_step_down_db\":5.38,\"whole_file_max_step_up_db\":29.72,\"whole_file_max_step_down_db\":13.02,\"rms_500ms_before\":0.06794,\"rms_500ms_after\":0.06384,\"max_sample_delta_around\":0.0322,\"max_sample_delta_whole\":0.0322,\"final_mood\":\"danger\",\"voices_at_end\":[{\"name\":\"danger\",\"level\":1,\"to\":1}]}"
+ },
+ {
+  "name": "xfade_day_to_danger: ends in the new mood with both voices present during the fade",
+  "ok": true,
+  "detail": "danger"
+ },
+ {
+  "name": "xfade_day_to_sunset: no amplitude discontinuity at the switch (10 ms RMS steps no larger than the file's own note onsets; no drop > 6 dB)",
+  "ok": true,
+  "detail": "{\"around_switch_max_step_up_db\":8.25,\"around_switch_max_step_down_db\":3.91,\"whole_file_max_step_up_db\":29.72,\"whole_file_max_step_down_db\":4.59,\"rms_500ms_before\":0.06794,\"rms_500ms_after\":0.06395,\"max_sample_delta_around\":0.0324,\"max_sample_delta_whole\":0.0324,\"final_mood\":\"sunset\",\"voices_at_end\":[{\"name\":\"sunset\",\"level\":1,\"to\":1}]}"
+ },
+ {
+  "name": "xfade_day_to_sunset: ends in the new mood with both voices present during the fade",
+  "ok": true,
+  "detail": "sunset"
+ },
+ {
+  "name": "sfx sheet: every one-shot, ui, creature and sting recipe produced sound",
+  "ok": true,
+  "detail": "59/59"
+ },
+ {
+  "name": "start() is idempotent and runs the context",
+  "ok": true,
+  "detail": "[\"none\",\"running\"]"
+ },
+ {
+  "name": "play: plays, then cooldown blocks a machine-gun repeat; far/unknown sounds are skipped",
+  "ok": true,
+  "detail": "[true,false,false,false]"
+ },
+ {
+  "name": "ui/creature/sting play",
+  "ok": true,
+  "detail": "[true,true,true]"
+ },
+ {
+  "name": "settings persist to localStorage mosslight.audio",
+  "ok": true,
+  "detail": "{\"master\":0.8,\"music\":0.3,\"ambient\":0.7,\"sfx\":0.8,\"ui\":0.5,\"creatures\":0.8,\"muted\":true,\"reduceRepetition\":false}"
+ },
+ {
+  "name": "a broken or empty world never throws and still picks a mood",
+  "ok": true,
+  "detail": "day / day"
+ },
+ {
+  "name": "no page errors",
+  "ok": true,
+  "detail": ""
+ }
+]
