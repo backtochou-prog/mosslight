@@ -48,7 +48,7 @@
   {
    "name": "a personal detail told to Pip comes back days later, tied to what you did today",
    "ok": true,
-   "detail": "What do you like doing most? Tell me. I collect those too. >> You said you love fishing — and you caught a Roach today! I knew it. I knew it about you. || You told me to go in daylight, and come back before dusk. Daylight only, like you said! I found the blue moss! It doesn't glow in the day. I'm going back to see it glow. || Is that a Roach? Do not tell me. I will guess. ... Pond-flavored. Am I close."
+   "detail": "What do you like doing most? Tell me. I collect those too. >> You said you love fishing — and you caught a Roach today! I knew it. I knew it about you. || You told me to go in daylight, and come back before dusk. Daylight only, like you said! I found the blue moss! It doesn't glow in the day. I'm going back to see it glow. || Is that a Roach? Do not tell me. I will guess. Pond-flavored. Am I close."
   },
   {
    "name": "Ebb recognises a second fish and recalls the first one by name",
@@ -113,7 +113,7 @@
   {
    "name": "Burl's storyline: examine the birches, choose a remedy; some need materials",
    "ok": true,
-   "detail": "true >> Cut the sick ones before it spreads. | Burn fallen branches and spread the ash at their roots. (needs 1 Coal) | Leave them. The forest knows what to do. | Not yet. >> ...Yes. ... And no. ... One will go grey all through. ... The other two may drink the rain. ... We will see. ...The birches. ... Better. ... Come in spring. ... See. >> true"
+   "detail": "true >> Cut the sick ones before it spreads. | Burn fallen branches and spread the ash at their roots. (needs 1 Coal) | Leave them. The forest knows what to do. | Not yet. >> ...One will go grey all through. ... The other two may drink the rain. ... I hope. ... Hope is slow, like me. ...The birches. ... Better. ... Come in spring. ... See. >> true"
   },
   {
    "name": "Tessel's storyline: parts arrive over several visits; the promise is kept; a decision",
@@ -142,7 +142,7 @@
   {
    "name": "after loading, characters still remember and still talk from memory",
    "ok": true,
-   "detail": "Remember when you caught that Roach and I was right there? I tell everyone. Well, I tell the beetle. | 17"
+   "detail": "Remember when you caught that Roach and I was right there? I tell everyone. The beetle has heard it nine times and it still looks proud of you. | 17"
   },
   {
    "name": "from a fresh start, nobody recalls anything that did not happen (every recall is tied to a real, earlier memory)",

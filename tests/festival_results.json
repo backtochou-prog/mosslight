@@ -63,7 +63,7 @@
   {
    "name": "rushing ahead loses Pip: the storyline ends badly and Pip remembers it",
    "ok": true,
-   "detail": "true >> I found my own way back. It took all night. I don't think I'm going north again. It's not your fault. It's a little bit your fault. >> lost >> You went too fast that night. I found my own way home. It's okay. It isn't okay. It's getting okay. || Remember when you caught that Roach and I was right there? I tell everyone. Well, I tell the beetle. || I didn't take it. I borrowed it. || You put it in your pocket. || A pocket can be a temporary museum. || Ask next time. || …Okay. Museums need permission."
+   "detail": "true >> I found my own way back. It took all night. I don't think I'm going north again. It's not your fault. It's a little bit your fault. >> lost >> You went too fast that night and I lost you in the dark. I found my own way home, and I was brave about it, and I would still rather have walked with you. || Remember when you caught that Roach and I was right there? I tell everyone. The beetle has heard it nine times and it still looks proud of you. || I didn't take it. I borrowed it. || You put it in your pocket. || A pocket can be a temporary museum. || Ask next time. || …Okay. Museums need permission."
   },
   {
    "name": "a choice changes the world: opening the knocking door makes the nights more dangerous",
@@ -118,7 +118,7 @@
   {
    "name": "talking to Pip at the Firefly Evening becomes a memory it brings up days later",
    "ok": true,
-   "detail": "fest_fireflies >> turning over leaves >> Something said my sneeze from under the ground. || Maybe an echo. || I hope so. I don't want to meet a better sneezer. || I caught one! I let it go! I caught another one! I let it go! This is the best night! >> true >> You went too fast that night. I found my own way home. It's okay. It isn't okay. It's getting okay. || Remember when you caught that Roach and I was right there? I tell everyone. Well, I tell the beetle. || You were at the The Firefly Evening! I saw you! I waved! You did not see me wave. I waved very hard."
+   "detail": "fest_fireflies >> turning over leaves >> Something said my sneeze from under the ground. || Maybe an echo. || I hope so. I don't want to meet a better sneezer. || I caught one! I let it go! I caught another one! I let it go! This is the best night! >> true >> You went too fast that night and I lost you in the dark. I found my own way home, and I was brave about it, and I would still rather have walked with you. || Remember when you caught that Roach and I was right there? I tell everyone. The beetle has heard it nine times and it still looks proud of you. || You were at the The Firefly Evening! I saw you! I waved! You did not see me wave. I waved very hard."
   },
   {
    "name": "just being there together is remembered too, gently",

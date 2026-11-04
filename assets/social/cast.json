@@ -668,7 +668,7 @@
 },
 {
 "id": "ebb_soon_fest_silent_tide",
-"text": "Soon the ice goes clear for a night. You can see what is under it. I would not miss it. I cannot, actually. I live here.",
+"text": "Soon the ice goes clear for one night, and you can see straight down to where the pond keeps its secrets. I have never slept through it. I would not forgive myself if I did.",
 "when": {
 "festival_soon": "fest_silent_tide"
 },
@@ -729,7 +729,7 @@
 },
 {
 "id": "e_r_fact",
-"text": "You remembered about the first rain. Hm. Most things that walk forget what the pond tells them.",
+"text": "You remembered what I said about the first rain. Nobody remembers what the pond says. It matters to me more than I expected.",
 "mem": {
 "type": "fact_mentioned",
 "min_age": 1
@@ -818,7 +818,7 @@
 "rain"
 ]
 },
-"react": "You remembered that. ... Hm. The pond is pleased. I am also, a little."
+"react": "You remembered that. I did not think anyone was listening. The pond is glad. So am I."
 }
 ],
 "gift_lines": {
@@ -830,7 +830,7 @@
 "{item}. Useful to a pond. Thank you."
 ],
 "neutral": [
-"{item}. Hm. I will find somewhere for it."
+"{item}. I will find a place for it. Thank you for thinking of the pond."
 ],
 "disliked": [
 "You bring me my neighbours. ... I know you meant well. Take it back.",
@@ -887,13 +887,13 @@
 },
 "reactions": {
 "accept": [
-"Hm. Yes. That is what I would have told me, if I listened better."
+"That is what I would tell myself, if I listened. Thank you for saying it kindly."
 ],
 "consider": [
 "Perhaps. I will turn it over, like a stone."
 ],
 "reject": [
-"No. I have done that before. It did not suit the pond."
+"I tried that once, and it cost the pond more than I admit. I cannot do it twice."
 ]
 },
 "followup": {
@@ -980,7 +980,7 @@
 "text": "Morrow knows those pipes. Let me ask it.",
 "needs_met": "tessel",
 "result": "good",
-"line": "The metal one? Hm. It talks too much and counts the wrong things. But it knows pipes. Yes. Ask.",
+"line": "The metal one. It talks too much and counts the wrong things, and it understands pipes better than I do, which I resent. Ask it.",
 "rel": {
 "respect": 3
 },
@@ -1006,7 +1006,7 @@
 "familiar": "You come back often. The pond has started expecting you. So have I. That is a sentence I have not said in a long time.",
 "trusted": "I am going to tell you something I have not told anyone. Not yet. Soon. Come back when the water is quiet.",
 "close": "You are part of what I count now, when I count the pond.",
-"kindred": "When I go quiet for the last time, the pond will need a keeper. I am not asking. I am only saying I have thought about it."
+"kindred": "When I go quiet for the last time, the pond will need a keeper. When I am gone the pond will need someone who loves it, and I have already thought about who. That is all I wanted to say. It took me a very long time to say it."
 },
 "activities": [
 {
@@ -1016,7 +1016,7 @@
 "water": true,
 "label": "Fish here together",
 "line": "The {fish} comes up at {when}. Try {bait}. ... That is all I will say. The pond keeps its own secrets, mostly.",
-"none": "There is nothing left in this pond you have not met. Hm. That has never happened before."
+"none": "There is nothing left in this pond you have not met. In all my years that has never happened, and I find I do not want it to end."
 }
 ],
 "pools": {
@@ -1196,7 +1196,7 @@
 "notice": [
 {
 "id": "n_catch",
-"text": "A {ctx.lastFish}. Tell me the depth and the hour and I will write it on the channel map. Yes, I have a map. No, it is not a hobby.",
+"text": "A {ctx.lastFish}. Tell me the depth and the hour. Every fish you show me makes the pond a little less lonely to keep.",
 "when": {
 "caught_today": true
 }
@@ -1233,7 +1233,7 @@
 },
 {
 "id": "n_lantern",
-"text": "Your lantern on the water makes a second lantern. I would call it a bad influence. It is lovely.",
+"text": "Your lantern on the water makes a second lantern. I have watched this pond alone a long time. Tonight it has company.",
 "when": {
 "lantern": true,
 "period": [
@@ -2143,7 +2143,7 @@
 },
 {
 "id": "p_c_patch",
-"text": "The mushrooms by the hollow log are mine. I mean, nobody owns mushrooms. But they are mine.",
+"text": "The mushrooms by the hollow log are mine. Nobody owns mushrooms, so I just look after them very, very hard.",
 "when": {
 "met_days": 1
 },
@@ -2240,7 +2240,7 @@
 },
 {
 "id": "p_r_shared",
-"text": "Remember when you caught that {mem.itemName} and I was right there? I tell everyone. Well, I tell the beetle.",
+"text": "Remember when you caught that {mem.itemName} and I was right there? I tell everyone. The beetle has heard it nine times and it still looks proud of you.",
 "mem": {
 "type": "shared_catch",
 "min_age": 1
@@ -2258,7 +2258,7 @@
 },
 {
 "id": "p_r_took",
-"text": "Somebody took the mushrooms by the hollow log. I'm not saying it was you. I saw you. I'm not saying it.",
+"text": "Somebody took the mushrooms by the hollow log. I saw you near them. I'm not angry. I only wanted to be asked.",
 "mem": {
 "type": "took",
 "min_age": 0,
@@ -2288,7 +2288,7 @@
 },
 {
 "id": "p_r_promise_broken",
-"text": "I waited for the lantern. I didn't go north. It's fine. It's fine! I'm small anyway.",
+"text": "I waited for the lantern. I didn't go north, because I didn't want to go alone. I'm small, so I'm good at waiting. I would have liked company.",
 "mem": {
 "type": "promise_broken",
 "min_age": 0
@@ -2319,7 +2319,7 @@
 },
 {
 "id": "p_r_left",
-"text": "You went too fast that night. I found my own way home. It's okay. It isn't okay. It's getting okay.",
+"text": "You went too fast that night and I lost you in the dark. I found my own way home, and I was brave about it, and I would still rather have walked with you.",
 "mem": {
 "type": "left_behind",
 "min_age": 0
@@ -2421,7 +2421,7 @@
 "when": {
 "met_days": 1
 },
-"react": "You remembered Fennel! Nobody remembers Fennel. Fennel is very well, thank you, Fennel is blushing."
+"react": "You remembered Fennel! Nobody remembers Fennel. Fennel is so happy it is hiding under the brim."
 }
 ],
 "gift_lines": {
@@ -2453,7 +2453,7 @@
 "A {item}! I have seen those. Not as good as that one though."
 ],
 "rare": [
-"A {item}?! Where did you — no don't tell me. Yes tell me. No. Yes."
+"A {item}?! Where did you find it! I want to hear everything, and then I want to follow your footprints back to the place."
 ]
 },
 "concerns": [
@@ -2487,10 +2487,10 @@
 "Yes. Yes! That's it. That's exactly it."
 ],
 "consider": [
-"Maybe? Maybe. I will think about it while I chase something."
+"I will think about it while I chase something. I always think better running."
 ],
 "reject": [
-"No... no, I don't think so. I think I want to see it."
+"I don't think I can. I am scared, and I want to see it, and I want to see it anyway."
 ]
 },
 "followup": {
@@ -2673,7 +2673,7 @@
 "festival": [
 {
 "id": "p_fest_aw",
-"text": "I hung SIX wishes! One is for you! I am not telling you which one. It is the yellow one.",
+"text": "I hung SIX wishes! One is for you! You will know which one by the yellow.",
 "when": {
 "festival": "fest_awakening"
 }
@@ -2776,14 +2776,14 @@
 "notice": [
 {
 "id": "p_catch",
-"text": "Is that a {ctx.lastFish}? Do not tell me. I will guess. ... Pond-flavored. Am I close.",
+"text": "Is that a {ctx.lastFish}? Do not tell me. I will guess. Pond-flavored. Am I close.",
 "when": {
 "caught_today": true
 }
 },
 {
 "id": "p_berry",
-"text": "You have blackberries. I am not asking. I am just standing here with my whole face.",
+"text": "You have blackberries. I can smell them from here. I am standing nearby with my whole face.",
 "when": {
 "has": "blackberry"
 }
@@ -5027,7 +5027,7 @@
 "chat": [
 {
 "id": "b_c_rings",
-"text": "...I have four hundred and twelve rings. ... Or thirteen. ... I lost count in a dry year.",
+"text": "...I have four hundred and twelve rings. ... I lost count in a dry year, so call it four hundred and thirteen. ... The dry year was the loneliest.",
 "fact": "rings",
 "when": {
 "bond": "acquainted"
@@ -5119,7 +5119,7 @@
 },
 {
 "id": "b_r_fact",
-"text": "...You remembered my rings. ... Hm. ... I will remember that you remembered.",
+"text": "...You remembered my rings. ... I will remember that you remembered. ... It is good to be remembered by something that walks.",
 "mem": {
 "type": "fact_mentioned",
 "min_age": 1
@@ -5254,7 +5254,7 @@
 "...{item}. ... Good."
 ],
 "neutral": [
-"...{item}. ... Hm."
+"...{item}. ... I will keep it close to my roots."
 ],
 "disliked": [
 "...That is one of mine. ... Cut. ... Take it away."
@@ -5275,7 +5275,7 @@
 },
 "lean": "compromise",
 "resists": "encourage",
-"intro": "...Every spring I wake a little less. ... Should I keep waking? ... Or let the sapling on my crown have the light?",
+"intro": "...Every spring I wake a little less. ... I wonder whether I should keep waking, or give the sapling on my crown the light.",
 "ask": "What would the sapling need?",
 "reveal": "...Light. ... Time. ... Someone to keep the deer off it. ... There are no deer anymore. ... I forget that.",
 "options": {
@@ -5297,7 +5297,7 @@
 "...Yes. ... That is right."
 ],
 "consider": [
-"...Hm. ... I will think. ... Come back next year."
+"...I will think about it. ... Come back next year and I will tell you what I decided."
 ],
 "reject": [
 "...No. ... You are young. ... You think everything should go on."
@@ -5404,7 +5404,7 @@
 "id": "leave",
 "text": "Leave them. The forest knows what to do.",
 "result": "mixed",
-"line": "...Yes. ... And no. ... One will go grey all through. ... The other two may drink the rain. ... We will see.",
+"line": "...One will go grey all through. ... The other two may drink the rain. ... I hope. ... Hope is slow, like me.",
 "rel": {
 "respect": 3
 },
@@ -5534,7 +5534,7 @@
 "text": "Name it after me.",
 "result": "mixed",
 "keepsake": "heartwood_seed",
-"line": "...After you. ... Hm. ... That is a short name, for a tree. ... It will have to grow into it.",
+"line": "...After you. ... That is a short name for a tree. ... It will have to grow into it, and I will be here to watch.",
 "rel": {
 "affection": 3
 }
@@ -5600,7 +5600,7 @@
 "text": "Let it name itself.",
 "result": "mixed",
 "keepsake": "heartwood_seed",
-"line": "...Hm. ... It will grow up next to stumps. ... It will have opinions.",
+"line": "...It will grow up beside the stumps. ... It will have opinions, and I will listen to every one.",
 "rel": {
 "respect": 2
 }
@@ -6996,7 +6996,7 @@
 },
 {
 "id": "t_low",
-"text": "Your pace has decreased. I recommend rest. You do not wear a coat. I recommend one of those as well. I am attempting care in the form of a list.",
+"text": "Your pace has decreased. I recommend rest. You wear no coat, so I recommend one. This is how I say I am worried about you.",
 "when": {
 "player_low": true
 }
