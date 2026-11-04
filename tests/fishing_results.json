@@ -211,7 +211,7 @@
   {
    "name": "frame time with water pass (software Chromium)",
    "ok": true,
-   "detail": "16.0 ms"
+   "detail": "16.5 ms"
   },
   {
    "name": "no two plates share both silhouette and colour",

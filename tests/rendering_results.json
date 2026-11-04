@@ -33,17 +33,17 @@
   {
    "name": "a calm still scene changes under 1.5% of its pixels per quarter second (the fire and breeze only)",
    "ok": true,
-   "detail": "calm 0.44%, breezy 0.52%"
+   "detail": "calm 0.40%, breezy 0.69%"
   },
   {
    "name": "pond rows agree with their neighbours (no striping; ≤ 6% of pixels differ sharply from the row above)",
    "ok": true,
-   "detail": "4.3%"
+   "detail": "4.1%"
   },
   {
    "name": "night still runs at 240 game-min per real-min; midday runs at about 93",
    "ok": true,
-   "detail": "noon 92.9, night 240.0"
+   "detail": "noon 92.4, night 239.8"
   },
   {
    "name": "spring daylight lasts about 8 real minutes (420-540 s) and a whole day about 11",

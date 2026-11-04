@@ -216,10 +216,13 @@ let SNOWACC = 0, CANVASPX = null, CANVRK = null, FLAGGED = false;
 // ---------------------------------------------------------------- palette table for "now"
 function lerp3(a, b, t) { return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t]; }
 function darknessAt(season, hour) { const kf = DATA.keyframes[season], hs = kf.hours, n = hs.length; for (let k = 0; k < n; k++) { const h0 = hs[k], h1 = hs[(k + 1) % n] + (k === n - 1 ? 24 : 0), hh = hour + ((k === n - 1 && hour < hs[0]) ? 24 : 0); if (hh >= h0 && hh <= h1) { let t = (hh - h0) / (h1 - h0); t = t * t * (3 - 2 * t); return kf.darkness[k] * (1 - t) + kf.darkness[(k + 1) % n] * t; } } return 1; }
+const SAT_BOOST = 0.28;
+function satBoost(c, k) { const lum = 0.299 * c[0] + 0.587 * c[1] + 0.114 * c[2]; return [Math.max(0, Math.min(255, lum + (c[0] - lum) * k)), Math.max(0, Math.min(255, lum + (c[1] - lum) * k)), Math.max(0, Math.min(255, lum + (c[2] - lum) * k))]; }
 function tableAt(season, hour) { const kf = DATA.keyframes[season]; const hs = kf.hours, n = hs.length;
   for (let k = 0; k < n; k++) { const h0 = hs[k]; const h1 = hs[(k + 1) % n] + (k === n - 1 ? 24 : 0); const hh = hour + ((k === n - 1 && hour < hs[0]) ? 24 : 0);
     if (hh >= h0 && hh <= h1) { let t = (hh - h0) / (h1 - h0); t = t * t * (3 - 2 * t); const a = kf.tables[k], b = kf.tables[(k + 1) % n];
-      return { table: a.map((c, i) => lerp3(c, b[i], t)), darkness: kf.darkness[k] * (1 - t) + kf.darkness[(k + 1) % n] * t }; } }
+      const dk = kf.darkness[k] * (1 - t) + kf.darkness[(k + 1) % n] * t, sk = 1 + SAT_BOOST * (1 - dk * .6);      /* richer, storybook colour in daylight; a lighter touch at night */
+      return { table: a.map((c, i) => satBoost(lerp3(c, b[i], t), sk)), darkness: dk }; } }
   return { table: kf.tables[n - 1], darkness: 1 }; }
 function gradeTable(table, wkind, wi, ev) { // weather + event grades on the 200-entry table, never per pixel
   const g = DATA.weather[wkind]; const out = new Array(table.length);
