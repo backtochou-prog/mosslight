@@ -566,6 +566,19 @@ $('intensity').oninput = e => WeatherState.set(WeatherState.kind, e.target.value
 $('zoom').onchange = e => state.zoom = +e.target.value; $('viewport').onchange = e => state.viewport = e.target.checked;
 $('vol').oninput = e => { if (window.Sound) { Sound.setVolume('master', e.target.value / 100); return; } Monsters.Audio.vol.master = e.target.value / 100; if (Monsters.Audio.master) Monsters.Audio.master.gain.value = Monsters.Audio.vol.master; }; $('touch').onchange = e => Touch.enabled = e.target.checked; $('devtoggle').onchange = e => $('dev').style.display = e.target.checked ? '' : 'none'; $('aspect').onchange = e => { const [w, h] = e.target.value.split('x').map(Number); Camera.vw = w; Camera.vh = h; }; $('safe').oninput = e => Camera.safe = +e.target.value; $('camsmooth').oninput = e => Camera.smooth = +e.target.value;
 if ('ontouchstart' in window) { Touch.enabled = true; $('touch').checked = true; }
+/* Fullscreen: a browser only allows it from a tap, so turning the phone cannot do it by itself. The first tap after the screen is
+   turned to landscape asks for fullscreen (and locks landscape where the phone allows it). iPhone Safari has no fullscreen for
+   pages: there, "Add to Home Screen" gives the same thing. Settings, Display has a Fullscreen switch for everyone else. */
+const FS = { el: document.documentElement, armed: false, on: () => !!(document.fullscreenElement || document.webkitFullscreenElement), can: () => !!(document.documentElement.requestFullscreen || document.documentElement.webkitRequestFullscreen),
+  landscape: () => innerWidth > innerHeight,
+  enter() { if (!this.can() || this.on()) return; try { const r = (this.el.requestFullscreen || this.el.webkitRequestFullscreen).call(this.el, { navigationUI: 'hide' }); const lock = () => { try { if (screen.orientation && screen.orientation.lock) screen.orientation.lock('landscape').catch(() => {}); } catch (e) {} }; if (r && r.then) r.then(lock).catch(() => {}); else lock(); } catch (e) {} },
+  exit() { try { (document.exitFullscreen || document.webkitExitFullscreen).call(document); } catch (e) {} },
+  toggle() { if (this.on()) this.exit(); else this.enter(); } };
+window.FS = FS; window.toggleFullscreen = () => FS.toggle();
+{ const arm = () => { FS.armed = !!(Touch.enabled && FS.can() && FS.landscape() && !FS.on()); };
+  addEventListener('orientationchange', () => setTimeout(arm, 350)); addEventListener('resize', () => setTimeout(arm, 150)); document.addEventListener('fullscreenchange', arm); arm();
+  const go = () => { if (FS.armed && FS.landscape() && !FS.on()) { FS.armed = false; FS.enter(); } };
+  addEventListener('touchend', go, { passive: true, capture: true }); addEventListener('click', go, { capture: true }); }
 if (!LAB && Touch.enabled) { state.zoom = 2; HALF_RATE = true; }          /* phones: a 2x backing canvas, scaled up crisply by CSS; a third of the pixels to fill */
 Touch.attach(cv);
 // on a phone the game is the page: the canvas fills the screen height and the widest matching view is used
