@@ -29,7 +29,7 @@ def clamp8(c):
 # ---------------------------------------------------------------------------
 FAMILIES: dict[str, list[str]] = {
     # terrain
-    'grass':      ['1b3826', '2a5531', '3b733c', '539a44', '72b64c', '96cc58', 'bde06a'],
+    'grass':      ['1d3b23', '2c5a2c', '3f7833', '58973b', '74b043', '98c950', 'bfe065'],   # warm meadow green, Stardew-like value steps
     'forest':     ['1c3f2a', '285533', '35703a', '428541', '509848'],          # shaded forest floor
     'worn':       ['4b6a38', '63893f', '7ea249', '97b656', 'b0c865'],            # trampled dry grass
     'dirt':       ['3a2619', '5b3e28', '7b5736', '9b7349', 'b88f60', 'd2ad7c'],
@@ -177,7 +177,7 @@ def _saturate(hexes, sat=1.18, val=1.03):
         r, g, b = colorsys.hls_to_rgb(hh, min(0.96, l * val), min(1.0, ss * sat))
         out.append('%02x%02x%02x' % (int(r * 255), int(g * 255), int(b * 255)))
     return out
-for _f, _k in (('grass', 1.22), ('worn', 1.15), ('forest', 1.15), ('dirt', 1.18), ('earth', 1.1), ('water', 1.15), ('oak', 1.22), ('birch', 1.2), ('pine', 1.15),
+for _f, _k in (('grass', 1.04), ('worn', 1.15), ('forest', 1.15), ('dirt', 1.18), ('earth', 1.1), ('water', 1.15), ('oak', 1.22), ('birch', 1.2), ('pine', 1.15),
                ('rowan', 1.2), ('shrub', 1.2), ('fern', 1.18), ('reed', 1.15), ('moss', 1.15), ('wood', 1.15), ('canvas', 1.12), ('leaf_litter', 1.2), ('sand', 1.1)):
     FAMILIES[_f] = _saturate(FAMILIES[_f], _k)
 

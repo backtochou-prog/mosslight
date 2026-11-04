@@ -18,7 +18,7 @@
   {
    "name": "characters walk to their next place through the world, respecting collision",
    "ok": true,
-   "detail": "388,338,602,330,6.7,0"
+   "detail": "388,338,602,330,6.5,0"
   },
   {
    "name": "each character keeps its own memory; repeat visits consolidate into one record",

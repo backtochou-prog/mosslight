@@ -14,6 +14,7 @@ from .terrain_tiles import T, GRASS, WORN, FOREST, SAND, DIRT, EARTH, PEBBLE, MU
 from .render import Scene, Light
 from .paths import Path
 from . import composition as C
+from . import ground_art as GA
 
 W_T, H_T = 48, 30
 
@@ -42,7 +43,6 @@ def build(lib) -> Scene:
         nb = sum(p[1 + dy:p.shape[0] - 1 + dy, 1 + dx:p.shape[1] - 1 + dx].astype(int) for dy in (-1, 0, 1) for dx in (-1, 0, 1) if (dx, dy) != (0, 0))
         mm.m[f & (nb <= 3)] = GRASS
     mm.metaball([(12, 10, 2.5)], FOREST)
-    mm.disc(17.4, 16.4, 2.4, WORN); mm.disc(19.8, 17.2, 2.2, WORN); mm.disc(15.2, 15.2, 1.2, WORN)
     # paths: the main way to the dock (widening at the camp), the narrow climb to the ruin
     main = Path([(4.5, 30.5), (6.5, 27), (9.5, 24), (13.5, 21.5), (17.5, 19.5), (22, 18.6), (26.5, 19.2), (30, 18.4), (33, 17.2)],
                 width=[0.75, 0.78, 0.8, 0.85, 0.9, 0.85, 0.8, 0.78, 0.75], surface=DIRT, verge=WORN, verge_width=0.95, seed=3)
@@ -69,25 +69,34 @@ def build(lib) -> Scene:
                     keepouts=[(272, 250, 48), (318, 276, 34), (560, 290, 40), (616, 100, 60), (418, 190, 18), (330, 224, 40), (470, 358, 44), (654, 380, 70)])
 
     # ------------------------------------------------------------------ landmarks, composed as clusters
+    def put(nm, x, y, fl=False):            # hand-placed: always placed where the artist put it, and it reserves its ground
+        sc.add(lib[nm], int(x), int(y), flip=fl); ctx.reserve(x, y, C.footprint_radius(lib[nm]))
     # THE CAMP — a refuge someone lives in: the tent backs onto the big oak and the rock
     # outcrop (shelter from the north), its mouth faces the fire; the fire pit sits on a
     # worn patch between tent and path; firewood is stacked by the tent where it stays dry;
     # the lantern post stands where it lights both the entrance and the fire; a flat stone
     # is the step at the tent mouth; two seats face the fire.
-    for (nm, x, y, fl) in (('oak_0', 216, 206, False), ('tent', 252, 244, False), ('woodpile', 178, 242, False), ('flatstone_0', 264, 256, False),
-                           ('campfire', 318, 274, False), ('log_seat', 286, 304, False), ('log_seat', 362, 288, True), ('lantern_post', 218, 284, False), ('stump_0', 404, 258, False)):
-        ctx.place(nm, x, y, flip=fl)
-    # THE OUTCROP — one main boulder, a second leaning against it, two smaller stones at its
-    # foot, a flat slab in front, moss on the shaded side, ferns in its shade. Small stones gather
-    # around big ones; nothing stands alone.
-    for (nm, x, y, fl) in (('boulder_l0', 318, 214, False), ('boulder_mossy_m1', 346, 222, False), ('boulder_s0', 302, 224, False), ('stone_1', 360, 230, False),
-                           ('stone_0', 332, 232, False), ('flatstone_1', 326, 238, False), ('fern_1', 290, 236, False), ('fern_0', 372, 236, True), ('tuft_2', 356, 238, False)):
-        ctx.place(nm, x, y, flip=fl)
-    sc.decals.append(C.moss_patch(306, 222, 12, 5)); sc.decals.append(C.moss_patch(352, 230, 9, 4))
+    for (nm, x, y, fl) in (('oak_0', 216, 206, False), ('tent', 248, 246, False), ('woodpile', 182, 240, False), ('chop_block', 192, 268, False),
+                           ('lantern_post', 232, 270, False), ('supply_crate', 284, 262, False), ('forage_basket', 270, 266, False), ('water_bucket', 340, 270, False),
+                           ('campfire', 318, 274, False), ('log_seat', 302, 300, False), ('log_seat_b', 352, 286, True)):
+        put(nm, x, y, fl)
+    # THE OUTCROP — a broken shelf of the same stone behind the tent: one big block, a mossy second leaning on it,
+    # small pieces that have split off at its foot. Ferns grow in its shade. Small stones gather by big ones.
+    for (nm, x, y, fl) in (('rock_xl', 324, 216, False), ('rock_m1', 347, 222, False), ('rock_m0', 304, 222, True), ('rock_s1', 336, 228, False),
+                           ('rock_s0', 360, 228, False), ('rock_s2', 314, 229, False), ('fern_1', 292, 232, False), ('fern_0', 372, 234, True), ('tuft_2', 312, 230, False)):
+        put(nm, x, y, fl)
+    # CAMP DRESSING — plants where plants would be: ferns and long grass in the shade and shelter of things (the oak's
+    # foot, the lee of the rocks, the tent's back corners, the ends of the seat logs), flowers in the sun at the
+    # camp's edge where nobody walks, mushrooms in the damp under the oak.
+    for (nm, x, y, fl) in (('fern_b', 200, 214, False), ('shrooms_brown', 234, 212, False), ('tall_b', 164, 246, True), ('tall_a', 212, 254, False),
+                           ('fern_c', 302, 242, True), ('tall_b', 308, 232, False), ('patch_daisy_s', 366, 240, False), ('tall_c', 381, 232, False),
+                           ('patch_blue', 212, 262, False), ('tall_c', 336, 314, True), ('patch_butter', 270, 308, False), ('tall_a', 384, 280, False),
+                           ('patch_daisy', 236, 300, True), ('tall_b', 168, 276, False), ('fern_a', 160, 230, False)):
+        put(nm, x, y, fl)
     # THE POND — dock on the near bank at the path's end, willow on the far bank, a mossy
     # boulder pair where the bank turns, reeds and lilies by rule.
-    for (nm, x, y, fl) in (('willow_0', 730, 306, True), ('boulder_mossy_l0', 596, 340, False), ('boulder_s1', 576, 348, False), ('stone_1', 590, 352, False)):
-        ctx.place(nm, x, y, flip=fl)
+    for (nm, x, y, fl) in (('willow_0', 730, 306, True), ('rock_xl', 600, 338, True), ('rock_s0', 577, 347, False), ('rock_s1', 584, 352, False)):
+        put(nm, x, y, fl)
     sc.add(lib['dock'], 528, 290, layer='ground'); sc.add(lib['lantern_hanging'], 592, 268)
     if 'ruin_wall' in lib: sc.add(lib['ruin_wall'], 512, 104)
     if 'bridge' in lib: sc.add(lib['bridge'], 654, 390, layer='ground')
@@ -95,12 +104,12 @@ def build(lib) -> Scene:
     # a dead tree beyond, glow-caps in the damp corner.
     for (nm, x, y, fl) in (('ruin_back', 616, 94, False), ('ruin_side', 560, 130, False), ('rubble_0', 672, 108, False), ('rubble_1', 548, 142, False),
                            ('beam', 606, 126, False), ('rowan_1', 640, 118, False), ('dead_0', 700, 150, False)):
-        ctx.place(nm, x, y, flip=fl)
+        put(nm, x, y, fl)
     sc.add(lib['lantern_hanging'], 612, 88); sc.add(lib['glowshroom_0'], 596, 132); sc.add(lib['glowshroom_1'], 684, 122)
     # THE FALLEN TREE — hollow log with its torn roots, a snapped branch, moss, mushrooms in
     # its shade and a fern: a quiet corner at the clearing's south-east.
     for (nm, x, y, fl) in (('hollowlog_0', 470, 356, False), ('branch_1', 442, 372, False), ('fern_2', 502, 344, False), ('shroom_1', 446, 370, False)):
-        ctx.place(nm, x, y, flip=fl)
+        put(nm, x, y, fl)
     sc.add(lib['roots_1'], 490, 354, layer='ground', flip=True); sc.add(lib['glowshroom_0'], 490, 364)
     sc.decals.append(C.moss_patch(460, 360, 14, 5)); sc.decals.append(C.leaf_litter(472, 366, 24, 14))
     # THE LONE ROWAN — the meadow's landmark, with a flower ring at its foot
@@ -122,7 +131,7 @@ def build(lib) -> Scene:
         if 33 < tx < 44 and 2.5 < ty < 9.5: return True
         if abs(tx - (29.5 + (ty - 15.5) * -0.75)) < 1.3 and 7.5 < ty < 16: return True
         return False
-    C.forest_edge(ctx, clearing_dist, species, exclude=exclude, spacing=(3.6, 3.3, 3.0))   # smaller, calmer canopies: keep the forest full
+    C.forest_edge(ctx, clearing_dist, species, exclude=exclude, spacing=(3.1, 2.7, 2.4))   # smaller, calmer canopies: keep the forest full
     C.understorey(ctx, clearing_dist)
     C.pond_margin(ctx, keep=lambda x, y: not (500 < x < 600 and 250 < y < 310) and not (590 < x < 724 and 330 < y < 410))
     trees = [(p.x, p.y) for p in sc.placements if 'tree' in p.sprite.tags and 'sapling' not in p.sprite.tags]
@@ -147,8 +156,9 @@ def build(lib) -> Scene:
         for k in range(len(xs)):
             x, y = int(xs[k]), int(ys[k]); d = ((x - 318) / 16) ** 2 + ((y - 276) / 7) ** 2
             if d < 0.45 or (d < 0.8 and (x + y) % 2 == 0) or (d < 1 and (x * 3 + y) % 5 == 0): c.put(x, y, PAL.i('earth', 1) if d < 0.45 else PAL.i('earth', 2))
-    sc.decals.append(scorch)
+    sc.decals.append(GA.camp_ground(300, 276, 44, 22, fire=None, links=[(250, 258, 24, 10), (194, 254, 18, 10)]))
     sc.decals.append(distant_backdrop)
+    sc.decals.append(GA.forest_depth())
 
     # ------------------------------------------------------------------ night-only
     ff = PAL.i('firefly', 0)
@@ -161,12 +171,15 @@ def build(lib) -> Scene:
     for (x, y, L) in ((632, 250, 3), (640, 256, 4), (628, 262, 3), (644, 268, 5), (636, 274, 3), (648, 280, 4), (640, 288, 3), (652, 294, 2)):
         for i in range(L): sc.night_pixels.append((x + i, y, ml[2] if 0 < i < L - 1 else ml[1]))
     # ------------------------------------------------------------------ lights
-    sc.lights.append(Light(238, 262, 46, color=(1.0, 0.84, 0.58), intensity=0.8))
+    sc.lights.append(Light(242, 252, 46, color=(1.0, 0.84, 0.58), intensity=0.8))
     sc.lights.append(Light(318, 262, 50, color=(1.0, 0.72, 0.42), intensity=0.95))
     sc.lights.append(Light(272, 236, 34, color=(1.0, 0.80, 0.55), intensity=0.6))
     sc.lights.append(Light(592, 262, 52, color=(1.0, 0.84, 0.58)))
     sc.lights.append(Light(612, 82, 48, color=(1.0, 0.84, 0.58), intensity=0.9))
     for (x, y) in ((596, 134), (684, 124), (500, 410)): sc.lights.append(Light(x, y, 14, color=(0.55, 0.95, 1.0), intensity=0.5))
+    sc.use_meadow_pass = False
+    shade_near = [(p.x, p.y + 2, max(10, p.sprite.w * 0.42), 7) for p in sc.placements if 'tree' in p.sprite.tags and 'sapling' not in p.sprite.tags]
+    sc.ground_passes = [lambda c: GA.grass_pass(c, shade_near=shade_near), GA.path_pass]
     sc.playable = (32, 48, sc.W - 64, sc.H - 80)
     sc.paths = [main, branch]
     return sc

@@ -198,9 +198,9 @@ function buildLightMap(extra = []) {
   const bay = [[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]];
   LIGHTS.forEach((L, li) => { const r = L.radius; const x0 = Math.max(0, L.x - r | 0), x1 = Math.min(W - 1, L.x + r | 0), y0 = Math.max(0, L.y - r | 0), y1 = Math.min(H - 1, L.y + r | 0);
     for (let y = y0; y <= y1; y++) for (let x = x0; x <= x1; x++) { const d = Math.hypot(x - L.x, (y - L.y) * 1.25) / r; if (d >= 1) continue;
-      let w = Math.pow(1 - d, 1.6) * L.intensity; w = Math.min(1, Math.floor(w * 5 + bay[y & 3][x & 3] / 16 * 0.9) / 5); const i = y * W + x; if (w > LW[i]) { LW[i] = w; LI[i] = li; } if (w > LWC[i]) LWC[i] = w; }
+      let w = Math.min(1, Math.pow(1 - d, 1.6) * L.intensity * 1.08);          /* a smooth pool: no banding, no dither */ const i = y * W + x; if (w > LW[i]) { LW[i] = w; LI[i] = li; } if (w > LWC[i]) LWC[i] = w; }
     if (L.kind === 'fire' || L.kind === 'lantern') { const R2 = r * (L.kind === 'fire' ? 2.2 : 1.7), sp = L.kind === 'fire' ? .58 : .3; const a0 = Math.max(0, L.x - R2 | 0), a1 = Math.min(W - 1, L.x + R2 | 0), b0 = Math.max(0, L.y - R2 | 0), b1 = Math.min(H - 1, L.y + R2 | 0);   // the warm spill: what makes a camp read as a pool of light in real dark
-      for (let y = b0; y <= b1; y++) for (let x = a0; x <= a1; x++) { const d = Math.hypot(x - L.x, (y - L.y) * 1.25) / R2; if (d >= 1) continue; let w = Math.pow(1 - d, 1.1) * sp * L.intensity; w = Math.floor(w * 10 + bay[y & 3][x & 3] / 16 * 0.9) / 10; const i = y * W + x; if (w > LW[i]) { LW[i] = w; LI[i] = li; } } } });
+      for (let y = b0; y <= b1; y++) for (let x = a0; x <= a1; x++) { const d = Math.hypot(x - L.x, (y - L.y) * 1.25) / R2; if (d >= 1) continue; let w = Math.pow(1 - d, 1.1) * sp * L.intensity; const i = y * W + x; if (w > LW[i]) { LW[i] = w; LI[i] = li; } } } });
 }
 // lamplight maps luminance onto one warm ramp (deep umber -> ochre -> candle -> cream) so lit grass stays grass-dark, not olive
 const WARM = [[40, 24, 14], [116, 68, 30], [212, 148, 76], [252, 224, 172]];
@@ -235,7 +235,8 @@ function gradeTable(table, wkind, wi, ev) { // weather + event grades on the 200
   return out; }
 
 // ---------------------------------------------------------------- weather particles
-const P = { rain: [], snow: [], leaves: [], splash: [], fire: [], ff: [], ripple: [] };
+const P = { rain: [], snow: [], leaves: [], splash: [], fire: [], ff: [], ripple: [], bf: [] };
+const BF_HOMES = [[212, 262], [270, 308], [366, 240], [236, 300], [370, 352], [560, 380], [470, 150], [300, 150], [640, 400]], BF_COLS = ['#f6f1e2', '#f2d25a', '#a9bdf0', '#f0b8d8'];
 function rnd(a, b) { return a + Math.random() * (b - a); }
 function spawn(kind, n, wind) {
   for (let i = 0; i < n; i++) {
@@ -258,6 +259,10 @@ function tickParticles(dt, time) {
   // fires breathe smoke and spit embers; drift follows the wind; fewer with reduced particles
   const few = UIKit.S.particles === 'reduced' ? .4 : 1; for (const L of LIGHTS) { if (L.kind !== 'fire') continue; if (Math.random() < dt * 5 * few) P.fire.push({ k: 'ember', x: L.x + rnd(-4, 4), y: L.y + 6, sx: L.x, sy: L.y, vx: rnd(-6, 6), vy: -rnd(14, 30), t: 0, life: rnd(.7, 1.5) }); if (Math.random() < dt * 2.4 * few) P.fire.push({ k: 'smoke', x: L.x + rnd(-3, 3), y: L.y - 2, sx: L.x, sy: L.y, vx: rnd(-2, 2), vy: -rnd(6, 10), t: 0, life: rnd(2.5, 4) }); }
   P.fire = P.fire.filter(p => { p.t += dt; p.x += (p.vx + wind * (p.k === 'smoke' ? 26 : 14)) * dt + (p.k === 'ember' ? Math.sin(p.t * 9 + p.sx) * .25 : 0); p.y += p.vy * dt; if (p.k === 'smoke') p.vy *= 1 - dt * .15; return p.t < p.life; }); if (P.fire.length > 160) P.fire.splice(0, P.fire.length - 160);
+  // butterflies by day over the flower patches: a lazy figure-eight around a home patch, wings beating; they leave in rain and at dusk
+  { const dk = tableAt(SeasonState.season, WorldClock.hour(), true).darkness, fair = dk < .3 && !['light_rain', 'heavy_rain', 'snow', 'fog'].includes(wk) && SeasonState.season !== 'winter';
+    if (fair && P.bf.length < 5 * few && Math.random() < dt * .6) { const hm = BF_HOMES[(Math.random() * BF_HOMES.length) | 0]; P.bf.push({ hx: hm[0], hy: hm[1], ph: Math.random() * 6, sp: rnd(.6, 1), t: 0, life: rnd(16, 30), c: BF_COLS[(Math.random() * BF_COLS.length) | 0] }); }
+    P.bf = P.bf.filter(b => { b.t += dt; b.ph += dt * b.sp; b.x = b.hx + Math.sin(b.ph * .7) * 16 + Math.sin(b.ph * 2.3) * 3; b.y = b.hy - 9 + Math.sin(b.ph * 1.4) * 5 + Math.sin(b.ph * 4.1) * 1.5; return b.t < b.life && (fair || b.t < 1); }); }
   // rain rings on open water
   if ((wk === 'light_rain' || wk === 'heavy_rain') && CLS) { const n = (wk === 'heavy_rain' ? 40 : 14) * inten * dt * few * 3; for (let k = 0; k < n; k++) { const x = Camera.ix() + rnd(0, Camera.vw) | 0, y = Camera.iy() + rnd(0, Camera.vh) | 0; if (x >= 0 && y >= 0 && x < W && y < H && (CLS[DATA.idx[SeasonState.season][y * W + x]] & 2) && depthNow()[y * W + x] === 0) P.ripple.push({ x, y, t: 0 }); } }
   P.ripple = P.ripple.filter(p => { p.t += dt * 1.6; return p.t < 1; }); if (P.ripple.length > 120) P.ripple.splice(0, P.ripple.length - 120);
@@ -532,6 +537,7 @@ function frame(now) {
   og.fillStyle = 'rgba(200,215,225,0.5)'; for (const p of P.splash) { const s = 1 + (p.t * 3 | 0); og.fillRect((p.x | 0) - s, p.y | 0, 1, 1); og.fillRect((p.x | 0) + s, p.y | 0, 1, 1); }
   for (const p of P.snow) { og.fillStyle = p.big ? 'rgba(246,251,255,0.95)' : 'rgba(226,235,243,0.75)'; og.fillRect(p.x | 0, p.y | 0, p.big ? 2 : 1, p.big ? 2 : 1); }
   for (const p of P.leaves) { og.fillStyle = `rgb(${p.col[0]},${p.col[1]},${p.col[2]})`; og.fillRect(p.x | 0, p.y | 0, 2, 1); og.fillRect((p.x | 0) + 1, (p.y | 0) - 1, 1, 1); }
+  for (const b of P.bf) { const x = b.x | 0, y = b.y | 0, open = ((b.t * 9) | 0) % 2 === 0; og.fillStyle = 'rgba(40,30,20,.9)'; og.fillRect(x, y, 1, 1); og.fillStyle = b.c; if (open) { og.fillRect(x - 1, y - 1, 1, 1); og.fillRect(x + 1, y - 1, 1, 1); og.fillRect(x - 1, y, 1, 1); og.fillRect(x + 1, y, 1, 1); } else { og.fillRect(x - 1, y - 1, 1, 1); og.fillRect(x + 1, y - 1, 1, 1); } }
   for (const p of P.fire) { const a = 1 - p.t / p.life; if (p.k === 'ember') { const hot = a > .5; og.fillStyle = hot ? `rgba(255,${190 + (a * 50 | 0)},110,${Math.min(1, a * 1.4)})` : `rgba(220,110,50,${a})`; og.fillRect(p.x | 0, p.y | 0, 1, 1); }
     else { const sz = 2 + (p.t / p.life * 4 | 0), lit = darkness > .4 ? Math.max(0, 1 - Math.hypot(p.x - p.sx, p.y - p.sy) / 40) : 0; og.fillStyle = lit > 0 ? `rgba(${150 + 60 * lit | 0},${110 + 30 * lit | 0},${90},${a * .22})` : `rgba(${darkness > .4 ? 70 : 150},${darkness > .4 ? 72 : 146},${darkness > .4 ? 80 : 140},${a * .2})`; og.fillRect(p.x - sz / 2 | 0, p.y - sz / 2 | 0, sz, sz - 1); } }
   for (const p of P.ripple) { const rr = 1 + p.t * 4 | 0, a = (1 - p.t) * .6; og.fillStyle = `rgba(215,230,240,${a})`; og.fillRect((p.x | 0) - rr, p.y | 0, 1, 1); og.fillRect((p.x | 0) + rr, p.y | 0, 1, 1); og.fillRect((p.x | 0) - (rr >> 1), (p.y | 0) - 1, rr, 1); og.fillRect((p.x | 0) - (rr >> 1), (p.y | 0) + 1, rr, 1); }

@@ -18,7 +18,7 @@ function check(name, ok, detail) { results.push({ name, ok: !!ok, detail }); con
   // 1. eight directions + 2. diagonal normalisation (open meadow, 90 fixed steps = 1.5 s)
   const dirs = { E: [1, 0], W: [-1, 0], N: [0, -1], S: [0, 1], NE: [0.7071, -0.7071], NW: [-0.7071, -0.7071], SE: [0.7071, 0.7071], SW: [-0.7071, 0.7071] };
   const dist = {};
-  for (const [k, ax] of Object.entries(dirs)) { await at(396, 262); await p.evaluate(a => SIM.step(a, 90), ax); const [x, y] = await pos(); dist[k] = Math.hypot(x - 396, y - 262); const sgn = Math.sign(x - 396) === Math.sign(ax[0]) && Math.sign(y - 262) === Math.sign(ax[1]); check(`moves ${k}`, dist[k] > 60 && sgn, `${dist[k].toFixed(1)} px`); }
+  for (const [k, ax] of Object.entries(dirs)) { await at(454, 198); await p.evaluate(a => SIM.step(a, 90), ax); const [x, y] = await pos(); dist[k] = Math.hypot(x - 454, y - 198); const sgn = Math.sign(x - 454) === Math.sign(ax[0]) && Math.sign(y - 198) === Math.sign(ax[1]); check(`moves ${k}`, dist[k] > 60 && sgn, `${dist[k].toFixed(1)} px`); }
   const card = (dist.E + dist.W + dist.N + dist.S) / 4, diag = (dist.NE + dist.NW + dist.SE + dist.SW) / 4;
   check('diagonal speed == cardinal speed', Math.abs(card - diag) < 1.5, `cardinal ${card.toFixed(1)} px, diagonal ${diag.toFixed(1)} px over 1.5 s`);
   // smooth stop: after releasing input the player stops within a few pixels

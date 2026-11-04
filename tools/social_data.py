@@ -3,7 +3,7 @@ character is, does, likes, worries about and says lives here. Lines that refer t
 (`mem`), or the build refuses them: characters may not invent shared history."""
 import json, os, re
 DIMS = ['trust', 'familiarity', 'affection', 'respect', 'reliability', 'shared']
-ANCHORS = dict(camp_fire=(340, 298), tent_mouth=(286, 266), hollow_log=(446, 374), lone_rowan=(404, 200), meadow=(388, 338), pond_bank=(604, 330), junction=(500, 252), sign=(470, 350),
+ANCHORS = dict(camp_fire=(340, 298), tent_mouth=(256, 266), hollow_log=(446, 374), lone_rowan=(404, 200), meadow=(388, 338), pond_bank=(604, 330), junction=(500, 252), sign=(470, 350),
                bridge=(654, 382), ruin_floor=(596, 146), ruin_arch=(616, 112), oak_shelter=(198, 252), burl_home=(170, 284), north_glade=(330, 160), outcrop=(296, 248), east_bank=(704, 380),
                river_east=(730, 232), lantern=(226, 290), birch_a=(130, 172), birch_b=(104, 210), birch_c=(186, 178))
 WATER = dict(dock_end=(606, 282), pond_centre=(636, 262), willow_shallows=(700, 286), inflow=(728, 196), ice_hole=(612, 286))

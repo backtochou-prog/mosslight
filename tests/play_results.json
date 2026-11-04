@@ -3,22 +3,22 @@
   {
    "name": "moves E",
    "ok": true,
-   "detail": "93.4 px"
+   "detail": "94.5 px"
   },
   {
    "name": "moves W",
    "ok": true,
-   "detail": "93.4 px"
+   "detail": "94.5 px"
   },
   {
    "name": "moves N",
    "ok": true,
-   "detail": "93.4 px"
+   "detail": "94.5 px"
   },
   {
    "name": "moves S",
    "ok": true,
-   "detail": "92.6 px"
+   "detail": "94.1 px"
   },
   {
    "name": "moves NE",
@@ -28,7 +28,7 @@
   {
    "name": "moves NW",
    "ok": true,
-   "detail": "88.0 px"
+   "detail": "95.0 px"
   },
   {
    "name": "moves SE",
@@ -38,17 +38,17 @@
   {
    "name": "moves SW",
    "ok": true,
-   "detail": "94.5 px"
+   "detail": "95.0 px"
   },
   {
    "name": "diagonal speed == cardinal speed",
    "ok": true,
-   "detail": "cardinal 93.2 px, diagonal 92.7 px over 1.5 s"
+   "detail": "cardinal 94.4 px, diagonal 94.5 px over 1.5 s"
   },
   {
    "name": "stops without sliding",
    "ok": true,
-   "detail": "slid 1.3 px after release"
+   "detail": "slid 0.7 px after release"
   },
   {
    "name": "blocked by oak trunk",
@@ -63,12 +63,12 @@
   {
    "name": "blocked by tent",
    "ok": true,
-   "detail": "stopped at y=243.5 (tent base 244)"
+   "detail": "stopped at y=244.6 (tent base 244)"
   },
   {
    "name": "blocked by ruin wall",
    "ok": true,
-   "detail": "stopped at y=96.6 (wall base 94)"
+   "detail": "stopped at y=121.6 (wall base 94)"
   },
   {
    "name": "dock is walkable (stops at the end of the deck)",
@@ -103,7 +103,7 @@
   {
    "name": "in front of oak trunk: fully visible",
    "ok": true,
-   "detail": "100% visible"
+   "detail": "99% visible"
   },
   {
    "name": "behind foreground canopy: hidden",
@@ -113,7 +113,7 @@
   {
    "name": "under the oak canopy, in front of trunk base: visible",
    "ok": true,
-   "detail": "98%"
+   "detail": "100%"
   },
   {
    "name": "camera clamps at the north-west edge",
@@ -177,7 +177,7 @@
   {
    "name": "frame cost (software Chromium, 640x360 at 3x)",
    "ok": true,
-   "detail": "16.3 ms/frame"
+   "detail": "16.4 ms/frame"
   },
   {
    "name": "no page errors",

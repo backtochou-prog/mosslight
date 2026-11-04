@@ -1207,8 +1207,7 @@ def reeds_winter(variant=0) -> Sprite:
 # prop scale: the camper is two tiles tall, so camp props are brought up to believable sizes beside it (a tent a person can
 # stoop into, a woodpile that reaches the hip). Rational resample: nearest-neighbour up by p, majority vote down by q.
 # ---------------------------------------------------------------------------
-PROP_SCALE = {'tent': (4, 3), 'woodpile': (3, 2), 'log_seat': (3, 2), 'stump_0': (3, 2), 'flatstone_0': (3, 2), 'flatstone_1': (3, 2),
-              'campfire': (5, 8), 'campfire_unlit': (5, 8), 'campfire_embers': (5, 8), 'lantern_post': (5, 4), 'lantern_hanging': (5, 4)}
+PROP_SCALE = {'stump_0': (3, 2), 'flatstone_0': (3, 2), 'flatstone_1': (3, 2), 'lantern_hanging': (5, 4)}   # the camp's hero props are authored at size in camp_art.py
 def _rescale(sp, p, q):
     import dataclasses
     a = np.repeat(np.repeat(sp.c.a, p, 0), p, 1); h, w = a.shape; H2, W2 = -(-h // q), -(-w // q)
@@ -1257,6 +1256,17 @@ def build_library_extended(lib: dict) -> dict:
     from .festival import all_sprites as _fest
     lib.update(_fest())
     apply_prop_scale(lib)
+    from .camp_art import add_camp_art, ALIASES; add_camp_art(lib)
+    import dataclasses
+    for old, new in ALIASES.items():                                   # the older rules and scenes pick up the new plants and stones by their old names
+        if new in lib: lib[old] = dataclasses.replace(lib[new], name=old)
+    for n in ('tent', 'woodpile', 'log_seat', 'log_seat_b', 'chop_block', 'supply_crate', 'lantern_post', 'rock_l0', 'rock_l1', 'rock_m0', 'rock_m1',
+              'rock_s0', 'rock_s1', 'rock_s2', 'bush_a', 'bush_b', 'bush_berry', 'shrub_0', 'shrub_1', 'shrub_2', 'fern_0', 'fern_1', 'fern_2', 'stone_0', 'stone_1',
+              'boulder_l0', 'boulder_m0', 'boulder_s0', 'boulder_s1', 'boulder_mossy_l0', 'boulder_mossy_m1', 'pine_0', 'pine_1', 'rock_xl', 'step_stone', 'forage_basket', 'water_bucket'):
+        if n in lib: lib[n + '_winter'] = snowcap(lib[n]); refine(lib[n + '_winter'].c)
+    lib['tent_winter'] = icicles(lib['tent_winter'])
+    for n in ('campfire', 'campfire_embers', 'campfire_unlit', 'stump_0'):           # stale winter copies of the old art: the new props carry their own
+        lib.pop(n + '_winter', None)
     return lib
 
 

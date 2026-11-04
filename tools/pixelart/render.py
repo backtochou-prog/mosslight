@@ -119,11 +119,12 @@ class Scene:
         from .canvas import refine
         refine(c, families={'water', 'stone'})
         if season == 'winter': ice_pass(c)
-        meadow_tone_pass(c)
+        if getattr(self, 'use_meadow_pass', True): meadow_tone_pass(c)
         if season != 'winter':
             from .terrain_render import bank_pass
             bank_pass(c)
         litter_pass(c, self.mm, season)
+        for gp in getattr(self, 'ground_passes', []): gp(c)          # hand-authored surface detail (ground_art.py)
         rng = random.Random(77)
         for d in self.decals:
             d(c, rng)
