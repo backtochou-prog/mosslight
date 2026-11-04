@@ -92,8 +92,8 @@ def moss_patch(cx, cy, rx, ry):
         ys, xs = np.nonzero(m & ok)
         for k in range(len(xs)):
             x, y = int(xs[k]), int(ys[k])
-            if core[y, x] or (x * 3 + y * 5) % 4 == 0:
-                c.put(x, y, mo[0] if (x + y) % 3 else mo[1])
+            if core[y, x] or (m[y, x] and ((x >> 1) + (y >> 1)) % 3 == 0):          # a soft patch: solid core, a sparse chunky fringe
+                c.put(x, y, mo[1] if core[y, x] else mo[0])
     return d
 
 def pebbles(cx, cy, r, n):
@@ -276,13 +276,13 @@ def ruin_overgrowth(ctx: Context, x0, y0, x1, y1):
 def foreground_frame(ctx: Context):
     """Canopies and ferns whose bases sit below the frame lean into the corners."""
     W, H = ctx.sc.W, ctx.sc.H
-    ctx.place('oak_2', 64, H + 30, layer='fg', solid=False); ctx.place('oak_1', W - 68, H + 26, flip=True, layer='fg', solid=False)
+    ctx.place('oak_2', 64, H + 16, layer='fg', solid=False); ctx.place('oak_1', W - 68, H + 14, flip=True, layer='fg', solid=False)
     ctx.place('fern_0', 120, H + 2, layer='fg', solid=False); ctx.place('fern_2', 150, H + 6, flip=True, layer='fg', solid=False)
     ctx.place('shrub_1', W - 8, H - 20, layer='fg', solid=False)
 
-def understorey(ctx: Context, clearing_dist, recipe=None, n_cand=900, spacing=1.6, band=(0.2, 2.4)):
+def understorey(ctx: Context, clearing_dist, recipe=None, n_cand=900, spacing=2.2, band=(0.2, 2.4)):
     """Shrubs, ferns and tall grass in the gaps between the edge trees."""
-    recipe = recipe or [('shrub_', 3, 3), ('fern_', 3, 3), ('tallgrass_', 3, 2), ('sapling_oak', 2, 1), ('sapling_birch', 2, 1)]
+    recipe = recipe or [('shrub_', 3, 3), ('fern_', 3, 2), ('tallgrass_', 3, 1), ('sapling_oak', 2, 1), ('sapling_birch', 2, 1)]
     rng = ctx.rng
     names, weights = [], []
     for (prefix, variants, w) in recipe:

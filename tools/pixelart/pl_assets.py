@@ -70,6 +70,60 @@ def regions(a, rules, **kw):
     for test, fams in rules:
         m = (test(r, g, b) if test else np.ones_like(done)) & ~done; part = to_families(a, fams, **kw); c.a[m] = part.a[m]; done |= m
     c.a[a[:, :, 3] < 128] = 0; return c
+
+# ---------------------------------------------------------------- calm art: fewer pixels, fewer tones, bigger clumps (Prompt 16 rendering pass)
+def _fam_rank(fam):
+    """palette index -> rank (half-steps count as .5) for one family"""
+    d = {}
+    for r in range(len(PAL.ramp(fam))):
+        d[PAL.index[(fam, r)]] = float(r)
+        if (fam + '~', r) in PAL.index: d[PAL.index[(fam + '~', r)]] = r + .5
+    return d
+def mode_filter(c, passes=2, protect=(), same_family=True):
+    """each pixel takes the commonest value among its 3x3 neighbours (ties keep it): kills single-pixel speckle, keeps clumps"""
+    a = c.a.copy(); h, w = a.shape
+    for _ in range(passes):
+        p = np.pad(a, 1); nb = np.stack([p[y:y + h, x:x + w] for y in range(3) for x in range(3)], 0)       # 9 x h x w
+        out = a.copy()
+        for y in range(h):
+            for x in range(w):
+                v = a[y, x]
+                if v == 0 or v in protect: continue
+                vals, cnt = np.unique(nb[:, y, x][nb[:, y, x] != 0], return_counts=True)
+                best = vals[cnt.argmax()]
+                if cnt.max() > (cnt[vals == v][0] if v in vals else 0) and best not in protect: out[y, x] = best
+        a = out
+    r = c.copy(); r.a = a; return r
+def posterize(c, fam, targets, protect=()):
+    """collapse a family's many ranks into len(targets) tones with equal-ish areas (darkest first); upper pixels edge lighter on ties"""
+    ranks = _fam_rank(fam); m = np.isin(c.a, list(ranks)) & ~np.isin(c.a, list(protect))
+    ys, xs = np.nonzero(m)
+    if len(ys) < 12: return c
+    val = np.array([ranks[v] for v in c.a[ys, xs]]) - .03 * ys / max(1, c.a.shape[0])
+    order = np.argsort(val, kind='stable'); n = len(order); out = c.copy(); idxs = [PAL.index[(fam, t)] for t in targets]
+    cuts = np.cumsum([.34, .40, .26][:len(targets)] if len(targets) == 3 else [1.0 / len(targets)] * len(targets)); cuts = (cuts / cuts[-1] * n).astype(int)
+    lo = 0
+    for k, hi in enumerate(cuts):
+        sel = order[lo:hi]; out.a[ys[sel], xs[sel]] = idxs[k]; lo = hi
+    return out
+def rim(c, fam, rank=1, protect=()):
+    """a clean 1-px dark outline around the foliage silhouette"""
+    ranks = _fam_rank(fam); m = np.isin(c.a, list(ranks)); p = np.pad(m, 1); inner = p[:-2, 1:-1] & p[2:, 1:-1] & p[1:-1, :-2] & p[1:-1, 2:]
+    edge = m & ~inner; out = c.copy(); out.a[edge] = PAL.index[(fam, rank)]; return out
+def calm_leaf(c, fam, targets=(2, 3, 4), rim_rank=1, passes=2, protect=(), crown=None):
+    """crown: fraction of the sprite height (from the top) that is foliage; any non-leaf specks inside it are repainted as leaf"""
+    if crown:
+        ranks = _fam_rank(fam); leaf = np.isin(c.a, list(ranks)); n = int(c.a.shape[0] * crown); ys, xs = np.nonzero(leaf[:n])
+        if len(xs):
+            mid = (mask_hull(leaf[:n]) & ~leaf[:n] & (c.a[:n] != 0)); c.a[:n][mid] = PAL.index[(fam, targets[1])]
+    c = posterize(c, fam, targets, protect); c = mode_filter(c, passes, protect); return rim(c, fam, rim_rank, protect)
+def mask_hull(m):
+    """fill each row between its first and last set pixel (a cheap convex-ish hull for crowns)"""
+    out = np.zeros_like(m)
+    for y in range(m.shape[0]):
+        xs = np.nonzero(m[y])[0]
+        if len(xs): out[y, xs.min():xs.max() + 1] = True
+    return out
 GREEN = lambda r, g, b: g > r + 2
 def bare(c, fam, rng_seed=3, bark=None):
     """Winter deciduous from the same drawing: the generated trunk stays, the canopy goes, limbs grow in the trunk's own colours."""
@@ -145,19 +199,26 @@ def apply(lib):
         if flip: c.a = c.a[:, ::-1]
         for n in names: adopt(lib, n, c)
         ADOPTED.extend(names)
-    def tree(src, name, leaf, bark=('wood',), **kw):
+    TREE_SCALE = 0.72          # trees come out about 3/4 size with roughly half the pixels (Stardew-like: 3-4 tiles wide, not 5)
+    def targets_for(fam):
+        n = len(PAL.ramp(fam)); return (2, 3, 4) if n >= 6 else (1, 2, n - 1)
+    def calm_tree(a, leaf, bark, crown=None, scale=TREE_SCALE, protect_fams=(), **kw):
+        a = shrink(a, max(8, int(a.shape[1] * scale))); parts = [(GREEN, leaf), (None, list(bark))]
+        c = regions(a, parts, **kw); prot = [PAL.index[(f, r)] for f in protect_fams for r in range(len(PAL.ramp(f)))]
+        return calm_leaf(c, leaf[0], targets_for(leaf[0]), 1, 3, tuple(prot), crown)
+    def tree(src, name, leaf, bark=('wood',), crown=None, **kw):
         a = rgba(src)
         if a is None: return
-        a = strip_ground(trim(a)); adopt(lib, name, regions(a, [(GREEN, leaf), (None, list(bark))], **kw)); ADOPTED.append(name)
+        a = strip_ground(trim(a)); adopt(lib, name, calm_tree(a, leaf, bark, crown, **kw)); ADOPTED.append(name)
     tree('a_oak_1', 'oak_0', ['oak']); tree('b_oak_2', 'oak_1', ['oak_b']); tree('b_oak_3', 'oak_2', ['oak']); tree('b_oak_4', 'oak_3', ['oak_b'])
-    tree('b_birch_1', 'birch_0', ['birch'], ('bark_birch',)); tree('b_birch_2', 'birch_1', ['birch'], ('bark_birch',)); tree('b_pine_1', 'pine_0', ['pine']); tree('b_pine_2', 'pine_1', ['pine'])
+    tree('b_birch_1', 'birch_0', ['birch'], ('bark_birch',), crown=.62); tree('b_birch_2', 'birch_1', ['birch'], ('bark_birch',), crown=.62); tree('b_pine_1', 'pine_0', ['pine'], crown=.62); tree('b_pine_2', 'pine_1', ['pine'], crown=.62)
     a = rgba('b_willow')
     if a is not None:
-        a = strip_ground(trim(a)); c = regions(a, [(GREEN, ['oak']), (None, ['wood'])])
+        a = strip_ground(trim(a)); c = calm_tree(a, ['oak'], ['wood'])
         for n in ('willow_0', 'willow_1'): adopt(lib, n, c); ADOPTED.append(n)
     a = rgba('b_rowan')
     if a is not None:
-        a = strip_ground(trim(a)); c = regions(a, [(lambda r, g, b: r > g + 50, ['berry']), (GREEN, ['rowan']), (None, ['wood'])], gain=1.35, lift=10)
+        a = strip_ground(trim(a)); a = shrink(a, max(8, int(a.shape[1] * .8))); c = regions(a, [(lambda r, g, b: r > g + 50, ['berry']), (GREEN, ['rowan']), (None, ['wood'])], gain=1.35, lift=10); c = calm_leaf(c, 'rowan', targets_for('rowan'), 1, 2, tuple(PAL.ramp('berry')))
         for n in ('rowan_0', 'rowan_1'): adopt(lib, n, c); ADOPTED.append(n)
     # camp: the tent interior goes to the emissive family so it still glows at night
     a = rgba('a_tent_1')
@@ -169,21 +230,23 @@ def apply(lib):
         a = shrink(trim(a), 38); c = regions(a, [(lambda r, g, b: (r > 190) & (b < 130) & (r > g + 20), ['fire']), (lambda r, g, b: (r > g + 12), ['wood']), (None, ['stone'])]); adopt(lib, 'campfire', c); ADOPTED.append('campfire')
         fire = np.isin(c.a, PAL.ramp('fire')); u = c.copy(); u.a[fire] = 0; adopt(lib, 'campfire_unlit', u); e = c.copy(); e.a[fire] = PAL.ramp('ember')[1]; adopt(lib, 'campfire_embers', e)
     # sheets
-    def sheet(src, names, fams, order=None, ground=None, widths=None, **kw):
+    def sheet(src, names, fams, order=None, ground=None, widths=None, post=None, wscale=1.0, **kw):
         a = rgba(src)
         if a is None: return []
         cs = components(a)
         if order: cs = sorted(cs, key=order)
         for i, (n, co) in enumerate(zip(names, cs)):
             co = trim(co); co = strip_ground(co, *(ground or ())) if ground is not None else co
-            if widths: co = shrink(co, widths[i % len(widths)])
-            adopt(lib, n, to_families(co, fams, **kw)); ADOPTED.append(n)
+            if widths: co = shrink(co, max(6, int(widths[i % len(widths)] * wscale)))
+            cc = to_families(co, fams, **kw)
+            if post: cc = post(cc)
+            adopt(lib, n, cc); ADOPTED.append(n)
         return cs
     big = lambda o: -(o[:, :, 3] > 128).sum()
     sheet('c_rocks_round' if rgba('c_rocks_round') is not None else 'a_rocks_1', ['boulder_l0', 'boulder_l1', 'boulder_m0', 'boulder_m1', 'boulder_s0', 'boulder_s1'], ['stone', 'pebble'], order=big, widths=[40, 38, 28, 26, 18, 16], gain=1.0 if rgba('c_rocks_round') is not None else 1.75, lift=0 if rgba('c_rocks_round') is not None else 14)
     sheet('b_rocks_mossy', ['boulder_mossy_l0', 'boulder_mossy_l1', 'boulder_mossy_m0', 'boulder_mossy_m1'], ['stone', 'moss'], order=big, ground=(.25,), widths=[40, 36, 28, 26], gain=1.1)
-    sheet('c_shrubs_side' if rgba('c_shrubs_side') is not None else 'b_shrubs', ['shrub_0', 'shrub_1', 'shrub_2', 'shrub_3b', 'hedge_0', 'hedge_1'], ['shrub', 'berry'], ground=(.24, lambda r, g, b: r > g), widths=[28, 26, 24, 30, 28, 26])
-    sheet('c_ferns_clean' if rgba('c_ferns_clean') is not None else 'b_ferns', ['fern_0', 'fern_1', 'fern_2'], ['fern', 'grass'], order=big, widths=[26, 22, 20])
+    sheet('c_shrubs_side' if rgba('c_shrubs_side') is not None else 'b_shrubs', ['shrub_0', 'shrub_1', 'shrub_2', 'shrub_3b', 'hedge_0', 'hedge_1'], ['shrub', 'berry'], ground=(.24, lambda r, g, b: r > g), widths=[28, 26, 24, 30, 28, 26], wscale=.8, post=lambda c: calm_leaf(c, 'shrub', (1, 2, 3), 1, 2, tuple(PAL.ramp('berry'))))
+    sheet('c_ferns_clean' if rgba('c_ferns_clean') is not None else 'b_ferns', ['fern_0', 'fern_1', 'fern_2'], ['fern', 'grass'], order=big, widths=[26, 22, 20], wscale=.8, post=lambda c: mode_filter(c, 1))
     fl = 'c_flowers_clean' if rgba('c_flowers_clean') is not None else 'b_flowers'
     sheet(fl, ['flowers_w0', 'flowers_y0', 'flowers_b0', 'flowers_p0', 'flowers_r0', 'flowers_b1'], ['flower_w', 'flower_y', 'flower_b', 'flower_p', 'berry', 'grass'], widths=[11, 9, 9, 10, 9, 9], ground=(.28, lambda r, g, b: (b > g) | (r < 80)))
     for dup, src_ in (('flowers_w1', 'flowers_w0'), ('flowers_y1', 'flowers_y0'), ('flowers_p1', 'flowers_p0'), ('flowers_r1', 'flowers_r0')):

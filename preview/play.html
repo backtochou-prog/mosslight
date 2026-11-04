@@ -65,7 +65,9 @@
 // WorldClock: game time, configurable scale, pause/advance.  (mirrors godot/WorldClock.gd)
 const WorldClock = {
   minutes: 780, scale: 240, paused: false, _acc: 0,
-  tick(dtReal) { if (!this.paused) this.minutes = (this.minutes + dtReal * this.scale / 60) % 1440; },
+  // game-minutes per real-minute right now: `scale` is the night pace; bright hours run slower (a longer, calmer day), blended by the sky's darkness
+  effScale() { const c = DATA.survival && DATA.survival.clock, kf = DATA.keyframes[SeasonState.season]; if (!c || !kf) return this.scale; const t = Math.min(1, Math.max(0, (darknessAt(SeasonState.season, this.hour()) - c.blend[0]) / (c.blend[1] - c.blend[0]))); const w = 1 - t * t * (3 - 2 * t); return this.scale * (1 + (c.day_scale / c.night_scale - 1) * w); },
+  tick(dtReal) { if (!this.paused) this.minutes = (this.minutes + dtReal * this.effScale() / 60) % 1440; },
   hour() { return this.minutes / 60; },
   label() { const h = Math.floor(this.minutes / 60), m = Math.floor(this.minutes % 60); return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`; },
   phase(season) { const kf = DATA.keyframes[season]; const h = this.hour(); let name = 'night';
@@ -203,10 +205,17 @@ function buildLightMap(extra = []) {
 // lamplight maps luminance onto one warm ramp (deep umber -> ochre -> candle -> cream) so lit grass stays grass-dark, not olive
 const WARM = [[40, 24, 14], [116, 68, 30], [212, 148, 76], [252, 224, 172]];
 function warmRamp(l) { const t = Math.max(0, Math.min(2.999, l / 255 * 3)), k = t | 0, f = t - k, a = WARM[k], b = WARM[k + 1]; return [a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f, a[2] + (b[2] - a[2]) * f]; }
-const SW = { a: new Float32Array(768), gs: new Float32Array(768), gc: new Float32Array(768), cs: Float32Array.from({ length: 768 }, (_, x) => Math.sin(x * .013)), cc: Float32Array.from({ length: 768 }, (_, x) => Math.cos(x * .013)), rs: new Float32Array(480), rc: new Float32Array(480), ys: Float32Array.from({ length: 480 }, (_, y) => Math.sin(y * .03)), yc: Float32Array.from({ length: 480 }, (_, y) => Math.cos(y * .03)) };
+// Shadows are soft: the baked stencil (0 none, 1 rim, 2 core) is blurred once into a 0..1 field, then blended as a cool tint. No dithering.
+const SOFT = new WeakMap();
+function softMask(m) { let f = SOFT.get(m); if (f) return f; const n = 768 * 480; f = new Float32Array(n); for (let i = 0; i < n; i++) f[i] = m[i] === 2 ? 1 : m[i] === 1 ? .55 : 0; const t = new Float32Array(n);
+  const box = (src, dst, r, horiz) => { const len = horiz ? 768 : 480, lines = horiz ? 480 : 768, st = horiz ? 1 : 768, ls = horiz ? 768 : 1, k = 2 * r + 1;
+    for (let l = 0; l < lines; l++) { let acc = 0; const b = l * ls; for (let q = -r; q <= r; q++) acc += src[b + Math.min(len - 1, Math.max(0, q)) * st]; for (let q = 0; q < len; q++) { dst[b + q * st] = acc / k; acc += src[b + Math.min(len - 1, q + r + 1) * st] - src[b + Math.max(0, q - r) * st]; } } };
+  box(f, t, 3, true); box(t, f, 3, false); box(f, t, 2, true); box(t, f, 2, false); SOFT.set(m, f); return f; }
+const SW = { a: new Float32Array(768), gs: new Float32Array(768), gc: new Float32Array(768), cs: Float32Array.from({ length: 768 }, (_, x) => Math.sin(x * .013)), cc: Float32Array.from({ length: 768 }, (_, x) => Math.cos(x * .013)), rs: Float32Array.from({ length: 480 }, (_, y) => Math.sin((y >> 2) * .45)), rc: Float32Array.from({ length: 480 }, (_, y) => Math.cos((y >> 2) * .45)), ys: Float32Array.from({ length: 480 }, (_, y) => Math.sin(y * .03)), yc: Float32Array.from({ length: 480 }, (_, y) => Math.cos(y * .03)) };
 let SNOWACC = 0, CANVASPX = null, CANVRK = null, FLAGGED = false;
 // ---------------------------------------------------------------- palette table for "now"
 function lerp3(a, b, t) { return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t]; }
+function darknessAt(season, hour) { const kf = DATA.keyframes[season], hs = kf.hours, n = hs.length; for (let k = 0; k < n; k++) { const h0 = hs[k], h1 = hs[(k + 1) % n] + (k === n - 1 ? 24 : 0), hh = hour + ((k === n - 1 && hour < hs[0]) ? 24 : 0); if (hh >= h0 && hh <= h1) { let t = (hh - h0) / (h1 - h0); t = t * t * (3 - 2 * t); return kf.darkness[k] * (1 - t) + kf.darkness[(k + 1) % n] * t; } } return 1; }
 function tableAt(season, hour) { const kf = DATA.keyframes[season]; const hs = kf.hours, n = hs.length;
   for (let k = 0; k < n; k++) { const h0 = hs[k]; const h1 = hs[(k + 1) % n] + (k === n - 1 ? 24 : 0); const hh = hour + ((k === n - 1 && hour < hs[0]) ? 24 : 0);
     if (hh >= h0 && hh <= h1) { let t = (hh - h0) / (h1 - h0); t = t * t * (3 - 2 * t); const a = kf.tables[k], b = kf.tables[(k + 1) % n];
@@ -371,17 +380,16 @@ const Touch = { enabled: false, btn: { x: 0, y: 0, r: 22 },
 // ---------------------------------------------------------------- the world pixel pass (hot path: flat typed arrays, numbers only)
 const SPR = [0, 0, 0];
 const SH = { tab: new Float32Array(768), post: new Float32Array(768), lamp: new Float32Array(768), day: new Float32Array(768), nl: 0, lk: null, lc: null, fl: null };
+function fogN(A, gx, gy) { const x0 = Math.floor(gx), tx = gx - x0, y0 = Math.min(FH - 2, Math.floor(gy)), ty = Math.min(1, gy - y0), a = x0 % FW, b = (x0 + 1) % FW; return (A[y0 * FW + a] * (1 - tx) + A[y0 * FW + b] * tx) * (1 - ty) + (A[(y0 + 1) * FW + a] * (1 - tx) + A[(y0 + 1) * FW + b] * tx) * ty; }
 function shadeWorld(VX0, VY0, VX1, VY1, idx, night, depL, shNoon, shLong, shadeT, CLS, LW, LI, d32, swayA, grassA, shadowOn, longW, shadowStrength,
   nightShow, winter, lightAmount, ffMul, ambK, moon, deep, snowAcc, snR, snG, snB, wetDark, tick30, fogA, fogShift, tick2, fgR, fgG, fgB) {
   const TB = SH.tab, PO = SH.post, LA = SH.lamp, DY = SH.day, LK = SH.lk, LC = SH.lc, FL = SH.fl, SWa = SW.a, SWcc = SW.cc, SWcs = SW.cs, SWgs = SW.gs, SWgc = SW.gc;
-  for (let y = VY0; y < VY1; y++) { const rsY = SW.rs[y] * .4, rcY = SW.rc[y] * .4, ycY = SW.yc[y], ysY = SW.ys[y], fy = Math.min(FH - 1, (y / 8) | 0), brow = (y & 3) * 4;
+  for (let y = VY0; y < VY1; y++) { const rsY = SW.rs[y], rcY = SW.rc[y], ycY = SW.yc[y], ysY = SW.ys[y], fy = Math.min(FH - 1, (y / 8) | 0), brow = (y & 3) * 4, brow2 = ((y >> 1) & 3) * 4;
     for (let x = VX0; x < VX1; x++) {
       const i = y * W + x; let ix = idx[i]; const cl = CLS[ix];
       // wind sway: canopy pixels sampled from a neighbour column, weighted by height above the trunk base; grass tufts sway a pixel
-      if (swayA > 0 && (cl & 1)) { const hg = depL[i] - y, wg = hg > 0 ? (hg < 34 ? hg / 34 : 1) : .5; const o = Math.round((SWa[x] + rsY * SWcc[x] + rcY * SWcs[x]) * swayA * wg); if (o !== 0) { let xx = x - o; xx = xx < 0 ? 0 : xx > W - 1 ? W - 1 : xx; const j = y * W + xx; if (CLS[idx[j]] & 1) ix = idx[j]; } }
+      if (swayA > 0 && (cl & 1)) { const hg = depL[i] - y, wg = hg > 0 ? (hg < 34 ? hg / 34 : 1) : .5; const o = Math.round((SWa[x] * rcY + SWcc[x] * rsY) * swayA * wg);          /* one slow travelling wave, in 4-row bands: whole clumps lean together */ if (o !== 0) { let xx = x - o; xx = xx < 0 ? 0 : xx > W - 1 ? W - 1 : xx; const j = y * W + xx; if (CLS[idx[j]] & 1) ix = idx[j]; } }
       else if (grassA > 0 && (cl & 32) && depL[i] > y) { const o = Math.round((SWgs[x] * ycY + SWgc[x] * ysY) * grassA); if (o !== 0) { const j = i - o; if (CLS[idx[j]] & 32) ix = idx[j]; } }
-      if (shadowOn) { const a = shNoon[i], bL = shLong[i]; let sv = 0; if (longW < 0.5) sv = a ? a : (bL && longW > 0.2 ? 1 : 0); else sv = bL ? bL : (a && longW < 0.8 ? 1 : 0);
-        if (sv) { const bt = BAYER[brow + (x & 3)] / 16; if (sv === 2 || bt < 0.5) { if (shadowStrength > bt * 0.6) ix = shadeT[ix]; } } }
       let r = 0, g = 0, b = 0; const nidx = night[i], lw = LW[i], c3 = ix * 3;
       if (!(nidx && nightShow > 0) && !(lw > 0 && lightAmount > 0)) { r = PO[c3]; g = PO[c3 + 1]; b = PO[c3 + 2]; }          // most pixels: unlit, no night overlay: the colour is the index alone
       else { r = TB[c3]; g = TB[c3 + 1]; b = TB[c3 + 2]; const cx = CLS[ix];
@@ -395,11 +403,11 @@ function shadeWorld(VX0, VY0, VX1, VY1, idx, night, depL, shNoon, shLong, shadeT
           if (deep > 0) { const k = deep * .22 * un; r += (14 - r) * k; g += (18 - g) * k; b += (40 - b) * k; }
           const kb = ambK * un; if (kb > 0) { const f = 1 - kb * .9; r *= f; g *= f; b *= f * 1.04; } } }
       const ck = CLS[ix];
-      if (snowAcc > .02 && depL[i] === 0 && !(ck & 6)) { const n = FOG[fy * FW + Math.min(FW - 1, (x / 8) | 0)]; if (n * .55 + BAYER[brow + (x & 3)] / 16 * .45 < snowAcc * .8) { r += (snR - r) * .8; g += (snG - g) * .8; b += (snB - b) * .8; } }   // snow settles in drifts
-      if (wetDark > 0 && (ck & 2) && ((x * 7 + y * 13 + tick30) % 97) < 2) { r += 40; g += 40; b += 40; }          // rain glints on water
-      if (fogA > 0 && !(ck & 4)) { const fx = Math.min(FW - 1, (((x + fogShift) / 8) | 0) % FW); const n = FOG[fy * FW + fx] * 0.6 + FOG2[fy * FW + ((fx + tick2) % FW)] * 0.4;   // ground mist, Bayer-thresholded
-        const dens = Math.max(0, n - 0.34) * 3.2 * fogA * (0.55 + 0.45 * (y / H)); const bt = BAYER[brow + (x & 3)] / 16;
-        if (dens > bt * 0.8) { const k = dens * .6 < .62 ? dens * .6 : .62; r += (fgR - r) * k; g += (fgG - g) * k; b += (fgB - b) * k; } }
+      if (shadowOn) { const fa = shNoon[i], fb = shLong[i], f = (fa + (fb - fa) * longW) * shadowStrength; if (f > .012 && !(ck & 4)) { r *= 1 - f * .30; g *= 1 - f * .22; b *= 1 - f * .10; } }          // a cool, soft shade that fades in and out smoothly
+      if (snowAcc > .02 && depL[i] === 0 && !(ck & 6)) { const sk = (snowAcc * .8 - .21 - fogN(FOG, x / 8, y / 8) * .55) * 3; if (sk > 0) { const k = sk > .8 ? .8 : sk; r += (snR - r) * k; g += (snG - g) * k; b += (snB - b) * k; } }          // snow settles in soft drifts   // snow settles in drifts
+      if (wetDark > 0 && (ck & 2) && ((x * 7 + y * 13 + tick30) % 211) < 2) { r += 26; g += 26; b += 26; }          // rain glints on water
+      if (fogA > 0 && !(ck & 4)) { const gx = (x + fogShift) / 8, gy = y / 8; const n = fogN(FOG, gx, gy) * 0.6 + fogN(FOG2, gx + tick2, gy) * 0.4;          // ground mist: a smooth, drifting blend, no dither
+        const dens = Math.max(0, n - 0.34) * 3.2 * fogA * (0.55 + 0.45 * (y / H)); if (dens > 0) { const k = dens * .5 < .5 ? dens * .5 : .5; r += (fgR - r) * k; g += (fgG - g) * k; b += (fgB - b) * k; } }
       const R = r > 255 ? 255 : r < 0 ? 0 : r, G = g > 255 ? 255 : g < 0 ? 0 : g, B = b > 255 ? 255 : b < 0 ? 0 : b;
       d32[i] = (0xff000000 | (B << 16) | (G << 8) | R) >>> 0;          // one 32-bit store per pixel
     } } }
@@ -437,7 +445,7 @@ const cv = document.getElementById('c'), ctx = cv.getContext('2d');
 let last = performance.now(), T = 0, state = { zoom: 3, viewport: true, ox: 60, oy: 90 }, simAcc = 0;
 const SIM_DT = 1 / 60;
 const depthNow = () => (EventState.current && DATA.depth[EventState.current.name]) || DATA.depth[SeasonState.season === 'winter' ? 'winter' : 'spring'];
-function simulate(dt) { simAcc += dt; let n = 0; const ax = (Survival.Sleep.sleeping || Survival.Activities.current || Gather.UI.open || Build.UI.busy() || Monsters.Journal.open || Fishing.busy() || Fishing.Book.open || Social.UI.journal || Festival.UI.open) ? [0, 0] : Input.axis(); Player.wantRun = !!Input.keys['r'] || (Input.touch.active && Math.hypot(Input.touch.x - Input.touch.ax, Input.touch.y - Input.touch.ay) > 21 * UI_SCALE); if (Player.running && Player.moving) { RUN_ACC += dt; if (RUN_ACC > 20) { RUN_ACC = 0; Survival.Energy.spend(1, 'running'); } } while (simAcc >= SIM_DT && n < 5) { Player.step(SIM_DT, ax); simAcc -= SIM_DT; n++; } Camera.update(dt); Interaction.update(dt); Survival.tick(dt, WorldClock.paused ? 0 : dt * WorldClock.scale / 60, Player.moving); Gather.tick(dt); Build.tick(dt); if (!Gather.UI.open && !Build.UI.open && !Monsters.Journal.open && !Fishing.Book.open && !Fishing.render.inVista() && !Social.busy()) Monsters.tick(dt); Fishing.tick(dt); Social.tick(dt); Festival.tick(dt); }
+function simulate(dt) { simAcc += dt; let n = 0; const ax = (Survival.Sleep.sleeping || Survival.Activities.current || Gather.UI.open || Build.UI.busy() || Monsters.Journal.open || Fishing.busy() || Fishing.Book.open || Social.UI.journal || Festival.UI.open) ? [0, 0] : Input.axis(); Player.wantRun = !!Input.keys['r'] || (Input.touch.active && Math.hypot(Input.touch.x - Input.touch.ax, Input.touch.y - Input.touch.ay) > 21 * UI_SCALE); if (Player.running && Player.moving) { RUN_ACC += dt; if (RUN_ACC > 20) { RUN_ACC = 0; Survival.Energy.spend(1, 'running'); } } while (simAcc >= SIM_DT && n < 5) { Player.step(SIM_DT, ax); simAcc -= SIM_DT; n++; } Camera.update(dt); Interaction.update(dt); Survival.tick(dt, WorldClock.paused ? 0 : dt * WorldClock.effScale() / 60, Player.moving); Gather.tick(dt); Build.tick(dt); if (!Gather.UI.open && !Build.UI.open && !Monsters.Journal.open && !Fishing.Book.open && !Fishing.render.inVista() && !Social.busy()) Monsters.tick(dt); Fishing.tick(dt); Social.tick(dt); Festival.tick(dt); }
 function frame(now) {
   const dt = Math.min(0.1, (now - last) / 1000); last = now; T += dt; const tf0 = performance.now();
   UIKit.tick(dt); const held = UIKit.paused() || UIKit.Map.open || portrait(); if (!held && window.MOSS_AUTOSAVE) { AUTO_T += dt; if (AUTO_T > 180) { AUTO_T = 0; MOSS_AUTOSAVE('timer'); } } if (SAVED_T > 0) SAVED_T -= dt;
@@ -467,10 +475,10 @@ function frame(now) {
   const deep = (hour >= 22.5 ? Math.min(1, (hour - 22.5) / 1.5) : hour < 4.5 ? Math.min(1, (4.5 - hour) / 1.5) : 0) * lightAmount;          // the small hours are the darkest
   const clearSky = (WeatherState.kind === 'clear' || WeatherState.kind === 'wind') ? 1 : WeatherState.kind === 'snow' ? .55 : .3; const moon = nightShow * clearSky * .2;   // moonlight: cool, low, shows form
   const ambK = lightAmount * .4;          // outside the pools the night falls off toward blue-black
-  for (let x = 0; x < W; x++) { SW.a[x] = Math.sin(T * 1.3 - x * .035) * .6; SW.gs[x] = Math.sin(T * 1.7 - x * .05); SW.gc[x] = Math.cos(T * 1.7 - x * .05); }          // the breeze waves are separable: one sine per row and per column, not per pixel
-  for (let y = 0; y < H; y++) { SW.rs[y] = Math.sin(T * 2.3 + y * .09); SW.rc[y] = Math.cos(T * 2.3 + y * .09); }
+  for (let x = 0; x < W; x++) { SW.a[x] = Math.sin(T * .8 - x * .03); SW.cc[x] = Math.cos(T * .8 - x * .03); SW.gs[x] = Math.sin(T * 1.0 - x * .05); SW.gc[x] = Math.cos(T * 1.0 - x * .05); }          // the breeze waves are separable: one sine per row and per column, not per pixel
+  
   const postT = tab.map((c, k) => { let r = c[0], g = c[1], b = c[2]; if (ambK > 0 && !(CLS[k] & 4)) { if (moon > 0) { const dc = dayTab[k], dl = (dc[0] * .3 + dc[1] * .59 + dc[2] * .11) / 255; r += (dl * 104 - r) * moon; g += (dl * 124 - g) * moon; b += (dl * 168 - b) * moon; } if (deep > 0) { const q = deep * .22; r += (14 - r) * q; g += (18 - g) * q; b += (40 - b) * q; } const f = 1 - ambK * .9; r *= f; g *= f; b *= f * 1.04; } return [r, g, b]; });
-  const breeze = calm ? wind : Math.max(wind, .22), swayA = .35 + wind * 2.2;
+  const breeze = calm ? wind : Math.max(wind, .22), swayA = .9 + wind * 1.3;
   const snowing = WeatherState.kind === 'snow' ? WeatherState.intensity : 0; if (!held) SNOWACC = Math.max(0, Math.min(1, SNOWACC + dt * (snowing ? snowing / 90 : -(season === 'winter' ? 1 / 600 : 1 / 120)))); const snowC = tab[DATA.entries.entries.reduce((m, e, i) => e.family === 'snow' && (m < 0 || e.rank > DATA.entries.entries[m].rank) ? i : m, -1)] || [240, 244, 250];
   const VX0 = state.viewport ? Math.max(0, Camera.ix() - 4) : 0, VX1 = state.viewport ? Math.min(W, Camera.ix() + Camera.vw + 4) : W, VY0 = state.viewport ? Math.max(0, Camera.iy() - 32) : 0, VY1 = state.viewport ? Math.min(H, Camera.iy() + Camera.vh + 4) : H;   // only what the camera can see is shaded
   tq = FT.mark('setup', tq);
@@ -480,8 +488,8 @@ function frame(now) {
   if (SH.nl < LIGHTS.length) { SH.nl = LIGHTS.length + 16; SH.lk = new Uint8Array(SH.nl); SH.lc = new Float32Array(SH.nl * 3); SH.fl = new Float32Array(SH.nl); }
   LIGHTS.forEach((L, k) => { SH.lk[k] = { fire: 1, lantern: 2, firefly: 3, glow: 4 }[L.kind] || 0; SH.lc[k * 3] = L.color[0]; SH.lc[k * 3 + 1] = L.color[1]; SH.lc[k * 3 + 2] = L.color[2]; SH.fl[k] = flick[k]; });
   const freshBase = !HALF_RATE || (FRAMEC++ & 1) === 0 || Math.abs(Camera.ix() - BASE_VIEW[0]) > 3 || Math.abs(Camera.iy() - BASE_VIEW[1]) > 3;          /* slow devices repaint the backdrop every other frame */
-  if (freshBase) shadeWorld(VX0, VY0, VX1, VY1, idx, night, depL, shNoon, shLong, shadeT, CLS, LW, LI, d32, breeze > 0.12 ? swayA : 0, calm ? 0 : .45 + wind * .9, shadowOn ? 1 : 0, longW, shadowStrength,
-    nightShow, season === 'winter' ? 1 : 0, lightAmount, ev && ev.fireflies ? ev.fireflies : 1, ambK, moon, deep, SNOWACC, snowC[0], snowC[1], snowC[2], wetDark, (T * 30) | 0, fogA, fogShift, (T * 2) | 0, fogCol[0], fogCol[1], fogCol[2]);
+  if (freshBase) shadeWorld(VX0, VY0, VX1, VY1, idx, night, depL, softMask(shNoon), softMask(shLong), shadeT, CLS, LW, LI, d32, breeze > 0.12 ? swayA : 0, (calm || wind < .35) ? 0 : .45 + wind * .9, shadowOn ? 1 : 0, longW, shadowStrength * (1 - .6 * Math.max(wetDark, Math.min(1, fogA))),
+    nightShow, season === 'winter' ? 1 : 0, lightAmount, ev && ev.fireflies ? ev.fireflies : 1, ambK, moon, deep, SNOWACC, snowC[0], snowC[1], snowC[2], wetDark, (T * 3) | 0, fogA, fogShift, (T * 2) | 0, fogCol[0], fogCol[1], fogCol[2]);
   const spriteRGB = (pi, i) => { const c = tab[pi]; let r = c[0], g = c[1], b = c[2]; const lw = LW[i]; let lit = 0; if (lw > 0 && lightAmount > 0) { const L = LIGHTS[LI[i]]; if (L.kind !== 'firefly') { const w = lw * lightAmount * flick[LI[i]]; lit = w; const lc = (L.kind === 'fire' || L.kind === 'lantern') ? lampT[pi] : dayTab[pi]; r += (lc[0] * L.color[0] * 1.06 + 10 - r) * w; g += (lc[1] * L.color[1] * 1.06 + 8 - g) * w; b += (lc[2] * L.color[2] * 1.06 + 4 - b) * w; } }
     if (ambK > 0 && !(CLS[pi] & 4)) { const un = 1 - Math.min(1, lit * 2.2); if (moon > 0) { const dc = dayTab[pi], dl = (dc[0] * .3 + dc[1] * .59 + dc[2] * .11) / 255, m = moon * un; r += (dl * 104 - r) * m; g += (dl * 124 - g) * m; b += (dl * 168 - b) * m; } const f = 1 - ambK * un * .9; r *= f; g *= f; b *= f; } SPR[0] = r; SPR[1] = g; SPR[2] = b; return SPR; };          /* one shared out-array: no garbage per pixel */
   tq = FT.mark('shade', tq);
@@ -498,7 +506,7 @@ function frame(now) {
     if (!window.FIREPX) { const fam = DATA.entries.entries; const rk = []; fam.forEach((e, i) => { if (e.family === 'fire') rk[e.rank] = i; }); window.FIRERK = rk; const pos = {}; rk.forEach((v, r) => pos[v] = r); window.FIREPX = []; const sp = DATA.idx.spring; for (let i = 0; i < W * H; i++) if (pos[sp[i]] !== undefined) FIREPX.push([i, pos[sp[i]], i % W, (i / W) | 0]); }
     for (const [i, rk, x, y] of FIREPX) { if (x < VX0 || x >= VX1 || y < VY0 || y >= VY1) continue; if (!(CLS[idx[i]] !== undefined)) continue; const w = Math.sin(T * 13 + y * 1.1 + x * .6) + Math.sin(T * 7.1 - y * .8 + x * 1.7); const nr = Math.max(0, Math.min(FIRERK.length - 1, rk + Math.round(w))); const c = tab[FIRERK[nr]], o = i * 4; if (season === 'winter' && idx[i] !== DATA.idx.spring[i]) continue; d[o] = c[0]; d[o + 1] = c[1]; d[o + 2] = c[2]; } }
   if (!calm) { if (!CANVASPX) { const rk = []; DATA.entries.entries.forEach((e, k) => { if (e.family === 'canvas') rk[e.rank] = k; }); CANVRK = rk.filter(v => v !== undefined); const pos = {}; CANVRK.forEach((v, r) => pos[v] = r); CANVASPX = []; for (let k = 0; k < W * H; k++) { const v = DATA.idx.spring[k]; if (pos[v] !== undefined) CANVASPX.push([k, pos[v], k % W, (k / W) | 0]); } }
-    const amp = .35 + wind * 1.1; for (const [k, rk, x, y] of CANVASPX) { if (x < VX0 || x >= VX1 || y < VY0 || y >= VY1) continue; if (idx[k] !== DATA.idx.spring[k] && !ev) continue; const w = Math.sin(T * 1.1 - x * .16 + y * .05) * amp; const sh = Math.round(w); if (!sh) continue; const nr = Math.max(0, Math.min(CANVRK.length - 1, rk + sh)); const c = spriteRGB(CANVRK[nr], k), o = k * 4; d[o] = c[0]; d[o + 1] = c[1]; d[o + 2] = c[2]; } }
+    const amp = .3 + wind * .8; for (const [k, rk, x, y] of CANVASPX) { if (x < VX0 || x >= VX1 || y < VY0 || y >= VY1) continue; if (idx[k] !== DATA.idx.spring[k] && !ev) continue; const w = Math.sin(T * .6 - x * .09 + y * .03) * amp; const sh = Math.round(w); if (!sh) continue; const nr = Math.max(0, Math.min(CANVRK.length - 1, rk + sh)); const c = spriteRGB(CANVRK[nr], k), o = k * 4; d[o] = c[0]; d[o + 1] = c[1]; d[o + 2] = c[2]; } }
   buildCtx.idx = idx; Fishing.render.sign(buildCtx, tab); Monsters.render.lantern(buildCtx); Build.render.items(buildCtx, false); Monsters.render.items(buildCtx, false); Social.render.items(buildCtx, false);
   // ---- player: y-sorted against the baked scene through the depth map, lit by the same table
   { const dep = depthNow(); const pm = DATA.player, pidx = DATA.pidx; const fw = pm.frame_w, fh = pm.frame_h;
@@ -506,7 +514,7 @@ function frame(now) {
     const pyBase = Math.round(Player.y); const shade = DATA.play.shade;
     // soft contact shadow on the ground only
     const [srx, sry] = pm.shadow || [5, 1.2];          /* the soft oval under the feet, sized by the sheet */
-    for (let yy = -2; yy <= 2; yy++) for (let xx = -srx; xx <= srx; xx++) { if ((xx * xx) / (srx * srx) + (yy * yy) / (sry * sry) > 1) continue; const sx = Math.round(Player.x) + xx, sy = pyBase + yy; if (sx < 0 || sy < 0 || sx >= W || sy >= H) continue; const i = sy * W + sx; if (dep[i] !== 0 || (CLS[idx[i]] & 2)) continue; const c = tab[shade[idx[i]]]; const o = i * 4; d[o] = c[0]; d[o + 1] = c[1]; d[o + 2] = c[2]; }
+    for (let yy = -3; yy <= 3; yy++) for (let xx = -srx - 1; xx <= srx + 1; xx++) { const q = (xx * xx) / ((srx + 1) * (srx + 1)) + (yy * yy) / ((sry + 1.2) * (sry + 1.2)); if (q >= 1) continue; const sx = Math.round(Player.x) + xx, sy = pyBase + yy; if (sx < 0 || sy < 0 || sx >= W || sy >= H) continue; const i = sy * W + sx; if (dep[i] !== 0 || (CLS[idx[i]] & 2)) continue; const k = (1 - q) * (1 - q) * .55 * Math.min(1, shadowStrength + .25); const o = i * 4; d[o] *= 1 - k * .30; d[o + 1] *= 1 - k * .22; d[o + 2] *= 1 - k * .10; }          /* a feathered oval: darkest under the boots, fading outward */
     for (let yy = 0; yy < fh; yy++) for (let xx = 0; xx < fw; xx++) { const sxx = Player.flip ? (fw - 1 - xx) : xx; const pi = pidx[(row * fh + yy) * (fw * pm.frames.length) + colf * fw + sxx]; if (!pi) continue;
       const x = px0 + xx, y = py0 + yy; if (x < 0 || y < 0 || x >= W || y >= H) continue; const i = y * W + x; if (dep[i] > pyBase) continue;   // something whose base is lower on screen is in front
       const [r, g, b] = spriteRGB(pi, i);

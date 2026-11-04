@@ -31,7 +31,7 @@ for season in ('spring', 'summer', 'autumn', 'winter'):
     sc.shadows_baked = False                                  # shadows are a live layer (length follows the sun)
     c = sc.render_indexed(tiles, night=False, season=season)
     Image.fromarray(c.a, 'L').save(os.path.join(out, f'scene_{season}_idx.png'))
-    for tag, (st, dx) in {'noon': (1.0, 0), 'long': (2.1, 14)}.items():
+    for tag, (st, dx) in {'noon': (1.0, 0), 'long': (1.5, 9)}.items():
         Image.fromarray(sc.shadow_mask(st, dx, season).a, 'L').save(os.path.join(out, f'shadow_{season}_{tag}.png'))
     shadows[season] = {'noon': f'shadow_{season}_noon.png', 'long': f'shadow_{season}_long.png'}
 for name, ev in EVENTS.items():
@@ -40,7 +40,7 @@ for name, ev in EVENTS.items():
     c = sc.render_indexed(tiles, night=False, season=ev['season'])
     Image.fromarray(c.a, 'L').save(os.path.join(out, f'scene_event_{name}_idx.png'))
     Image.fromarray(sc.shadow_mask(1.0, 0, ev['season']).a, 'L').save(os.path.join(out, f'shadow_event_{name}_noon.png'))
-    Image.fromarray(sc.shadow_mask(2.1, 14, ev['season']).a, 'L').save(os.path.join(out, f'shadow_event_{name}_long.png'))
+    Image.fromarray(sc.shadow_mask(1.5, 9, ev['season']).a, 'L').save(os.path.join(out, f'shadow_event_{name}_long.png'))
     events[name] = {'layer': f'scene_event_{name}_idx.png', 'noon': f'shadow_event_{name}_noon.png', 'long': f'shadow_event_{name}_long.png'}
 sc = make_scene('spring')
 nl = Canvas(sc.W, sc.H)

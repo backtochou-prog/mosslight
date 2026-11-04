@@ -127,7 +127,7 @@ def grass_tile(variant: int, shade: str) -> Canvas:
     rng = random.Random(1000 + variant * 7 + hash(shade) % 97)
     c = Canvas(T, T); base = 3
     c.rect(0, 0, T, T, PAL.i('grass', base))
-    n_light = {'dark': 0, 'mid': 1, 'sun': 2}[shade]; n_dark = {'dark': 2, 'mid': 1, 'sun': 0}[shade]   # calm ground: mown, not noisy; detail comes from placed plants
+    n_light = {'dark': 0, 'mid': 0, 'sun': 1}[shade]; n_dark = {'dark': 1, 'mid': 0, 'sun': 0}[shade]   # calm ground: almost flat colour; the life comes from placed plants
     for _ in range(n_light):                      # a tuft: three lit blade tips over a dark root
         x, y = rng.randrange(T), rng.randrange(T)
         c.put(x, (y - 1) % T, PAL.i('grass', base + 1)); c.put((x + 2) % T, (y - 1) % T, PAL.i('grass', base + 1))
@@ -136,7 +136,7 @@ def grass_tile(variant: int, shade: str) -> Canvas:
     for _ in range(n_dark):                       # a shaded pocket
         x, y = rng.randrange(T), rng.randrange(T)
         c.put(x, y, PAL.i('grass', base - 1)); c.put((x + 1) % T, y, PAL.i('grass', base - 1))
-    if shade == 'sun' and rng.random() < 0.6:
+    if shade == 'sun' and rng.random() < 0.2:
         x, y = rng.randrange(T), rng.randrange(T)
         c.put(x, y, PAL.i('grass', 5)); c.put(x, (y + 1) % T, PAL.i('grass', 4))
     if variant == 5:
@@ -328,9 +328,7 @@ def soft_edge(c, m, rng, rings=2):
     r2 = inner_ring(m, 2); r3 = inner_ring(m, 3)
     for y in range(T):
         for x in range(T):
-            if edge[y, x] and ((x + y) % 2 == 0 or rng.random() < 0.25): c.a[y, x] = 0
-            elif rings > 1 and r2[y, x] and rng.random() < 0.3: c.a[y, x] = 0
-            elif rings > 2 and r3[y, x] and (x + y) % 2 == 0 and rng.random() < 0.35: c.a[y, x] = 0
+            if edge[y, x] and ((x >> 1) + (y >> 1)) % 3 == 0: c.a[y, x] = 0          # edges: sparse chunky 2x2 notches, no checkerboard or random pepper
 
 def transition_tile(mat: int, bits, phase) -> Canvas:
     full = all(bits)

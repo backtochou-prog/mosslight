@@ -43,7 +43,7 @@ function check(name, ok, detail) { results.push({ name, ok: !!ok, detail }); con
     for (let yy = 0; yy < fh; yy++) for (let xx = 0; xx < fw; xx++) { const pi = pidx[(row * fh + yy) * (fw * pm.frames.length) + col * fw + xx]; if (!pi) continue; tot++; const i = (py0 + yy) * 768 + px0 + xx; if (dep[i] <= Math.round(Player.y)) shown++; } return shown / tot; });
   await at(228, 198); let v = await vis(); check('behind oak trunk: partially hidden', v > 0.2 && v < 0.9, `${(v * 100).toFixed(0)}% of player visible`); await shot('depth_behind_trunk');
   await at(222, 214); v = await vis(); check('in front of oak trunk: fully visible', v > 0.98, `${(v * 100).toFixed(0)}% visible`); await shot('depth_in_front_of_trunk');
-  await at(130, 440); v = await vis(); check('behind foreground canopy: hidden', v < 0.6, `${(v * 100).toFixed(0)}% visible under the framing oak`);
+  await at(64, 456); v = await vis(); check('behind foreground canopy: hidden', v < 0.6, `${(v * 100).toFixed(0)}% visible under the framing oak`);
   await at(224, 232); v = await vis(); check('under the oak canopy, in front of trunk base: visible', v > 0.9, `${(v * 100).toFixed(0)}%`);
   // 5. camera: follows, clamps at edges, integer offsets, no jump
   await at(60, 80); await p.evaluate(() => { for (let i = 0; i < 90; i++) Camera.update(1 / 60); }); let cam = await p.evaluate(() => [Camera.ix(), Camera.iy()]); check('camera clamps at the north-west edge', cam[0] === 0 && cam[1] === 16, `camera at (${cam})`);

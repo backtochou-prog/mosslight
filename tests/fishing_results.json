@@ -191,7 +191,7 @@
   {
    "name": "walking still works after fishing",
    "ok": true,
-   "detail": "420→443.0333333333333"
+   "detail": "420→444.09999999999997"
   },
   {
    "name": "touch: open, tap cast, tap strike, hold to reel, release, tap keep",

@@ -122,7 +122,7 @@ def build(lib) -> Scene:
         if 33 < tx < 44 and 2.5 < ty < 9.5: return True
         if abs(tx - (29.5 + (ty - 15.5) * -0.75)) < 1.3 and 7.5 < ty < 16: return True
         return False
-    C.forest_edge(ctx, clearing_dist, species, exclude=exclude, spacing=(4.2, 3.8, 3.4))   # broader canopies need more air between them
+    C.forest_edge(ctx, clearing_dist, species, exclude=exclude, spacing=(3.6, 3.3, 3.0))   # smaller, calmer canopies: keep the forest full
     C.understorey(ctx, clearing_dist)
     C.pond_margin(ctx, keep=lambda x, y: not (500 < x < 600 and 250 < y < 310) and not (590 < x < 724 and 330 < y < 410))
     trees = [(p.x, p.y) for p in sc.placements if 'tree' in p.sprite.tags and 'sapling' not in p.sprite.tags]
@@ -131,9 +131,9 @@ def build(lib) -> Scene:
     C.sheltered_corner(ctx, 112, 300)
     C.ruin_overgrowth(ctx, 556, 90, 680, 136)
     # sunny meadow: wildflowers in two loose drifts, none in the shade
-    C.vegetation_cluster(ctx, 370, 352, 40, [('flowers_w', 2, 3), ('flowers_b', 2, 2), ('flowers_y', 2, 1), ('tuft_', 3, 2)], spacing=8, n=6)
+    C.vegetation_cluster(ctx, 370, 352, 40, [('flowers_w', 2, 3), ('flowers_b', 2, 2), ('flowers_y', 2, 1), ('tuft_', 3, 2)], spacing=9, n=4)
     C.vegetation_cluster(ctx, 560, 380, 33, [('flowers_p', 2, 2), ('flowers_r', 2, 1), ('tallgrass_', 3, 2), ('tuft_', 3, 1)], spacing=8, n=4)
-    C.vegetation_cluster(ctx, 170, 262, 24, [('flowers_w', 2, 2), ('shroom_', 2, 1), ('tuft_', 3, 1)], spacing=8, n=3)
+    C.vegetation_cluster(ctx, 170, 262, 24, [('flowers_w', 2, 2), ('shroom_', 2, 1), ('tuft_', 3, 1)], spacing=9, n=2)
     C.vegetation_cluster(ctx, 470, 150, 29, [('flowers_y', 2, 2), ('flowers_w', 2, 1), ('tuft_', 3, 1)], spacing=8, n=3)
     C.vegetation_cluster(ctx, 300, 150, 26, [('flowers_b', 2, 2), ('flowers_p', 2, 1), ('tallgrass_', 3, 1)], spacing=8, n=3)
     C.vegetation_cluster(ctx, 640, 400, 24, [('flowers_r', 2, 2), ('flowers_y', 2, 1)], spacing=8, n=3)

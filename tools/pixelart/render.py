@@ -108,7 +108,7 @@ class Scene:
             full = m.ellipse_mask(cx, cy, rx * stretch, ry)
             if s.soft_shadow:
                 outer = m.ellipse_mask(cx, cy, rx * stretch + 2, ry + 1) & ~full
-                ys, xs = np.nonzero(outer); keep = ((xs + ys) % 2 == 0); m.a[ys[keep], xs[keep]] = 1
+                m.a[outer] = 1          # a full soft ring; the game blurs the stencil into a gentle falloff
             m.a[full] = 2
         return m
 

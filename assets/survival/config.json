@@ -110,6 +110,14 @@
    "anim": "gather"
   }
  },
+ "clock": {
+  "night_scale": 240,
+  "day_scale": 93,
+  "blend": [
+   0.1,
+   0.45
+  ]
+ },
  "danger": {
   "early_night": 0.4,
   "deep_night": 1.0,

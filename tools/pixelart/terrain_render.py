@@ -169,8 +169,8 @@ def meadow_tone_pass(c: Canvas, seed=31):
     for ty in range(0, H, 8):
         for tx in range(0, W, 8):
             v = fbm(tx, ty, 52.0, seed, 3)
-            if v > 0.57:
-                n = int((v - 0.57) * 9 + rng.random())
+            if v > 0.62:
+                n = int((v - 0.62) * 4 + rng.random())
                 for _ in range(n):
                     x, y = tx + rng.randrange(8), ty + rng.randrange(8)
                     pts = ((x, y - 1), (x + 2, y - 1), (x + 1, y), (x + 1, y - 2))
@@ -178,13 +178,13 @@ def meadow_tone_pass(c: Canvas, seed=31):
                         for px, py in pts: c.a[py, px] = g[4]
                         if y + 1 < H and base[y + 1, x + 1]: c.a[y + 1, x + 1] = g[2]
                 # a tiny wildflower now and then in the sunniest drifts
-                if v > 0.66 and rng.random() < 0.22:
+                if v > 0.70 and rng.random() < 0.10:
                     x, y = tx + rng.randrange(8), ty + rng.randrange(1, 8)
                     if x + 1 < W and base[y, x] and base[y - 1, x] and base[y, x + 1]:
                         c.a[y - 1, x] = PAL.i('flower_w', 2) if rng.random() < 0.6 else PAL.i('flower_y', 1)
                         c.a[y, x] = g[2]
-            elif v < 0.41:
-                n = int((0.41 - v) * 8 + rng.random())
+            elif v < 0.36:
+                n = int((0.36 - v) * 3 + rng.random())
                 for _ in range(n):
                     x, y = tx + rng.randrange(8), ty + rng.randrange(8)
                     if x + 1 < W and base[y, x] and base[y, x + 1]:
@@ -198,13 +198,13 @@ def water_depth_pass(c: Canvas, rng_seed=9):
     wr = PAL.ramp('water')
     rng = random.Random(rng_seed)
     ys, xs = np.nonzero(c.a == wr[3])
-    for _ in range(len(xs) // 80):
+    for _ in range(len(xs) // 300):
         k = rng.randrange(len(xs)); x, y = int(xs[k]), int(ys[k])
         L = rng.randint(2, 5)
         if all(c.get(x + i, y) == wr[3] for i in range(L)):
             for i in range(L): c.put(x + i, y, wr[5] if 0 < i < L - 1 else wr[4])
     ys, xs = np.nonzero(c.a == wr[1])
-    for _ in range(len(xs) // 140):
+    for _ in range(len(xs) // 480):
         k = rng.randrange(len(xs)); x, y = int(xs[k]), int(ys[k])
         L = rng.randint(2, 4)
         for i in range(L):
@@ -242,7 +242,7 @@ def bank_pass(c: Canvas):
 def litter_pass(c: Canvas, mm: MaterialMap, season='spring', seed=41):
     """Leaf litter overlay on grass/forest/worn: clustered leaves, density per
     tile from mm.litter scaled by season."""
-    scale = {'spring': 0.6, 'summer': 0.3, 'autumn': 1.8, 'winter': 0.0}[season]
+    scale = {'spring': 0.3, 'summer': 0.15, 'autumn': 1.1, 'winter': 0.0}[season]
     if scale == 0: return c
     rng = random.Random(seed)
     ok = np.isin(c.a, PAL.ramp('grass') + PAL.ramp('forest') + PAL.ramp('worn'))

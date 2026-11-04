@@ -1,0 +1,71 @@
+{
+ "results": [
+  {
+   "name": "oaks are about three tiles wide and carry half the old pixels (≤ 2400 px, ≤ 10 colours, ≤ 72 px tall)",
+   "ok": true,
+   "detail": "[\"58x70 2266px 10c\",\"57x63 1927px 9c\",\"43x66 1595px 10c\",\"56x66 1768px 8c\"]"
+  },
+  {
+   "name": "every tree is posterised to a handful of tones (≤ 10 colours) and pines/birches stay slim",
+   "ok": true,
+   "detail": "birch_0 744px 6c, pine_1 1286px 7c, willow_0 1745px 7c, rowan_0 615px 8c"
+  },
+  {
+   "name": "shrubs and ferns are small and simple (≤ 450 px)",
+   "ok": true,
+   "detail": "396, 324, 181"
+  },
+  {
+   "name": "canopy tone changes between neighbouring pixels stay low (≤ 16% including the outline; was 21-40%)",
+   "ok": true,
+   "detail": "14.7%, canopy covers 23% of the map"
+  },
+  {
+   "name": "shadow field is soft: the biggest step between neighbouring pixels is small (≤ 0.22; a dithered edge jumps by 0.55-1)",
+   "ok": true,
+   "detail": "max step 0.143, 41293 px of shade"
+  },
+  {
+   "name": "no isolated shadow specks, and the long (evening) shade is no more than ~1.6x the noon shade",
+   "ok": true,
+   "detail": "0 specks; noon 18698 px, long 27495 px"
+  },
+  {
+   "name": "a calm still scene changes under 1.5% of its pixels per quarter second (the fire and breeze only)",
+   "ok": true,
+   "detail": "calm 0.48%, breezy 0.60%"
+  },
+  {
+   "name": "pond rows agree with their neighbours (no striping; ≤ 6% of pixels differ sharply from the row above)",
+   "ok": true,
+   "detail": "4.0%"
+  },
+  {
+   "name": "night still runs at 240 game-min per real-min; midday runs at about 93",
+   "ok": true,
+   "detail": "noon 92.4, night 241.0"
+  },
+  {
+   "name": "spring daylight lasts about 8 real minutes (420-540 s) and a whole day about 11",
+   "ok": true,
+   "detail": "477 s daylight of 649 s"
+  },
+  {
+   "name": "every season keeps its own light: summer longest, winter shortest, all at least 4 minutes",
+   "ok": true,
+   "detail": "spring 477s, summer 574s, autumn 381s, winter 284s"
+  },
+  {
+   "name": "walking energy still follows game time (1 energy per game hour), so a slower day does not change the economy",
+   "ok": true,
+   "detail": "1.00 per game hour"
+  },
+  {
+   "name": "no page errors",
+   "ok": true,
+   "detail": ""
+  }
+ ],
+ "passed": 13,
+ "total": 13
+}

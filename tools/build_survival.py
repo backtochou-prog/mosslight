@@ -22,6 +22,9 @@ CONFIG = {
         'build':           {'label': 'Build',          'energy': 5, 'minutes': 30, 'heavy': True,  'anim': 'build'},
         'tend_fire':       {'label': 'Tend the fire',  'energy': 1, 'minutes': 4,  'heavy': False, 'anim': 'gather'},
     },
+    # real-time pace: night runs at 240 game-min per real-min (6-minute day, as before); bright hours run slower so daylight lasts
+    # about 8 real minutes in spring (tools/calibration in BALANCE notes: integrate over the darkness curve). Blended by darkness.
+    'clock': {'night_scale': 240, 'day_scale': 93, 'blend': [0.10, 0.45]},
     'danger': {'early_night': 0.4, 'deep_night': 1.0, 'day': 0.0, 'sunset': 0.1, 'dawn': 0.1, 'dawn_transition': 0.3},
 }
 os.makedirs(os.path.join(ROOT, 'assets/survival'), exist_ok=True)
