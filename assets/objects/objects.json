@@ -811,17 +811,17 @@
   "trunk_top": null
  },
  "stump_0": {
-  "w": 20,
-  "h": 19,
+  "w": 30,
+  "h": 29,
   "origin": [
-   10,
-   17
+   15,
+   26
   ],
   "shadow": [
-   7,
+   10,
+   3,
    2,
-   1,
-   1
+   2
   ],
   "tags": [
    "prop",
@@ -861,16 +861,16 @@
   "trunk_top": null
  },
  "tent": {
-  "w": 67,
-  "h": 65,
+  "w": 90,
+  "h": 87,
   "origin": [
-   34,
-   63
+   45,
+   84
   ],
   "shadow": [
-   24,
-   5,
-   6,
+   32,
+   7,
+   8,
    -1
   ],
   "tags": [
@@ -881,11 +881,11 @@
   "trunk_top": null
  },
  "campfire": {
-  "w": 38,
-  "h": 35,
+  "w": 48,
+  "h": 44,
   "origin": [
-   20,
-   33
+   25,
+   41
   ],
   "shadow": null,
   "tags": [
@@ -898,11 +898,11 @@
   "trunk_top": null
  },
  "campfire_unlit": {
-  "w": 38,
-  "h": 35,
+  "w": 48,
+  "h": 44,
   "origin": [
-   20,
-   33
+   25,
+   41
   ],
   "shadow": null,
   "tags": [
@@ -915,11 +915,11 @@
   "trunk_top": null
  },
  "campfire_embers": {
-  "w": 38,
-  "h": 35,
+  "w": 48,
+  "h": 44,
   "origin": [
-   20,
-   33
+   25,
+   41
   ],
   "shadow": null,
   "tags": [
@@ -932,16 +932,16 @@
   "trunk_top": null
  },
  "woodpile": {
-  "w": 26,
-  "h": 24,
+  "w": 39,
+  "h": 36,
   "origin": [
-   12,
-   22
+   18,
+   33
   ],
   "shadow": [
-   9,
-   1.8,
-   2,
+   14,
+   3,
+   3,
    0
   ],
   "tags": [
@@ -953,11 +953,11 @@
   "trunk_top": null
  },
  "flatstone_0": {
-  "w": 20,
-  "h": 9,
+  "w": 30,
+  "h": 14,
   "origin": [
-   10,
-   7
+   15,
+   10
   ],
   "shadow": null,
   "tags": [
@@ -968,11 +968,11 @@
   "trunk_top": null
  },
  "flatstone_1": {
-  "w": 20,
-  "h": 9,
+  "w": 30,
+  "h": 14,
   "origin": [
-   10,
-   7
+   15,
+   10
   ],
   "shadow": null,
   "tags": [
@@ -983,17 +983,17 @@
   "trunk_top": null
  },
  "log_seat": {
-  "w": 26,
-  "h": 18,
+  "w": 39,
+  "h": 27,
   "origin": [
-   8,
-   16
+   12,
+   24
   ],
   "shadow": [
-   9,
-   1.6,
-   1,
-   1
+   14,
+   2,
+   2,
+   2
   ],
   "tags": [
    "prop",
@@ -1003,15 +1003,15 @@
   "trunk_top": null
  },
  "lantern_post": {
-  "w": 21,
-  "h": 46,
+  "w": 27,
+  "h": 58,
   "origin": [
-   11,
-   44
+   14,
+   55
   ],
   "shadow": [
-   7,
-   1.2,
+   9,
+   2,
    1,
    1
   ],
@@ -1024,11 +1024,11 @@
   "trunk_top": null
  },
  "lantern_hanging": {
-  "w": 9,
-  "h": 14,
+  "w": 12,
+  "h": 18,
   "origin": [
-   4,
-   13
+   5,
+   16
   ],
   "shadow": null,
   "tags": [

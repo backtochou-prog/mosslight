@@ -1202,6 +1202,31 @@ def reeds_winter(variant=0) -> Sprite:
         if (xs[k] + ys[k]) % 5 == 0: c.a[ys[k], xs[k]] = sn[3]
     return Sprite(f'reeds_{variant}_winter', c, base.ox, base.oy, base.shadow, base.soft_shadow, base.tags + ('winter',))
 
+
+# ---------------------------------------------------------------------------
+# prop scale: the camper is two tiles tall, so camp props are brought up to believable sizes beside it (a tent a person can
+# stoop into, a woodpile that reaches the hip). Rational resample: nearest-neighbour up by p, majority vote down by q.
+# ---------------------------------------------------------------------------
+PROP_SCALE = {'tent': (4, 3), 'woodpile': (3, 2), 'log_seat': (3, 2), 'stump_0': (3, 2), 'flatstone_0': (3, 2), 'flatstone_1': (3, 2),
+              'campfire': (5, 4), 'campfire_unlit': (5, 4), 'campfire_embers': (5, 4), 'lantern_post': (5, 4), 'lantern_hanging': (5, 4)}
+def _rescale(sp, p, q):
+    import dataclasses
+    a = np.repeat(np.repeat(sp.c.a, p, 0), p, 1); h, w = a.shape; H2, W2 = -(-h // q), -(-w // q)
+    pad = np.zeros((H2 * q, W2 * q), a.dtype); pad[:h, :w] = a; out = np.zeros((H2, W2), a.dtype)
+    blocks = pad.reshape(H2, q, W2, q).transpose(0, 2, 1, 3).reshape(H2, W2, q * q)
+    for y in range(H2):
+        for x in range(W2):
+            vals = blocks[y, x]; nz = vals[vals > 0]
+            if len(nz) * 2 > q * q:
+                u, cnt = np.unique(nz, return_counts=True); out[y, x] = u[cnt.argmax()]
+    c = Canvas(W2, H2); c.a[:] = out; k = p / q
+    sc = lambda t: tuple(round(v * k) for v in t) if t else t
+    return dataclasses.replace(sp, c=c, ox=round(sp.ox * k), oy=round(sp.oy * k), shadow=sc(sp.shadow), contact=tuple(v * k for v in sp.contact) if sp.contact else None)
+def apply_prop_scale(lib):
+    for n, (p, q) in PROP_SCALE.items():
+        if n in lib: lib[n] = _rescale(lib[n], p, q)
+    return lib
+
 def build_library_extended(lib: dict) -> dict:
     def add(s): lib[s.name] = s
     from .canvas import refine
@@ -1231,6 +1256,7 @@ def build_library_extended(lib: dict) -> dict:
     apply(lib)
     from .festival import all_sprites as _fest
     lib.update(_fest())
+    apply_prop_scale(lib)
     return lib
 
 

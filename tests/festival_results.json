@@ -88,7 +88,7 @@
   {
    "name": "each festival changes the place: thousands of pixels, its own lights and its own particles",
    "ok": true,
-   "detail": "{\"fest_awakening\":[8688,16,\"petals\"],\"fest_fireflies\":[1801,12,\"fireflies\"],\"fest_forgotten\":[5033,8,\"leaves\"],\"fest_silent_tide\":[1246,11,\"snowglow\"]}"
+   "detail": "{\"fest_awakening\":[8579,16,\"petals\"],\"fest_fireflies\":[1786,12,\"fireflies\"],\"fest_forgotten\":[4832,8,\"leaves\"],\"fest_silent_tide\":[1246,11,\"snowglow\"]}"
   },
   {
    "name": "festival collectibles: picked once, recorded in the journal, attendance noted",

@@ -42,9 +42,9 @@ function check(name, ok, detail) { results.push({ name, ok: !!ok, detail }); con
   const vis = async () => p.evaluate(() => { const dep = DATA.depth.spring, pm = DATA.player, pidx = DATA.pidx; const fw = pm.frame_w, fh = pm.frame_h; const row = pm.facings.indexOf(Player.facing), col = Player.frame(); let tot = 0, shown = 0; const px0 = Math.round(Player.x) - pm.origin[0], py0 = Math.round(Player.y) - pm.origin[1];
     for (let yy = 0; yy < fh; yy++) for (let xx = 0; xx < fw; xx++) { const pi = pidx[(row * fh + yy) * (fw * pm.frames.length) + col * fw + xx]; if (!pi) continue; tot++; const i = (py0 + yy) * 768 + px0 + xx; if (dep[i] <= Math.round(Player.y)) shown++; } return shown / tot; });
   await at(228, 198); let v = await vis(); check('behind oak trunk: partially hidden', v > 0.2 && v < 0.9, `${(v * 100).toFixed(0)}% of player visible`); await shot('depth_behind_trunk');
-  await at(222, 214); v = await vis(); check('in front of oak trunk: fully visible', v > 0.98, `${(v * 100).toFixed(0)}% visible`); await shot('depth_in_front_of_trunk');
+  await at(214, 218); v = await vis(); check('in front of oak trunk: fully visible', v > 0.98, `${(v * 100).toFixed(0)}% visible`); await shot('depth_in_front_of_trunk');
   await at(64, 456); v = await vis(); check('behind foreground canopy: hidden', v < 0.6, `${(v * 100).toFixed(0)}% visible under the framing oak`);
-  await at(224, 232); v = await vis(); check('under the oak canopy, in front of trunk base: visible', v > 0.9, `${(v * 100).toFixed(0)}%`);
+  await at(206, 232); v = await vis(); check('under the oak canopy, in front of trunk base: visible', v > 0.9, `${(v * 100).toFixed(0)}%`);
   // 5. camera: follows, clamps at edges, integer offsets, no jump
   await at(60, 80); await p.evaluate(() => { for (let i = 0; i < 90; i++) Camera.update(1 / 60); }); let cam = await p.evaluate(() => [Camera.ix(), Camera.iy()]); check('camera clamps at the north-west edge', cam[0] === 0 && cam[1] === 16, `camera at (${cam})`);
   await at(740, 440); await p.evaluate(() => { for (let i = 0; i < 120; i++) Camera.update(1 / 60); }); cam = await p.evaluate(() => [Camera.ix(), Camera.iy()]); check('camera clamps at the south-east edge', cam[0] === 128 && cam[1] === 120, `camera at (${cam})`);

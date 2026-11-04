@@ -12,8 +12,9 @@ import numpy as np
 from .canvas import Canvas
 from .palette import PAL
 
-W, H = 22, 38
-OX, OY = 11, 37
+W, H = 22, 36
+OX, OY = 11, 35
+SRC_H, CUT = 38, (21, 23)        # drawn on a 38-row grid, then two rows are taken out of the middle of the torso: a compact, Stardew-height body
 FACINGS = ['down', 'up', 'side', 'gather', 'fish', 'build', 'run_down', 'run_up', 'run_side', 'blink', 'hurt', 'sleep']
 FRAMES = ['idle0', 'idle1', 'walk0', 'walk1', 'walk2', 'walk3']
 IDLE_COLS, WALK_COLS, CONTACTS = [0, 1], [2, 3, 4, 5], [3, 5]
@@ -32,24 +33,24 @@ ROLL = (r('rope', 2), r('rope', 1), r('rope', 0))
 EYE, WHITE, CHEEK, MOUTH = r('wood', 0), r('flower_w', 2), r('berry', 2), r('berry', 0)
 
 def ell(cx, cy, rx, ry):
-    m = np.zeros((H, W), bool)
-    for y in range(H):
+    m = np.zeros((SRC_H, W), bool)
+    for y in range(SRC_H):
         for x in range(W):
             if ((x + .5 - cx) / rx) ** 2 + ((y + .5 - cy) / ry) ** 2 <= 1: m[y, x] = True
     return m
 def box(x0, y0, x1, y1, round_=True):
     """inclusive rectangle with the four corners shaved for a soft, drawn look"""
-    m = np.zeros((H, W), bool); m[y0:y1 + 1, x0:x1 + 1] = True
+    m = np.zeros((SRC_H, W), bool); m[y0:y1 + 1, x0:x1 + 1] = True
     if round_ and x1 - x0 > 3 and y1 - y0 > 3:
         for (x, y) in ((x0, y0), (x1, y0), (x0, y1), (x1, y1)): m[y, x] = False
     return m
 
 class Fig:
-    def __init__(self): self.c = Canvas(W, H)
+    def __init__(self): self.c = Canvas(W, SRC_H)
     def part(self, m, col, outline=True, light=True, shade=True):
         """flat fill with a one-pixel highlight (top-left) and shade (bottom-right), outlined in ink"""
         if not m.any(): return
-        t = Canvas(W, H); lt, mid, sh = col; t.a[m] = mid
+        t = Canvas(W, SRC_H); lt, mid, sh = col; t.a[m] = mid
         up = np.zeros_like(m); up[1:, 1:] = m[:-1, :-1]; dn = np.zeros_like(m); dn[:-1, :-1] = m[1:, 1:]
         if light: t.a[m & ~up] = lt
         if shade: t.a[m & ~dn] = sh
@@ -66,11 +67,11 @@ class Fig:
         self.c.a[m] = t.a[m]
     def px(self, pts, col):
         for x, y in pts:
-            if 0 <= x < W and 0 <= y < H: self.c.a[y, x] = col
+            if 0 <= x < W and 0 <= y < SRC_H: self.c.a[y, x] = col
 
 def shifted(f, dy):
     if not dy: return f
-    o = Canvas(W, H); o.a[:H - dy] = f.a[dy:]; return o
+    o = Canvas(W, SRC_H); o.a[:SRC_H - dy] = f.a[dy:]; return o
 
 # ---------------------------------------------------------------- front
 def front(lift=None, hands=(0, 0), eyes='open', mouth='smile', crouch=0, dy=0):
@@ -110,9 +111,7 @@ def front(lift=None, hands=(0, 0), eyes='open', mouth='smile', crouch=0, dy=0):
         for x in (7, 13): f.px([(x, ey), (x + 1, ey + 1)], EYE); f.px([(x + 1, ey), (x, ey + 1)], EYE)
     f.px([(6, 14 - b), (7, 14 - b), (14, 14 - b), (15, 14 - b)], CHEEK)
     f.px([(10, 13 - b)], SKIN[2])
-    if mouth == 'smile': f.px([(9, 15 - b), (12, 15 - b), (10, 16 - b), (11, 16 - b)], MOUTH)
-    elif mouth == 'open': f.px([(10, 15 - b), (11, 15 - b), (10, 16 - b), (11, 16 - b)], MOUTH)
-    elif mouth == 'flat': f.px([(9, 16 - b), (10, 16 - b), (11, 16 - b), (12, 16 - b)], MOUTH)
+    if mouth == 'open': f.px([(10, 15 - b), (11, 15 - b), (10, 16 - b), (11, 16 - b)], MOUTH)
     # hat: wide soft brim, rounded crown, red band
     f.part(ell(10.5, 7.2 - b, 9.6, 2.7), HAT)
     f.part(box(5, 1 - b, 16, 6 - b), HAT); f.c.a[5 - b, 6:16] = r('berry', 1); f.c.a[4 - b, 6:16] = r('berry', 2)
@@ -120,7 +119,7 @@ def front(lift=None, hands=(0, 0), eyes='open', mouth='smile', crouch=0, dy=0):
     return shifted(f.c, 0) if not crouch else crouch_shift(f.c, crouch)
 
 def crouch_shift(c, d):
-    o = Canvas(W, H); o.a[d:H - 5] = c.a[:H - 5 - d]; o.a[H - 5:] = c.a[H - 5:]; return o
+    o = Canvas(W, SRC_H); o.a[d:SRC_H - 5] = c.a[:SRC_H - 5 - d]; o.a[SRC_H - 5:] = c.a[SRC_H - 5:]; return o
 
 # ---------------------------------------------------------------- back
 def back(lift=None, hands=(0, 0), dy=0):
@@ -164,9 +163,7 @@ def side(lift=False, arm='rest', eyes='open', mouth='smile', dy=0, rod=None):
     elif eyes == 'closed': f.px([(13, ey + 1), (14, ey + 1)], EYE)
     elif eyes == 'hurt': f.px([(13, ey), (14, ey + 1), (14, ey), (13, ey + 1)], EYE)
     f.px([(12, 14 - b), (13, 14 - b)], CHEEK)
-    if mouth == 'smile': f.px([(13, 15 - b), (14, 16 - b), (15, 15 - b)], MOUTH)
-    elif mouth == 'open': f.px([(14, 15 - b), (14, 16 - b)], MOUTH)
-    elif mouth == 'flat': f.px([(13, 16 - b), (14, 16 - b), (15, 16 - b)], MOUTH)
+    if mouth == 'open': f.px([(14, 15 - b), (14, 16 - b)], MOUTH)
     f.part(ell(11, 7.2 - b, 9.6, 2.7), HAT); f.part(box(6, 1 - b, 16, 6 - b), HAT); f.c.a[5 - b, 7:16] = r('berry', 1); f.c.a[4 - b, 7:16] = r('berry', 2); f.px([(8, 2 - b), (9, 2 - b), (10, 1 - b)], HAT[0])
     # near arm
     if arm == 'rest': f.part(box(8, 18 - b, 11, 24 - b), COAT); f.part(ell(10, 26 - b, 2, 2), SKIN)
@@ -201,7 +198,13 @@ def sleep(k):
     f.part(ell(5, 29, 3.2, 3.2), SKIN); f.part(ell(5, 27, 4, 2.2), HAT); f.px([(3, 30), (6, 30)], EYE); f.px([(4, 32 - k)], MOUTH)
     f.px([(17, 24 - 3 * k - 0)], r('flower_w', 2)); return f.c
 
+def squash(c):
+    a = c.a; o = Canvas(W, H); o.a[:] = np.concatenate([a[:CUT[0]], a[CUT[1]:]])[:H]; return o
+
 def cell(facing, col):
+    return squash(_cell(facing, col))
+
+def _cell(facing, col):
     if facing in ('down', 'up', 'side'): return idle_frames(facing)[col] if col < 2 else walk_frames(facing)[col - 2]
     if facing.startswith('run_'):
         f = facing[4:]; return idle_frames(f)[col] if col < 2 else walk_frames(f, run=True)[col - 2]

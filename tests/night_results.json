@@ -18,7 +18,7 @@
   {
    "name": "dawn: creatures retreat gradually, not instantly",
    "ok": true,
-   "detail": "3,3.7,0"
+   "detail": "3,2.9,0"
   },
   {
    "name": "lantern extends how far you are seen",
@@ -37,7 +37,7 @@
   {
    "name": "Wanderer notices, approaches and hits",
    "ok": true,
-   "detail": "attack,76"
+   "detail": "attack,84"
   },
   {
    "name": "player outpaces a Wanderer",
@@ -47,7 +47,7 @@
   {
    "name": "Stalker will not enter campfire light to reach a player beside it",
    "ok": true,
-   "detail": "light,48"
+   "detail": "light,47"
   },
   {
    "name": "Stalker cycles stalk, pounce, attack, retreat",
@@ -82,7 +82,7 @@
   {
    "name": "melee: hit, damage from the tool, wear, kill, drops",
    "ok": true,
-   "detail": "1,14,true,true,1"
+   "detail": "1,14,true,true,2"
   },
   {
    "name": "drops are collected into the pack and recorded",
@@ -171,7 +171,7 @@
   {
    "name": "frame time with creatures (software Chromium)",
    "ok": true,
-   "detail": "43.3 ms"
+   "detail": "18.1 ms"
   },
   {
    "name": "real keys: L lantern, F strike, K guide, Shift sneak",

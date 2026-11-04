@@ -1,10 +1,10 @@
 {
  "name": "survivor v5 (original; cozy chunky camper, built from parts)",
  "frame_w": 22,
- "frame_h": 38,
+ "frame_h": 36,
  "origin": [
   11,
-  37
+  35
  ],
  "facings": [
   "down",

@@ -74,8 +74,8 @@ def build(lib) -> Scene:
     # worn patch between tent and path; firewood is stacked by the tent where it stays dry;
     # the lantern post stands where it lights both the entrance and the fire; a flat stone
     # is the step at the tent mouth; two seats face the fire.
-    for (nm, x, y, fl) in (('oak_0', 216, 206, False), ('tent', 272, 244, False), ('woodpile', 204, 240, False), ('flatstone_0', 282, 252, False),
-                           ('campfire', 318, 274, False), ('log_seat', 296, 296, False), ('log_seat', 350, 276, True), ('lantern_post', 232, 280, False), ('stump_0', 364, 262, False)):
+    for (nm, x, y, fl) in (('oak_0', 216, 206, False), ('tent', 252, 244, False), ('woodpile', 178, 242, False), ('flatstone_0', 264, 256, False),
+                           ('campfire', 318, 274, False), ('log_seat', 282, 310, False), ('log_seat', 376, 290, True), ('lantern_post', 218, 284, False), ('stump_0', 404, 258, False)):
         ctx.place(nm, x, y, flip=fl)
     # THE OUTCROP — one main boulder, a second leaning against it, two smaller stones at its
     # foot, a flat slab in front, moss on the shaded side, ferns in its shade. Small stones gather
