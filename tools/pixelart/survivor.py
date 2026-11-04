@@ -74,48 +74,62 @@ def shifted(f, dy):
     o = Canvas(W, SRC_H); o.a[:SRC_H - dy] = f.a[dy:]; return o
 
 # ---------------------------------------------------------------- front
-def front(lift=None, hands=(0, 0), eyes='open', mouth='smile', crouch=0, dy=0):
-    """lift: 'L' or 'R' raises that boot (knee up, sole showing); hands: vertical offset of (left, right) hand; dy: whole body up"""
-    f = Fig(); b = dy
-    # legs and boots
-    for side, x0 in (('L', 5), ('R', 12)):
-        up = lift == side; ly = 26 - b
-        if up:
-            f.part(box(x0, ly, x0 + 4, ly + 3), DENIM)                              # thigh, knee toward you
-            f.part(box(x0, ly + 4, x0 + 4, ly + 6), BOOT); f.px([(x0 + 1, ly + 6), (x0 + 2, ly + 6), (x0 + 3, ly + 6)], BOOT[2])   # sole
-        else:
-            f.part(box(x0, ly, x0 + 4, 33), DENIM); f.part(box(x0 - 1, 33, x0 + 5, 36), BOOT)
-    f.px([(5, 36), (6, 36), (16, 36), (17, 36)], BOOT[2])
-    # backpack straps peeking at the shoulders are drawn with the coat
-    f.part(box(4, 17 - b, 17, 27 - b), COAT)                                           # coat
-    f.part(box(9, 18 - b, 12, 24 - b, False), SHIRT, outline=False)                    # shirt in the open front
-    f.px([(10, 18 - b), (11, 18 - b)], SHIRT[2]); f.c.a[25 - b, 4:18] = BOOT[1]; f.px([(10, 25 - b), (11, 25 - b)], r('flower_y', 2))   # belt, buckle
-    f.px([(5, y) for y in range(18 - b, 25 - b)], COAT[0]); f.px([(7, 20 - b), (7, 21 - b), (14, 20 - b), (14, 21 - b)], COAT[2])       # coat folds
-    f.px([(6, 17 - b), (6, 18 - b), (15, 17 - b), (15, 18 - b)], PACK[1])             # pack straps
-    f.part(box(7, 16 - b, 14, 18 - b), SCARF)                                          # scarf
-    f.part(box(13, 18 - b, 15, 21 - b), SCARF)                                         # scarf tail
-    # arms (a little out from the body, hands relaxed)
-    for side, x0, hy in (('L', 1, hands[0]), ('R', 18, hands[1])):
-        f.part(box(x0, 18 - b + hy, x0 + 2, 24 - b + hy), COAT); f.part(ell(x0 + 1.5, 26 - b + hy, 2, 2), SKIN)
-    # head
-    f.part(ell(5, 12 - b, 1.6, 2.6), SKIN, light=False); f.part(ell(16.2, 12 - b, 1.6, 2.6), SKIN, light=False)               # ears
-    f.part(ell(10.5, 12.5 - b, 6.4, 5.4), SKIN)
-    f.part(ell(10.5, 8 - b, 6.2, 3), HAIR, outline=False)                              # fringe
-    f.px([(4, 13 - b), (4, 14 - b), (17, 13 - b), (17, 14 - b)], HAIR[1])
+VEST = (r('forest', 3), r('forest', 2), r('forest', 1))
+STRAP = (r('wood', 5), r('wood', 4), r('wood', 2))
+PANTS = (r('pebble', 2), r('pebble', 1), r('pebble', 0))
+NECK = (r('flower_b', 2), r('flower_b', 1), r('flower_b', 0))
+HAIRC = (r('leaf_litter', 2), r('wood', 3), r('wood', 2))      # warm auburn, light / mid / shade
+
+def hair_front(f, b):
+    f.part(ell(10.5, 7.2 - b, 6.9, 4.9), HAIRC)                                        # a full, tousled head of hair
+    f.px([(7, 3 - b), (10, 2 - b), (13, 3 - b)], HAIRC[0])
+def fringe(f, b, flip=False):
+    f.part(ell(10.5, 8.6 - b, 5.6, 2.0), HAIRC, outline=False)                          # fringe over the brow
+    f.px([(5, 10 - b), (5, 11 - b), (16, 10 - b), (16, 11 - b)], HAIRC[1])             # side locks
+
+def torso_front(f, b):
+    f.part(box(4, 17 - b, 17, 27 - b), SHIRT)                                          # shirt
+    f.part(box(5, 17 - b, 7, 27 - b, False), VEST); f.part(box(14, 17 - b, 16, 27 - b, False), VEST)    # leather vest, open at the front
+    f.c.line(6, 18 - b, 15, 26 - b, STRAP[1]); f.c.line(6, 17 - b, 15, 25 - b, STRAP[0])               # bandolier strap
+    f.part(box(13, 23 - b, 16, 26 - b), VEST); f.px([(14, 24 - b)], STRAP[0])                           # hip pouch
+    f.c.a[27 - b, 4:18] = BOOT[1]; f.px([(10, 27 - b), (11, 27 - b)], r('metal', 3))                    # belt, buckle
+    f.part(box(8, 16 - b, 13, 18 - b), NECK)                                                         # neckerchief
+
+def arms_front(f, b, hands):
+    for x0, hy in ((1, hands[0]), (18, hands[1])):
+        f.part(box(x0, 18 - b + hy, x0 + 2, 21 - b + hy), SHIRT)                       # sleeve, rolled
+        f.part(box(x0, 22 - b + hy, x0 + 2, 25 - b + hy, False), SKIN); f.part(ell(x0 + 1.5, 26 - b + hy, 2, 2), SKIN)
+
+def face_front(f, b, eyes):
+    f.part(ell(5, 12 - b, 1.6, 2.6), SKIN, light=False); f.part(ell(16.2, 12 - b, 1.6, 2.6), SKIN, light=False)
+    f.part(ell(10.5, 13 - b, 6.2, 5.6), SKIN)
+    fringe(f, b)
     ey = 12 - b
     if eyes == 'open':
         for x in (7, 13): f.px([(x, ey), (x + 1, ey), (x, ey + 1), (x + 1, ey + 1)], EYE); f.px([(x, ey)], WHITE)
+        f.px([(7, ey - 2), (8, ey - 2), (13, ey - 2), (14, ey - 2)], HAIRC[2])         # brows
     elif eyes == 'closed':
         for x in (7, 13): f.px([(x, ey + 1), (x + 1, ey + 1)], EYE)
+        f.px([(7, ey - 2), (8, ey - 2), (13, ey - 2), (14, ey - 2)], HAIRC[2])
     elif eyes == 'hurt':
         for x in (7, 13): f.px([(x, ey), (x + 1, ey + 1)], EYE); f.px([(x + 1, ey), (x, ey + 1)], EYE)
+        f.px([(7, ey - 2), (8, ey - 3), (13, ey - 3), (14, ey - 2)], HAIRC[2])
     f.px([(10, 13 - b)], SKIN[2])
+
+def front(lift=None, hands=(0, 0), eyes='open', mouth='none', crouch=0, dy=0):
+    f = Fig(); b = dy
+    for side, x0 in (('L', 5), ('R', 12)):
+        up = lift == side; ly = 27 - b
+        if up:
+            f.part(box(x0, ly, x0 + 4, ly + 4), PANTS)
+            f.part(box(x0, ly + 5, x0 + 4, ly + 7), BOOT); f.px([(x0 + 1, ly + 7), (x0 + 2, ly + 7), (x0 + 3, ly + 7)], BOOT[2])
+        else:
+            f.part(box(x0, ly, x0 + 4, 34), PANTS); f.part(box(x0 - 1, 33, x0 + 5, 36), BOOT)
+    f.px([(5, 36), (6, 36), (16, 36), (17, 36)], BOOT[2])
+    arms_front(f, b, hands); torso_front(f, b)
+    hair_front(f, b); face_front(f, b, eyes)
     if mouth == 'open': f.px([(10, 15 - b), (11, 15 - b), (10, 16 - b), (11, 16 - b)], MOUTH)
-    # hat: wide soft brim, rounded crown, red band
-    f.part(ell(10.5, 7.2 - b, 9.6, 2.7), HAT)
-    f.part(box(5, 1 - b, 16, 6 - b), HAT); f.c.a[5 - b, 6:16] = r('berry', 1); f.c.a[4 - b, 6:16] = r('berry', 2)
-    f.px([(7, 2 - b), (8, 2 - b), (9, 1 - b)], HAT[0])
-    return shifted(f.c, 0) if not crouch else crouch_shift(f.c, crouch)
+    return crouch_shift(f.c, crouch) if crouch else f.c
 
 def crouch_shift(c, d):
     o = Canvas(W, SRC_H); o.a[d:SRC_H - 5] = c.a[:SRC_H - 5 - d]; o.a[SRC_H - 5:] = c.a[SRC_H - 5:]; return o
@@ -124,49 +138,43 @@ def crouch_shift(c, d):
 def back(lift=None, hands=(0, 0), dy=0):
     f = Fig(); b = dy
     for side, x0 in (('L', 5), ('R', 12)):
-        up = lift == side; ly = 26 - b
-        if up:
-            f.part(box(x0, ly, x0 + 4, ly + 3), DENIM); f.part(box(x0, ly + 4, x0 + 4, ly + 6), BOOT)
-        else:
-            f.part(box(x0, ly, x0 + 4, 33), DENIM); f.part(box(x0 - 1, 33, x0 + 5, 36), BOOT)
-    for side, x0, hy in (('L', 1, hands[0]), ('R', 18, hands[1])):
-        f.part(box(x0, 18 - b + hy, x0 + 2, 24 - b + hy), COAT); f.part(ell(x0 + 1.5, 26 - b + hy, 2, 2), SKIN)
-    f.part(box(4, 17 - b, 17, 27 - b), COAT)
+        up = lift == side; ly = 27 - b
+        if up: f.part(box(x0, ly, x0 + 4, ly + 4), PANTS); f.part(box(x0, ly + 5, x0 + 4, ly + 7), BOOT)
+        else: f.part(box(x0, ly, x0 + 4, 34), PANTS); f.part(box(x0 - 1, 33, x0 + 5, 36), BOOT)
+    arms_front(f, b, hands)
+    f.part(box(4, 17 - b, 17, 27 - b), SHIRT); f.part(box(5, 17 - b, 16, 27 - b, False), VEST)
     f.part(box(6, 15 - b, 15, 26 - b), PACK)                                           # pack
-    f.px([(x, 22 - b) for x in range(7, 15)], PACK[2]); f.part(box(7, 23 - b, 14, 25 - b, False), PACK, outline=False); f.px([(10, 25 - b), (11, 25 - b)], r('flower_y', 2))
+    f.px([(x, 21 - b) for x in range(7, 15)], PACK[2]); f.part(box(7, 22 - b, 14, 25 - b, False), PACK, outline=False); f.px([(10, 23 - b), (11, 23 - b)], r('flower_y', 2))
     f.part(box(5, 13 - b, 16, 16 - b), ROLL); f.px([(x, 14 - b) for x in range(6, 16, 3)], ROLL[2])      # bedroll
-    f.px([(8, 26 - b), (13, 26 - b)], r('metal', 3))
-    f.part(ell(10.5, 11.5 - b, 6.4, 5.4), HAIR)
-    f.part(ell(10.5, 7.2 - b, 9.6, 2.7), HAT); f.part(box(5, 1 - b, 16, 6 - b), HAT); f.c.a[5 - b, 6:16] = r('berry', 1); f.c.a[4 - b, 6:16] = r('berry', 2)
-    f.px([(7, 2 - b), (8, 2 - b), (9, 1 - b)], HAT[0])
+    f.part(ell(10.5, 11.5 - b, 6.2, 5.6), HAIRC)
+    hair_front(f, b); f.part(ell(10.5, 12 - b, 6.2, 4.6), HAIRC, outline=False)
+    f.px([(8, 4 - b), (12, 3 - b), (10, 6 - b)], HAIRC[0])
     return f.c
 
 # ---------------------------------------------------------------- side (facing right; the engine flips for left)
-def side(lift=False, arm='rest', eyes='open', mouth='smile', dy=0, rod=None):
+def side(lift=False, arm='rest', eyes='open', mouth='none', dy=0, rod=None):
     f = Fig(); b = dy
-    # far leg first, behind
-    f.part(box(9, 26 - b, 12, 33), DENIM); f.part(box(8, 33, 14, 36), BOOT)
-    f.part(box(4, 15 - b, 9, 25 - b), PACK); f.part(box(3, 13 - b, 10, 16 - b), ROLL); f.px([(5, 14 - b), (8, 14 - b)], ROLL[2]); f.px([(4, 20 - b), (4, 21 - b)], PACK[0])
-    # near leg
+    f.part(box(9, 27 - b, 12, 34), PANTS); f.part(box(8, 33, 14, 36), BOOT)
+    f.part(box(4, 15 - b, 9, 26 - b), PACK); f.part(box(3, 13 - b, 10, 16 - b), ROLL); f.px([(5, 14 - b), (8, 14 - b)], ROLL[2]); f.px([(4, 20 - b), (4, 21 - b)], PACK[0])
     if lift:
-        f.part(box(8, 26 - b, 16, 31 - b), DENIM); f.part(box(14, 31 - b, 17, 33 - b), DENIM); f.part(box(13, 33 - b, 19, 35 - b), BOOT)
+        f.part(box(8, 27 - b, 16, 30 - b), PANTS); f.part(box(14, 30 - b, 17, 33 - b), PANTS); f.part(box(13, 33 - b, 19, 35 - b), BOOT)
     else:
-        f.part(box(8, 26 - b, 13, 33), DENIM); f.part(box(7, 33, 14, 36), BOOT); f.px([(8, 36), (9, 36), (10, 36)], BOOT[2])
-    f.part(box(6, 17 - b, 14, 27 - b), COAT); f.px([(7, y) for y in range(18 - b, 24 - b)], COAT[0]); f.c.a[25 - b, 6:15] = BOOT[1]
-    f.part(box(8, 16 - b, 14, 18 - b), SCARF); f.part(box(5, 17 - b, 7, 21 - b), SCARF)
-    # head, facing right
-    f.part(ell(10, 12.5 - b, 5.6, 5.4), SKIN); f.part(ell(7.4, 11.5 - b, 2.8, 4.6), HAIR, outline=False)
-    f.part(box(15, 13 - b, 16, 14 - b, False), SKIN, shade=False)                       # nose
+        f.part(box(8, 27 - b, 13, 34), PANTS); f.part(box(7, 33, 14, 36), BOOT); f.px([(8, 36), (9, 36), (10, 36)], BOOT[2])
+    f.part(box(6, 17 - b, 14, 27 - b), SHIRT); f.part(box(6, 17 - b, 13, 27 - b, False), VEST); f.c.line(6, 18 - b, 13, 25 - b, STRAP[1])
+    f.c.a[26 - b, 6:15] = BOOT[1]
+    f.part(box(8, 16 - b, 14, 18 - b), NECK)
+    f.part(ell(10, 13 - b, 5.8, 5.6), SKIN)
+    f.part(ell(8.4, 7.6 - b, 6.2, 5.0), HAIRC); f.part(ell(6.8, 11 - b, 3.0, 4.2), HAIRC, outline=False); f.px([(6, 2 - b), (9, 1 - b), (12, 2 - b)], HAIRC[0])
+    f.part(ell(11.4, 8.6 - b, 4.0, 1.9), HAIRC, outline=False)                          # fringe
+    f.part(box(15, 13 - b, 16, 14 - b, False), SKIN, shade=False)
     ey = 12 - b
-    if eyes == 'open': f.px([(13, ey), (14, ey), (13, ey + 1), (14, ey + 1)], EYE); f.px([(13, ey)], WHITE)
+    if eyes == 'open': f.px([(13, ey), (14, ey), (13, ey + 1), (14, ey + 1)], EYE); f.px([(13, ey)], WHITE); f.px([(13, ey - 2), (14, ey - 2)], HAIRC[2])
     elif eyes == 'closed': f.px([(13, ey + 1), (14, ey + 1)], EYE)
     elif eyes == 'hurt': f.px([(13, ey), (14, ey + 1), (14, ey), (13, ey + 1)], EYE)
     if mouth == 'open': f.px([(14, 15 - b), (14, 16 - b)], MOUTH)
-    f.part(ell(11, 7.2 - b, 9.6, 2.7), HAT); f.part(box(6, 1 - b, 16, 6 - b), HAT); f.c.a[5 - b, 7:16] = r('berry', 1); f.c.a[4 - b, 7:16] = r('berry', 2); f.px([(8, 2 - b), (9, 2 - b), (10, 1 - b)], HAT[0])
-    # near arm
-    if arm == 'rest': f.part(box(8, 18 - b, 11, 24 - b), COAT); f.part(ell(10, 26 - b, 2, 2), SKIN)
-    elif arm == 'back': f.part(box(6, 19 - b, 9, 25 - b), COAT); f.part(ell(7.5, 27 - b, 2, 2), SKIN)
-    elif arm == 'fwd': f.part(box(11, 19 - b, 15, 23 - b), COAT); f.part(ell(16, 23.5 - b, 2, 2), SKIN)
+    if arm == 'rest': f.part(box(8, 18 - b, 11, 21 - b), SHIRT); f.part(box(8, 22 - b, 11, 24 - b, False), SKIN); f.part(ell(10, 26 - b, 2, 2), SKIN)
+    elif arm == 'back': f.part(box(6, 19 - b, 9, 22 - b), SHIRT); f.part(box(6, 23 - b, 9, 25 - b, False), SKIN); f.part(ell(7.5, 27 - b, 2, 2), SKIN)
+    elif arm == 'fwd': f.part(box(11, 19 - b, 15, 22 - b), SHIRT); f.part(box(13, 22 - b, 16, 24 - b, False), SKIN); f.part(ell(16.5, 23.5 - b, 2, 2), SKIN)
     if rod: f.c.line(*rod[0], *rod[1], r('wood', 3)); f.c.put(*rod[1], r('wood', 4))
     return f.c
 
@@ -193,7 +201,7 @@ def action(kind, k):
 
 def sleep(k):
     f = Fig(); f.part(ell(11, 30, 10, 5), COAT); f.part(box(6, 24, 15, 27), ROLL)
-    f.part(ell(5, 29, 3.2, 3.2), SKIN); f.part(ell(5, 27, 4, 2.2), HAT); f.px([(3, 30), (6, 30)], EYE); f.px([(4, 32 - k)], MOUTH)
+    f.part(ell(5, 29, 3.2, 3.2), SKIN); f.part(ell(5, 27, 4, 2.4), HAIRC); f.px([(3, 30), (6, 30)], EYE); f.px([(4, 32 - k)], MOUTH)
     f.px([(17, 24 - 3 * k - 0)], r('flower_w', 2)); return f.c
 
 def squash(c):
