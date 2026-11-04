@@ -8,42 +8,42 @@
   {
    "name": "moves W",
    "ok": true,
-   "detail": "94.5 px"
+   "detail": "93.4 px"
   },
   {
    "name": "moves N",
    "ok": true,
-   "detail": "94.5 px"
+   "detail": "94.1 px"
   },
   {
    "name": "moves S",
    "ok": true,
-   "detail": "94.1 px"
+   "detail": "94.5 px"
   },
   {
    "name": "moves NE",
    "ok": true,
-   "detail": "94.5 px"
+   "detail": "95.1 px"
   },
   {
    "name": "moves NW",
    "ok": true,
-   "detail": "95.0 px"
+   "detail": "93.7 px"
   },
   {
    "name": "moves SE",
    "ok": true,
-   "detail": "93.7 px"
+   "detail": "94.5 px"
   },
   {
    "name": "moves SW",
    "ok": true,
-   "detail": "95.0 px"
+   "detail": "94.5 px"
   },
   {
    "name": "diagonal speed == cardinal speed",
    "ok": true,
-   "detail": "cardinal 94.4 px, diagonal 94.5 px over 1.5 s"
+   "detail": "cardinal 94.1 px, diagonal 94.5 px over 1.5 s"
   },
   {
    "name": "stops without sliding",
@@ -58,7 +58,7 @@
   {
    "name": "blocked by pond",
    "ok": true,
-   "detail": "stopped at x=552.5 walking east into the pond (bank near 548)"
+   "detail": "stopped at x=567.5 walking east into the pond (bank near 548)"
   },
   {
    "name": "blocked by tent",
@@ -103,7 +103,7 @@
   {
    "name": "in front of oak trunk: fully visible",
    "ok": true,
-   "detail": "99% visible"
+   "detail": "100% visible"
   },
   {
    "name": "behind foreground canopy: hidden",
@@ -177,7 +177,7 @@
   {
    "name": "frame cost (software Chromium, 640x360 at 3x)",
    "ok": true,
-   "detail": "16.4 ms/frame"
+   "detail": "20.0 ms/frame"
   },
   {
    "name": "no page errors",

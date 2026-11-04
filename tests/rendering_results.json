@@ -18,32 +18,32 @@
   {
    "name": "canopy tone changes between neighbouring pixels stay low (≤ 16% including the outline; was 21-40%)",
    "ok": true,
-   "detail": "15.6%, canopy covers 35% of the map"
+   "detail": "15.5%, canopy covers 35% of the map"
   },
   {
    "name": "shadow field is soft: the biggest step between neighbouring pixels is small (≤ 0.22; a dithered edge jumps by 0.55-1)",
    "ok": true,
-   "detail": "max step 0.143, 53673 px of shade"
+   "detail": "max step 0.143, 58853 px of shade"
   },
   {
    "name": "no isolated shadow specks, and the long (evening) shade is no more than ~1.6x the noon shade",
    "ok": true,
-   "detail": "0 specks; noon 25901 px, long 37207 px"
+   "detail": "0 specks; noon 27973 px, long 40202 px"
   },
   {
    "name": "a calm still scene changes under 1.5% of its pixels per quarter second (the fire and breeze only)",
    "ok": true,
-   "detail": "calm 0.56%, breezy 0.93%"
+   "detail": "calm 0.56%, breezy 1.11%"
   },
   {
    "name": "pond rows agree with their neighbours (no striping; ≤ 6% of pixels differ sharply from the row above)",
    "ok": true,
-   "detail": "4.1%"
+   "detail": "3.6%"
   },
   {
    "name": "night still runs at 240 game-min per real-min; midday runs at about 93",
    "ok": true,
-   "detail": "noon 93.0, night 240.0"
+   "detail": "noon 93.8, night 233.2"
   },
   {
    "name": "spring daylight lasts about 8 real minutes (420-540 s) and a whole day about 11",

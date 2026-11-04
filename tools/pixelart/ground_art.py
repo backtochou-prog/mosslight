@@ -156,8 +156,9 @@ def path_pass(c, seed=19):
     _dirt_marks(a, inner1, inner3, inner5, seed)
     # 2. pebbles: small, lit on top, shaded below; more of them at the margins than in the middle
     def pebble(x, y, big):
-        pts = ([(0, 0, PB[2]), (1, 0, PB[1]), (0, 1, PB[1]), (1, 1, PB[0])] if not big else
-               [(1, 0, PB[2]), (2, 0, PB[1]), (0, 1, PB[2]), (1, 1, PB[1]), (2, 1, PB[1]), (3, 1, PB[0]), (1, 2, PB[0]), (2, 2, PB[0])])
+        S_ = (E[4], E[3], E[1])                                    # warm grey-brown stones, the colour of the path's own grit
+        pts = ([(0, 0, S_[0]), (1, 0, S_[1]), (0, 1, S_[1]), (1, 1, S_[2])] if not big else
+               [(1, 0, S_[0]), (2, 0, S_[1]), (0, 1, S_[0]), (1, 1, S_[1]), (2, 1, S_[1]), (3, 1, S_[2]), (1, 2, S_[2]), (2, 2, S_[2])])
         if all(0 <= x + dx < W and 0 <= y + dy < H and inner1[y + dy, x + dx] for dx, dy, _ in pts):
             for dx, dy, col in pts: a[y + dy, x + dx] = col
             if y + 3 < H and inner1[y + 2 + (1 if big else 0), x + 1]: a[y + 2 + (1 if big else 0), x + 1] = D[2]
@@ -212,6 +213,7 @@ def camp_ground(cx, cy, rx, ry, seed=5, fire=None, links=()):
             x, y = int(xs[k]), int(ys[k]); dd = depth[y, x]
             g = value_noise(x, y, 6.0, seed + 3)
             if dd > 0.72 and g > 0.86 - (dd - 0.72) * 1.2: a[y, x] = G[3] if g < 0.93 else G[2]      # stubborn grass islands
+        edge_cleanup(c)
         dm = mask & np.isin(a, D)
         _dirt_marks(a, _erode(dm, 1), _erode(dm, 3), _erode(dm, 6), seed + 30)
         # the lip: dirt meeting grass is a shade darker, and blades lean in over it
@@ -229,7 +231,7 @@ def camp_ground(cx, cy, rx, ry, seed=5, fire=None, links=()):
         for _ in range(int(rx * ry / 220)):
             x = int(cx + (rng.random() * 2 - 1) * rx * 0.85); y = int(cy + (rng.random() * 2 - 1) * ry * 0.85)
             if 0 < x < W - 3 and 0 < y < H - 3 and dm[y:y + 2, x:x + 2].all() and depth[y, x] > 0.45:
-                a[y, x] = PB[2]; a[y, x + 1] = PB[1]; a[y + 1, x] = PB[1]; a[y + 1, x + 1] = PB[0]; a[y + 2, x + 1] = D[2]
+                a[y, x] = E[4]; a[y, x + 1] = E[3]; a[y + 1, x] = E[3]; a[y + 1, x + 1] = E[1]; a[y + 2, x + 1] = D[2]
         if fire:                                                           # ash and char spread around the pit
             fx, fy, fr = fire
             for y in range(int(fy - fr - 2), int(fy + fr) + 3):
@@ -279,3 +281,19 @@ def forest_depth(seed=13, margin=10):
         sel = layer.a != 0
         a[sel] = layer.a[sel]
     return d
+
+
+def edge_cleanup(c, passes=2):
+    """Clean material edges the way an artist tidies a block-in: a lone pixel of dirt poking into grass becomes grass,
+    a lone notch of grass bitten into dirt becomes dirt. Shapes keep their wobble but lose their pixel crumbs."""
+    a = c.a
+    dirt = np.isin(a, list(D[1:6]) + list(E))
+    gr = np.isin(a, G[1:6])
+    for _ in range(passes):
+        p = np.pad(dirt, 1)
+        n = p[:-2, 1:-1].astype(int) + p[2:, 1:-1] + p[1:-1, :-2] + p[1:-1, 2:]
+        crumb = dirt & (n <= 1) & np.pad(gr, 1)[1:-1, 1:-1]
+        a[crumb] = G[3]; dirt &= ~crumb
+        bite = gr & (n >= 3)
+        a[bite] = D[3]; dirt |= bite; gr &= ~bite
+    return c

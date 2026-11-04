@@ -43,7 +43,7 @@
   {
    "name": "sitting by the fire passes time and becomes a shared memory",
    "ok": true,
-   "detail": "When I was a chestnut I fell a very long way. Your fire is the opposite of falling. | 0.5 | true"
+   "detail": "Sparks are just fire trying to be fireflies. I read that. I didn't read that. I made it up just now. | 0.5 | true"
   },
   {
    "name": "declining is free: no activity is ever offered by the inhabitant itself, only listed when you talk",
@@ -88,7 +88,7 @@
   {
    "name": "each festival changes the place: thousands of pixels, its own lights and its own particles",
    "ok": true,
-   "detail": "{\"fest_awakening\":[8715,16,\"petals\"],\"fest_fireflies\":[1785,12,\"fireflies\"],\"fest_forgotten\":[4880,8,\"leaves\"],\"fest_silent_tide\":[1246,11,\"snowglow\"]}"
+   "detail": "{\"fest_awakening\":[8675,16,\"petals\"],\"fest_fireflies\":[1798,12,\"fireflies\"],\"fest_forgotten\":[4834,8,\"leaves\"],\"fest_silent_tide\":[1197,11,\"snowglow\"]}"
   },
   {
    "name": "festival collectibles: picked once, recorded in the journal, attendance noted",

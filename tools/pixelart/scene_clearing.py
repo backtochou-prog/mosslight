@@ -114,7 +114,7 @@ def build(lib) -> Scene:
     sc.decals.append(C.moss_patch(460, 360, 14, 5)); sc.decals.append(C.leaf_litter(472, 366, 24, 14))
     # THE LONE ROWAN — the meadow's landmark, with a flower ring at its foot
     ctx.place('rowan_0', 418, 186); sc.add(lib['flowers_b1'], 440, 198); sc.add(lib['flowers_w0'], 400, 196); sc.add(lib['tuft_1'], 426, 194)
-    sc.add(lib['branch_0'], 196, 226)                                   # a branch under the big oak, where branches fall
+    sc.add(lib['branch_0'], 236, 222)                                   # a branch fallen under the big oak, clear of the woodpile
 
     # ------------------------------------------------------------------ rules
     def species(band, tx, ty, r_):
@@ -132,7 +132,7 @@ def build(lib) -> Scene:
         if abs(tx - (29.5 + (ty - 15.5) * -0.75)) < 1.3 and 7.5 < ty < 16: return True
         return False
     C.forest_edge(ctx, clearing_dist, species, exclude=exclude, spacing=(3.1, 2.7, 2.4))   # smaller, calmer canopies: keep the forest full
-    C.understorey(ctx, clearing_dist)
+    C.understorey(ctx, clearing_dist, recipe=[('shrub_', 3, 3), ('fern_', 3, 2), ('tallgrass_', 3, 2)], n_cand=1700, spacing=1.7, band=(0.3, 2.8))      # bushes, ferns and long grass fill the gaps between edge trees
     C.pond_margin(ctx, keep=lambda x, y: not (500 < x < 600 and 250 < y < 310) and not (590 < x < 724 and 330 < y < 410))
     trees = [(p.x, p.y) for p in sc.placements if 'tree' in p.sprite.tags and 'sapling' not in p.sprite.tags]
     C.path_decorate(ctx, trees)
@@ -178,8 +178,8 @@ def build(lib) -> Scene:
     sc.lights.append(Light(612, 82, 48, color=(1.0, 0.84, 0.58), intensity=0.9))
     for (x, y) in ((596, 134), (684, 124), (500, 410)): sc.lights.append(Light(x, y, 14, color=(0.55, 0.95, 1.0), intensity=0.5))
     sc.use_meadow_pass = False
-    shade_near = [(p.x, p.y + 2, max(10, p.sprite.w * 0.42), 7) for p in sc.placements if 'tree' in p.sprite.tags and 'sapling' not in p.sprite.tags]
-    sc.ground_passes = [lambda c: GA.grass_pass(c, shade_near=shade_near), GA.path_pass]
+    shade_near = [(p.x + 3, p.y + 1, max(12, p.sprite.w * 0.55), 9) for p in sc.placements if 'tree' in p.sprite.tags and 'sapling' not in p.sprite.tags]
+    sc.ground_passes = [GA.edge_cleanup, lambda c: GA.grass_pass(c, shade_near=shade_near), GA.path_pass]
     sc.playable = (32, 48, sc.W - 64, sc.H - 80)
     sc.paths = [main, branch]
     return sc

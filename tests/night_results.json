@@ -13,12 +13,12 @@
   {
    "name": "night ramps: early budget smaller than deep; creatures appear gradually",
    "ok": true,
-   "detail": "1,1,3,3,wanderer/stalker/burrower"
+   "detail": "1,1,3,3,wanderer/howler/stalker"
   },
   {
    "name": "dawn: creatures retreat gradually, not instantly",
    "ok": true,
-   "detail": "2,4.0,0"
+   "detail": "3,8.3,0"
   },
   {
    "name": "lantern extends how far you are seen",
@@ -42,12 +42,12 @@
   {
    "name": "player outpaces a Wanderer",
    "ok": true,
-   "detail": "274,100"
+   "detail": "281,100"
   },
   {
    "name": "Stalker will not enter campfire light to reach a player beside it",
    "ok": true,
-   "detail": "light,53"
+   "detail": "light,50"
   },
   {
    "name": "Stalker cycles stalk, pounce, attack, retreat",
@@ -82,7 +82,7 @@
   {
    "name": "melee: hit, damage from the tool, wear, kill, drops",
    "ok": true,
-   "detail": "1,14,true,true,2"
+   "detail": "1,14,true,true,1"
   },
   {
    "name": "drops are collected into the pack and recorded",
@@ -166,12 +166,12 @@
   {
    "name": "AI cost with 12 creatures",
    "ok": true,
-   "detail": "0.02 ms/tick"
+   "detail": "0.06 ms/tick"
   },
   {
    "name": "frame time with creatures (software Chromium)",
    "ok": true,
-   "detail": "19.4 ms"
+   "detail": "26.2 ms"
   },
   {
    "name": "real keys: L lantern, F strike, K guide, Shift sneak",

@@ -411,7 +411,7 @@ function shadeWorld(VX0, VY0, VX1, VY1, idx, night, depL, shNoon, shLong, shadeT
           if (deep > 0) { const k = deep * .22 * un; r += (14 - r) * k; g += (18 - g) * k; b += (40 - b) * k; }
           const kb = ambK * un; if (kb > 0) { const f = 1 - kb * .9; r *= f; g *= f; b *= f * 1.04; } } }
       const ck = CLS[ix];
-      if (shadowOn) { const fa = shNoon[i], fb = shLong[i], f = (fa + (fb - fa) * longW) * shadowStrength; if (f > .012 && !(ck & 4)) { r *= 1 - f * .30; g *= 1 - f * .22; b *= 1 - f * .10; } }          // a cool, soft shade that fades in and out smoothly
+      if (shadowOn) { const fa = shNoon[i], fb = shLong[i], f = (fa + (fb - fa) * longW) * shadowStrength; if (f > .012 && !(ck & 4)) { r *= 1 - f * .40; g *= 1 - f * .33; b *= 1 - f * .18; } }          // a cool, soft shade that fades in and out smoothly
       if (snowAcc > .02 && depL[i] === 0 && !(ck & 6)) { const sk = (snowAcc * .8 - .21 - fogN(FOG, x / 8, y / 8) * .55) * 3; if (sk > 0) { const k = sk > .8 ? .8 : sk; r += (snR - r) * k; g += (snG - g) * k; b += (snB - b) * k; } }          // snow settles in soft drifts   // snow settles in drifts
       if (wetDark > 0 && (ck & 2) && ((x * 7 + y * 13 + tick30) % 211) < 2) { r += 26; g += 26; b += 26; }          // rain glints on water
       if (fogA > 0 && !(ck & 4)) { const gx = (x + fogShift) / 8, gy = y / 8; const n = fogN(FOG, gx, gy) * 0.6 + fogN(FOG2, gx + tick2, gy) * 0.4;          // ground mist: a smooth, drifting blend, no dither
