@@ -109,7 +109,6 @@ def front(lift=None, hands=(0, 0), eyes='open', mouth='smile', crouch=0, dy=0):
         for x in (7, 13): f.px([(x, ey + 1), (x + 1, ey + 1)], EYE)
     elif eyes == 'hurt':
         for x in (7, 13): f.px([(x, ey), (x + 1, ey + 1)], EYE); f.px([(x + 1, ey), (x, ey + 1)], EYE)
-    f.px([(6, 14 - b), (7, 14 - b), (14, 14 - b), (15, 14 - b)], CHEEK)
     f.px([(10, 13 - b)], SKIN[2])
     if mouth == 'open': f.px([(10, 15 - b), (11, 15 - b), (10, 16 - b), (11, 16 - b)], MOUTH)
     # hat: wide soft brim, rounded crown, red band
@@ -162,7 +161,6 @@ def side(lift=False, arm='rest', eyes='open', mouth='smile', dy=0, rod=None):
     if eyes == 'open': f.px([(13, ey), (14, ey), (13, ey + 1), (14, ey + 1)], EYE); f.px([(13, ey)], WHITE)
     elif eyes == 'closed': f.px([(13, ey + 1), (14, ey + 1)], EYE)
     elif eyes == 'hurt': f.px([(13, ey), (14, ey + 1), (14, ey), (13, ey + 1)], EYE)
-    f.px([(12, 14 - b), (13, 14 - b)], CHEEK)
     if mouth == 'open': f.px([(14, 15 - b), (14, 16 - b)], MOUTH)
     f.part(ell(11, 7.2 - b, 9.6, 2.7), HAT); f.part(box(6, 1 - b, 16, 6 - b), HAT); f.c.a[5 - b, 7:16] = r('berry', 1); f.c.a[4 - b, 7:16] = r('berry', 2); f.px([(8, 2 - b), (9, 2 - b), (10, 1 - b)], HAT[0])
     # near arm
