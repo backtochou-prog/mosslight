@@ -881,11 +881,11 @@
   "trunk_top": null
  },
  "campfire": {
-  "w": 48,
-  "h": 44,
+  "w": 29,
+  "h": 27,
   "origin": [
-   25,
-   41
+   15,
+   25
   ],
   "shadow": null,
   "tags": [
@@ -898,11 +898,11 @@
   "trunk_top": null
  },
  "campfire_unlit": {
-  "w": 48,
-  "h": 44,
+  "w": 29,
+  "h": 27,
   "origin": [
-   25,
-   41
+   15,
+   25
   ],
   "shadow": null,
   "tags": [
@@ -915,11 +915,11 @@
   "trunk_top": null
  },
  "campfire_embers": {
-  "w": 48,
-  "h": 44,
+  "w": 29,
+  "h": 27,
   "origin": [
-   25,
-   41
+   15,
+   25
   ],
   "shadow": null,
   "tags": [
