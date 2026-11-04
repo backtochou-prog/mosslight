@@ -7,7 +7,7 @@
   "mood": "morning",
   "want": "morning",
   "layers": {},
-  "render_ms": 1466
+  "render_ms": 697
  },
  "mood_day": {
   "peak": 0.2591,
@@ -17,7 +17,7 @@
   "mood": "day",
   "want": "day",
   "layers": {},
-  "render_ms": 1511
+  "render_ms": 666
  },
  "mood_sunset": {
   "peak": 0.2769,
@@ -27,7 +27,7 @@
   "mood": "sunset",
   "want": "sunset",
   "layers": {},
-  "render_ms": 1431
+  "render_ms": 660
  },
  "mood_night": {
   "peak": 0.1915,
@@ -37,7 +37,7 @@
   "mood": "night",
   "want": "night",
   "layers": {},
-  "render_ms": 1823
+  "render_ms": 624
  },
  "mood_danger": {
   "peak": 0.2062,
@@ -47,7 +47,7 @@
   "mood": "danger",
   "want": "danger",
   "layers": {},
-  "render_ms": 1647
+  "render_ms": 608
  },
  "mood_shelter": {
   "peak": 0.2655,
@@ -57,7 +57,7 @@
   "mood": "shelter",
   "want": "shelter",
   "layers": {},
-  "render_ms": 1630
+  "render_ms": 659
  },
  "mood_fishing": {
   "peak": 0.159,
@@ -67,7 +67,7 @@
   "mood": "fishing",
   "want": "fishing",
   "layers": {},
-  "render_ms": 865
+  "render_ms": 480
  },
  "mood_winter": {
   "peak": 0.1597,
@@ -77,7 +77,7 @@
   "mood": "winter",
   "want": "winter",
   "layers": {},
-  "render_ms": 1218
+  "render_ms": 554
  },
  "mood_fest_awakening": {
   "peak": 0.2287,
@@ -87,7 +87,7 @@
   "mood": "fest_awakening",
   "want": "fest_awakening",
   "layers": {},
-  "render_ms": 1315
+  "render_ms": 666
  },
  "mood_fest_fireflies": {
   "peak": 0.2257,
@@ -97,7 +97,7 @@
   "mood": "fest_fireflies",
   "want": "fest_fireflies",
   "layers": {},
-  "render_ms": 1032
+  "render_ms": 640
  },
  "mood_fest_forgotten": {
   "peak": 0.1776,
@@ -107,7 +107,7 @@
   "mood": "fest_forgotten",
   "want": "fest_forgotten",
   "layers": {},
-  "render_ms": 1372
+  "render_ms": 710
  },
  "mood_fest_silent_tide": {
   "peak": 0.1715,
@@ -117,7 +117,7 @@
   "mood": "fest_silent_tide",
   "want": "fest_silent_tide",
   "layers": {},
-  "render_ms": 957
+  "render_ms": 683
  },
  "amb_spring_day_meadow": {
   "peak": 0.0429,
@@ -140,7 +140,7 @@
    "thunder": 0,
    "fire": 0
   },
-  "render_ms": 643
+  "render_ms": 451
  },
  "amb_summer_dusk_pond": {
   "peak": 0.2668,
@@ -163,7 +163,7 @@
    "thunder": 0,
    "fire": 0
   },
-  "render_ms": 771
+  "render_ms": 445
  },
  "amb_autumn_rain_tent": {
   "peak": 0.1767,
@@ -186,7 +186,7 @@
    "thunder": 0,
    "fire": 0
   },
-  "render_ms": 869
+  "render_ms": 574
  },
  "amb_winter_night_wind": {
   "peak": 0.1625,
@@ -209,7 +209,7 @@
    "thunder": 0,
    "fire": 0
   },
-  "render_ms": 956
+  "render_ms": 524
  },
  "amb_campfire_night": {
   "peak": 0.3545,
@@ -232,7 +232,7 @@
    "thunder": 0,
    "fire": 0.3827
   },
-  "render_ms": 650
+  "render_ms": 570
  },
  "xfade_day_to_danger": {
   "peak": 0.276,
@@ -241,7 +241,7 @@
   "seconds": 16,
   "mood": "danger",
   "layers": {},
-  "render_ms": 1361
+  "render_ms": 1091
  },
  "xfade_day_to_sunset": {
   "peak": 0.2723,
@@ -250,18 +250,18 @@
   "seconds": 16,
   "mood": "sunset",
   "layers": {},
-  "render_ms": 1752
+  "render_ms": 985
  },
  "sfx_sheet": {
-  "peak": 0.6966,
-  "rms": 0.03366,
-  "centroid_hz": 1600,
+  "peak": 0.7056,
+  "rms": 0.03286,
+  "centroid_hz": 1742,
   "seconds": 38.4,
   "mood": "day",
   "layers": {},
   "played": 59,
   "count": 59,
-  "render_ms": 2257
+  "render_ms": 1626
  },
  "_crossfade": {
   "xfade_day_to_danger": {

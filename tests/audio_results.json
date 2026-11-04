@@ -97,7 +97,7 @@
  {
   "name": "sfx_sheet: no clipping (peak < 0.95)",
   "ok": true,
-  "detail": 0.6966
+  "detail": 0.7056
  },
  {
   "name": "mood_morning: not silent (rms > 0.002)",
@@ -197,7 +197,7 @@
  {
   "name": "sfx_sheet: not silent (rms > 0.002)",
   "ok": true,
-  "detail": 0.03366
+  "detail": 0.03286
  },
  {
   "name": "mood_morning: world state selects mood 'morning'",
@@ -307,7 +307,7 @@
  {
   "name": "settings persist to localStorage mosslight.audio",
   "ok": true,
-  "detail": "{\"master\":0.8,\"music\":0.3,\"ambient\":0.7,\"sfx\":0.8,\"ui\":0.5,\"creatures\":0.8,\"muted\":true,\"reduceRepetition\":false}"
+  "detail": "{\"master\":0.8,\"music\":0.3,\"ambient\":0.7,\"sfx\":0.8,\"ui\":0.5,\"creatures\":0.8,\"muted\":true,\"musicMuted\":false,\"reduceRepetition\":false}"
  },
  {
   "name": "a broken or empty world never throws and still picks a mood",
