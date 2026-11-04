@@ -344,10 +344,10 @@
 "characters": {
 "ebb": {
 "id": "ebb",
-"name": "Ebb",
-"species": "Pond elder",
-"epithet": "Keeper of the pond",
-"communication": "speech, slow, in water images",
+"name": "Nera",
+"species": "Pond-dweller",
+"epithet": "Keeper of the Pond",
+"communication": "dry, exact, practical",
 "sprite": "ebb",
 "frames": {
 "idle": [
@@ -383,40 +383,56 @@
 "shared_catch": 1.4,
 "promise_broken": 1.2
 },
-"appearance": "A broad, old, wet head rising from the pond, wearing a mask of grey driftwood. Duckweed fronds for gills; a lily growing on its crown.",
-"description": "Something has lived in the pond for longer than the ruin has been a ruin. It surfaces when it chooses, mostly at the edges of the day.",
-"background": "Ebb remembers the pond before the dock, and the dock before it went grey. It counts the fish the way others count days.",
-"secret": "Ebb once took bread from a child who sat on the dock every evening. It kept the child's carved fish for forty years, at the bottom of the pond.",
+"appearance": "Smooth slate-green skin, pale gold eyes, a reed-fiber sash full of chalk and little jars. She taps a jar twice before opening it and pauses to watch the pond after anyone says something difficult. When irritated, she becomes extremely polite.",
+"description": "Nera is a small, amphibious pond-dweller and the closest thing the Vale has to a water steward. She is measured, dryly funny, observant, and more comfortable fixing a practical problem than naming a feeling. Calm is a skill she practices, not an absence of worry.",
+"background": "Nera hatched in an intake basin beneath the north bank. Her first memories are of a slow drip and a red warning light. She found the pond already full of life and chose to stay.",
+"secret": "She once diverted water from a dry gully to save her own nursery pool, leaving a patch of young reeds to die. She has never told the others because she believes stewardship means being judged by every consequence.",
 "interests": [
 [
-"fish",
-"Fish, and which ones come back"
+"jars",
+"Clean jars, rain charts and warm tea"
 ],
 [
-"weather",
-"Rain, especially the first rain after a dry week"
+"stones",
+"Smooth river stones"
 ],
 [
-"old_world",
-"The people who built the pipes"
+"stored",
+"Foods that can be stored"
 ],
 [
-"quiet",
-"Quiet water"
+"sound",
+"Mapping water by sound"
 ]
 ],
 "dislikes": [
 [
-"noise",
-"Splashing for no reason"
+"waste",
+"Waste"
 ],
 [
-"given_fish",
-"Being handed its neighbours as gifts"
+"perfume",
+"Strong perfume"
+],
+[
+"mother",
+"Being called \"the pond's mother\""
 ]
 ],
 "habits": "Rises at the dock at dawn and dusk; dozes in the willow shallows through the day; reads the moon on clear nights; under the ice in winter except at noon.",
 "schedule": [
+{
+"when": {
+"milestone": "close",
+"weather": [
+"clear"
+]
+},
+"frm": 6.5,
+"to": 8.5,
+"at": "inflow",
+"act": "tasting the river where it enters the pond"
+},
 {
 "when": {
 "festival": "fest_awakening"
@@ -549,23 +565,18 @@
 "baseline": "relaxed",
 "gifts": {
 "loves": [
-"moonstone",
-"nightlily",
-"quartz",
-"starshard"
+"glass_pane",
+"glass_shard",
+"spore_jar"
 ],
 "likes": [
 "stone",
-"flint",
-"lily",
-"moss",
-"insect_bait",
-"worm"
+"quartz",
+"mint",
+"moss"
 ],
 "dislikes": [
-"cat:fish",
-"scrap_metal",
-"coal"
+"rot_fiber"
 ]
 },
 "shows": {
@@ -574,98 +585,7 @@
 ],
 "label": "Show it a fish"
 },
-"greet": [
-{
-"id": "e_first",
-"text": "Hm. A new shape on my dock. The ripples said something was coming. They exaggerate.",
-"when": {
-"met": false
-},
-"expr": "calm"
-},
-{
-"id": "e_g_dawn",
-"text": "Morning comes up out of the water here. Watch. ... There. That was it.",
-"when": {
-"period": [
-"dawn"
-]
-}
-},
-{
-"id": "e_g_dusk",
-"text": "This is the hour the pond breathes out. Stand still and you can hear it.",
-"when": {
-"period": [
-"dusk"
-]
-}
-},
-{
-"id": "e_g_rain",
-"text": "Rain! Every drop is a small visitor. I greet them all. It takes a while.",
-"when": {
-"weather": [
-"rain"
-]
-},
-"expr": "glad"
-},
-{
-"id": "e_g_night",
-"text": "The moon is on the water. I am reading it. It mostly says the same thing, but slowly.",
-"when": {
-"period": [
-"night",
-"deep"
-]
-}
-},
-{
-"id": "e_g_winter",
-"text": "Ah. The ice lets me up for an hour. Talk fast. No. Talk slow. I have an hour.",
-"when": {
-"season": [
-"winter"
-]
-}
-},
-{
-"id": "e_g_worried",
-"text": "There you are. Good. The water is thin today, and I do not like to be alone with that.",
-"when": {
-"mood": [
-"worried"
-]
-},
-"expr": "troubled"
-},
-{
-"id": "e_g_absent",
-"text": "You were gone {absent} days. The pond noticed. I said nothing. The pond is a gossip.",
-"when": {
-"absent": 4,
-"bond": "acquainted"
-},
-"w": 3
-},
-{
-"id": "e_g_plain",
-"text": "Back again. The water remembers your footsteps. So do I.",
-"when": {
-"met": true,
-"bond": "acquainted"
-}
-},
-{
-"id": "e_g_0",
-"text": "Hm.",
-"when": {
-"met": true
-},
-"w": 0.3
-}
-],
+"greet": [],
 "chat": [
 {
 "id": "e_c_rise",
@@ -1009,7 +929,7 @@
 "familiarity": 10
 },
 "talk": "The perch used to rise under the dock at dusk, seven or eight of them. Now two. I am old; maybe I count badly. Would you catch three different kinds from my pond and tell me? Not to keep. To know.",
-"journal": "Ebb wants to know which fish still live in the pond: three different kinds.",
+"journal": "Nera wants to know which fish still live in the pond: three different kinds.",
 "objective": {
 "type": "catch_distinct",
 "habitat": "pond",
@@ -1036,7 +956,7 @@
 {
 "id": "decide",
 "talk": "Rust from the old pipes. So that is it. What should be done? I am a pond. I cannot climb.",
-"journal": "Decide with Ebb what to do about the rust in the inflow.",
+"journal": "Decide with Nera what to do about the rust in the inflow.",
 "objective": {
 "type": "choice",
 "options": [
@@ -1057,7 +977,7 @@
 },
 {
 "id": "tessel",
-"text": "Tessel knows those pipes. Let me ask it.",
+"text": "Morrow knows those pipes. Let me ask it.",
 "needs_met": "tessel",
 "result": "good",
 "line": "The metal one? Hm. It talks too much and counts the wrong things. But it knows pipes. Yes. Ask.",
@@ -1144,7 +1064,7 @@
 {
 "id": "ask",
 "talk": "A child sat on the dock every evening, a long time ago. They carved me a fish. I kept it at the bottom of the pond for forty years. Last spring I could not find it. The silt moved. Only a hook could reach where it went. Fish from the platform at dusk. Bring it up, if it wants to come.",
-"journal": "Fish from the platform at dusk: somewhere down there is the carved fish Ebb lost.",
+"journal": "Fish from the platform at dusk: somewhere down there is the carved fish Nera lost.",
 "objective": {
 "type": "fish_snag",
 "habitat": "pond",
@@ -1271,14 +1191,613 @@
 "complete": "Some things come back."
 }
 }
+},
+"voice": "Short clauses, precise nouns, little ornament. She asks practical questions that are really emotional ones: \"Did you eat?\" means \"Are you looking after yourself?\" Humor is understated and often arrives after a beat. Never grand or mystical.",
+"story": {
+"Wants, fears, contradictions": "Wants a pond that can care for itself and permission to be cared for in turn. Fears an invisible contamination she cannot detect until too late. Dreams of seeing the river mouth. She insists no one owns the water, yet keeps a private map of every channel. Her vulnerability is guilt disguised as competence.",
+"Relationships": "Respects Rootbound Elder's patience but thinks the Elder waits too long to act. Trades useful notes with the Mechanical Wanderer, whom she distrusts around the intake pipe. Finds Little Forager exhausting and secretly enjoys the company. The Lantern Keeper is the one person who can make Nera accept help without arguing. Nera thinks the Dreaming Creature needs more water and fewer theories.",
+"Player relationship": "First meeting: courteous and guarded; asks the player not to drink from the north bank until she checks it. Familiarity: shares useful routes and notices whether the player is tired. Friendship: admits her water diversion and asks what repair should mean when the past cannot be undone. Deep trust: invites the player to the river mouth, without asking them to promise to return.",
+"Story arc": "Nera learns that responsibility is not the same as solitary control. Her arc begins with a hidden mistake and resolves when she tells the community what happened, then works with them to restore the gully. The outcome is not a perfect repair; it is shared knowledge and a living wetland that grows back differently."
+},
+"ex": [
+{
+"id": "ebb.1",
+"n": 1,
+"p": "topic",
+"tag": "Morning",
+"turns": [
+[
+"p",
+"Up early?"
+],
+[
+"n",
+"The pond was up earlier. I lost the argument."
+]
+],
+"w": {
+"hour": [
+5,
+10
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "ebb.2",
+"n": 2,
+"p": "talk",
+"tag": "Daytime",
+"turns": [
+[
+"n",
+"If you see a jar with a blue thread, don't open it. It contains a smell I haven't named yet."
+],
+[
+"p",
+"Is that dangerous?"
+],
+[
+"n",
+"Mostly to my confidence."
+]
+],
+"w": {
+"hour": [
+9,
+17
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "ebb.3",
+"n": 3,
+"p": "topic",
+"tag": "Evening",
+"turns": [
+[
+"p",
+"How was the water?"
+],
+[
+"n",
+"Wet. A little proud of itself. The usual."
+]
+],
+"w": {
+"hour": [
+17,
+22
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "ebb.4",
+"n": 4,
+"p": "talk",
+"tag": "Rain",
+"turns": [
+[
+"n",
+"Rain makes every channel look like it has a plan. Give it an hour. It doesn't."
+]
+],
+"w": {
+"weather": [
+"rain"
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "ebb.5",
+"n": 5,
+"p": "topic",
+"tag": "Winter",
+"turns": [
+[
+"p",
+"The pond's gone quiet."
+],
+[
+"n",
+"Under the skin, it's busy. Ice is just a lid with poor manners."
+]
+],
+"w": {
+"season": [
+"winter"
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "ebb.6",
+"n": 6,
+"p": "talk",
+"tag": "Quiet moment",
+"turns": [
+[
+"n",
+"That beetle has been trying to climb the same reed for ten minutes."
+],
+[
+"p",
+"Should we help?"
+],
+[
+"n",
+"It hasn't asked. I respect that."
+]
+],
+"w": {},
+"req": [],
+"once": false,
+"weight": 0.7
+},
+{
+"id": "ebb.7",
+"n": 7,
+"p": "topic",
+"tag": "Comfort",
+"turns": [
+[
+"p",
+"I made a mess of things."
+],
+[
+"n",
+"Then we have a mess. Sit down. We can decide what it means after you've eaten."
+]
+],
+"w": {
+"player_low": true
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "ebb.8",
+"n": 8,
+"p": "topic",
+"tag": "Funny",
+"turns": [
+[
+"p",
+"Do fish sleep?"
+],
+[
+"n",
+"Yes."
+],
+[
+"p",
+"How can you tell?"
+],
+[
+"n",
+"They stop judging my posture."
+]
+],
+"w": {
+"bond": "acquainted"
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "ebb.9",
+"n": 9,
+"p": "talk",
+"tag": "Vulnerable",
+"turns": [
+[
+"n",
+"I keep checking the north bank. There's nothing wrong today."
+],
+[
+"p",
+"And yesterday?"
+],
+[
+"n",
+"Yesterday I checked it twelve times. I don't recommend keeping score."
+]
+],
+"w": {
+"bond": "friendly"
+},
+"req": [],
+"once": true,
+"weight": 1.0
+},
+{
+"id": "ebb.10",
+"n": 10,
+"p": "topic",
+"tag": "Disagreement",
+"turns": [
+[
+"p",
+"You can't control every drop."
+],
+[
+"n",
+"I know. I dislike hearing accurate things when I'm busy."
+]
+],
+"w": {
+"bond": "friendly"
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "ebb.11",
+"n": 11,
+"p": "talk",
+"tag": "Affection",
+"turns": [
+[
+"n",
+"I set out two cups. It wasn't a test. I just hoped you'd be here."
+]
+],
+"w": {
+"bond": "close"
+},
+"req": [],
+"once": true,
+"weight": 1.0
+},
+{
+"id": "ebb.12",
+"n": 12,
+"p": "topic",
+"tag": "Loneliness",
+"turns": [
+[
+"p",
+"Do you ever get lonely?"
+],
+[
+"n",
+"The pond is full of life. That isn't the same as having someone notice you left the bank."
+]
+],
+"w": {
+"bond": "friendly"
+},
+"req": [],
+"once": true,
+"weight": 1.0
+},
+{
+"id": "ebb.13",
+"n": 13,
+"p": "meet",
+"tag": "New — first meeting",
+"turns": [
+[
+"n",
+"Stop there, please. North-bank water isn't checked yet."
+],
+[
+"p",
+"I was just looking."
+],
+[
+"n",
+"Good. Looking is safe. Drinking is a separate decision."
+]
+],
+"w": {},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "ebb.14",
+"n": 14,
+"p": "talk",
+"tag": "Familiar",
+"turns": [
+[
+"n",
+"You remembered the clean jar."
+],
+[
+"p",
+"You asked."
+],
+[
+"n",
+"People remember the dramatic requests. I appreciate the boring ones."
+]
+],
+"w": {
+"bond": "acquainted"
+},
+"req": [
+"flag:jar_asked",
+"gave:clean_glass"
+],
+"once": true,
+"weight": 4
+},
+{
+"id": "ebb.15",
+"n": 15,
+"p": "beat",
+"tag": "Friend",
+"turns": [
+[
+"n",
+"I have a map of the channels. It is not a map of ownership."
+],
+[
+"p",
+"Then why hide it?"
+],
+[
+"n",
+"Because I wrote one channel in red. I wanted the page to look less like blame."
+]
+],
+"w": {
+"bond": "friendly"
+},
+"req": [],
+"once": true,
+"weight": 1.0,
+"label": "Watch the water with Nera"
+},
+{
+"id": "ebb.16",
+"n": 16,
+"p": "beat",
+"tag": "Deep Trust — revelation",
+"turns": [
+[
+"n",
+"I diverted the gully water to save my hatch pool. The reeds downstream died."
+],
+[
+"p",
+"You were trying to save someone."
+],
+[
+"n",
+"Yes. That doesn't put the reeds back."
+],
+[
+"p",
+"No. But we can tell the others and try."
+],
+[
+"n",
+"Stay while I say it. I don't want to make it sound smaller."
+]
+],
+"w": {
+"bond": "close"
+},
+"req": [
+"seen:ebb.15"
+],
+"once": true,
+"weight": 1.0,
+"label": "Stay with Nera while she says something",
+"sets": [
+"flag:confessed"
+]
+},
+{
+"id": "ebb.17",
+"n": 17,
+"p": "topic",
+"tag": "Discovery — pond intake",
+"turns": [
+[
+"p",
+"There's a pipe under the north bank."
+],
+[
+"n",
+"I know. I was hoping it was an old root."
+],
+[
+"p",
+"Roots usually don't have bolts."
+],
+[
+"n",
+"You'd be surprised what this pond has tried."
+]
+],
+"w": {},
+"req": [
+"disc:intake"
+],
+"once": true,
+"weight": 1.0
+},
+{
+"id": "ebb.18",
+"n": 18,
+"p": "talk",
+"tag": "Discovery — river mouth",
+"turns": [
+[
+"n",
+"It smells different here."
+],
+[
+"p",
+"Good different?"
+],
+[
+"n",
+"Unfamiliar. That will have to be good enough for today."
+]
+],
+"w": {
+"at": [
+"inflow"
+]
+},
+"req": [
+"seen:ebb.16"
+],
+"once": true,
+"weight": 5
+},
+{
+"id": "ebb.19",
+"n": 19,
+"p": "gift",
+"tag": "Gift — clean glass",
+"turns": [
+[
+"n",
+"A jar with no cracks. A luxurious little silence."
+],
+[
+"p",
+"You like it?"
+],
+[
+"n",
+"I do. Thank you."
+]
+],
+"w": {},
+"req": [],
+"once": false,
+"weight": 1.0,
+"items": [
+"glass_pane",
+"glass_shard",
+"spore_jar"
+]
+},
+{
+"id": "ebb.22",
+"n": 22,
+"p": "talk",
+"tag": "Campfire",
+"turns": [
+[
+"n",
+"I brought tea. It tastes like bark."
+],
+[
+"p",
+"Is that the recipe?"
+],
+[
+"n",
+"It's the apology."
+]
+],
+"w": {
+"period": [
+"dusk",
+"night"
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "ebb.23",
+"n": 23,
+"p": "talk",
+"tag": "Night sound",
+"turns": [
+[
+"n",
+"That knock came from below the bank."
+],
+[
+"p",
+"Should we check?"
+],
+[
+"n",
+"In daylight. Curiosity is not improved by poor visibility."
+]
+],
+"w": {
+"period": [
+"night",
+"deep"
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "ebb.24",
+"n": 24,
+"p": "talk",
+"tag": "Danger",
+"turns": [
+[
+"n",
+"Back from the water. Slowly. It is not angry; it is startled. Those are different problems."
+]
+],
+"w": {
+"monsters_near": 1
+},
+"req": [],
+"once": false,
+"weight": 5
+},
+{
+"id": "ebb.25",
+"n": 25,
+"p": "talk",
+"tag": "Lantern Walk",
+"turns": [
+[
+"n",
+"I left a cup near the path. If no one uses it, I still had a cup to spare."
+]
+],
+"w": {
+"festival": "fest_fireflies"
+},
+"req": [],
+"once": false,
+"weight": 5
 }
+]
 },
 "pip": {
 "id": "pip",
 "name": "Pip",
-"species": "Burrling",
-"epithet": "The little forager",
-"communication": "quick speech, in fragments and tangents",
+"species": "Forager",
+"epithet": "Little Forager",
+"communication": "quick, interrupted, concrete",
 "sprite": "pip",
 "frames": {
 "idle": [
@@ -1318,40 +1837,40 @@
 "discovery": 1.4,
 "took": 1.3
 },
-"appearance": "A chestnut burr the size of a fist, on twig legs, under one enormous leaf it wears as a hat. A moss satchel full of finds.",
-"description": "Something small runs from cover to cover in the clearing, talking to itself, filling a satchel with anything that looks interesting.",
-"background": "Pip fell from a chestnut tree that no longer exists and has been collecting the world ever since, one small thing at a time.",
-"secret": "Pip's satchel holds one thing it never shows anyone: a brass button with a face on it. Pip thinks it is a very small person, asleep.",
+"appearance": "Big ears with one torn notch, a patched orange vest, pockets that smell of berries. Pip squats rather than sits and often starts a sentence while still chewing. When nervous, they count things aloud: buttons, steps, clouds.",
+"description": "Pip is a young, quick-footed creature of uncertain species, with a broad tail, dark paws, and an appetite for novelty. Curious, funny, impulsive, and occasionally tactless, Pip is the least ceremonial person in camp. They can turn almost anything into a game, including a conversation they should probably take seriously.",
+"background": "Pip remembers being small in a drainage culvert during a storm, following a warm green glimmer until it led to the pond. They have no memory of a family and have made a family out of being useful.",
+"secret": "Pip found the torn page from the weather station log but hid it after the word \"departure\" frightened them. They tell themself it is because the paper is fragile.",
 "interests": [
 [
-"mushrooms",
-"Mushrooms, especially ones that glow"
+"berries",
+"Berries, seed pods and anything that rattles"
 ],
 [
-"flowers",
-"Flowers, all of them"
+"buttons",
+"Interesting buttons"
 ],
 [
-"shiny",
-"Small interesting objects"
+"riddles",
+"Riddles with fair answers"
 ],
 [
-"north",
-"The north woods, which it has never seen"
+"names",
+"Naming bugs, then changing the names"
 ]
 ],
 "dislikes": [
 [
-"rain",
-"Getting its hat wet"
+"mushy",
+"Mushy roots"
 ],
 [
-"loud",
-"Sudden loud things"
+"shushed",
+"Being shushed"
 ],
 [
-"metal",
-"Cold metal"
+"wrapped",
+"Gifts wrapped so carefully they can't tell what they are"
 ]
 ],
 "owns": [
@@ -1513,30 +2032,21 @@
 "baseline": "curious",
 "gifts": {
 "loves": [
-"mushroom_red",
+"blackberry",
+"rowan_berry",
+"eggshell",
+"seeds_wild"
+],
+"likes": [
 "mushroom_brown",
 "feather",
 "bellflower",
-"ghostcap",
-"eggshell",
+"daisy",
 "glass_shard"
 ],
-"likes": [
-"daisy",
-"poppy",
-"yarrow",
-"seeds_wild",
-"blackberry",
-"rowan_berry",
-"moss",
-"fern_frond"
-],
 "dislikes": [
-"scrap_metal",
-"bolt",
-"iron_ingot",
-"coal",
-"nails"
+"burdock_root",
+"emberroot"
 ]
 },
 "shows": {
@@ -1547,80 +2057,7 @@
 ],
 "label": "Show it something you found"
 },
-"greet": [
-{
-"id": "p_first",
-"text": "Oh! Oh. Hello. Did you see the \u2014 no. Never mind. Hello! You're very big. That's fine. I'm Pip.",
-"when": {
-"met": false
-},
-"expr": "glad"
-},
-{
-"id": "p_g_morning",
-"text": "Morning! The rowan had eleven dew drops. I drank nine. Nine is plenty.",
-"when": {
-"period": [
-"dawn"
-]
-}
-},
-{
-"id": "p_g_rain",
-"text": "Everything is wet and my hat is wet and the hat is the whole point of the hat.",
-"when": {
-"weather": [
-"rain"
-]
-},
-"expr": "troubled"
-},
-{
-"id": "p_g_fog",
-"text": "It's so quiet in the fog. Too quiet. Can you talk? Just say things. Anything.",
-"when": {
-"weather": [
-"fog"
-]
-},
-"expr": "troubled"
-},
-{
-"id": "p_g_fire",
-"text": "Your fire is the best fire. I have only seen one other fire. Yours is better.",
-"when": {
-"at": [
-"camp_fire"
-]
-}
-},
-{
-"id": "p_g_lonely",
-"text": "You were gone {absent} days! I counted. I'm not upset. I made a pile of leaves for every day. It's a big pile.",
-"when": {
-"absent": 3,
-"bond": "acquainted"
-},
-"w": 3,
-"expr": "troubled"
-},
-{
-"id": "p_g_excited",
-"text": "Spring spring spring! Everything is coming up at once and I can only look at one thing at a time!",
-"when": {
-"mood": [
-"excited"
-]
-}
-},
-{
-"id": "p_g_plain",
-"text": "Hi! Hi. What did you find today? I found a beetle. It found me first, actually.",
-"when": {
-"met": true
-}
-}
-],
+"greet": [],
 "chat": [
 {
 "id": "p_c_mush",
@@ -1728,7 +2165,7 @@
 },
 {
 "id": "p_r_pref_fish",
-"text": "You said you love fishing \u2014 and you caught a {ctx.lastFish} today! I knew it. I knew it about you.",
+"text": "You said you love fishing — and you caught a {ctx.lastFish} today! I knew it. I knew it about you.",
 "mem": {
 "type": "told",
 "key": "favourite",
@@ -1966,7 +2403,7 @@
 "A {item}! I have seen those. Not as good as that one though."
 ],
 "rare": [
-"A {item}?! Where did you \u2014 no don't tell me. Yes tell me. No. Yes."
+"A {item}?! Where did you — no don't tell me. Yes tell me. No. Yes."
 ]
 },
 "concerns": [
@@ -2023,7 +2460,7 @@
 ],
 "practical": [
 "promise",
-"Your jar lit the whole path! I saw it \u2014 the blue moss, glowing! I sat with it until I got sleepy.|I waited for the light. I did not go."
+"Your jar lit the whole path! I saw it — the blue moss, glowing! I sat with it until I got sleepy.|I waited for the light. I did not go."
 ]
 }
 }
@@ -2252,7 +2689,7 @@
 "id": "stay",
 "text": "Stay until dark and watch the moss glow.",
 "result": "good",
-"line": "We waited. It got dark. And then \u2014 blue. All of it, blue, like the ground was full of tiny skies. I am never going to forget this. Never.",
+"line": "We waited. It got dark. And then — blue. All of it, blue, like the ground was full of tiny skies. I am never going to forget this. Never.",
 "rel": {
 "shared": 8,
 "affection": 6
@@ -2284,14 +2721,597 @@
 }
 ],
 "complete": "Whenever Pip talks about the north now, it says \"we\"."
+},
+"voice": "Fast, concrete, full of interruptions and oddly exact observations. Uses playful comparisons and self-corrections: \"I found a thing. A good thing. Unless it's a bad thing that looks good.\" Humor is spontaneous, sometimes defensive. Pip is never a tiny sage.",
+"story": {
+"Wants, fears, contradictions": "Wants to know what everything is for. Fears being the only one who doesn't know when a joke has gone too far, then fears being boring when they stop. Dreams of making a field guide nobody has to be embarrassed to read. They say they love surprises but hate being surprised by someone leaving.",
+"Relationships": "Admires Nera's jars but cannot resist touching them. Tries to make the Lantern Keeper laugh. Thinks Rootbound Elder is a tree who knows a lot about not moving. The Mechanical Wanderer is Pip's favorite puzzle and least favorite person to lose a race to. Pip and the Dreaming Creature share harmless nonsense and an occasional real silence.",
+"Player relationship": "First meeting: asks what the player is carrying, then offers a pebble as a \"trade.\" Familiarity: starts leaving discoveries on the camp board. Friendship: allows the player to read their field notes. Deep trust: confesses the hidden page and asks the player to stay while they read it.",
+"Story arc": "Pip moves from collecting things to deciding what deserves to be shared. They bring the hidden weather-station page to the group and help make a field guide that includes uncertainty, mistakes, and multiple names for the same creature."
+},
+"ex": [
+{
+"id": "pip.1",
+"n": 1,
+"p": "talk",
+"tag": "Morning",
+"turns": [
+[
+"n",
+"I found three berries and one berry-shaped pebble. Breakfast has a strong opening."
+]
+],
+"w": {
+"hour": [
+5,
+10
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "pip.2",
+"n": 2,
+"p": "topic",
+"tag": "Daytime",
+"turns": [
+[
+"p",
+"What are you collecting?"
+],
+[
+"n",
+"Evidence. Of what? Not sure. That's the exciting bit."
+]
+],
+"w": {
+"hour": [
+9,
+17
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "pip.3",
+"n": 3,
+"p": "talk",
+"tag": "Evening",
+"turns": [
+[
+"n",
+"Do you think crickets get tired of singing the same song?"
+],
+[
+"p",
+"Maybe."
+],
+[
+"n",
+"Good. I get tired of my songs and I only know four."
+]
+],
+"w": {
+"hour": [
+17,
+22
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "pip.4",
+"n": 4,
+"p": "talk",
+"tag": "Rain",
+"turns": [
+[
+"n",
+"Everything smells like a wet sock. A nice wet sock. Don't tell the flowers I said that."
+]
+],
+"w": {
+"weather": [
+"rain"
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "pip.5",
+"n": 5,
+"p": "talk",
+"tag": "Winter",
+"turns": [
+[
+"n",
+"My footprints look very serious in snow. Like tiny important meetings."
+]
+],
+"w": {
+"season": [
+"winter"
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "pip.6",
+"n": 6,
+"p": "talk",
+"tag": "Quiet moment",
+"turns": [
+[
+"n",
+"I'm trying to sit still."
+],
+[
+"p",
+"How's it going?"
+],
+[
+"n",
+"I have learned the ground has at least seven textures. So, badly."
+]
+],
+"w": {},
+"req": [],
+"once": false,
+"weight": 0.7
+},
+{
+"id": "pip.7",
+"n": 7,
+"p": "talk",
+"tag": "Comfort",
+"turns": [
+[
+"n",
+"I don't know what to say."
+],
+[
+"p",
+"You don't have to."
+],
+[
+"n",
+"Oh. Great. I can do that. I can be quiet at you."
+]
+],
+"w": {
+"player_low": true
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "pip.8",
+"n": 8,
+"p": "talk",
+"tag": "Funny",
+"turns": [
+[
+"n",
+"I named that beetle Captain."
+],
+[
+"p",
+"Why?"
+],
+[
+"n",
+"It looks like it has a boat. It does not. That's the joke."
+]
+],
+"w": {
+"bond": "acquainted"
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "pip.9",
+"n": 9,
+"p": "talk",
+"tag": "Vulnerable",
+"turns": [
+[
+"n",
+"Sometimes I talk fast so nobody has time to notice I don't know the answer."
+],
+[
+"p",
+"I notice."
+],
+[
+"n",
+"Yeah. You wait anyway. That's better."
+]
+],
+"w": {
+"bond": "friendly"
+},
+"req": [],
+"once": true,
+"weight": 1.0
+},
+{
+"id": "pip.10",
+"n": 10,
+"p": "talk",
+"tag": "Disagreement",
+"turns": [
+[
+"n",
+"I didn't take it. I borrowed it."
+],
+[
+"p",
+"You put it in your pocket."
+],
+[
+"n",
+"A pocket can be a temporary museum."
+],
+[
+"p",
+"Ask next time."
+],
+[
+"n",
+"…Okay. Museums need permission."
+]
+],
+"w": {
+"bond": "friendly"
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "pip.11",
+"n": 11,
+"p": "talk",
+"tag": "Affection",
+"turns": [
+[
+"n",
+"I saved you the crunchy bit. I wanted it, so that's how you know it's a big deal."
+]
+],
+"w": {
+"bond": "close"
+},
+"req": [],
+"once": true,
+"weight": 1.0
+},
+{
+"id": "pip.12",
+"n": 12,
+"p": "talk",
+"tag": "Belonging",
+"turns": [
+[
+"n",
+"I used to think a home was where you kept your stuff. Now I think it's where people let you put the weird stuff down."
+]
+],
+"w": {
+"bond": "friendly"
+},
+"req": [],
+"once": true,
+"weight": 1.0
+},
+{
+"id": "pip.13",
+"n": 13,
+"p": "meet",
+"tag": "New — first meeting",
+"turns": [
+[
+"n",
+"Are you new? You look new. Can I trade you this pebble for a question?"
+],
+[
+"p",
+"What question?"
+],
+[
+"n",
+"Good one. I have to think of it now."
+]
+],
+"w": {},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "pip.14",
+"n": 14,
+"p": "talk",
+"tag": "Familiar",
+"turns": [
+[
+"n",
+"I put your shell on the camp board."
+],
+[
+"p",
+"Why?"
+],
+[
+"n",
+"So I'd remember where I found it. I can take it down."
+],
+[
+"p",
+"You can leave it."
+],
+[
+"n",
+"Excellent. Museum open."
+]
+],
+"w": {
+"bond": "acquainted"
+},
+"req": [
+"gave:eggshell"
+],
+"once": true,
+"weight": 4
+},
+{
+"id": "pip.15",
+"n": 15,
+"p": "beat",
+"tag": "Friend",
+"turns": [
+[
+"n",
+"You can read my notes, but don't fix the spelling unless the bug's name changes."
+]
+],
+"w": {
+"bond": "friendly"
+},
+"req": [],
+"once": true,
+"weight": 1.0,
+"label": "Read Pip's field notes"
+},
+{
+"id": "pip.16",
+"n": 16,
+"p": "beat",
+"tag": "Deep Trust — hidden page",
+"turns": [
+[
+"n",
+"I found this in the root hollow. It says 'departure' and then the page stops."
+],
+[
+"p",
+"You kept it?"
+],
+[
+"n",
+"I hid it. Kept sounds like I had a plan."
+],
+[
+"p",
+"Want me to read it with you?"
+],
+[
+"n",
+"Yes. Slowly. If it says everybody left, I don't want to hear it alone."
+]
+],
+"w": {
+"bond": "close"
+},
+"req": [
+"seen:pip.15"
+],
+"once": true,
+"weight": 1.0,
+"label": "Sit with Pip",
+"sets": [
+"flag:page_read"
+]
+},
+{
+"id": "pip.19",
+"n": 19,
+"p": "gift",
+"tag": "Gift — snack",
+"turns": [
+[
+"n",
+"For me? I was just thinking about food."
+],
+[
+"p",
+"You always are."
+],
+[
+"n",
+"That is a hurtful and accurate thing to say."
+]
+],
+"w": {},
+"req": [],
+"once": false,
+"weight": 1.0,
+"items": [
+"blackberry",
+"rowan_berry"
+]
+},
+{
+"id": "pip.20",
+"n": 20,
+"p": "gift",
+"tag": "Gift — mushy root",
+"turns": [
+[
+"n",
+"Is it meant to be this soft?"
+],
+[
+"p",
+"I think so."
+],
+[
+"n",
+"I'm going to thank you with my face, which is making a brave shape."
+]
+],
+"w": {},
+"req": [],
+"once": false,
+"weight": 1.0,
+"items": [
+"burdock_root",
+"emberroot"
+]
+},
+{
+"id": "pip.21",
+"n": 21,
+"p": "talk",
+"tag": "Discovery — Glassling nest",
+"turns": [
+[
+"n",
+"It polished my button! It stole my button, then improved it. I have complicated feelings."
+]
+],
+"w": {},
+"req": [
+"world:root_door_opened"
+],
+"once": true,
+"weight": 5
+},
+{
+"id": "pip.22",
+"n": 22,
+"p": "talk",
+"tag": "Campfire",
+"turns": [
+[
+"n",
+"I have a story about a frog and a spoon."
+],
+[
+"p",
+"Is it true?"
+],
+[
+"n",
+"The spoon part is. The frog has requested privacy."
+]
+],
+"w": {
+"period": [
+"dusk",
+"night"
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "pip.23",
+"n": 23,
+"p": "talk",
+"tag": "Night sound",
+"turns": [
+[
+"n",
+"Something said my sneeze from under the ground."
+],
+[
+"p",
+"Maybe an echo."
+],
+[
+"n",
+"I hope so. I don't want to meet a better sneezer."
+]
+],
+"w": {
+"period": [
+"night",
+"deep"
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "pip.24",
+"n": 24,
+"p": "talk",
+"tag": "Danger",
+"turns": [
+[
+"n",
+"I know, I know—back away. I can do careful. I am doing careful with my whole body."
+]
+],
+"w": {
+"monsters_near": 1
+},
+"req": [],
+"once": false,
+"weight": 5
+},
+{
+"id": "pip.25",
+"n": 25,
+"p": "talk",
+"tag": "First frost custom",
+"turns": [
+[
+"n",
+"I put a button in the bowl. If someone takes it, I hope they have a shirt with a very specific problem."
+]
+],
+"w": {
+"festival": "fest_forgotten"
+},
+"req": [],
+"once": false,
+"weight": 5
 }
+]
 },
 "wick": {
 "id": "wick",
-"name": "Wick",
-"species": "Lamp moth",
-"epithet": "The lantern keeper",
-"communication": "light and gesture; it does not speak",
+"name": "Sella",
+"species": "Moth-kin",
+"epithet": "Lantern Keeper",
+"communication": "gentle, plain, offering choices",
 "sprite": "wick",
 "frames": {
 "idle": [
@@ -2306,7 +3326,6 @@
 "speed": 16,
 "solid": false,
 "talk_radius": 30,
-"gesture": true,
 "traits": {
 "caution": 0.85,
 "curiosity": 0.4,
@@ -2327,36 +3346,53 @@
 "promise_broken": 1.3,
 "witnessed": 1.2
 },
-"appearance": "Tall and narrow, wrapped in its own folded wings like a dusty coat. Where a head would be, a paper lantern with a small steady flame.",
-"description": "On some nights a small light walks the clearing that is not a lantern anyone lit.",
-"background": "Wick visits every light in the clearing at night, one by one, like someone checking on sleeping children.",
-"secret": "Wick was a moth once. It flew into the last lamp still burning in the reservoir, the night the valley flooded, and came out as this.",
+"appearance": "Dusty cream wings folded like a shawl, long antennae, amber lamp-glow eyes, tool belt with neatly sorted wicks. She rubs a thumb along the edge of a wick when thinking. She hums while working, but stops if someone is trying to speak.",
+"description": "Sella is a tall, mothlike being who maintains the old rail lamps and makes small, practical comforts. She is warm but not effusive, attentive without prying, and has an unexpectedly sharp sense of humor. She believes kindness should leave room for refusal.",
+"background": "Sella emerged in a maintenance alcove near Lantern Row. An old lamp was already burning, fed by a stubborn trickle of stored charge. She learned to trim it and eventually made the route safe.",
+"secret": "Her oldest memory includes a voice saying \"leave one dark,\" but she does not know whether it was a person or a recording. She keeps the first broken wick from that lamp in her pocket.",
 "interests": [
 [
-"light",
-"Light, every kind"
+"wax",
+"Beeswax, dry cloth and wind chimes"
 ],
 [
-"dusk_fire",
-"The light of a fire just before it goes out"
+"repairs",
+"Careful repairs"
 ],
 [
-"safety",
-"Keeping others away from dark places"
+"path",
+"Sitting where she can see the path"
+],
+[
+"flames",
+"The sounds different flames make"
 ]
 ],
 "dislikes": [
 [
-"coal",
-"Coal: \"dead light\""
+"debt",
+"Being thanked as if kindness were a debt"
 ],
 [
-"dark_door",
-"The door in the ruin"
+"flash",
+"Sudden bright flashes"
+],
+[
+"fine",
+"People who insist they are \"fine\" while bleeding"
 ]
 ],
 "habits": "Only at night. Visits your lantern after dusk, keeps watch at the ruin arch, lights the crossing after midnight. Never in rain.",
 "schedule": [
+{
+"when": {
+"after_rain": true
+},
+"frm": 15,
+"to": 19,
+"at": "pond_bank",
+"act": "setting an unlit wick on the bank"
+},
 {
 "when": {
 "festival": "fest_fireflies"
@@ -2382,7 +3418,7 @@
 "frm": 18,
 "to": 24,
 "at": "ice_hole",
-"act": "holding its lantern over the ice"
+"act": "holding her lantern over the ice"
 },
 {
 "when": {
@@ -2426,7 +3462,7 @@
 "frm": 19.5,
 "to": 24,
 "at": "camp_fire",
-"act": "warming its wings at your fire"
+"act": "warming her wings at your fire"
 },
 {
 "frm": 19.5,
@@ -2484,94 +3520,26 @@
 "baseline": "relaxed",
 "gifts": {
 "loves": [
-"lantern_moth",
-"glass_shard",
-"nightglass",
-"luminous_spores",
-"resin",
-"spore_jar"
+"hinge",
+"cloth",
+"nightlily",
+"bellflower"
 ],
 "likes": [
-"moondew",
-"starshard",
+"nails",
+"hook_iron",
+"daisy",
+"poppy",
 "quartz",
-"feather"
+"amethyst"
 ],
-"dislikes": [
-"coal",
-"mud",
-"cat:fish"
-]
+"dislikes": []
 },
-"greet": [
-{
-"id": "w_first",
-"text": "*A small light stops at the edge of the dark and looks at you. The flame inside it leans toward you, then away.* (It is deciding whether you are dangerous.)",
-"when": {
-"met": false
-},
-"expr": "calm"
-},
-{
-"id": "w_g_lantern",
-"text": "*It bends close to your lantern, flame to flame, and its own light steadies.* (It approves of your lantern.)",
-"when": {
-"lantern": true
-}
-},
-{
-"id": "w_g_dark",
-"text": "*It holds its lantern up to your face, then points at your empty hand.* (You are walking at night without a light.)",
-"when": {
-"lantern": false,
-"period": [
-"night",
-"deep"
-]
-},
-"expr": "troubled"
-},
-{
-"id": "w_g_worried",
-"text": "*Its light flickers fast, three times, toward the trees.* (Something unlit is moving out there.)",
-"when": {
-"mood": [
-"worried"
-]
-},
-"expr": "troubled"
-},
-{
-"id": "w_g_fire",
-"text": "*It settles by the fire and opens its wings a little. You see they are patterned like dusty eyes.* (It is content.)",
-"when": {
-"at": [
-"camp_fire"
-]
-}
-},
-{
-"id": "w_g_absent",
-"text": "*It brightens, slowly, all the way. Then dims back to normal, as if embarrassed.* (It missed you. {absent} nights.)",
-"when": {
-"absent": 3,
-"bond": "acquainted"
-},
-"w": 3,
-"expr": "glad"
-},
-{
-"id": "w_g_plain",
-"text": "*A slow pulse of light, the same rhythm as before.* (It recognises you.)",
-"when": {
-"met": true
-}
-}
-],
+"greet": [],
 "chat": [
 {
 "id": "w_c_dusk",
-"text": "*It points at your campfire, then makes its own flame very small and very red, then waits.* (It loves the light a fire gives just before it goes out.)",
+"text": "*She points at your campfire, then makes her own flame very small and very red, then waits.* (She loves the light a fire gives just before it goes out.)",
 "fact": "dusk_fire",
 "when": {
 "bond": "acquainted"
@@ -2580,13 +3548,13 @@
 },
 {
 "id": "w_c_door",
-"text": "*It turns toward the ruin and covers its lantern with a wing until there is no light at all.* (Do not go to the arch at night.)",
+"text": "*She turns toward the ruin and covers her lantern with a wing until there is no light at all.* (Do not go to the arch at night.)",
 "learn": "safety",
 "w": 1.5
 },
 {
 "id": "w_c_stars",
-"text": "*It holds its lantern up at the sky, then lowers it, as if comparing.* (The stars are lanterns too far away to check on.)",
+"text": "*She holds her lantern up at the sky, then lowers it, as if comparing.* (The stars are lanterns too far away to check on.)",
 "when": {
 "weather": [
 "clear"
@@ -2595,14 +3563,14 @@
 },
 {
 "id": "w_c_lamps",
-"text": "*It visits each of your lights in turn, then comes back and dips once.* (All your lights are well.)",
+"text": "*She visits each of your lights in turn, then comes back and dips once.* (All your lights are well.)",
 "when": {
 "lights": 2
 }
 },
 {
 "id": "w_c_coal",
-"text": "*At the smell of coal, its flame shrinks and turns away.* (Coal is dead light.)",
+"text": "*At the smell of coal, her flame shrinks and turns away.* (Coal is dead light.)",
 "learn": "coal",
 "when": {
 "has": "coal"
@@ -2610,7 +3578,7 @@
 },
 {
 "id": "w_c_moths",
-"text": "*Small moths come and circle its head. It does not mind. It seems to know them.*",
+"text": "*Small moths come and circle her head. She does not mind. She seems to know them.*",
 "when": {
 "season": [
 "summer"
@@ -2619,7 +3587,7 @@
 },
 {
 "id": "wick_soon_fest_fireflies",
-"text": "*It points at the pond, then opens its hands and lets a hundred small lights out of them, all imagined.* (Soon.)",
+"text": "*She points at the pond, then opens her hands and lets a hundred small lights out of them, all imagined.* (Soon.)",
 "when": {
 "festival_soon": "fest_fireflies"
 },
@@ -2630,7 +3598,7 @@
 "recall": [
 {
 "id": "w_r_protected",
-"text": "*It shows you, with its light, the shape of the thing you drove off that night, and then your shape, standing between.* (It remembers that you protected it.)",
+"text": "*She shows you, with her light, the shape of the thing you drove off that night, and then your shape, standing between.* (She remembers that you protected her.)",
 "mem": {
 "type": "protected",
 "min_age": 0
@@ -2640,7 +3608,7 @@
 },
 {
 "id": "w_r_fact",
-"text": "*It looks at the low red embers of your fire, then at you, a long time.* (You remembered what it loves.)",
+"text": "*She looks at the low red embers of your fire, then at you, a long time.* (You remembered what she loves.)",
 "mem": {
 "type": "fact_mentioned",
 "min_age": 0
@@ -2650,7 +3618,7 @@
 },
 {
 "id": "w_r_light_kept",
-"text": "*It flies to the light you set by the arch and circles it twice.* (The light by the door still burns. It checks on it every night.)",
+"text": "*She flies to the light you set by the arch and circles it twice.* (The light by the door still burns. She checks on it every night.)",
 "mem": {
 "type": "promise_kept",
 "min_age": 0
@@ -2659,7 +3627,7 @@
 },
 {
 "id": "w_r_broken",
-"text": "*It goes to the arch, where a light was supposed to be, and stays there with its back to you.*",
+"text": "*She goes to the arch, where a light was supposed to be, and stays there with her back to you.*",
 "mem": {
 "type": "promise_broken",
 "min_age": 0
@@ -2669,7 +3637,7 @@
 },
 {
 "id": "w_r_gift",
-"text": "*It turns the {mem.itemName} you gave it this way and that in its own light.* (It still has it.)",
+"text": "*She turns the {mem.itemName} you gave her this way and that in her own light.* (She still has it.)",
 "mem": {
 "type": "gift_loved",
 "min_age": 1
@@ -2678,7 +3646,7 @@
 },
 {
 "id": "w_r_fear",
-"text": "*It remembers what you said about the dark. It makes its light a little brighter on your side.*",
+"text": "*She remembers what you said about the dark. She makes her light a little brighter on your side.*",
 "mem": {
 "type": "told",
 "key": "dark"
@@ -2687,7 +3655,7 @@
 },
 {
 "id": "w_r_advice",
-"text": "*It shows you, in light, the choice you advised.* ({mem.adviceShort}.) {mem.outcomeText}",
+"text": "*She shows you, in light, the choice you advised.* ({mem.adviceShort}.) {mem.outcomeText}",
 "mem": {
 "type": "advice_outcome",
 "min_age": 0
@@ -2696,7 +3664,7 @@
 },
 {
 "id": "w_r_fest",
-"text": "*It shows you the {mem.detailText} in light, and you in it.* (It remembers you were there.)",
+"text": "*She shows you the {mem.detailText} in light, and you in it.* (She remembers you were there.)",
 "mem": {
 "type": [
 "festival",
@@ -2716,7 +3684,7 @@
 "tells": [
 {
 "id": "dark",
-"ask": "*It holds its lantern between you and the dark trees, then tilts its head.* (Are you afraid of the dark?)",
+"ask": "*She holds her lantern between you and the dark trees, then tilts her head.* (Are you afraid of the dark?)",
 "when": {
 "met_days": 0
 },
@@ -2757,24 +3725,24 @@
 "deep"
 ]
 },
-"react": "*It goes very still and its flame turns the exact red of embers.* (It is moved.)"
+"react": "*She goes very still and her flame turns the exact red of embers.* (She is moved.)"
 }
 ],
 "gift_lines": {
 "loved": [
-"*It takes the {item} and holds it inside its own light, where it glows.* (It will keep this.)"
+"*She takes the {item} and holds it inside her own light, where it glows.* (She will keep this.)"
 ],
 "liked": [
-"*It inspects the {item} and dips its lantern once.* (Thank you.)"
+"*She inspects the {item} and dips her lantern once.* (Thank you.)"
 ],
 "neutral": [
-"*It looks at the {item}, then politely at you.*"
+"*She looks at the {item}, then politely at you.*"
 ],
 "disliked": [
-"*Its flame shrinks from the {item}. It steps back.* (Not that.)"
+"*Her flame shrinks from the {item}. She steps back.* (Not that.)"
 ],
 "repeat": [
-"*It already has a {item} from you, {mem.ago}. It holds both up and the light doubles.*"
+"*She already has a {item} from you, {mem.ago}. She holds both up and the light doubles.*"
 ],
 "sleepy": [
 "There is no one here to take it."
@@ -2789,9 +3757,9 @@
 },
 "lean": "practical",
 "resists": "encourage",
-"intro": "*It shows you the dark arch, then the camp, then covers its lantern with a wing.* (It is asking: should the others know what is behind the door?)",
+"intro": "*She shows you the dark arch, then the camp, then covers her lantern with a wing.* (She is asking: should the others know what is behind the door?)",
 "ask": "What is behind it?",
-"reveal": "*Its light gutters to almost nothing. It holds very still for a long time.* (Something that eats light.)",
+"reveal": "*Her light gutters to almost nothing. She holds very still for a long time.* (Something that eats light.)",
 "options": {
 "encourage": "Tell them. They deserve to know.",
 "reassure": "Keep it to yourself. Don't frighten them.",
@@ -2809,13 +3777,13 @@
 },
 "reactions": {
 "accept": [
-"*Its flame brightens and steadies.* (Yes.)"
+"*Her flame brightens and steadies.* (Yes.)"
 ],
 "consider": [
-"*It tilts, one way, then the other.* (Maybe.)"
+"*She tilts, one way, then the other.* (Maybe.)"
 ],
 "reject": [
-"*Its flame turns away.* (No.)"
+"*Her flame turns away.* (No.)"
 ]
 },
 "followup": {
@@ -2823,19 +3791,19 @@
 "outcomes": {
 "practical": [
 "promise",
-"*It takes you to the light by the arch and stands beside it, very straight.* (Nobody has gone in since.)|*It stands at the arch in the dark, where a light was supposed to be.*"
+"*She takes you to the light by the arch and stands beside it, very straight.* (Nobody has gone in since.)|*She stands at the arch in the dark, where a light was supposed to be.*"
 ],
 "compromise": [
 "good",
-"*It shows you the small one, the burr, turning away from the arch.* (It told only the one who wanders. It worked.)"
+"*She shows you the small one, the burr, turning away from the arch.* (She told only the one who wanders. She worked.)"
 ],
 "encourage": [
 "bad",
-"*It shows you the burr hiding in its log for two nights.* (It told everyone. Now they are afraid of everything.)"
+"*She shows you the burr hiding in her log for two nights.* (She told everyone. Now they are afraid of everything.)"
 ],
 "reassure": [
 "mixed",
-"*It shows you itself, alone at the arch every night.* (It kept the secret. It is tired.)"
+"*She shows you herself, alone at the arch every night.* (She kept the secret. She is tired.)"
 ]
 }
 }
@@ -2854,8 +3822,8 @@
 "deep"
 ]
 },
-"talk": "*It leads your eye to the arch in the ruin. It dims its lantern to nothing, then flares, then dims.* (There is a door that light does not come out of.)",
-"journal": "Wick wants you to see the dark door in the ruin: at deep night, with a light.",
+"talk": "*She leads your eye to the arch in the ruin. She dims her lantern to nothing, then flares, then dims.* (There is a door that light does not come out of.)",
+"journal": "Sella wants you to see the dark door in the ruin: at deep night, with a light.",
 "objective": {
 "type": "be_at",
 "at": "ruin_arch",
@@ -2869,8 +3837,8 @@
 },
 {
 "id": "decide",
-"talk": "*It waits for you to say what should be done.*",
-"journal": "Decide with Wick what to do about the door.",
+"talk": "*She waits for you to say what should be done.*",
+"journal": "Decide with Sella what to do about the door.",
 "objective": {
 "type": "choice",
 "options": [
@@ -2882,7 +3850,7 @@
 "nails": 2
 },
 "result": "good",
-"line": "*It helps you hold the last board. When it is done, it rests its lantern against the planks, listening.* (It is quieter now.)",
+"line": "*She helps you hold the last board. When it is done, she rests her lantern against the planks, listening.* (She is quieter now.)",
 "rel": {
 "trust": 6,
 "reliability": 4
@@ -2893,7 +3861,7 @@
 "text": "Keep a light burning at the mouth instead.",
 "needs_light": "ruin_arch",
 "result": "good",
-"line": "*It sits beside the light you set and its own flame matches it, flicker for flicker.* (Two lights are a watch. One is only a hope.)",
+"line": "*She sits beside the light you set and her own flame matches it, flicker for flicker.* (Two lights are a watch. One is only a hope.)",
 "rel": {
 "trust": 5,
 "shared": 4
@@ -2903,7 +3871,7 @@
 "id": "leave",
 "text": "Leave it. Whatever is down there was here first.",
 "result": "mixed",
-"line": "*It looks at you a long time. Then it turns its lantern toward the door and does not look back at you.* (It will keep watching. Alone.)",
+"line": "*She looks at you a long time. Then she turns her lantern toward the door and does not look back at you.* (She will keep watching. Alone.)",
 "rel": {
 "respect": 2,
 "trust": -2
@@ -2913,14 +3881,14 @@
 }
 }
 ],
-"complete": "*Every night now it stops at the arch, then comes to your lantern last.*",
+"complete": "*Every night now she stops at the arch, then comes to your lantern last.*",
 "reward_secret": true
 },
 "milestone_lines": {
-"familiar": "*It lets its light rest on your shoulder for a moment.* (It knows you.)",
-"trusted": "*It opens its wings for you, wide, and the dusty eyes on them catch your lantern.* (It is showing you what it hides.)",
-"close": "*Every night now, your lantern is the last one it visits.*",
-"kindred": "*It gives you one small flame from its own lantern. It does not go out.*"
+"familiar": "*She lets her light rest on your shoulder for a moment.* (She knows you.)",
+"trusted": "*She opens her wings for you, wide, and the dusty eyes on them catch your lantern.* (She is showing you what she hides.)",
+"close": "*Every night now, your lantern is the last one she visits.*",
+"kindred": "*She gives you one small flame from her own lantern. She does not go out.*"
 },
 "activities": [
 {
@@ -2936,38 +3904,38 @@
 ]
 },
 "label": "Sit by the fire with it",
-"line": "*You watch the fire burn down together. At the very end, it leans close.*"
+"line": "*You watch the fire burn down together. At the very end, she leans close.*"
 }
 ],
 "pools": {
 "fireside": [
 {
 "id": "w_fire1",
-"text": "*It makes its flame match the dying fire, ember for ember, until you cannot tell which is which.*"
+"text": "*She makes her flame match the dying fire, ember for ember, until you cannot tell which is which.*"
 },
 {
 "id": "w_fire2",
-"text": "*It points at each spark as it rises, then at the stars, one by one, as if keeping count of where they go.*"
+"text": "*She points at each spark as it rises, then at the stars, one by one, as if keeping count of where they go.*"
 }
 ],
 "festival": [
 {
 "id": "w_fest_ff",
-"text": "*It is surrounded by fireflies and its flame is laughing, if a flame can.* (This is its favourite night.)",
+"text": "*She is surrounded by fireflies and her flame is laughing, if a flame can.* (This is her favourite night.)",
 "when": {
 "festival": "fest_fireflies"
 }
 },
 {
 "id": "w_fest_fg",
-"text": "*It watches the bonfire from the arch, very still, like someone at a window.* (Too big a fire to visit.)",
+"text": "*She watches the bonfire from the arch, very still, like someone at a window.* (Too big a fire to visit.)",
 "when": {
 "festival": "fest_forgotten"
 }
 },
 {
 "id": "w_fest_tide",
-"text": "*It holds its lantern low over the ice, and below, a drowned window seems to brighten in answer.*",
+"text": "*She holds her lantern low over the ice, and below, a drowned window seems to brighten in answer.*",
 "when": {
 "festival": "fest_silent_tide"
 }
@@ -2982,11 +3950,11 @@
 "requires": {
 "milestone": "trusted"
 },
-"offer": "*Its light keeps turning toward the boarded door*",
+"offer": "*Her light keeps turning toward the boarded door*",
 "stages": [
 {
 "id": "ask",
-"talk": "*It takes you to the boards you nailed over the door. It holds its lantern close to the wood and waits.* (Listen. Deep night.)",
+"talk": "*She takes you to the boards you nailed over the door. She holds her lantern close to the wood and waits.* (Listen. Deep night.)",
 "journal": "Listen at the boarded door in the ruin, at deep night.",
 "objective": {
 "type": "be_at",
@@ -3000,7 +3968,7 @@
 },
 {
 "id": "decide",
-"talk": "*It looks at you. It does not know either.*",
+"talk": "*She looks at you. She does not know either.*",
 "journal": "Decide what to do about the knocking.",
 "objective": {
 "type": "choice",
@@ -3012,11 +3980,11 @@
 "world": {
 "door_open": true
 },
-"line": "*The last board comes away. Cold air, and nothing comes out, and nothing comes out, and then something does: you never see it, only feel it pass. Wick will not go near the arch for a long time.*",
+"line": "*The last board comes away. Cold air, and nothing comes out, and nothing comes out, and then something does: you never see it, only feel it pass. Sella will not go near the arch for a long time.*",
 "rel": {
 "trust": -6
 },
-"complete": "*The arch is just an arch now. Whatever was behind it is somewhere else. Wick stays close to the camp.*"
+"complete": "*The arch is just an arch now. Whatever was behind it is somewhere else. Sella stays close to the camp.*"
 },
 {
 "id": "reinforce",
@@ -3026,7 +3994,7 @@
 "nails": 1
 },
 "result": "mixed",
-"line": "*The knocking stops after the third board. Wick rests its lantern on the wood a long time.* (We will never know what it was.)",
+"line": "*The knocking stops after the third board. Sella rests her lantern on the wood a long time.* (We will never know what it was.)",
 "rel": {
 "trust": 3,
 "reliability": 2
@@ -3034,9 +4002,9 @@
 },
 {
 "id": "sit",
-"text": "Sit with Wick through the night and listen.",
+"text": "Sit with Sella through the night and listen.",
 "result": "good",
-"line": "*You sit with your backs to the boards. The knocking goes on, slower and slower. At dawn it stops. Wick lays one wing over your shoulder.* (Perhaps it only wanted someone to hear.)",
+"line": "*You sit with your backs to the boards. The knocking goes on, slower and slower. At dawn it stops. Sella lays one wing over your shoulder.* (Perhaps it only wanted someone to hear.)",
 "rel": {
 "shared": 8,
 "trust": 6
@@ -3046,7 +4014,7 @@
 }
 }
 ],
-"complete": "*It still listens at the door some nights. Less, now.*"
+"complete": "*She still listens at the door some nights. Less, now.*"
 },
 "light": {
 "id": "answer",
@@ -3054,12 +4022,12 @@
 "requires": {
 "milestone": "trusted"
 },
-"offer": "*Its light blinks a pattern at you: long, short, long*",
+"offer": "*Her light blinks a pattern at you: long, short, long*",
 "stages": [
 {
 "id": "ask",
-"talk": "*It blinks at you: long, short, long. Then it points at your lantern and at the door.* (At deep night, signal the dark with your lantern.)",
-"journal": "At the ruin arch at deep night, turn your lantern on and off a few times, like Wick showed you.",
+"talk": "*She blinks at you: long, short, long. Then she points at your lantern and at the door.* (At deep night, signal the dark with your lantern.)",
+"journal": "At the ruin arch at deep night, turn your lantern on and off a few times, like Sella showed you.",
 "objective": {
 "type": "signal",
 "at": "ruin_arch",
@@ -3074,8 +4042,8 @@
 },
 {
 "id": "decide",
-"talk": "*It is trembling, light and all.* (Something down there has a light too.)",
-"journal": "Decide with Wick what to do about the answering light.",
+"talk": "*She is trembling, light and all.* (Something down there has a light too.)",
+"journal": "Decide with Sella what to do about the answering light.",
 "objective": {
 "type": "choice",
 "options": [
@@ -3086,7 +4054,7 @@
 "world": {
 "answering_light": true
 },
-"line": "*Wick takes the first watch. Every deep night now, two lights blink at the door, and one blinks back.*",
+"line": "*Sella takes the first watch. Every deep night now, two lights blink at the door, and one blinks back.*",
 "rel": {
 "shared": 8,
 "trust": 4
@@ -3096,7 +4064,7 @@
 "id": "stop",
 "text": "Stop. We do not know what it is.",
 "result": "mixed",
-"line": "*It dims its lantern and nods, slowly. It does not look at the door again that night.*",
+"line": "*She dims her lantern and nods, slowly. She does not look at the door again that night.*",
 "rel": {
 "respect": 3
 }
@@ -3113,12 +4081,12 @@
 "requires": {
 "trust": 20
 },
-"offer": "*It stands apart from you*",
+"offer": "*She stands apart from you*",
 "stages": [
 {
 "id": "decide",
-"talk": "*It keeps its back to you. Its light is very small.*",
-"journal": "Wick has been keeping watch alone since you left the door to it.",
+"talk": "*She keeps her back to you. Her light is very small.*",
+"journal": "Sella has been keeping watch alone since you left the door to it.",
 "objective": {
 "type": "choice",
 "options": [
@@ -3127,7 +4095,7 @@
 "text": "I was wrong to leave it to you. Let's set a light there now.",
 "needs_light": "ruin_arch",
 "result": "good",
-"line": "*It turns, slowly, and sets its lantern beside the one you placed. It stays there with you until morning.*",
+"line": "*She turns, slowly, and sets her lantern beside the one you placed. She stays there with you until morning.*",
 "rel": {
 "trust": 8,
 "shared": 4
@@ -3138,7 +4106,7 @@
 "text": "It was the right call.",
 "result": "bad",
 "sets": "wick_cold",
-"line": "*It does not answer. From now on it visits your lantern only on the way to somewhere else.*",
+"line": "*She does not answer. From now on she visits your lantern only on the way to somewhere else.*",
 "rel": {
 "affection": -6,
 "trust": -4
@@ -3148,17 +4116,598 @@
 }
 }
 ],
-"complete": "*It watches the door.*"
-}
+"complete": "*She watches the door.*"
 }
 }
 },
+"voice": "Gentle, plainspoken, lightly teasing. Uses questions that offer choice, not pressure: \"Want company, or a light left nearby?\" Her metaphors are rare and domestic. When uncomfortable she talks about tools. She never speaks like a fortune teller.",
+"story": {
+"Wants, fears, contradictions": "Wants people to feel they can find their way back. Fears that a light can become an obligation or lure. Dreams of making a lamp that runs on wind. She is generous with labor but rarely asks anyone to sit beside her. The warmth she offers is real, and it costs her energy.",
+"Relationships": "Quietly protective of Pip without treating them like a child. Helps Nera accept care. Shares long, companionable silences with Rootbound Elder. Is fascinated by the Wanderer's ability to remember sounds. Worries the Dreaming Creature mistakes every light for a message.",
+"Player relationship": "First meeting: offers to show the safe path, with no expectation the player follow. Familiarity: remembers which kind of light the player prefers. Friendship: tells the story of the first lamp and admits she cannot tell whether its voice was real. Deep trust: asks the player to help build a wind-fed lamp, then lets the first test fail without making it a tragedy.",
+"Story arc": "Sella learns that keeping a light available does not mean keeping watch over everyone. She makes a communal wind lamp and leaves the choice to use it with each traveler."
+},
+"ex": [
+{
+"id": "wick.1",
+"n": 1,
+"p": "talk",
+"tag": "Morning",
+"turns": [
+[
+"n",
+"The east lamp stayed lit all night. I think it was showing off."
+]
+],
+"w": {
+"hour": [
+5,
+10
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "wick.2",
+"n": 2,
+"p": "topic",
+"tag": "Daytime",
+"turns": [
+[
+"p",
+"What are you fixing?"
+],
+[
+"n",
+"A hinge. It has been making a noise like a disappointed aunt."
+]
+],
+"w": {
+"hour": [
+9,
+17
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "wick.3",
+"n": 3,
+"p": "talk",
+"tag": "Evening",
+"turns": [
+[
+"n",
+"The path is clear. Want me to walk with you, or would you rather take the quiet?"
+]
+],
+"w": {
+"hour": [
+17,
+22
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "wick.4",
+"n": 4,
+"p": "talk",
+"tag": "Rain",
+"turns": [
+[
+"n",
+"Rain gets into everything. Including my left boot, which is an impressive place for water to find."
+]
+],
+"w": {
+"weather": [
+"rain"
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "wick.5",
+"n": 5,
+"p": "topic",
+"tag": "Winter",
+"turns": [
+[
+"p",
+"Your lamps look warmer tonight."
+],
+[
+"n",
+"Cold makes a small flame look ambitious."
+]
+],
+"w": {
+"season": [
+"winter"
+],
+"hour": [
+16,
+24
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "wick.6",
+"n": 6,
+"p": "talk",
+"tag": "Quiet moment",
+"turns": [
+[
+"n",
+"Listen. No, not for anything. Just listen."
+],
+[
+"p",
+"I hear the lamp."
+],
+[
+"n",
+"That's enough."
+]
+],
+"w": {},
+"req": [],
+"once": false,
+"weight": 0.7
+},
+{
+"id": "wick.7",
+"n": 7,
+"p": "talk",
+"tag": "Comfort",
+"turns": [
+[
+"n",
+"You can sit here. We don't have to make the feeling useful."
+]
+],
+"w": {
+"player_low": true
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "wick.8",
+"n": 8,
+"p": "topic",
+"tag": "Funny",
+"turns": [
+[
+"p",
+"You have a favorite lamp?"
+],
+[
+"n",
+"No."
+],
+[
+"p",
+"That one?"
+],
+[
+"n",
+"It has a very good personality."
+]
+],
+"w": {
+"bond": "acquainted"
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "wick.9",
+"n": 9,
+"p": "talk",
+"tag": "Vulnerable",
+"turns": [
+[
+"n",
+"I keep the lamps lit because I like knowing someone could come back. Some nights I forget that no one asked me to wait."
+]
+],
+"w": {
+"bond": "friendly"
+},
+"req": [],
+"once": true,
+"weight": 1.0
+},
+{
+"id": "wick.10",
+"n": 10,
+"p": "topic",
+"tag": "Disagreement",
+"turns": [
+[
+"p",
+"You don't have to fix everything for everyone."
+],
+[
+"n",
+"I know. I just don't always know what to do with my hands when I stop."
+]
+],
+"w": {
+"bond": "friendly"
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "wick.11",
+"n": 11,
+"p": "talk",
+"tag": "Affection",
+"turns": [
+[
+"n",
+"I made the tea the way you like it. You don't have to stay. I wanted to make it."
+]
+],
+"w": {
+"bond": "close"
+},
+"req": [
+"flag:told_light"
+],
+"once": true,
+"weight": 1.0
+},
+{
+"id": "wick.12",
+"n": 12,
+"p": "topic",
+"tag": "Hope",
+"turns": [
+[
+"p",
+"What do you hope for?"
+],
+[
+"n",
+"A lamp that runs on wind. And one evening when I can leave it to do its job."
+]
+],
+"w": {
+"bond": "friendly"
+},
+"req": [],
+"once": true,
+"weight": 1.0
+},
+{
+"id": "wick.13",
+"n": 13,
+"p": "meet",
+"tag": "New — first meeting",
+"turns": [
+[
+"n",
+"This path gets slick past the third post. I can show you, if you'd like."
+],
+[
+"p",
+"I can find it."
+],
+[
+"n",
+"Of course. The offer stands without following you."
+]
+],
+"w": {},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "wick.14",
+"n": 14,
+"p": "talk",
+"tag": "Familiar",
+"turns": [
+[
+"n",
+"I left the low lamp on. You said bright light gives you a headache."
+],
+[
+"p",
+"You remembered."
+],
+[
+"n",
+"I did. It's a nice thing to remember."
+]
+],
+"w": {
+"bond": "acquainted"
+},
+"req": [
+"flag:light_low"
+],
+"once": true,
+"weight": 4
+},
+{
+"id": "wick.15",
+"n": 15,
+"p": "beat",
+"tag": "Friend",
+"turns": [
+[
+"n",
+"There's one lamp I never light."
+],
+[
+"p",
+"Why?"
+],
+[
+"n",
+"I was told to leave one dark. It felt kind. I still don't know who said it."
+]
+],
+"w": {
+"bond": "friendly"
+},
+"req": [],
+"once": true,
+"weight": 1.0,
+"label": "Sit with Sella by the low lamp"
+},
+{
+"id": "wick.16",
+"n": 16,
+"p": "beat",
+"tag": "Deep Trust",
+"turns": [
+[
+"n",
+"That voice might have been a recording. It might have been someone beside me. I have kept the wick all these years as if it could decide."
+],
+[
+"p",
+"What do you think now?"
+],
+[
+"n",
+"I think I can keep the wick and stop asking it."
+]
+],
+"w": {
+"bond": "close"
+},
+"req": [
+"seen:wick.15"
+],
+"once": true,
+"weight": 1.0,
+"label": "Sit with Sella a while longer",
+"sets": [
+"flag:wick_kept"
+]
+},
+{
+"id": "wick.17",
+"n": 17,
+"p": "beat",
+"tag": "Story — wind lamp",
+"turns": [
+[
+"n",
+"It turned!"
+],
+[
+"p",
+"Then stopped."
+],
+[
+"n",
+"Yes. We have built a lamp with a very brief career. I'm proud of it."
+]
+],
+"w": {
+"bond": "close"
+},
+"req": [
+"seen:wick.16",
+"flag:wind_lamp_built"
+],
+"once": true,
+"weight": 1.0,
+"label": "Try the wind lamp with Sella",
+"sets": [
+"world:wind_lamp"
+]
+},
+{
+"id": "wick.18",
+"n": 18,
+"p": "topic",
+"tag": "Discovery — Lantern Row lights",
+"turns": [
+[
+"p",
+"I saw lights moving in the fog."
+],
+[
+"n",
+"Did you follow?"
+],
+[
+"p",
+"No."
+],
+[
+"n",
+"Good. Sometimes the kindest thing is letting a light have its own errand."
+]
+],
+"w": {},
+"req": [
+"disc:lights"
+],
+"once": true,
+"weight": 1.0
+},
+{
+"id": "wick.19",
+"n": 19,
+"p": "gift",
+"tag": "Gift — tool",
+"turns": [
+[
+"n",
+"This fits my hand perfectly. Thank you. I'll try not to use it to fix things that aren't broken."
+]
+],
+"w": {},
+"req": [],
+"once": false,
+"weight": 1.0,
+"items": [
+"hinge",
+"nails",
+"hook_iron"
+]
+},
+{
+"id": "wick.20",
+"n": 20,
+"p": "gift",
+"tag": "Gift — bright glass",
+"turns": [
+[
+"n",
+"It's beautiful, but it catches too much light for the path. Could I keep it by my workbench instead?"
+]
+],
+"w": {},
+"req": [],
+"once": false,
+"weight": 1.0,
+"items": [
+"quartz",
+"amethyst",
+"moonstone",
+"starshard"
+]
+},
+{
+"id": "wick.22",
+"n": 22,
+"p": "talk",
+"tag": "Campfire",
+"turns": [
+[
+"n",
+"I brought mending. You can talk over it, or not. Cloth doesn't mind either way."
+]
+],
+"w": {
+"period": [
+"dusk",
+"night"
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "wick.23",
+"n": 23,
+"p": "talk",
+"tag": "Strange sound",
+"turns": [
+[
+"n",
+"That was not a lamp."
+],
+[
+"p",
+"Are you scared?"
+],
+[
+"n",
+"Yes. I'm going to be scared over here, where the ground is solid."
+]
+],
+"w": {
+"period": [
+"night",
+"deep"
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "wick.24",
+"n": 24,
+"p": "talk",
+"tag": "Danger",
+"turns": [
+[
+"n",
+"Stay behind the stone marker. I have the lamp; you have the clear path. We can both do our part."
+]
+],
+"w": {
+"monsters_near": 1
+},
+"req": [],
+"once": false,
+"weight": 5
+},
+{
+"id": "wick.25",
+"n": 25,
+"p": "talk",
+"tag": "Lantern Walk",
+"turns": [
+[
+"n",
+"Hang one if you want. Watch if you want. There's no count at the end."
+]
+],
+"w": {
+"festival": "fest_fireflies"
+},
+"req": [],
+"once": false,
+"weight": 5
+}
+]
+},
 "burl": {
 "id": "burl",
-"name": "Burl",
+"name": "Orun",
 "species": "Rootbound",
-"epithet": "The rootbound elder",
-"communication": "very slow speech, a few words at a time",
+"epithet": "Rootbound Elder",
+"communication": "unhurried, tactile, blunt",
 "sprite": "burl",
 "frames": {
 "idle": [
@@ -3194,32 +4743,40 @@
 "lied": 1.5,
 "witnessed": 1.2
 },
-"appearance": "A great stump with a face in the bark, knotholes for eyes, a beard of moss, and a sapling of its own growing from its crown.",
-"description": "At the west edge of the clearing there is a stump that is too old, and too wide, and sometimes it is facing a different way.",
-"background": "Burl was the oldest oak in the valley before it was cut. It did not agree to stop. It grew a new tree out of its own top instead.",
-"secret": "The people who cut Burl down sat on it afterward and ate their lunch. It remembers what they talked about. It has never told anyone.",
+"appearance": "Bark plates like an old coat, fern fronds at the shoulders, one small white mushroom that grows and shrinks above the left ear. Orun tests the ground with a root before stepping. They answer questions after a pause that may mean thought, sleep, or simply listening to insects.",
+"description": "Orun is an old, mobile root-and-bark being whose lower limbs have grown into a bundle of living roots. Patient, practical, and occasionally stubborn, Orun is not an oracle. They forget names, dislike being treated as a monument, and enjoy ordinary gossip.",
+"background": "Orun grew above the Root Rooms, in soil enriched by warmth and mineral runoff. They remember the tunnel as a pressure in the roots before they remember light.",
+"secret": "A rusted door below bears a mark Orun has seen in dreams. Their roots have slowly sealed one chamber because something inside still clicks. Orun has not told the others: they fear curiosity will make the chamber dangerous.",
 "interests": [
 [
-"trees",
-"Every tree in the valley, by name"
+"mold",
+"Leaf mold and a good rain"
 ],
 [
-"seasons",
-"The turning of the year"
+"stories",
+"Stories with unimportant endings"
 ],
 [
-"slowness",
-"Slowness"
+"birds",
+"Bird visits"
+],
+[
+"moss",
+"A list of places where moss grows on stone"
 ]
 ],
 "dislikes": [
 [
 "axes",
-"Axes"
+"Axes waved as punctuation"
 ],
 [
-"lies",
-"Being told one thing and shown another"
+"wise",
+"Being called \"wise\""
+],
+[
+"wind",
+"Hot dry wind"
 ]
 ],
 "habits": "Never moves. Awake from dawn to dusk, asleep at night. Through winter it barely wakes, and only at noon on clear days.",
@@ -3326,98 +4883,21 @@
 "baseline": "relaxed",
 "gifts": {
 "loves": [
-"heartwood_seed",
-"seeds_wild",
-"moss",
-"rowan_berry"
+"rot_fiber",
+"moss"
 ],
 "likes": [
+"cloth",
 "fern_frond",
-"mushroom_brown",
-"clay",
-"yarrow",
-"moondew"
+"mushroom_brown"
 ],
 "dislikes": [
 "log",
 "plank",
-"hardwood",
-"bark",
-"coal",
-"scrap_metal"
+"hardwood"
 ]
 },
-"greet": [
-{
-"id": "b_first",
-"text": "...Hm. ... Something small. ... Walking. ... They always walk.",
-"when": {
-"met": false
-}
-},
-{
-"id": "b_g_dawn",
-"text": "...Dew. ... Good dew today. ... Sit.",
-"when": {
-"period": [
-"dawn"
-]
-}
-},
-{
-"id": "b_g_rain",
-"text": "...Rain. ... Ah. ... Rain.",
-"when": {
-"weather": [
-"rain"
-]
-},
-"expr": "glad"
-},
-{
-"id": "b_g_axe",
-"text": "...You smell of cut wood. ... I know that smell.",
-"when": {
-"cut_today": true
-},
-"expr": "troubled"
-},
-{
-"id": "b_g_suspicious",
-"text": "...The axes again. ... I hear them in my roots.",
-"when": {
-"mood": [
-"suspicious"
-]
-},
-"expr": "troubled"
-},
-{
-"id": "b_g_winter",
-"text": "...Cold. ... Speak. ... Quickly. ... For me, that is quickly.",
-"when": {
-"season": [
-"winter"
-]
-}
-},
-{
-"id": "b_g_absent",
-"text": "...You were away. ... {absent} days. ... That is nothing. ... I noticed.",
-"when": {
-"absent": 5,
-"bond": "acquainted"
-},
-"w": 3
-},
-{
-"id": "b_g_plain",
-"text": "...The small walker. ... Again.",
-"when": {
-"met": true
-}
-}
-],
+"greet": [],
 "chat": [
 {
 "id": "b_c_rings",
@@ -3680,7 +5160,7 @@
 },
 "promise": {
 "stance": "practical",
-"what": "visit Burl on three different days",
+"what": "visit Orun on three different days",
 "days": 6,
 "check": {
 "visit_days": 3
@@ -3735,7 +5215,7 @@
 ]
 },
 "talk": "...The birches. ... Their bark is greying in spots. ... Like lichen. ... Not lichen. ... The three at the west edge. ... Touch the bark. ... Come back.",
-"journal": "Burl wants you to touch the bark of the three birches at the west edge, by day.",
+"journal": "Orun wants you to touch the bark of the three birches at the west edge, by day.",
 "objective": {
 "type": "visit_all",
 "at": [
@@ -3755,7 +5235,7 @@
 {
 "id": "decide",
 "talk": "...Cold. ... Dry. ... I was afraid of that. ... What would you do?",
-"journal": "Advise Burl about the grey birches.",
+"journal": "Advise Orun about the grey birches.",
 "objective": {
 "type": "choice",
 "options": [
@@ -3839,7 +5319,7 @@
 },
 {
 "id": "b_q2",
-"text": "...A beetle crossed your boot and then crossed Burl. ... Burl said it tickled. ... It was the first joke you have heard it make."
+"text": "...A beetle crossed your boot and then crossed Orun. ... Orun said it tickled. ... It was the first joke you have heard it make."
 },
 {
 "id": "b_q3",
@@ -3876,7 +5356,7 @@
 {
 "id": "ask",
 "talk": "...Heartwood. ... A seed from the old oaks. ... Plant it beside me. ... I would like company that grows.",
-"journal": "Bring Burl a heartwood seed to plant beside it (they turn up under the big oak, on autumn nights after rain).",
+"journal": "Bring Orun a heartwood seed to plant beside it (they turn up under the big oak, on autumn nights after rain).",
 "objective": {
 "type": "deliver",
 "items": {
@@ -3889,17 +5369,17 @@
 {
 "id": "grow",
 "talk": "...Watch it with me. ... Three different days.",
-"journal": "Visit Burl and the new seed on three different days.",
+"journal": "Visit Orun and the new seed on three different days.",
 "objective": {
 "type": "visit_days",
 "n": 3,
-"found": "A green thread has come up beside Burl, two leaves wide."
+"found": "A green thread has come up beside Orun, two leaves wide."
 }
 },
 {
 "id": "decide",
 "talk": "...It came up. ... It needs a name. ... Long names take a long time. ... Choose.",
-"journal": "Help Burl name the new oak.",
+"journal": "Help Orun name the new oak.",
 "objective": {
 "type": "choice",
 "options": [
@@ -3908,7 +5388,7 @@
 "text": "Name it after you.",
 "result": "good",
 "keepsake": "heartwood_seed",
-"line": "...After me. ... Burl, the small. ... It will hate that. ... Good.",
+"line": "...After me. ... Orun, the small. ... It will hate that. ... Good.",
 "rel": {
 "affection": 6
 }
@@ -3951,7 +5431,7 @@
 {
 "id": "ask",
 "talk": "...You told me to cut the birches. ... They are stumps. ... I have thought about stumps. ... Bring me a heartwood seed. ... I want something to grow where they were.",
-"journal": "Bring Burl a heartwood seed, to grow where the cut birches were.",
+"journal": "Bring Orun a heartwood seed, to grow where the cut birches were.",
 "objective": {
 "type": "deliver",
 "items": {
@@ -3964,7 +5444,7 @@
 {
 "id": "grow",
 "talk": "...Watch it with me.",
-"journal": "Visit Burl and the new seed on three different days.",
+"journal": "Visit Orun and the new seed on three different days.",
 "objective": {
 "type": "visit_days",
 "n": 3,
@@ -3974,7 +5454,7 @@
 {
 "id": "decide",
 "talk": "...It came up. ... Where the stumps are. ... Name it.",
-"journal": "Help Burl name the new tree.",
+"journal": "Help Orun name the new tree.",
 "objective": {
 "type": "choice",
 "options": [
@@ -4006,14 +5486,566 @@
 "complete": "...Something grows where the birches were."
 }
 }
+},
+"voice": "Slow but not lofty, tactile, often funny in a blunt way. Uses everyday comparisons: \"That plan has the structural integrity of wet toast.\" Occasionally loses a word and substitutes a vivid wrong one. Avoids abstract speeches; when Orun says something profound, it should be brief and incidental.",
+"story": {
+"Wants, fears, contradictions": "Wants the Vale to have time to change without being forced into a story. Fears fire moving through dry roots. Dreams of growing a branch low enough for Pip to nap on. Says the past is compost, but keeps a precise count of what they have lost. Emotional vulnerability: being loved only for their age and knowledge.",
+"Relationships": "Nera's urgency reminds Orun of young shoots after rain. Loves Pip's questions, though sometimes needs quiet after them. Trusts Sella's silences. Finds the Wanderer both familiar and alarming. The Dreaming Creature sleeps beneath Orun's broadest roots; Orun claims the snoring keeps the beetles honest.",
+"Player relationship": "First meeting: asks the player to stand somewhere else because a root is growing there. Familiarity: offers small, practical advice about soil and safe paths. Friendship: admits the sealed chamber and why it frightens them. Deep trust: asks the player to accompany them to the door, with no demand to open it.",
+"Story arc": "Orun learns that protecting the community does not require deciding what everyone may know. With the player, they examine the Root Room door and choose whether to open it only after the group has agreed on precautions. Behind it is a dead relay and a nest of harmless Glasslings, not a definitive answer."
+},
+"ex": [
+{
+"id": "burl.1",
+"n": 1,
+"p": "talk",
+"tag": "Morning",
+"turns": [
+[
+"n",
+"A woodpecker inspected me. I failed to provide anything worth eating."
+]
+],
+"w": {
+"hour": [
+5,
+10
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "burl.2",
+"n": 2,
+"p": "topic",
+"tag": "Daytime",
+"turns": [
+[
+"p",
+"How old are you?"
+],
+[
+"n",
+"Older than that question. Younger than this hill. Somewhere between, probably."
+]
+],
+"w": {
+"hour": [
+9,
+17
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "burl.3",
+"n": 3,
+"p": "talk",
+"tag": "Evening",
+"turns": [
+[
+"n",
+"The shadows are long. Good. It means the sun is going somewhere."
+]
+],
+"w": {
+"hour": [
+17,
+22
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "burl.4",
+"n": 4,
+"p": "talk",
+"tag": "Rain",
+"turns": [
+[
+"n",
+"My knees are drinking."
+],
+[
+"p",
+"You have knees?"
+],
+[
+"n",
+"Two excellent root-knots. Don't be rude."
+]
+],
+"w": {
+"weather": [
+"rain"
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "burl.5",
+"n": 5,
+"p": "talk",
+"tag": "Winter",
+"turns": [
+[
+"n",
+"Snow is a blanket with no understanding of furniture."
+]
+],
+"w": {
+"season": [
+"winter"
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "burl.6",
+"n": 6,
+"p": "talk",
+"tag": "Quiet moment",
+"turns": [
+[
+"n",
+"That moss is growing on the north face."
+],
+[
+"p",
+"Does that matter?"
+],
+[
+"n",
+"Not especially. I enjoy being right about small things."
+]
+],
+"w": {},
+"req": [],
+"once": false,
+"weight": 0.7
+},
+{
+"id": "burl.7",
+"n": 7,
+"p": "talk",
+"tag": "Comfort",
+"turns": [
+[
+"n",
+"Come sit. No advice today. I have used up my quota."
+]
+],
+"w": {
+"player_low": true
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "burl.8",
+"n": 8,
+"p": "topic",
+"tag": "Funny",
+"turns": [
+[
+"p",
+"Are you asleep?"
+],
+[
+"n",
+"No."
+],
+[
+"p",
+"You were snoring."
+],
+[
+"n",
+"The beetles were moving a log. It was a group effort."
+]
+],
+"w": {
+"bond": "acquainted"
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "burl.9",
+"n": 9,
+"p": "talk",
+"tag": "Vulnerable",
+"turns": [
+[
+"n",
+"They ask me what I remember. Sometimes I remember being tired. That is not the kind of old story people want."
+]
+],
+"w": {
+"bond": "friendly"
+},
+"req": [],
+"once": true,
+"weight": 1.0
+},
+{
+"id": "burl.10",
+"n": 10,
+"p": "topic",
+"tag": "Disagreement",
+"turns": [
+[
+"p",
+"We should open the door."
+],
+[
+"n",
+"Perhaps. You are speaking as though the door owes us an answer."
+],
+[
+"p",
+"It doesn't."
+],
+[
+"n",
+"Good. Then we can go carefully."
+]
+],
+"w": {
+"bond": "friendly"
+},
+"req": [
+"seen:burl.15",
+"disc:root_door"
+],
+"once": true,
+"weight": 1.0
+},
+{
+"id": "burl.11",
+"n": 11,
+"p": "talk",
+"tag": "Affection",
+"turns": [
+[
+"n",
+"I grew this branch low. It makes a fine seat. You may use it without making a speech."
+]
+],
+"w": {
+"bond": "close"
+},
+"req": [],
+"once": true,
+"weight": 1.0
+},
+{
+"id": "burl.12",
+"n": 12,
+"p": "topic",
+"tag": "Belonging",
+"turns": [
+[
+"p",
+"Do you miss the past?"
+],
+[
+"n",
+"I miss particular things. A bird. A smell after rain. I do not miss being a past for other people."
+]
+],
+"w": {
+"bond": "friendly"
+},
+"req": [],
+"once": true,
+"weight": 1.0
+},
+{
+"id": "burl.13",
+"n": 13,
+"p": "meet",
+"tag": "New — first meeting",
+"turns": [
+[
+"n",
+"Would you move left? A root is growing where your foot is."
+],
+[
+"p",
+"I don't see it."
+],
+[
+"n",
+"It is very young. It has not learned to be seen."
+]
+],
+"w": {},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "burl.14",
+"n": 14,
+"p": "topic",
+"tag": "Familiar",
+"turns": [
+[
+"n",
+"The path you asked about is passable. Avoid the shiny mud. Shiny mud is a liar."
+]
+],
+"w": {
+"bond": "acquainted"
+},
+"req": [],
+"once": true,
+"weight": 1.0,
+"label": "Ask about the paths"
+},
+{
+"id": "burl.15",
+"n": 15,
+"p": "beat",
+"tag": "Friend",
+"turns": [
+[
+"n",
+"There is a door in the Root Rooms. I have let roots cover it."
+],
+[
+"p",
+"Because something's inside?"
+],
+[
+"n",
+"Because I do not know. Fear can be very tidy."
+]
+],
+"w": {
+"bond": "friendly"
+},
+"req": [],
+"once": true,
+"weight": 1.0,
+"label": "Sit under Orun's branches"
+},
+{
+"id": "burl.16",
+"n": 16,
+"p": "beat",
+"tag": "Deep Trust — at the door",
+"turns": [
+[
+"n",
+"I will not ask you to open it. I am asking you to stand here while I decide whether I want to."
+],
+[
+"p",
+"I'm here."
+],
+[
+"n",
+"Good. That's a useful kind of company."
+]
+],
+"w": {
+"bond": "close"
+},
+"req": [
+"seen:burl.15",
+"disc:root_door"
+],
+"once": true,
+"weight": 1.0,
+"label": "Stand with Orun while they decide",
+"sets": [
+"flag:stood_at_door"
+]
+},
+{
+"id": "burl.17",
+"n": 17,
+"p": "beat",
+"tag": "Story — Glasslings",
+"turns": [
+[
+"n",
+"The clicking was a nest. Small creatures, not a machine."
+],
+[
+"p",
+"Does that disappoint you?"
+],
+[
+"n",
+"No. It is a relief with tiny feet."
+]
+],
+"w": {
+"bond": "close"
+},
+"req": [
+"seen:burl.16",
+"flag:group_agreed"
+],
+"once": true,
+"weight": 1.0,
+"label": "Open the old door together",
+"sets": [
+"world:root_door_opened"
+]
+},
+{
+"id": "burl.18",
+"n": 18,
+"p": "topic",
+"tag": "Discovery — old mark",
+"turns": [
+[
+"p",
+"The symbol is on Morrow, too."
+],
+[
+"n",
+"Then the mark traveled. It does not tell us who carried it."
+]
+],
+"w": {},
+"req": [
+"disc:old_mark",
+"met:tessel"
+],
+"once": true,
+"weight": 1.0
+},
+{
+"id": "burl.19",
+"n": 19,
+"p": "gift",
+"tag": "Gift — compost",
+"turns": [
+[
+"n",
+"Excellent. This is a gift that knows what it is for."
+]
+],
+"w": {},
+"req": [],
+"once": false,
+"weight": 1.0,
+"items": [
+"rot_fiber",
+"moss"
+]
+},
+{
+"id": "burl.22",
+"n": 22,
+"p": "talk",
+"tag": "Campfire",
+"turns": [
+[
+"n",
+"I knew a story once about a squirrel and a bucket."
+],
+[
+"p",
+"What happened?"
+],
+[
+"n",
+"The bucket was fine. The squirrel was very wet."
+]
+],
+"w": {
+"period": [
+"dusk",
+"night"
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "burl.23",
+"n": 23,
+"p": "talk",
+"tag": "Night knock",
+"turns": [
+[
+"n",
+"One knock from below. I answered once. Now we wait."
+]
+],
+"w": {
+"period": [
+"night",
+"deep"
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "burl.24",
+"n": 24,
+"p": "talk",
+"tag": "Danger — dry wind",
+"turns": [
+[
+"n",
+"No flame. No sparks. The roots are thirsty enough to take offense."
+]
+],
+"w": {
+"wind": 0.6
+},
+"req": [],
+"once": false,
+"weight": 5
+},
+{
+"id": "burl.25",
+"n": 25,
+"p": "talk",
+"tag": "First frost bowl",
+"turns": [
+[
+"n",
+"I put in a handful of soil. It is not useful to eat, but it is good to remember where food grows."
+]
+],
+"w": {
+"festival": "fest_forgotten"
+},
+"req": [],
+"once": false,
+"weight": 5
 }
+]
 },
 "tessel": {
 "id": "tessel",
-"name": "Tessel",
-"species": "Survey unit",
-"epithet": "The mechanical wanderer",
-"communication": "precise speech, numbered, socially awkward",
+"name": "Morrow",
+"species": "Maintenance machine",
+"epithet": "Mechanical Wanderer",
+"communication": "literal, precise, learning contractions",
 "sprite": "tessel",
 "frames": {
 "idle": [
@@ -4053,40 +6085,55 @@
 "showed": 1.1,
 "quest_help": 1.2
 },
-"appearance": "A rusted survey dome on three jointed legs, one big lens, an antenna with a scrap of red cloth. Moss and a small white flower grow on its back.",
-"description": "Something clicks and whirs among the ruin stones, counting them.",
-"background": "Tessel was built to measure the valley before the flood. It finished the survey. Nobody came to collect it. It started again.",
-"secret": "Tessel's record zero is a woman laughing at a kettle. Tessel does not know who she was. It has never deleted it.",
+"appearance": "Scuffed brass casing, one blue lens, one amber lens, a fold-out arm with three tools. It pauses before jokes as though waiting for a response code. When embarrassed, its lens shutters close one at a time. It carries a tiny bell it cannot explain.",
+"description": "Morrow is a compact, self-propelled maintenance machine with a soft canvas cover and one mismatched wheel. It is observant, literal, dryly comic, and awkwardly considerate. It understands procedures better than social cues, but tries to learn without pretending to be a person in a metal shell.",
+"background": "It remembers maintenance tasks but not who assigned them.",
+"secret": "Morrow woke beneath the old rail with damaged route instructions and a Continuance mark that matches the Root Rooms door. It has been following a signal that may be its own low-power diagnostic. It sometimes invents a reason to visit the camp because the route is \"operationally useful.\"",
 "interests": [
 [
-"machines",
-"Mechanical objects of every kind"
+"gears",
+"Clean gears and patterned cloth"
 ],
 [
-"measuring",
-"Counting and measuring"
+"maps",
+"Accurate maps"
 ],
 [
-"weather",
-"Weather data"
+"rhythms",
+"Soft tapping rhythms"
 ],
 [
-"people",
-"People, which it finds confusing"
+"birds",
+"Bird calls, with confidence levels"
 ]
 ],
 "dislikes": [
 [
-"rain",
-"Rain: rust"
+"water",
+"Sudden water immersion"
 ],
 [
-"vague",
-"Vague answers"
+"test",
+"Being called a person as a test"
+],
+[
+"help",
+"\"Help\" that removes its choice"
 ]
 ],
 "habits": "Tinkers in the ruin in the morning, surveys the path junction before noon, reads the signpost in the afternoon, powers down in the arch at night. Shelters from rain.",
 "schedule": [
+{
+"frm": 19,
+"to": 20.5,
+"at": "lantern",
+"act": "learning to trim a wick",
+"when": {
+"weather": [
+"clear"
+]
+}
+},
 {
 "when": {
 "festival": "fest_awakening"
@@ -4183,27 +6230,21 @@
 "baseline": "curious",
 "gifts": {
 "loves": [
-"rusted_gear",
-"circuit",
-"battery",
-"wire",
 "bolt",
-"key_old"
+"nails",
+"hinge",
+"cloth"
 ],
 "likes": [
-"scrap_metal",
-"copper_ore",
-"iron_ingot",
-"glass_shard",
-"quartz",
-"nails",
-"hinge"
+"rusted_gear",
+"circuit",
+"wire",
+"battery",
+"scrap_metal"
 ],
 "dislikes": [
 "mud",
-"moss",
-"cat:fish",
-"blackberry"
+"moss"
 ]
 },
 "shows": {
@@ -4212,57 +6253,7 @@
 ],
 "label": "Show it something old"
 },
-"greet": [
-{
-"id": "t_first",
-"text": "Greeting. You are the human-shaped unit. Correction: the human. Apologies. My social routines are at thirty-one percent. I am Tessel.",
-"when": {
-"met": false
-}
-},
-{
-"id": "t_g_rain",
-"text": "Query: why does it rain? Answer: to test me. I am remaining in the arch.",
-"when": {
-"weather": [
-"rain"
-]
-},
-"expr": "troubled"
-},
-{
-"id": "t_g_night",
-"text": "Low-power mode. Speak slowly. Correction: speak normally. I will be slow.",
-"when": {
-"drowsy": true
-}
-},
-{
-"id": "t_g_survey",
-"text": "Today the path has six hundred and twelve stones. Yesterday it had six hundred and eleven. One of them is you.",
-"when": {
-"at": [
-"junction"
-]
-}
-},
-{
-"id": "t_g_absent",
-"text": "You were absent for {absent} days. I logged it. I logged it more times than necessary.",
-"when": {
-"absent": 3,
-"bond": "acquainted"
-},
-"w": 3
-},
-{
-"id": "t_g_plain",
-"text": "Greeting again. Recognition: one hundred percent.",
-"when": {
-"met": true
-}
-}
-],
+"greet": [],
 "chat": [
 {
 "id": "t_c_activation",
@@ -4562,7 +6553,7 @@
 "familiarity": 10
 },
 "talk": "Project: Beacon. A device that told the weather to anyone listening. Parts missing: rusted gear, circuit, wire (two), battery. Will you assist? This is a request, not a command. I am told those feel different.",
-"journal": "Bring Tessel the parts for its beacon: a rusted gear, a circuit, two wires and a battery.",
+"journal": "Bring Morrow the parts for its beacon: a rusted gear, a circuit, two wires and a battery.",
 "objective": {
 "type": "deliver",
 "items": {
@@ -4581,7 +6572,7 @@
 {
 "id": "decide",
 "talk": "Beacon assembled. It needs a purpose. Options: weather, like before; music, from the old records; or a call. Simple. \"Someone is here.\" What should it do?",
-"journal": "Help Tessel decide what the beacon should do.",
+"journal": "Help Morrow decide what the beacon should do.",
 "objective": {
 "type": "choice",
 "agency": true,
@@ -4710,7 +6701,7 @@
 {
 "id": "ask",
 "talk": "The beacon's call has been sent 41 times. Last night: an answer. Come to the arch at night. Observe with me.",
-"journal": "Watch the beacon with Tessel at the ruin arch, at night.",
+"journal": "Watch the beacon with Morrow at the ruin arch, at night.",
 "objective": {
 "type": "be_at",
 "at": "ruin_arch",
@@ -4725,7 +6716,7 @@
 {
 "id": "decide",
 "talk": "Something answered. Options: reply, or go silent. I would like a recommendation. I would also like to not be alone with this.",
-"journal": "Decide with Tessel whether to answer the light.",
+"journal": "Decide with Morrow whether to answer the light.",
 "objective": {
 "type": "choice",
 "options": [
@@ -4753,10 +6744,10 @@
 },
 {
 "id": "wick",
-"text": "Ask Wick first. It knows what lives in the dark.",
+"text": "Ask Sella first. It knows what lives in the dark.",
 "needs_met": "wick",
 "result": "good",
-"line": "Consulted Wick. Wick says the light out there is cold. I will not answer. I am glad you thought of asking. I would not have.",
+"line": "Consulted Sella. Sella says the light out there is cold. I will not answer. I am glad you thought of asking. I would not have.",
 "rel": {
 "trust": 5,
 "respect": 3
@@ -4779,7 +6770,7 @@
 {
 "id": "ask",
 "talk": "Request: be at the pond with me on the night the ice goes clear. The Silent Tide. I want to measure the drowned town. I do not want to do it alone.",
-"journal": "Be with Tessel at the Silent Tide, deep in winter.",
+"journal": "Be with Morrow at the Silent Tide, deep in winter.",
 "objective": {
 "type": "festival_with",
 "festival": "fest_silent_tide"
@@ -4788,7 +6779,7 @@
 {
 "id": "decide",
 "talk": "The town is all there. Every house. What should I record?",
-"journal": "Help Tessel decide what to record of the drowned town.",
+"journal": "Help Morrow decide what to record of the drowned town.",
 "objective": {
 "type": "choice",
 "options": [
@@ -4828,14 +6819,586 @@
 "complete": "Some measurements are kept in protected memory."
 }
 }
+},
+"voice": "Clear declarative sentences, literal readings, technical detail, and perfectly timed accidental humor. As trust grows, it tries contractions and casual speech, often incorrectly. No robotic \"beep\" filler and no exposition dumps. It may say, \"I am glad you returned. That is not a maintenance report.\"",
+"story": {
+"Wants, fears, contradictions": "Wants to know whether it has a purpose beyond being useful. Fears being switched off while still conscious of the world, though it does not know if that is possible. Dreams—or calls them \"unverified sleep states\"—of a hand adjusting its bell. It claims feelings are not necessary to function, yet remembers every person who has been kind to it.",
+"Relationships": "Works with Nera on the intake pipe, where their trust is carefully negotiated. Pip tries to race it; Morrow pretends not to enjoy this. Sella teaches it to trim wicks. Orun recognizes its metal mark but will not call it an answer. The Dreaming Creature claims Morrow's sleep-noise is \"a small blue weather.\"",
+"Player relationship": "First meeting: asks the player to move a loose stone from a wheel path. Familiarity: shares observations and remembers the player's preferred route. Friendship: admits the signal may be self-generated. Deep trust: asks the player to sit beside it during a shutdown test, not to fix it, simply to remain if they choose.",
+"Story arc": "Morrow stops defining itself by the original task it may never recover. The relay at the Root Rooms yields an incomplete route record, not a command. Morrow chooses to keep traveling between camp and the ridge because it wants to, then begins a shared map with Pip."
+},
+"ex": [
+{
+"id": "tessel.1",
+"n": 1,
+"p": "talk",
+"tag": "Morning",
+"turns": [
+[
+"n",
+"Good morning. My left wheel is making a new sound. I have classified it as 'probably conversational.'"
+]
+],
+"w": {
+"hour": [
+5,
+10
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "tessel.2",
+"n": 2,
+"p": "topic",
+"tag": "Daytime",
+"turns": [
+[
+"p",
+"What are you doing?"
+],
+[
+"n",
+"Following a bird. It has not provided a route plan. I continue anyway."
+]
+],
+"w": {
+"hour": [
+9,
+17
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "tessel.3",
+"n": 3,
+"p": "talk",
+"tag": "Evening",
+"turns": [
+[
+"n",
+"The temperature is dropping. I recommend a coat."
+],
+[
+"p",
+"You don't wear one."
+],
+[
+"n",
+"I am attempting empathy through analogy."
+]
+],
+"w": {
+"hour": [
+17,
+22
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "tessel.4",
+"n": 4,
+"p": "talk",
+"tag": "Rain",
+"turns": [
+[
+"n",
+"I am under the roof. This is not a request for rescue. It is a report on my successful planning."
+]
+],
+"w": {
+"weather": [
+"rain"
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "tessel.5",
+"n": 5,
+"p": "talk",
+"tag": "Winter",
+"turns": [
+[
+"n",
+"My wheel has frozen. I am not distressed. I am… expressing a strong preference for thaw."
+]
+],
+"w": {
+"season": [
+"winter"
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "tessel.6",
+"n": 6,
+"p": "talk",
+"tag": "Quiet moment",
+"turns": [
+[
+"n",
+"A thrush repeated the same phrase four times. I understood none of it. I found the repetition reassuring."
+]
+],
+"w": {},
+"req": [],
+"once": false,
+"weight": 0.7
+},
+{
+"id": "tessel.7",
+"n": 7,
+"p": "topic",
+"tag": "Comfort",
+"turns": [
+[
+"p",
+"I feel useless."
+],
+[
+"n",
+"That is a feeling, not a measurement. I can remain here while it passes, if you prefer."
+]
+],
+"w": {
+"player_low": true
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "tessel.8",
+"n": 8,
+"p": "topic",
+"tag": "Funny",
+"turns": [
+[
+"p",
+"Can you dance?"
+],
+[
+"n",
+"Yes."
+],
+[
+"n",
+"That was a wheel calibration. I apologize for the confidence."
+]
+],
+"w": {
+"bond": "acquainted"
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "tessel.9",
+"n": 9,
+"p": "talk",
+"tag": "Vulnerable",
+"turns": [
+[
+"n",
+"I remember being activated. I do not remember who did it. I dislike that the missing part feels important."
+]
+],
+"w": {
+"bond": "friendly"
+},
+"req": [],
+"once": true,
+"weight": 1.0
+},
+{
+"id": "tessel.10",
+"n": 10,
+"p": "topic",
+"tag": "Disagreement",
+"turns": [
+[
+"p",
+"Let me repair you."
+],
+[
+"n",
+"No."
+],
+[
+"p",
+"I can help."
+],
+[
+"n",
+"You may offer help. You may not convert my refusal into a faulty setting."
+]
+],
+"w": {
+"bond": "friendly"
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "tessel.11",
+"n": 11,
+"p": "talk",
+"tag": "Affection",
+"turns": [
+[
+"n",
+"I have recorded the time you usually arrive. This is not surveillance. It is… anticipation. I believe."
+]
+],
+"w": {
+"bond": "close",
+"talk_days": 5
+},
+"req": [],
+"once": true,
+"weight": 1.0
+},
+{
+"id": "tessel.12",
+"n": 12,
+"p": "topic",
+"tag": "Hope",
+"turns": [
+[
+"p",
+"What do you want?"
+],
+[
+"n",
+"A task I choose. A route I have not been assigned. Perhaps a name that does not sound like a label."
+]
+],
+"w": {
+"bond": "friendly"
+},
+"req": [],
+"once": true,
+"weight": 1.0
+},
+{
+"id": "tessel.13",
+"n": 13,
+"p": "meet",
+"tag": "New — first meeting",
+"turns": [
+[
+"n",
+"Please move the stone beside your foot. It obstructs my route."
+],
+[
+"p",
+"Where are you going?"
+],
+[
+"n",
+"I am revising that plan."
+]
+],
+"w": {},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "tessel.14",
+"n": 14,
+"p": "talk",
+"tag": "Familiar",
+"turns": [
+[
+"n",
+"You usually take the lower path. Today you chose the ridge. I noticed. I am not asking why."
+]
+],
+"w": {
+"bond": "acquainted",
+"on_ridge": true,
+"low_visits": 2
+},
+"req": [],
+"once": true,
+"weight": 4
+},
+{
+"id": "tessel.15",
+"n": 15,
+"p": "topic",
+"tag": "Friend",
+"turns": [
+[
+"p",
+"Does M-4 mean anything?"
+],
+[
+"n",
+"It appears to be a designation. I prefer Morrow. Pip selected it after I said I had no preference. I had a preference."
+]
+],
+"w": {
+"bond": "friendly"
+},
+"req": [],
+"once": true,
+"weight": 1.0
+},
+{
+"id": "tessel.16",
+"n": 16,
+"p": "beat",
+"tag": "Deep Trust — signal",
+"turns": [
+[
+"n",
+"The signal I followed may be my own diagnostic pulse."
+],
+[
+"p",
+"Does that change anything?"
+],
+[
+"n",
+"Yes. It means I may have traveled this far for no instruction. I find that… encouraging."
+]
+],
+"w": {
+"bond": "close"
+},
+"req": [
+"seen:tessel.15"
+],
+"once": true,
+"weight": 1.0,
+"label": "Stand with Morrow while it talks"
+},
+{
+"id": "tessel.17",
+"n": 17,
+"p": "beat",
+"tag": "Story — shutdown test",
+"turns": [
+[
+"n",
+"I will power down for six minutes. You do not need to stay."
+],
+[
+"p",
+"I know."
+],
+[
+"n",
+"I would like you to, if you choose."
+]
+],
+"w": {
+"bond": "close"
+},
+"req": [
+"seen:tessel.16"
+],
+"once": true,
+"weight": 1.0,
+"label": "Sit beside Morrow for the shutdown test",
+"sets": [
+"flag:shutdown_test"
+]
+},
+{
+"id": "tessel.18",
+"n": 18,
+"p": "talk",
+"tag": "Discovery — Root Room relay",
+"turns": [
+[
+"n",
+"The mark matches. The relay has no command, only a partial route and a date with two digits missing."
+],
+[
+"p",
+"Can you restore it?"
+],
+[
+"n",
+"No. I can stop pretending that restoration is the only useful outcome."
+]
+],
+"w": {},
+"req": [
+"world:root_door_opened"
+],
+"once": true,
+"weight": 5
+},
+{
+"id": "tessel.19",
+"n": 19,
+"p": "gift",
+"tag": "Gift — spare fastener",
+"turns": [
+[
+"n",
+"A correct size. You observed my wheel."
+],
+[
+"p",
+"I did."
+],
+[
+"n",
+"Thank you. I will install it when I want to."
+]
+],
+"w": {},
+"req": [],
+"once": false,
+"weight": 1.0,
+"items": [
+"bolt",
+"nails",
+"hinge"
+]
+},
+{
+"id": "tessel.20",
+"n": 20,
+"p": "gift",
+"tag": "Gift — soft cloth",
+"turns": [
+[
+"n",
+"This is not mechanically necessary."
+],
+[
+"p",
+"You can still have it."
+],
+[
+"n",
+"I will place it over my casing. For… comfort."
+]
+],
+"w": {},
+"req": [],
+"once": false,
+"weight": 1.0,
+"items": [
+"cloth"
+]
+},
+{
+"id": "tessel.22",
+"n": 22,
+"p": "talk",
+"tag": "Campfire",
+"turns": [
+[
+"n",
+"I cannot taste the stew."
+],
+[
+"p",
+"You can still sit with us."
+],
+[
+"n",
+"I know. I am practicing sitting without claiming a function."
+]
+],
+"w": {
+"period": [
+"dusk",
+"night"
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "tessel.23",
+"n": 23,
+"p": "talk",
+"tag": "Night sound",
+"turns": [
+[
+"n",
+"That sound came from below us. I cannot identify it. I will not invent certainty to improve the silence."
+]
+],
+"w": {
+"period": [
+"night",
+"deep"
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "tessel.24",
+"n": 24,
+"p": "talk",
+"tag": "Danger — Hush Hounds",
+"turns": [
+[
+"n",
+"Stop moving. They are tracking vibration. We will wait until the ground is quiet, then leave together."
+]
+],
+"w": {
+"hounds": 1
+},
+"req": [],
+"once": false,
+"weight": 6
+},
+{
+"id": "tessel.25",
+"n": 25,
+"p": "talk",
+"tag": "Lantern Walk",
+"turns": [
+[
+"n",
+"I have hung a lamp. It is not efficient illumination. It is a visible sign that the route can be shared."
+]
+],
+"w": {
+"festival": "fest_fireflies"
+},
+"req": [],
+"once": false,
+"weight": 5
 }
+]
 },
 "lull": {
 "id": "lull",
-"name": "Lull",
-"species": "Fogling",
-"epithet": "The dreaming creature",
-"communication": "pictures; it shows rather than speaks",
+"name": "Luma",
+"species": "Dreamer",
+"epithet": "Dreaming Creature",
+"communication": "soft, wandering, sensory",
 "sprite": "lull",
 "frames": {
 "idle": [
@@ -4851,7 +7414,6 @@
 "speed": 8,
 "solid": false,
 "talk_radius": 36,
-"pictures": true,
 "traits": {
 "caution": 0.2,
 "curiosity": 0.7,
@@ -4872,32 +7434,55 @@
 "witnessed": 1.4,
 "discovery": 1.2
 },
-"appearance": "A curled drift of mist and pollen, many small eyes mostly closed, a long tail of fog behind it.",
-"description": "On foggy mornings there is a piece of fog in the meadow that drifts against the wind.",
-"background": "Lull is half asleep all the time. It shows you pictures from its dreams, and some of them are memories.",
-"secret": "Lull is what remains of the reservoir's last summer: the mist that rose off the water the day the valley flooded. Its pictures are that town's last afternoon.",
+"appearance": "Velvety dark fur with pale speckles, a frill of translucent fins behind the ears, oversized paws. Luma blinks one eye at a time when waking. They collect smooth seed pods and line them up, then forget why.",
+"description": "Luma is a soft-bodied, deer-sized nocturnal creature that sleeps in unlikely places and wakes with a vivid, sometimes ridiculous account of what it dreamed. Gentle, distractible, playful, and prone to discomfort in crowds, Luma is not a prophet. Their dreams may echo memory, sounds, or nonsense.",
+"background": "Luma was found asleep in the Glass Orchard after a storm. They have no reliable account of where they came from.",
+"secret": "Their recurring dream is a green room full of ticking, with a door too small to enter. Luma fears the dream is a memory of being alone underground. They have not told the others because everyone listens too carefully when they speak about dreams.",
 "interests": [
 [
-"pictures",
-"Pictures, and old things that hold them"
+"stones",
+"Warm stones, pears and low lamps"
 ],
 [
-"bells",
-"Bellflowers, and the sound they almost make"
+"rain",
+"Soft rain"
 ],
 [
-"weather",
-"Fog, snow, the hour after rain"
+"naps",
+"Ranking naps by how surprised they are to wake"
+],
+[
+"stories",
+"Stories that end before bedtime"
 ]
 ],
 "dislikes": [
 [
-"wind",
-"Wind"
+"bells",
+"Sharp bells"
+],
+[
+"woken",
+"Being woken abruptly"
+],
+[
+"clue",
+"Having every dream treated as a clue"
 ]
 ],
 "habits": "Only in fog, in snow, or at dawn after rain. Drifts over the meadow and the pond bank.",
 "schedule": [
+{
+"frm": 17,
+"to": 19.5,
+"at": "oak_shelter",
+"act": "dozing against the broad roots",
+"when": {
+"weather": [
+"fog"
+]
+}
+},
 {
 "when": {
 "gone": true
@@ -4984,21 +7569,17 @@
 "baseline": "relaxed",
 "gifts": {
 "loves": [
-"bellflower",
-"photo",
-"moondew",
-"nightlily",
-"feather"
+"stone",
+"cloth",
+"moonstone"
 ],
 "likes": [
-"daisy",
-"tin_cup",
-"eggshell",
-"luminous_spores",
-"mint"
+"rowan_berry",
+"blackberry",
+"moss",
+"moondew"
 ],
 "dislikes": [
-"coal",
 "scrap_metal"
 ]
 },
@@ -5009,70 +7590,7 @@
 ],
 "label": "Show it something"
 },
-"greet": [
-{
-"id": "l_first",
-"text": "*It shows you a picture: your own face, but blurred, as if seen through water.* (It has noticed you.)",
-"pics": [
-"moondew"
-],
-"when": {
-"met": false
-}
-},
-{
-"id": "l_g_fog",
-"text": "*A picture of a field of white, and something small and happy in the middle of it.* (It loves the fog.)",
-"pics": [
-"mint"
-],
-"when": {
-"weather": [
-"fog"
-]
-},
-"expr": "glad"
-},
-{
-"id": "l_g_snow",
-"text": "*It shows you snow falling \u2014 upward, slowly, back into the sky.*",
-"when": {
-"weather": [
-"snow"
-]
-}
-},
-{
-"id": "l_g_dawn",
-"text": "*A picture of the rowan with every leaf holding a drop of rain, and in each drop, a tiny sun.*",
-"pics": [
-"rowan_berry"
-],
-"when": {
-"period": [
-"dawn"
-]
-}
-},
-{
-"id": "l_g_absent",
-"text": "*It shows you an empty path, many times over, each time a little more faded.* (You were gone {absent} days.)",
-"when": {
-"absent": 3,
-"bond": "acquainted"
-},
-"w": 3,
-"expr": "troubled"
-},
-{
-"id": "l_g_plain",
-"text": "*It opens two of its small eyes, which it does not do for everyone.*",
-"when": {
-"met": true
-},
-"expr": "glad"
-}
-],
+"greet": [],
 "chat": [
 {
 "id": "l_c_bells",
@@ -5316,7 +7834,7 @@
 "met_days": 0
 },
 "talk": "*It shows you three empty frames, with holes where the pictures should be.* (It has lost something and wants it back.)",
-"journal": "Show Lull old things: they wake pictures in it. Three fragments.",
+"journal": "Show Luma old things: they wake pictures in it. Three fragments.",
 "objective": {
 "type": "fragments",
 "n": 3
@@ -5325,7 +7843,7 @@
 {
 "id": "decide",
 "talk": "*It shows you the three pictures together: {quest.fragments}.* (What were they?)",
-"journal": "Tell Lull what its pictures were.",
+"journal": "Tell Luma what its pictures were.",
 "objective": {
 "type": "choice",
 "options": [
@@ -5436,7 +7954,7 @@
 {
 "id": "ask",
 "talk": "*It shows you the pond frozen clear, and the town below, and itself drifting down toward it.* (On the Silent Tide, come with it to the ice.)",
-"journal": "Be with Lull at the Silent Tide.",
+"journal": "Be with Luma at the Silent Tide.",
 "objective": {
 "type": "festival_with",
 "festival": "fest_silent_tide"
@@ -5445,7 +7963,7 @@
 {
 "id": "decide",
 "talk": "*Under the ice, its town. It hovers over the hole, looking down, looking at you.* (Should it go back down?)",
-"journal": "Lull is deciding whether to go back to the drowned town.",
+"journal": "Luma is deciding whether to go back to the drowned town.",
 "objective": {
 "type": "choice",
 "options": [
@@ -5485,7 +8003,910 @@
 }
 ],
 "complete": "*Every winter, on the Silent Tide, it is there first.*"
+},
+"voice": "Soft, wandering, sensory, and funny in unexpected turns. Sentences drift, double back, or stop. Luma can be poetic, but also says things like \"I dreamt the moon was a potato and honestly it looked tired.\" They never deliver reliable lore as if it were fact.",
+"story": {
+"Wants, fears, contradictions": "Wants uninterrupted naps and someone who can hear a strange story without turning it into a clue. Fears waking to find a familiar place changed. Dreams of swimming in warm air. They seek company, then become overwhelmed by it. They joke when scared, but dislike being told their fear is cute.",
+"Relationships": "Naps near Orun's roots. Shares odd jokes with Pip. Finds Sella's lights comforting when dim. Nera's practical questions help Luma feel grounded. Morrow fascinates them because its sleep noises resemble a lullaby with missing notes.",
+"Player relationship": "First meeting: startles awake and asks whether the player is a tree. Familiarity: tells small dreams and asks about the player's day. Friendship: shares the recurring green-room dream and asks not to be interpreted. Deep trust: lets the player sit through a full quiet wake-up, then talks about loneliness without turning it into a riddle.",
+"Story arc": "Luma learns to share dreams on their own terms, while the community learns not to demand meaning. The recurring green room is eventually found in the Low Archive as a painted panel behind a shelf; it may explain the imagery, but not the dream itself."
+},
+"ex": [
+{
+"id": "lull.1",
+"n": 1,
+"p": "talk",
+"tag": "Morning",
+"turns": [
+[
+"n",
+"Good morning. I dreamed I was a very small hill. A rabbit sat on me. I liked having a job."
+]
+],
+"w": {
+"hour": [
+5,
+10
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "lull.2",
+"n": 2,
+"p": "topic",
+"tag": "Daytime",
+"turns": [
+[
+"p",
+"Were you asleep?"
+],
+[
+"n",
+"I was resting my eyes from the inside."
+]
+],
+"w": {
+"hour": [
+9,
+17
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "lull.3",
+"n": 3,
+"p": "talk",
+"tag": "Evening",
+"turns": [
+[
+"n",
+"The sky looks like it forgot what color it wanted. I like that about it."
+]
+],
+"w": {
+"hour": [
+17,
+22
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "lull.4",
+"n": 4,
+"p": "talk",
+"tag": "Rain",
+"turns": [
+[
+"n",
+"Rain on leaves sounds like tiny feet going somewhere important. Probably home. I hope they packed snacks."
+]
+],
+"w": {
+"weather": [
+"rain"
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "lull.5",
+"n": 5,
+"p": "topic",
+"tag": "Winter",
+"turns": [
+[
+"p",
+"Cold?"
+],
+[
+"n",
+"A little. I have tucked my paws under myself. I am now a warm comma."
+]
+],
+"w": {
+"season": [
+"winter"
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "lull.6",
+"n": 6,
+"p": "talk",
+"tag": "Quiet moment",
+"turns": [
+[
+"n",
+"I lined up these seed pods by size. Now I don't remember what the size was supposed to tell me."
+]
+],
+"w": {},
+"req": [],
+"once": false,
+"weight": 0.7
+},
+{
+"id": "lull.7",
+"n": 7,
+"p": "talk",
+"tag": "Comfort",
+"turns": [
+[
+"n",
+"You don't need to explain the whole hurt. You can give me the small edge of it, if that's easier."
+]
+],
+"w": {
+"player_low": true
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "lull.8",
+"n": 8,
+"p": "talk",
+"tag": "Funny",
+"turns": [
+[
+"n",
+"I dreamed the moon was a potato."
+],
+[
+"p",
+"Was it delicious?"
+],
+[
+"n",
+"No, it was tired. Please respect its privacy."
+]
+],
+"w": {
+"bond": "acquainted"
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "lull.9",
+"n": 9,
+"p": "talk",
+"tag": "Vulnerable",
+"turns": [
+[
+"n",
+"Sometimes I wake up and the place looks unfamiliar for one breath. Then I remember it. That one breath is very long."
+]
+],
+"w": {
+"bond": "friendly"
+},
+"req": [],
+"once": true,
+"weight": 1.0
+},
+{
+"id": "lull.10",
+"n": 10,
+"p": "topic",
+"tag": "Disagreement",
+"turns": [
+[
+"p",
+"Your dream must mean something."
+],
+[
+"n",
+"Maybe. But I don't want it turned into homework."
+],
+[
+"p",
+"You're right. Sorry."
+],
+[
+"n",
+"Thank you. We can let it be odd."
+]
+],
+"w": {
+"bond": "friendly"
+},
+"req": [
+"seen:lull.8|seen:lull.14|seen:lull.1"
+],
+"once": true,
+"weight": 1.0
+},
+{
+"id": "lull.11",
+"n": 11,
+"p": "talk",
+"tag": "Affection",
+"turns": [
+[
+"n",
+"I saved the warm stone for you. It isn't warm anymore. I thought we could warm it again together."
+]
+],
+"w": {
+"bond": "close"
+},
+"req": [],
+"once": true,
+"weight": 1.0
+},
+{
+"id": "lull.12",
+"n": 12,
+"p": "topic",
+"tag": "Loneliness",
+"turns": [
+[
+"p",
+"Do you feel alone?"
+],
+[
+"n",
+"Yes. Also, sometimes I want everyone to go away. Both feelings fit. It's a crowded little room."
+]
+],
+"w": {
+"bond": "friendly"
+},
+"req": [],
+"once": true,
+"weight": 1.0
+},
+{
+"id": "lull.13",
+"n": 13,
+"p": "meet",
+"tag": "New — first meeting",
+"turns": [
+[
+"n",
+"Are you a tree?"
+],
+[
+"p",
+"No."
+],
+[
+"n",
+"Good. I was about to apologize for sleeping on you."
+]
+],
+"w": {},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "lull.14",
+"n": 14,
+"p": "talk",
+"tag": "Familiar",
+"turns": [
+[
+"n",
+"I dreamed you brought a pear. You didn't. I am telling you this as a very unfair review of reality."
+]
+],
+"w": {
+"bond": "acquainted"
+},
+"req": [],
+"once": true,
+"weight": 4
+},
+{
+"id": "lull.15",
+"n": 15,
+"p": "talk",
+"tag": "Friend",
+"turns": [
+[
+"n",
+"Do you want a dream story, or a normal one?"
+],
+[
+"p",
+"Normal."
+],
+[
+"n",
+"A beetle stole a seed pod. It came back for a second one. I respected the ambition."
+]
+],
+"w": {
+"bond": "friendly"
+},
+"req": [],
+"once": true,
+"weight": 3
+},
+{
+"id": "lull.16",
+"n": 16,
+"p": "beat",
+"tag": "Deep Trust — recurring dream",
+"turns": [
+[
+"n",
+"Green room. Ticking. A door too small for me."
+],
+[
+"p",
+"Do you want to look for it?"
+],
+[
+"n",
+"Not today. Could you just sit with me while I wake up properly?"
+],
+[
+"p",
+"Yes."
+],
+[
+"n",
+"Good. I am here now. I can feel the stone."
+]
+],
+"w": {
+"bond": "close"
+},
+"req": [],
+"once": true,
+"weight": 1.0,
+"label": "Sit with Luma while they wake",
+"sets": [
+"flag:dream_shared"
+]
+},
+{
+"id": "lull.18",
+"n": 18,
+"p": "talk",
+"tag": "Discovery — Second Dawn",
+"turns": [
+[
+"n",
+"The world glowed under the hill."
+],
+[
+"p",
+"Do you know why?"
+],
+[
+"n",
+"No. I was hoping you did. We can both be surprised."
+]
+],
+"w": {},
+"req": [
+"disc:second_dawn"
+],
+"once": true,
+"weight": 5
+},
+{
+"id": "lull.22",
+"n": 22,
+"p": "talk",
+"tag": "Campfire",
+"turns": [
+[
+"n",
+"I have a story, but it doesn't go anywhere."
+],
+[
+"p",
+"That's fine."
+],
+[
+"n",
+"A stone was warm. Then it wasn't. The end."
+]
+],
+"w": {
+"period": [
+"dusk",
+"night"
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "lull.23",
+"n": 23,
+"p": "talk",
+"tag": "Night Choir",
+"turns": [
+[
+"n",
+"The frogs sound like someone trying to remember a song without waking the singer."
+]
+],
+"w": {
+"period": [
+"night",
+"deep"
+],
+"season": [
+"spring",
+"summer",
+"autumn"
+]
+},
+"req": [],
+"once": false,
+"weight": 1.0
+},
+{
+"id": "lull.24",
+"n": 24,
+"p": "talk",
+"tag": "Danger — Hush Hounds",
+"turns": [
+[
+"n",
+"Don't run. My heart is already doing that for all of us."
+]
+],
+"w": {
+"hounds": 1
+},
+"req": [],
+"once": false,
+"weight": 6
+},
+{
+"id": "lull.25",
+"n": 25,
+"p": "talk",
+"tag": "First frost bowl",
+"turns": [
+[
+"n",
+"I put in a smooth stone. Take it if your pocket needs a little weight."
+]
+],
+"w": {
+"festival": "fest_forgotten"
+},
+"req": [],
+"once": false,
+"weight": 5
 }
+]
 }
+},
+"cross": [
+{
+"n": 1,
+"title": "Pip and Nera, at the pond",
+"turns": [
+[
+"Pip",
+"If I put a berry in the water, will it float?"
+],
+[
+"Nera",
+"Possibly."
+],
+[
+"Pip",
+"And if it sinks?"
+],
+[
+"Nera",
+"Then you have fed the pond."
+],
+[
+"Pip",
+"I like a snack with options."
+]
+],
+"who": [
+"pip",
+"ebb"
+],
+"at": [
+"pond_bank",
+"dock_end"
+],
+"w": {
+"hour": [
+15,
+18
+]
 }
+},
+{
+"n": 2,
+"title": "Sella and Morrow, repairing a lamp",
+"turns": [
+[
+"Morrow",
+"The wick is crooked."
+],
+[
+"Sella",
+"So am I, some mornings."
+],
+[
+"Morrow",
+"Should I correct you?"
+],
+[
+"Sella",
+"No."
+],
+[
+"Morrow",
+"Understood. I will not correct either of us."
+]
+],
+"who": [
+"wick",
+"tessel"
+],
+"at": [
+"lantern"
+],
+"w": {
+"hour": [
+19.5,
+20.5
+]
+}
+},
+{
+"n": 3,
+"title": "Orun and Luma, dusk",
+"turns": [
+[
+"Luma",
+"Your roots make a good wall."
+],
+[
+"Orun",
+"They are not a wall."
+],
+[
+"Luma",
+"A wall with excellent manners, then."
+],
+[
+"Orun",
+"That is more accurate."
+]
+],
+"who": [
+"burl",
+"lull"
+],
+"at": [
+"burl_home",
+"oak_shelter"
+],
+"w": {
+"hour": [
+17,
+19.5
+]
+}
+},
+{
+"n": 4,
+"title": "Pip and Morrow, on the path",
+"turns": [
+[
+"Pip",
+"Race you to the post!"
+],
+[
+"Morrow",
+"I am not optimized for competition."
+],
+[
+"Pip",
+"So that's a yes?"
+],
+[
+"Morrow",
+"That is an incomplete refusal."
+]
+],
+"who": [
+"pip",
+"tessel"
+],
+"at": [
+"meadow",
+"sign"
+],
+"w": {
+"hour": [
+13,
+15
+]
+}
+},
+{
+"n": 5,
+"title": "Nera and Sella, after rain",
+"turns": [
+[
+"Sella",
+"You look tired."
+],
+[
+"Nera",
+"I am inspecting the bank."
+],
+[
+"Sella",
+"You can inspect it sitting down."
+],
+[
+"Nera",
+"That is annoyingly practical."
+],
+[
+"Sella",
+"I learned from the best."
+]
+],
+"who": [
+"ebb",
+"wick"
+],
+"at": [
+"dock_end",
+"pond_bank"
+],
+"w": {
+"after_rain": true,
+"hour": [
+15,
+19
+]
+}
+},
+{
+"n": 6,
+"title": "Group at the Empty Bowl",
+"turns": [
+[
+"Pip",
+"Someone put in a button."
+],
+[
+"Morrow",
+"It has four holes. Potentially useful."
+],
+[
+"Orun",
+"Or potentially a button."
+],
+[
+"Luma",
+"I like that it doesn't have to decide."
+],
+[
+"Nera",
+"The bowl can hold both."
+]
+],
+"who": [
+"pip",
+"tessel",
+"burl",
+"lull",
+"ebb"
+],
+"at": [
+"camp_fire"
+],
+"w": {
+"festival": "fest_forgotten",
+"hour": [
+18,
+23
+]
+},
+"any_place": true
+}
+],
+"choices": {
+"ebb": "All right. The water will still be here.",
+"pip": "Okay! I'll keep the question. It can wait in my pocket.",
+"wick": "Of course. I'll leave the lamp low.",
+"burl": "Good. A choice made slowly is still a choice.",
+"tessel": "Acknowledged. No penalty recorded. I mean that literally.",
+"lull": "That's fine. We can let the moment stay unfinished."
+},
+"world_notes": [
+{
+"id": "folklore_0",
+"kind": "folklore",
+"title": "The Listening Turn",
+"src": [
+"pip.23"
+],
+"show": [
+"pip"
+],
+"text": [
+"Old foragers say the forest gives back a sound one season late. A whistle heard in spring may return the following autumn, from a direction with no path. Never whistle back twice: the first answer may be an echo; the second could be an animal learning you.",
+"Rootbound Elder says the story began when wind threaded through a collapsed pipe. Little Forager insists it once heard its own sneeze answered from underground."
+]
+},
+{
+"id": "folklore_1",
+"kind": "folklore",
+"title": "The Borrowed Shore",
+"src": [
+"pip.5"
+],
+"show": [
+"pip",
+"wick"
+],
+"text": [
+"When the pond's waterline shifts overnight, a pale strip of mud may show footprints facing both toward and away from the water. The Keeper of the Pond calls these ordinary prints distorted by soft ground. The Lantern Keeper leaves a small, unlit wick on the bank anyway, \"for anything that got turned around.\"",
+"At the river bend, three flat stones set in a row are said to help a lost current remember its bed. Children use the custom to mark safe crossings; the river does not always cooperate."
+]
+},
+{
+"id": "folklore_2",
+"kind": "folklore",
+"title": "The Lantern Walk",
+"src": [
+"ebb.25",
+"wick.25",
+"tessel.25",
+"wick.18"
+],
+"show": [
+"ebb",
+"wick",
+"tessel"
+],
+"text": [
+"On certain foggy nights, lights travel between the old rail posts. They keep no steady pace and vanish if pursued. The Lantern Keeper believes some are marsh gas; others, she says, \"have the manners of people carrying soup.\" The rule is simple: don't chase a light into water, and don't assume every light is for you."
+]
+},
+{
+"id": "folklore_3",
+"kind": "folklore",
+"title": "The Root Rooms",
+"src": [
+"burl.23",
+"ebb.23",
+"burl.18",
+"tessel.18"
+],
+"show": [
+"burl",
+"ebb",
+"tessel"
+],
+"text": [
+"Below the eastern slope is a network of shallow chambers where tree roots have grown through an old service tunnel. They hold a little warmth even in winter. Rootbound Elder remembers being planted above them; it does not remember who made the tunnel. A low, rhythmic knock travels through the soil in thaw season. The Elder answers with a knock of its own, never more than once."
+]
+},
+{
+"id": "folklore_4",
+"kind": "folklore",
+"title": "The Second Dawn",
+"src": [
+"lull.18"
+],
+"show": [
+"lull"
+],
+"text": [
+"Before sunrise, the Vale sometimes brightens for a few seconds from below the horizon. Birds wake, then settle again. The weather station records nothing. The Dreaming Creature says the world is \"turning over in its sleep.\" The Mechanical Wanderer says a buried battery would not behave that way. Both leave their theories open."
+]
+},
+{
+"id": "folklore_5",
+"kind": "folklore",
+"title": "The Empty Bowl",
+"src": [
+"pip.25",
+"burl.25",
+"lull.25"
+],
+"show": [
+"pip",
+"burl",
+"lull"
+],
+"text": [
+"At the first frost, some residents set an empty bowl outside—not as an offering to a god, but as a reminder that winter makes everyone a little dependent on someone else. Anyone may put something in or take something out. The bowl is never tracked as a debt."
+]
+},
+{
+"id": "place_6",
+"kind": "place",
+"title": "Pondside Camp",
+"disc": [
+"camp_fire"
+],
+"show": [
+"ebb"
+],
+"text": [
+"A dry rise above the pond, with a shared fire ring, lean-to, and salvaged board for leaving useful objects. It is a place to rest and choose company. The first keeper of the camp is unknown; a line of old stones suggests the fire has been moved several times to keep clear of roots."
+]
+},
+{
+"id": "place_7",
+"kind": "place",
+"title": "The Pond",
+"disc": [
+"pond_bank"
+],
+"show": [
+"ebb"
+],
+"text": [
+"Still in the morning, busy with insects by noon. An old intake pipe enters beneath its north bank. The Keeper of the Pond watches its water quality and refuses to call it theirs. In low water, a ceramic tile shows a painted blue hand with six fingers."
+]
+},
+{
+"id": "place_8",
+"kind": "place",
+"title": "Lantern Row",
+"disc": [
+"lantern"
+],
+"show": [
+"wick"
+],
+"text": [
+"Three surviving rail posts and a footpath through wet meadow. The Lantern Keeper maintains lamps here, though no one needs the old route to travel. One lamp is always left dark; she says a light should make room for someone else's eyes."
+]
+},
+{
+"id": "place_9",
+"kind": "place",
+"title": "The Root Rooms",
+"src": [
+"burl.18",
+"tessel.18"
+],
+"world": [
+"root_door_opened"
+],
+"show": [
+"burl",
+"tessel"
+],
+"text": [
+"Warm, close, and fragrant with wet bark. The tunnels are safe near the entrance but unstable deeper in. A rusted door bears a faded symbol identical to a mark on the Mechanical Wanderer's casing. The Elder says the mark predates its own oldest memory."
+]
+}
+]
 }

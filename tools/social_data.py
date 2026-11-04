@@ -537,6 +537,92 @@ C['lull']['quest2'] = dict(id='lastafternoon', title='The Last Afternoon', requi
         dict(id='stay', text='Stay. You have a place here now.', result='good', line='*It rises from the hole and settles around your shoulders. Its pictures are the clearing now, and you, and the pond with nothing under it.*', rel=dict(affection=8, shared=6)),
         dict(id='visit', text='Stay, and come back here every winter to look.', result='good', line='*Every one of its eyes opens. It shows you the two of you on the ice, again and again, a year apart each time.*', rel=dict(shared=8, trust=4))]))], complete='*Every winter, on the Silent Tide, it is there first.*')
 
+
+# ============================================================== Prompt 17: the narrative library (docs/narrative/*.md)
+# Names, bible text and every authored exchange come from the three source files through tools/narrative.py; the conditions
+# under which each exchange may play live in tools/narrative_map.py. Anything about a character that the files do not say
+# (mechanics, routines, memory weights) stays defined above.
+import narrative as NR, narrative_map as NM
+SPECIES = dict(Nera='Pond-dweller', Pip='Forager', Sella='Moth-kin', Orun='Rootbound', Morrow='Maintenance machine', Luma='Dreamer')
+COMM = dict(Nera='dry, exact, practical', Pip='quick, interrupted, concrete', Sella='gentle, plain, offering choices', Orun='unhurried, tactile, blunt', Morrow='literal, precise, learning contractions', Luma='soft, wandering, sensory')
+# how many sentences of "History and secret" are history (the rest is the secret, shown only once it has been earned)
+HISTORY_SENTENCES = dict(Nera=3, Pip=2, Sella=3, Orun=2, Morrow=None, Luma=2)
+INTERESTS = dict(
+  Nera=([('jars', 'Clean jars, rain charts and warm tea'), ('stones', 'Smooth river stones'), ('stored', 'Foods that can be stored'), ('sound', 'Mapping water by sound')], [('waste', 'Waste'), ('perfume', 'Strong perfume'), ('mother', 'Being called "the pond\'s mother"')]),
+  Pip=([('berries', 'Berries, seed pods and anything that rattles'), ('buttons', 'Interesting buttons'), ('riddles', 'Riddles with fair answers'), ('names', 'Naming bugs, then changing the names')], [('mushy', 'Mushy roots'), ('shushed', 'Being shushed'), ('wrapped', "Gifts wrapped so carefully they can't tell what they are")]),
+  Sella=([('wax', 'Beeswax, dry cloth and wind chimes'), ('repairs', 'Careful repairs'), ('path', 'Sitting where she can see the path'), ('flames', 'The sounds different flames make')], [('debt', 'Being thanked as if kindness were a debt'), ('flash', 'Sudden bright flashes'), ('fine', 'People who insist they are "fine" while bleeding')]),
+  Orun=([('mold', 'Leaf mold and a good rain'), ('stories', 'Stories with unimportant endings'), ('birds', 'Bird visits'), ('moss', 'A list of places where moss grows on stone')], [('axes', 'Axes waved as punctuation'), ('wise', 'Being called "wise"'), ('wind', 'Hot dry wind')]),
+  Morrow=([('gears', 'Clean gears and patterned cloth'), ('maps', 'Accurate maps'), ('rhythms', 'Soft tapping rhythms'), ('birds', 'Bird calls, with confidence levels')], [('water', 'Sudden water immersion'), ('test', 'Being called a person as a test'), ('help', '"Help" that removes its choice')]),
+  Luma=([('stones', 'Warm stones, pears and low lamps'), ('rain', 'Soft rain'), ('naps', 'Ranking naps by how surprised they are to wake'), ('stories', 'Stories that end before bedtime')], [('bells', 'Sharp bells'), ('woken', 'Being woken abruptly'), ('clue', 'Having every dream treated as a clue')]))
+GIFTS = dict(  # real item ids only; what the bible says each one likes and does not
+  ebb=dict(loves=['glass_pane', 'glass_shard', 'spore_jar'], likes=['stone', 'quartz', 'mint', 'moss'], dislikes=['rot_fiber']),
+  pip=dict(loves=['blackberry', 'rowan_berry', 'eggshell', 'seeds_wild'], likes=['mushroom_brown', 'feather', 'bellflower', 'daisy', 'glass_shard'], dislikes=['burdock_root', 'emberroot']),
+  wick=dict(loves=['hinge', 'cloth', 'nightlily', 'bellflower'], likes=['nails', 'hook_iron', 'daisy', 'poppy', 'quartz', 'amethyst'], dislikes=[]),
+  burl=dict(loves=['rot_fiber', 'moss'], likes=['cloth', 'fern_frond', 'mushroom_brown'], dislikes=['log', 'plank', 'hardwood']),
+  tessel=dict(loves=['bolt', 'nails', 'hinge', 'cloth'], likes=['rusted_gear', 'circuit', 'wire', 'battery', 'scrap_metal'], dislikes=['mud', 'moss']),
+  lull=dict(loves=['stone', 'cloth', 'moonstone'], likes=['rowan_berry', 'blackberry', 'moss', 'moondew'], dislikes=['scrap_metal']))
+def _sentences(t): return re.split(r'(?<=[.?!])\s+(?=[A-Z"])', t.strip())
+def attach_narrative():
+    data = NR.build(); report = dict(unconnected=[], connected=0, by_pool={})
+    for name, nc in data['characters'].items():
+        cid = nc['id']; c = C[cid]; b = nc['bible']
+        c.update(name=name, epithet=nc['title'], species=SPECIES[name], communication=COMM[name], description=b['Role and core'], appearance=b['Appearance and mannerisms'], voice=b['Voice'])
+        c.pop('gesture', None); c.pop('pictures', None)
+        hs = _sentences(b['History and secret']); k = HISTORY_SENTENCES[name]
+        if k is None: c['background'], c['secret'] = hs[1], ' '.join([hs[0]] + hs[2:])        # Morrow: the Root Rooms mark is a discovery, so it stays with the secret
+        else: c['background'], c['secret'] = ' '.join(hs[:k]), ' '.join(hs[k:])
+        c['interests'], c['dislikes'] = INTERESTS[name]; c['gifts'] = GIFTS[cid]; c['greet'] = []; c['story'] = {k2: b[k2] for k2 in ('Wants, fears, contradictions', 'Relationships', 'Player relationship', 'Story arc')}
+        ex = []; rules = NM.RULES[cid]
+        for e in nc['exchanges']:
+            r = rules.get(e['n']); assert r is not None, (cid, e['n'])
+            pool = r.get('p') or ('topic' if e['first'] == 'player' else 'talk')
+            if pool == 'none': report['unconnected'].append(dict(id=e['id'], name=name, tag=e['tag'], why=r.get('note'))); continue
+            rec = dict(id=e['id'], n=e['n'], p=pool, tag=e['tag'], turns=[['p' if t['who'] == 'player' else 'n', t['text']] for t in e['turns']], w=r['w'], req=r['req'], once=r['once'], weight=r['weight'])
+            for k2 in ('items', 'label', 'sets'):
+                if r.get(k2): rec[k2] = r[k2]
+            ex.append(rec); report['connected'] += 1; report['by_pool'][pool] = report['by_pool'].get(pool, 0) + 1
+        c['ex'] = ex
+    for cid, adds in NM.SCHEDULE_ADD.items(): C[cid]['schedule'] = adds + C[cid]['schedule']
+    return data, report
+DREAMS = {'lull.14'}      # Luma dreaming about the player is not a claim about the past
+RENAME = {'Ebb': 'Nera', 'Wick': 'Sella', 'Burl': 'Orun', 'Tessel': 'Morrow', 'Lull': 'Luma'}
+SKIP_KEYS = {'ex', 'story', 'voice', 'background', 'secret', 'description', 'appearance', 'interests', 'dislikes', 'communication', 'species', 'epithet', 'name'}
+_SHE_VERBS = ('leads dims helps rests takes sets lifts hands holds keeps looks turns waits says nods stays walks lights goes moves smiles laughs listens watches puts gives shows stands sits reaches asks tells brings stops draws pulls picks steps opens closes touches thanks blinks flares raises lowers visits comes flies checks remembers makes points inspects knows does is has still lets sits leans dips tilts covers circles loves seems gutters shrinks carries pauses stays hesitates answers').split()
+def _fix_she(t):
+    """Sella is 'she' in the character bible; the older narration of this neighbour said 'it'. Only the neighbour's own actions change (verbs
+    that a person does); pronouns for the door, the dark and the knocking stay as they were."""
+    v = '|'.join(_SHE_VERBS)
+    t = re.sub(r'(^|[*(\[]|[.!?;,] |\b(?:then|and|when|but|while|so) )It (?=(?:' + v + r')\b)', lambda m: m.group(1) + ('She ' if m.group(1) == '' or m.group(1)[-1] in '*([.!?;' or m.group(1).endswith('] ') else 'she '), t)
+    t = re.sub(r'\b(then|and|when|but|while|so|,) it (?=(?:' + v + r')\b)', r'\1 she ', t)
+    t = re.sub(r'\bIts\b', 'Her', t); t = re.sub(r'\bits\b', 'her', t); t = re.sub(r'\bitself\b', 'herself', t)
+    t = t.replace('(It is quieter now.)', '(The door is quieter now.)').replace('She is quieter now', 'She is quieter now')
+    t = t.replace('lays one wing over your shoulder', 'lays one wing over your shoulder').replace('(It remembers that you protected it.)', '(She remembers that you protected her.)').replace('(It remembers you were there.)', '(She remembers you were there.)')
+    t = t.replace('You remembered what it loves.', 'You remembered what she loves.').replace('(You remembered what it loves.)', '(You remembered what she loves.)')
+    for a, b in [('. she ', '. She '), ('? she ', '? She '), ('! she ', '! She '), ('(It ', '(She '), ('*It ', '*She '), ('. It ', '. She '), ('Then it ', 'Then she '), ('Every night now it ', 'Every night now she '), ('one it visits', 'one she visits'),
+                 ('From now on it visits', 'From now on she visits'), ('what it hides', 'what she hides'), ('you protected it.)', 'you protected her.)'), ('you gave it this way', 'you gave her this way')]: t = t.replace(a, b)
+    return t
+def reconcile_names():
+    """The older hand-written storylines used the first-draft names; the library's names win everywhere the player can read them."""
+    def fix(o, cid):
+        if isinstance(o, str):
+            for a, b in RENAME.items(): o = re.sub(r'\b' + a + r'\b', b, o)
+            return _fix_she(o) if cid == 'wick' else o
+        if isinstance(o, dict): return {k: (v if k in SKIP_KEYS else fix(v, cid)) for k, v in o.items()}
+        if isinstance(o, (list, tuple)): return type(o)(fix(v, cid) for v in o)
+        return o
+    for cid in list(C): 
+        for k in list(C[cid]):
+            if k not in SKIP_KEYS: C[cid][k] = fix(C[cid][k], cid)
+def lint_exchanges():
+    """An authored exchange may only claim a past if it is bound to something that really happened (a requirement, or the player's own ask)."""
+    past = re.compile(r"\byou (remembered|said|asked|usually|told|took|brought)\b|\byour shell\b|the way you like it|the path you asked about", re.I)
+    bad = []
+    for c in C.values():
+        for e in c.get('ex', []):
+            txt = ' '.join(t[1] for t in e['turns'] if t[0] == 'n')
+            if past.search(txt) and not (e['req'] or 'low_visits' in e['w'] or 'talk_days' in e['w'] or (e['p'] == 'topic' and e.get('label')) or e['id'] in DREAMS): bad.append(e['id'])
+    assert not bad, ('authored lines claiming a past with no binding condition', bad)
+
 def lint():
     """No line may claim a past that is not bound to a stored memory."""
     bad = []
@@ -550,8 +636,19 @@ def lint():
     assert not bad, bad
 def build():
     lint()
+    data, report = attach_narrative(); reconcile_names(); lint_exchanges()
     out = dict(version=1, milestones=MILESTONES, dims=DIMS, anchors=ANCHORS, water=WATER, memory_kinds={k: dict(sig=v[0], sign=v[1]) for k, v in MEMORY.items()}, moods=MOODS,
                tiers=[[0, 'stranger'], [8, 'acquainted'], [20, 'friendly'], [38, 'close'], [60, 'kindred']], characters=C)
-    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); json.dump(out, open(os.path.join(root, 'assets/social/cast.json'), 'w'), indent=0)
-    n = sum(len(c['greet']) + len(c['chat']) + len(c['recall']) + len(c['asleep']) for c in C.values()); print(len(C), 'characters,', n, 'authored lines')
+    root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    out['cross'] = [dict(n=x['n'], title=x['title'], turns=[[x2['speaker'], x2['text']] for x2 in x['turns']], **NM.CROSS[x['n']]) for x in data['cross']]; out['choices'] = {NR.CHAR_IDS[k]: v for k, v in data['choices'].items()}
+    wd = data['world']; notes = []
+    for i, wn in enumerate(NM.WORLD_NOTES):
+        src = wd['folklore' if wn['kind'] == 'folklore' else 'places']; hit = [x for x in src if x['title'] == wn['title']]; assert hit, wn['title']
+        allowed = set(e['id'] for c in C.values() for e in c['ex'])
+        for ex in wn.get('src', []): assert ex in allowed, ('world note needs a connected exchange', wn['title'], ex)
+        notes.append(dict(id=f"{wn['kind']}_{i}", **{k: v for k, v in wn.items()}, text=hit[0]['paragraphs']))
+    out['world_notes'] = notes
+    json.dump(out, open(os.path.join(root, 'assets/social/cast.json'), 'w'), indent=0, ensure_ascii=False)
+    json.dump(report, open(os.path.join(root, 'assets/social/narrative_report.json'), 'w'), indent=1, ensure_ascii=False)
+    n = sum(len(c['chat']) + len(c['recall']) + len(c['asleep']) + len(c['ex']) for c in C.values()); print(len(C), 'characters,', n, 'authored lines;', report['connected'], 'library exchanges connected,', len(report['unconnected']), 'waiting on a game feature')
 if __name__ == '__main__': build()

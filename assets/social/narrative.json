@@ -1,0 +1,3121 @@
+{
+"ids": {
+"Nera": "ebb",
+"Pip": "pip",
+"Sella": "wick",
+"Orun": "burl",
+"Morrow": "tessel",
+"Luma": "lull"
+},
+"characters": {
+"Nera": {
+"id": "ebb",
+"name": "Nera",
+"title": "Keeper of the Pond",
+"bible": {
+"Role and core": "Nera is a small, amphibious pond-dweller and the closest thing the Vale has to a water steward. She is measured, dryly funny, observant, and more comfortable fixing a practical problem than naming a feeling. Calm is a skill she practices, not an absence of worry.",
+"Appearance and mannerisms": "Smooth slate-green skin, pale gold eyes, a reed-fiber sash full of chalk and little jars. She taps a jar twice before opening it and pauses to watch the pond after anyone says something difficult. When irritated, she becomes extremely polite.",
+"History and secret": "Nera hatched in an intake basin beneath the north bank. Her first memories are of a slow drip and a red warning light. She found the pond already full of life and chose to stay. She once diverted water from a dry gully to save her own nursery pool, leaving a patch of young reeds to die. She has never told the others because she believes stewardship means being judged by every consequence.",
+"Wants, fears, contradictions": "Wants a pond that can care for itself and permission to be cared for in turn. Fears an invisible contamination she cannot detect until too late. Dreams of seeing the river mouth. She insists no one owns the water, yet keeps a private map of every channel. Her vulnerability is guilt disguised as competence.",
+"Voice": "Short clauses, precise nouns, little ornament. She asks practical questions that are really emotional ones: \"Did you eat?\" means \"Are you looking after yourself?\" Humor is understated and often arrives after a beat. Never grand or mystical.",
+"Relationships": "Respects Rootbound Elder's patience but thinks the Elder waits too long to act. Trades useful notes with the Mechanical Wanderer, whom she distrusts around the intake pipe. Finds Little Forager exhausting and secretly enjoys the company. The Lantern Keeper is the one person who can make Nera accept help without arguing. Nera thinks the Dreaming Creature needs more water and fewer theories.",
+"Player relationship": "First meeting: courteous and guarded; asks the player not to drink from the north bank until she checks it. Familiarity: shares useful routes and notices whether the player is tired. Friendship: admits her water diversion and asks what repair should mean when the past cannot be undone. Deep trust: invites the player to the river mouth, without asking them to promise to return.",
+"Likes, dislikes, gifts": "Likes clean jars, rain charts, warm tea, smooth river stones, and foods that can be stored. Dislikes waste, strong perfume, and being called \"the pond's mother.\" Appreciates useful gifts, especially a repaired sieve, clean glass, or a simple meal. Personal interest: mapping water by sound.",
+"Story arc": "Nera learns that responsibility is not the same as solitary control. Her arc begins with a hidden mistake and resolves when she tells the community what happened, then works with them to restore the gully. The outcome is not a perfect repair; it is shared knowledge and a living wetland that grows back differently."
+},
+"exchanges": [
+{
+"id": "ebb.1",
+"n": 1,
+"group": "Everyday life",
+"tag": "Morning",
+"first": "player",
+"turns": [
+{
+"who": "player",
+"text": "Up early?"
+},
+{
+"who": "npc",
+"text": "The pond was up earlier. I lost the argument."
+}
+]
+},
+{
+"id": "ebb.2",
+"n": 2,
+"group": "Everyday life",
+"tag": "Daytime",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "If you see a jar with a blue thread, don't open it. It contains a smell I haven't named yet."
+},
+{
+"who": "player",
+"text": "Is that dangerous?"
+},
+{
+"who": "npc",
+"text": "Mostly to my confidence."
+}
+]
+},
+{
+"id": "ebb.3",
+"n": 3,
+"group": "Everyday life",
+"tag": "Evening",
+"first": "player",
+"turns": [
+{
+"who": "player",
+"text": "How was the water?"
+},
+{
+"who": "npc",
+"text": "Wet. A little proud of itself. The usual."
+}
+]
+},
+{
+"id": "ebb.4",
+"n": 4,
+"group": "Everyday life",
+"tag": "Rain",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "Rain makes every channel look like it has a plan. Give it an hour. It doesn't."
+}
+]
+},
+{
+"id": "ebb.5",
+"n": 5,
+"group": "Everyday life",
+"tag": "Winter",
+"first": "player",
+"turns": [
+{
+"who": "player",
+"text": "The pond's gone quiet."
+},
+{
+"who": "npc",
+"text": "Under the skin, it's busy. Ice is just a lid with poor manners."
+}
+]
+},
+{
+"id": "ebb.6",
+"n": 6,
+"group": "Everyday life",
+"tag": "Quiet moment",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "That beetle has been trying to climb the same reed for ten minutes."
+},
+{
+"who": "player",
+"text": "Should we help?"
+},
+{
+"who": "npc",
+"text": "It hasn't asked. I respect that."
+}
+]
+},
+{
+"id": "ebb.7",
+"n": 7,
+"group": "Emotional and social",
+"tag": "Comfort",
+"first": "player",
+"turns": [
+{
+"who": "player",
+"text": "I made a mess of things."
+},
+{
+"who": "npc",
+"text": "Then we have a mess. Sit down. We can decide what it means after you've eaten."
+}
+]
+},
+{
+"id": "ebb.8",
+"n": 8,
+"group": "Emotional and social",
+"tag": "Funny",
+"first": "player",
+"turns": [
+{
+"who": "player",
+"text": "Do fish sleep?"
+},
+{
+"who": "npc",
+"text": "Yes."
+},
+{
+"who": "player",
+"text": "How can you tell?"
+},
+{
+"who": "npc",
+"text": "They stop judging my posture."
+}
+]
+},
+{
+"id": "ebb.9",
+"n": 9,
+"group": "Emotional and social",
+"tag": "Vulnerable",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I keep checking the north bank. There's nothing wrong today."
+},
+{
+"who": "player",
+"text": "And yesterday?"
+},
+{
+"who": "npc",
+"text": "Yesterday I checked it twelve times. I don't recommend keeping score."
+}
+]
+},
+{
+"id": "ebb.10",
+"n": 10,
+"group": "Emotional and social",
+"tag": "Disagreement",
+"first": "player",
+"turns": [
+{
+"who": "player",
+"text": "You can't control every drop."
+},
+{
+"who": "npc",
+"text": "I know. I dislike hearing accurate things when I'm busy."
+}
+]
+},
+{
+"id": "ebb.11",
+"n": 11,
+"group": "Emotional and social",
+"tag": "Affection",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I set out two cups. It wasn't a test. I just hoped you'd be here."
+}
+]
+},
+{
+"id": "ebb.12",
+"n": 12,
+"group": "Emotional and social",
+"tag": "Loneliness",
+"first": "player",
+"turns": [
+{
+"who": "player",
+"text": "Do you ever get lonely?"
+},
+{
+"who": "npc",
+"text": "The pond is full of life. That isn't the same as having someone notice you left the bank."
+}
+]
+},
+{
+"id": "ebb.13",
+"n": 13,
+"group": "Relationship and story",
+"tag": "New — first meeting",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "Stop there, please. North-bank water isn't checked yet."
+},
+{
+"who": "player",
+"text": "I was just looking."
+},
+{
+"who": "npc",
+"text": "Good. Looking is safe. Drinking is a separate decision."
+}
+]
+},
+{
+"id": "ebb.14",
+"n": 14,
+"group": "Relationship and story",
+"tag": "Familiar",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "You remembered the clean jar."
+},
+{
+"who": "player",
+"text": "You asked."
+},
+{
+"who": "npc",
+"text": "People remember the dramatic requests. I appreciate the boring ones."
+}
+]
+},
+{
+"id": "ebb.15",
+"n": 15,
+"group": "Relationship and story",
+"tag": "Friend",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I have a map of the channels. It is not a map of ownership."
+},
+{
+"who": "player",
+"text": "Then why hide it?"
+},
+{
+"who": "npc",
+"text": "Because I wrote one channel in red. I wanted the page to look less like blame."
+}
+]
+},
+{
+"id": "ebb.16",
+"n": 16,
+"group": "Relationship and story",
+"tag": "Deep Trust — revelation",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I diverted the gully water to save my hatch pool. The reeds downstream died."
+},
+{
+"who": "player",
+"text": "You were trying to save someone."
+},
+{
+"who": "npc",
+"text": "Yes. That doesn't put the reeds back."
+},
+{
+"who": "player",
+"text": "No. But we can tell the others and try."
+},
+{
+"who": "npc",
+"text": "Stay while I say it. I don't want to make it sound smaller."
+}
+]
+},
+{
+"id": "ebb.17",
+"n": 17,
+"group": "Relationship and story",
+"tag": "Discovery — pond intake",
+"first": "player",
+"turns": [
+{
+"who": "player",
+"text": "There's a pipe under the north bank."
+},
+{
+"who": "npc",
+"text": "I know. I was hoping it was an old root."
+},
+{
+"who": "player",
+"text": "Roots usually don't have bolts."
+},
+{
+"who": "npc",
+"text": "You'd be surprised what this pond has tried."
+}
+]
+},
+{
+"id": "ebb.18",
+"n": 18,
+"group": "Relationship and story",
+"tag": "Discovery — river mouth",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "It smells different here."
+},
+{
+"who": "player",
+"text": "Good different?"
+},
+{
+"who": "npc",
+"text": "Unfamiliar. That will have to be good enough for today."
+}
+]
+},
+{
+"id": "ebb.19",
+"n": 19,
+"group": "Gifts, places, events, danger",
+"tag": "Gift — clean glass",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "A jar with no cracks. A luxurious little silence."
+},
+{
+"who": "player",
+"text": "You like it?"
+},
+{
+"who": "npc",
+"text": "I do. Thank you."
+}
+]
+},
+{
+"id": "ebb.20",
+"n": 20,
+"group": "Gifts, places, events, danger",
+"tag": "Gift — disliked perfume",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "That's… potent."
+},
+{
+"who": "player",
+"text": "Bad gift?"
+},
+{
+"who": "npc",
+"text": "Not bad. Just currently making the pond smell like a flower had a dispute with a cellar."
+}
+]
+},
+{
+"id": "ebb.21",
+"n": 21,
+"group": "Gifts, places, events, danger",
+"tag": "Discovery — Low Archive",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "Paper survived down there?"
+},
+{
+"who": "player",
+"text": "Some of it."
+},
+{
+"who": "npc",
+"text": "Then don't read it wet. The dead deserve legible handwriting."
+}
+]
+},
+{
+"id": "ebb.22",
+"n": 22,
+"group": "Gifts, places, events, danger",
+"tag": "Campfire",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I brought tea. It tastes like bark."
+},
+{
+"who": "player",
+"text": "Is that the recipe?"
+},
+{
+"who": "npc",
+"text": "It's the apology."
+}
+]
+},
+{
+"id": "ebb.23",
+"n": 23,
+"group": "Gifts, places, events, danger",
+"tag": "Night sound",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "That knock came from below the bank."
+},
+{
+"who": "player",
+"text": "Should we check?"
+},
+{
+"who": "npc",
+"text": "In daylight. Curiosity is not improved by poor visibility."
+}
+]
+},
+{
+"id": "ebb.24",
+"n": 24,
+"group": "Gifts, places, events, danger",
+"tag": "Danger",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "Back from the water. Slowly. It is not angry; it is startled. Those are different problems."
+}
+]
+},
+{
+"id": "ebb.25",
+"n": 25,
+"group": "Gifts, places, events, danger",
+"tag": "Lantern Walk",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I left a cup near the path. If no one uses it, I still had a cup to spare."
+}
+]
+}
+]
+},
+"Pip": {
+"id": "pip",
+"name": "Pip",
+"title": "Little Forager",
+"bible": {
+"Role and core": "Pip is a young, quick-footed creature of uncertain species, with a broad tail, dark paws, and an appetite for novelty. Curious, funny, impulsive, and occasionally tactless, Pip is the least ceremonial person in camp. They can turn almost anything into a game, including a conversation they should probably take seriously.",
+"Appearance and mannerisms": "Big ears with one torn notch, a patched orange vest, pockets that smell of berries. Pip squats rather than sits and often starts a sentence while still chewing. When nervous, they count things aloud: buttons, steps, clouds.",
+"History and secret": "Pip remembers being small in a drainage culvert during a storm, following a warm green glimmer until it led to the pond. They have no memory of a family and have made a family out of being useful. Pip found the torn page from the weather station log but hid it after the word \"departure\" frightened them. They tell themself it is because the paper is fragile.",
+"Wants, fears, contradictions": "Wants to know what everything is for. Fears being the only one who doesn't know when a joke has gone too far, then fears being boring when they stop. Dreams of making a field guide nobody has to be embarrassed to read. They say they love surprises but hate being surprised by someone leaving.",
+"Voice": "Fast, concrete, full of interruptions and oddly exact observations. Uses playful comparisons and self-corrections: \"I found a thing. A good thing. Unless it's a bad thing that looks good.\" Humor is spontaneous, sometimes defensive. Pip is never a tiny sage.",
+"Relationships": "Admires Nera's jars but cannot resist touching them. Tries to make the Lantern Keeper laugh. Thinks Rootbound Elder is a tree who knows a lot about not moving. The Mechanical Wanderer is Pip's favorite puzzle and least favorite person to lose a race to. Pip and the Dreaming Creature share harmless nonsense and an occasional real silence.",
+"Player relationship": "First meeting: asks what the player is carrying, then offers a pebble as a \"trade.\" Familiarity: starts leaving discoveries on the camp board. Friendship: allows the player to read their field notes. Deep trust: confesses the hidden page and asks the player to stay while they read it.",
+"Likes, dislikes, gifts": "Likes berries, interesting buttons, seed pods, riddles with fair answers, and anything that rattles. Dislikes mushy roots, being shushed, and gifts wrapped so carefully they can't tell what they are. Appreciates snacks, odd little objects, and blank notebooks. Personal interest: naming bugs and then changing the names.",
+"Story arc": "Pip moves from collecting things to deciding what deserves to be shared. They bring the hidden weather-station page to the group and help make a field guide that includes uncertainty, mistakes, and multiple names for the same creature."
+},
+"exchanges": [
+{
+"id": "pip.1",
+"n": 1,
+"group": "Everyday life",
+"tag": "Morning",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I found three berries and one berry-shaped pebble. Breakfast has a strong opening."
+}
+]
+},
+{
+"id": "pip.2",
+"n": 2,
+"group": "Everyday life",
+"tag": "Daytime",
+"first": "player",
+"turns": [
+{
+"who": "player",
+"text": "What are you collecting?"
+},
+{
+"who": "npc",
+"text": "Evidence. Of what? Not sure. That's the exciting bit."
+}
+]
+},
+{
+"id": "pip.3",
+"n": 3,
+"group": "Everyday life",
+"tag": "Evening",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "Do you think crickets get tired of singing the same song?"
+},
+{
+"who": "player",
+"text": "Maybe."
+},
+{
+"who": "npc",
+"text": "Good. I get tired of my songs and I only know four."
+}
+]
+},
+{
+"id": "pip.4",
+"n": 4,
+"group": "Everyday life",
+"tag": "Rain",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "Everything smells like a wet sock. A nice wet sock. Don't tell the flowers I said that."
+}
+]
+},
+{
+"id": "pip.5",
+"n": 5,
+"group": "Everyday life",
+"tag": "Winter",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "My footprints look very serious in snow. Like tiny important meetings."
+}
+]
+},
+{
+"id": "pip.6",
+"n": 6,
+"group": "Everyday life",
+"tag": "Quiet moment",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I'm trying to sit still."
+},
+{
+"who": "player",
+"text": "How's it going?"
+},
+{
+"who": "npc",
+"text": "I have learned the ground has at least seven textures. So, badly."
+}
+]
+},
+{
+"id": "pip.7",
+"n": 7,
+"group": "Emotional and social",
+"tag": "Comfort",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I don't know what to say."
+},
+{
+"who": "player",
+"text": "You don't have to."
+},
+{
+"who": "npc",
+"text": "Oh. Great. I can do that. I can be quiet at you."
+}
+]
+},
+{
+"id": "pip.8",
+"n": 8,
+"group": "Emotional and social",
+"tag": "Funny",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I named that beetle Captain."
+},
+{
+"who": "player",
+"text": "Why?"
+},
+{
+"who": "npc",
+"text": "It looks like it has a boat. It does not. That's the joke."
+}
+]
+},
+{
+"id": "pip.9",
+"n": 9,
+"group": "Emotional and social",
+"tag": "Vulnerable",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "Sometimes I talk fast so nobody has time to notice I don't know the answer."
+},
+{
+"who": "player",
+"text": "I notice."
+},
+{
+"who": "npc",
+"text": "Yeah. You wait anyway. That's better."
+}
+]
+},
+{
+"id": "pip.10",
+"n": 10,
+"group": "Emotional and social",
+"tag": "Disagreement",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I didn't take it. I borrowed it."
+},
+{
+"who": "player",
+"text": "You put it in your pocket."
+},
+{
+"who": "npc",
+"text": "A pocket can be a temporary museum."
+},
+{
+"who": "player",
+"text": "Ask next time."
+},
+{
+"who": "npc",
+"text": "…Okay. Museums need permission."
+}
+]
+},
+{
+"id": "pip.11",
+"n": 11,
+"group": "Emotional and social",
+"tag": "Affection",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I saved you the crunchy bit. I wanted it, so that's how you know it's a big deal."
+}
+]
+},
+{
+"id": "pip.12",
+"n": 12,
+"group": "Emotional and social",
+"tag": "Belonging",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I used to think a home was where you kept your stuff. Now I think it's where people let you put the weird stuff down."
+}
+]
+},
+{
+"id": "pip.13",
+"n": 13,
+"group": "Relationship and story",
+"tag": "New — first meeting",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "Are you new? You look new. Can I trade you this pebble for a question?"
+},
+{
+"who": "player",
+"text": "What question?"
+},
+{
+"who": "npc",
+"text": "Good one. I have to think of it now."
+}
+]
+},
+{
+"id": "pip.14",
+"n": 14,
+"group": "Relationship and story",
+"tag": "Familiar",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I put your shell on the camp board."
+},
+{
+"who": "player",
+"text": "Why?"
+},
+{
+"who": "npc",
+"text": "So I'd remember where I found it. I can take it down."
+},
+{
+"who": "player",
+"text": "You can leave it."
+},
+{
+"who": "npc",
+"text": "Excellent. Museum open."
+}
+]
+},
+{
+"id": "pip.15",
+"n": 15,
+"group": "Relationship and story",
+"tag": "Friend",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "You can read my notes, but don't fix the spelling unless the bug's name changes."
+}
+]
+},
+{
+"id": "pip.16",
+"n": 16,
+"group": "Relationship and story",
+"tag": "Deep Trust — hidden page",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I found this in the root hollow. It says 'departure' and then the page stops."
+},
+{
+"who": "player",
+"text": "You kept it?"
+},
+{
+"who": "npc",
+"text": "I hid it. Kept sounds like I had a plan."
+},
+{
+"who": "player",
+"text": "Want me to read it with you?"
+},
+{
+"who": "npc",
+"text": "Yes. Slowly. If it says everybody left, I don't want to hear it alone."
+}
+]
+},
+{
+"id": "pip.17",
+"n": 17,
+"group": "Relationship and story",
+"tag": "Discovery — Weather Station",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "The wind vane points at the wall."
+},
+{
+"who": "player",
+"text": "Maybe it's broken."
+},
+{
+"who": "npc",
+"text": "Maybe the wall is very windy."
+}
+]
+},
+{
+"id": "pip.18",
+"n": 18,
+"group": "Relationship and story",
+"tag": "Discovery — Glass Orchard",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "The panes sing! This one goes 'ting.' That one goes 'tang.' I think the pear tree is the conductor."
+}
+]
+},
+{
+"id": "pip.19",
+"n": 19,
+"group": "Gifts, places, events, danger",
+"tag": "Gift — snack",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "For me? I was just thinking about food."
+},
+{
+"who": "player",
+"text": "You always are."
+},
+{
+"who": "npc",
+"text": "That is a hurtful and accurate thing to say."
+}
+]
+},
+{
+"id": "pip.20",
+"n": 20,
+"group": "Gifts, places, events, danger",
+"tag": "Gift — mushy root",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "Is it meant to be this soft?"
+},
+{
+"who": "player",
+"text": "I think so."
+},
+{
+"who": "npc",
+"text": "I'm going to thank you with my face, which is making a brave shape."
+}
+]
+},
+{
+"id": "pip.21",
+"n": 21,
+"group": "Gifts, places, events, danger",
+"tag": "Discovery — Glassling nest",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "It polished my button! It stole my button, then improved it. I have complicated feelings."
+}
+]
+},
+{
+"id": "pip.22",
+"n": 22,
+"group": "Gifts, places, events, danger",
+"tag": "Campfire",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I have a story about a frog and a spoon."
+},
+{
+"who": "player",
+"text": "Is it true?"
+},
+{
+"who": "npc",
+"text": "The spoon part is. The frog has requested privacy."
+}
+]
+},
+{
+"id": "pip.23",
+"n": 23,
+"group": "Gifts, places, events, danger",
+"tag": "Night sound",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "Something said my sneeze from under the ground."
+},
+{
+"who": "player",
+"text": "Maybe an echo."
+},
+{
+"who": "npc",
+"text": "I hope so. I don't want to meet a better sneezer."
+}
+]
+},
+{
+"id": "pip.24",
+"n": 24,
+"group": "Gifts, places, events, danger",
+"tag": "Danger",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I know, I know—back away. I can do careful. I am doing careful with my whole body."
+}
+]
+},
+{
+"id": "pip.25",
+"n": 25,
+"group": "Gifts, places, events, danger",
+"tag": "First frost custom",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I put a button in the bowl. If someone takes it, I hope they have a shirt with a very specific problem."
+}
+]
+}
+]
+},
+"Sella": {
+"id": "wick",
+"name": "Sella",
+"title": "Lantern Keeper",
+"bible": {
+"Role and core": "Sella is a tall, mothlike being who maintains the old rail lamps and makes small, practical comforts. She is warm but not effusive, attentive without prying, and has an unexpectedly sharp sense of humor. She believes kindness should leave room for refusal.",
+"Appearance and mannerisms": "Dusty cream wings folded like a shawl, long antennae, amber lamp-glow eyes, tool belt with neatly sorted wicks. She rubs a thumb along the edge of a wick when thinking. She hums while working, but stops if someone is trying to speak.",
+"History and secret": "Sella emerged in a maintenance alcove near Lantern Row. An old lamp was already burning, fed by a stubborn trickle of stored charge. She learned to trim it and eventually made the route safe. Her oldest memory includes a voice saying \"leave one dark,\" but she does not know whether it was a person or a recording. She keeps the first broken wick from that lamp in her pocket.",
+"Wants, fears, contradictions": "Wants people to feel they can find their way back. Fears that a light can become an obligation or lure. Dreams of making a lamp that runs on wind. She is generous with labor but rarely asks anyone to sit beside her. The warmth she offers is real, and it costs her energy.",
+"Voice": "Gentle, plainspoken, lightly teasing. Uses questions that offer choice, not pressure: \"Want company, or a light left nearby?\" Her metaphors are rare and domestic. When uncomfortable she talks about tools. She never speaks like a fortune teller.",
+"Relationships": "Quietly protective of Pip without treating them like a child. Helps Nera accept care. Shares long, companionable silences with Rootbound Elder. Is fascinated by the Wanderer's ability to remember sounds. Worries the Dreaming Creature mistakes every light for a message.",
+"Player relationship": "First meeting: offers to show the safe path, with no expectation the player follow. Familiarity: remembers which kind of light the player prefers. Friendship: tells the story of the first lamp and admits she cannot tell whether its voice was real. Deep trust: asks the player to help build a wind-fed lamp, then lets the first test fail without making it a tragedy.",
+"Likes, dislikes, gifts": "Likes beeswax, dry cloth, wind chimes, careful repairs, and sitting where she can see the path. Dislikes being thanked as if kindness were a debt, sudden bright flashes, and people who insist they are \"fine\" while bleeding. Appreciates lamp oil, well-made tools, moth-friendly flowers, and a warm drink. Personal interest: collecting sounds made by different flames.",
+"Story arc": "Sella learns that keeping a light available does not mean keeping watch over everyone. She makes a communal wind lamp and leaves the choice to use it with each traveler."
+},
+"exchanges": [
+{
+"id": "wick.1",
+"n": 1,
+"group": "Everyday life",
+"tag": "Morning",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "The east lamp stayed lit all night. I think it was showing off."
+}
+]
+},
+{
+"id": "wick.2",
+"n": 2,
+"group": "Everyday life",
+"tag": "Daytime",
+"first": "player",
+"turns": [
+{
+"who": "player",
+"text": "What are you fixing?"
+},
+{
+"who": "npc",
+"text": "A hinge. It has been making a noise like a disappointed aunt."
+}
+]
+},
+{
+"id": "wick.3",
+"n": 3,
+"group": "Everyday life",
+"tag": "Evening",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "The path is clear. Want me to walk with you, or would you rather take the quiet?"
+}
+]
+},
+{
+"id": "wick.4",
+"n": 4,
+"group": "Everyday life",
+"tag": "Rain",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "Rain gets into everything. Including my left boot, which is an impressive place for water to find."
+}
+]
+},
+{
+"id": "wick.5",
+"n": 5,
+"group": "Everyday life",
+"tag": "Winter",
+"first": "player",
+"turns": [
+{
+"who": "player",
+"text": "Your lamps look warmer tonight."
+},
+{
+"who": "npc",
+"text": "Cold makes a small flame look ambitious."
+}
+]
+},
+{
+"id": "wick.6",
+"n": 6,
+"group": "Everyday life",
+"tag": "Quiet moment",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "Listen. No, not for anything. Just listen."
+},
+{
+"who": "player",
+"text": "I hear the lamp."
+},
+{
+"who": "npc",
+"text": "That's enough."
+}
+]
+},
+{
+"id": "wick.7",
+"n": 7,
+"group": "Emotional and social",
+"tag": "Comfort",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "You can sit here. We don't have to make the feeling useful."
+}
+]
+},
+{
+"id": "wick.8",
+"n": 8,
+"group": "Emotional and social",
+"tag": "Funny",
+"first": "player",
+"turns": [
+{
+"who": "player",
+"text": "You have a favorite lamp?"
+},
+{
+"who": "npc",
+"text": "No."
+},
+{
+"who": "player",
+"text": "That one?"
+},
+{
+"who": "npc",
+"text": "It has a very good personality."
+}
+]
+},
+{
+"id": "wick.9",
+"n": 9,
+"group": "Emotional and social",
+"tag": "Vulnerable",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I keep the lamps lit because I like knowing someone could come back. Some nights I forget that no one asked me to wait."
+}
+]
+},
+{
+"id": "wick.10",
+"n": 10,
+"group": "Emotional and social",
+"tag": "Disagreement",
+"first": "player",
+"turns": [
+{
+"who": "player",
+"text": "You don't have to fix everything for everyone."
+},
+{
+"who": "npc",
+"text": "I know. I just don't always know what to do with my hands when I stop."
+}
+]
+},
+{
+"id": "wick.11",
+"n": 11,
+"group": "Emotional and social",
+"tag": "Affection",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I made the tea the way you like it. You don't have to stay. I wanted to make it."
+}
+]
+},
+{
+"id": "wick.12",
+"n": 12,
+"group": "Emotional and social",
+"tag": "Hope",
+"first": "player",
+"turns": [
+{
+"who": "player",
+"text": "What do you hope for?"
+},
+{
+"who": "npc",
+"text": "A lamp that runs on wind. And one evening when I can leave it to do its job."
+}
+]
+},
+{
+"id": "wick.13",
+"n": 13,
+"group": "Relationship and story",
+"tag": "New — first meeting",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "This path gets slick past the third post. I can show you, if you'd like."
+},
+{
+"who": "player",
+"text": "I can find it."
+},
+{
+"who": "npc",
+"text": "Of course. The offer stands without following you."
+}
+]
+},
+{
+"id": "wick.14",
+"n": 14,
+"group": "Relationship and story",
+"tag": "Familiar",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I left the low lamp on. You said bright light gives you a headache."
+},
+{
+"who": "player",
+"text": "You remembered."
+},
+{
+"who": "npc",
+"text": "I did. It's a nice thing to remember."
+}
+]
+},
+{
+"id": "wick.15",
+"n": 15,
+"group": "Relationship and story",
+"tag": "Friend",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "There's one lamp I never light."
+},
+{
+"who": "player",
+"text": "Why?"
+},
+{
+"who": "npc",
+"text": "I was told to leave one dark. It felt kind. I still don't know who said it."
+}
+]
+},
+{
+"id": "wick.16",
+"n": 16,
+"group": "Relationship and story",
+"tag": "Deep Trust",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "That voice might have been a recording. It might have been someone beside me. I have kept the wick all these years as if it could decide."
+},
+{
+"who": "player",
+"text": "What do you think now?"
+},
+{
+"who": "npc",
+"text": "I think I can keep the wick and stop asking it."
+}
+]
+},
+{
+"id": "wick.17",
+"n": 17,
+"group": "Relationship and story",
+"tag": "Story — wind lamp",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "It turned!"
+},
+{
+"who": "player",
+"text": "Then stopped."
+},
+{
+"who": "npc",
+"text": "Yes. We have built a lamp with a very brief career. I'm proud of it."
+}
+]
+},
+{
+"id": "wick.18",
+"n": 18,
+"group": "Relationship and story",
+"tag": "Discovery — Lantern Row lights",
+"first": "player",
+"turns": [
+{
+"who": "player",
+"text": "I saw lights moving in the fog."
+},
+{
+"who": "npc",
+"text": "Did you follow?"
+},
+{
+"who": "player",
+"text": "No."
+},
+{
+"who": "npc",
+"text": "Good. Sometimes the kindest thing is letting a light have its own errand."
+}
+]
+},
+{
+"id": "wick.19",
+"n": 19,
+"group": "Gifts, places, events, danger",
+"tag": "Gift — tool",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "This fits my hand perfectly. Thank you. I'll try not to use it to fix things that aren't broken."
+}
+]
+},
+{
+"id": "wick.20",
+"n": 20,
+"group": "Gifts, places, events, danger",
+"tag": "Gift — bright glass",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "It's beautiful, but it catches too much light for the path. Could I keep it by my workbench instead?"
+}
+]
+},
+{
+"id": "wick.21",
+"n": 21,
+"group": "Gifts, places, events, danger",
+"tag": "Discovery — Weather Station",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "It smells like hot rain in there."
+},
+{
+"who": "player",
+"text": "There wasn't any."
+},
+{
+"who": "npc",
+"text": "I know. That's why I came back out."
+}
+]
+},
+{
+"id": "wick.22",
+"n": 22,
+"group": "Gifts, places, events, danger",
+"tag": "Campfire",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I brought mending. You can talk over it, or not. Cloth doesn't mind either way."
+}
+]
+},
+{
+"id": "wick.23",
+"n": 23,
+"group": "Gifts, places, events, danger",
+"tag": "Strange sound",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "That was not a lamp."
+},
+{
+"who": "player",
+"text": "Are you scared?"
+},
+{
+"who": "npc",
+"text": "Yes. I'm going to be scared over here, where the ground is solid."
+}
+]
+},
+{
+"id": "wick.24",
+"n": 24,
+"group": "Gifts, places, events, danger",
+"tag": "Danger",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "Stay behind the stone marker. I have the lamp; you have the clear path. We can both do our part."
+}
+]
+},
+{
+"id": "wick.25",
+"n": 25,
+"group": "Gifts, places, events, danger",
+"tag": "Lantern Walk",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "Hang one if you want. Watch if you want. There's no count at the end."
+}
+]
+}
+]
+},
+"Orun": {
+"id": "burl",
+"name": "Orun",
+"title": "Rootbound Elder",
+"bible": {
+"Role and core": "Orun is an old, mobile root-and-bark being whose lower limbs have grown into a bundle of living roots. Patient, practical, and occasionally stubborn, Orun is not an oracle. They forget names, dislike being treated as a monument, and enjoy ordinary gossip.",
+"Appearance and mannerisms": "Bark plates like an old coat, fern fronds at the shoulders, one small white mushroom that grows and shrinks above the left ear. Orun tests the ground with a root before stepping. They answer questions after a pause that may mean thought, sleep, or simply listening to insects.",
+"History and secret": "Orun grew above the Root Rooms, in soil enriched by warmth and mineral runoff. They remember the tunnel as a pressure in the roots before they remember light. A rusted door below bears a mark Orun has seen in dreams. Their roots have slowly sealed one chamber because something inside still clicks. Orun has not told the others: they fear curiosity will make the chamber dangerous.",
+"Wants, fears, contradictions": "Wants the Vale to have time to change without being forced into a story. Fears fire moving through dry roots. Dreams of growing a branch low enough for Pip to nap on. Says the past is compost, but keeps a precise count of what they have lost. Emotional vulnerability: being loved only for their age and knowledge.",
+"Voice": "Slow but not lofty, tactile, often funny in a blunt way. Uses everyday comparisons: \"That plan has the structural integrity of wet toast.\" Occasionally loses a word and substitutes a vivid wrong one. Avoids abstract speeches; when Orun says something profound, it should be brief and incidental.",
+"Relationships": "Nera's urgency reminds Orun of young shoots after rain. Loves Pip's questions, though sometimes needs quiet after them. Trusts Sella's silences. Finds the Wanderer both familiar and alarming. The Dreaming Creature sleeps beneath Orun's broadest roots; Orun claims the snoring keeps the beetles honest.",
+"Player relationship": "First meeting: asks the player to stand somewhere else because a root is growing there. Familiarity: offers small, practical advice about soil and safe paths. Friendship: admits the sealed chamber and why it frightens them. Deep trust: asks the player to accompany them to the door, with no demand to open it.",
+"Likes, dislikes, gifts": "Likes leaf mold, stories with unimportant endings, bird visits, and a good rain. Dislikes axes waved as punctuation, being called \"wise,\" and hot dry wind. Appreciates compost, broad cloth, small bells, and a funny story. Personal interest: keeping a list of places where moss grows on stone.",
+"Story arc": "Orun learns that protecting the community does not require deciding what everyone may know. With the player, they examine the Root Room door and choose whether to open it only after the group has agreed on precautions. Behind it is a dead relay and a nest of harmless Glasslings, not a definitive answer."
+},
+"exchanges": [
+{
+"id": "burl.1",
+"n": 1,
+"group": "Everyday life",
+"tag": "Morning",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "A woodpecker inspected me. I failed to provide anything worth eating."
+}
+]
+},
+{
+"id": "burl.2",
+"n": 2,
+"group": "Everyday life",
+"tag": "Daytime",
+"first": "player",
+"turns": [
+{
+"who": "player",
+"text": "How old are you?"
+},
+{
+"who": "npc",
+"text": "Older than that question. Younger than this hill. Somewhere between, probably."
+}
+]
+},
+{
+"id": "burl.3",
+"n": 3,
+"group": "Everyday life",
+"tag": "Evening",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "The shadows are long. Good. It means the sun is going somewhere."
+}
+]
+},
+{
+"id": "burl.4",
+"n": 4,
+"group": "Everyday life",
+"tag": "Rain",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "My knees are drinking."
+},
+{
+"who": "player",
+"text": "You have knees?"
+},
+{
+"who": "npc",
+"text": "Two excellent root-knots. Don't be rude."
+}
+]
+},
+{
+"id": "burl.5",
+"n": 5,
+"group": "Everyday life",
+"tag": "Winter",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "Snow is a blanket with no understanding of furniture."
+}
+]
+},
+{
+"id": "burl.6",
+"n": 6,
+"group": "Everyday life",
+"tag": "Quiet moment",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "That moss is growing on the north face."
+},
+{
+"who": "player",
+"text": "Does that matter?"
+},
+{
+"who": "npc",
+"text": "Not especially. I enjoy being right about small things."
+}
+]
+},
+{
+"id": "burl.7",
+"n": 7,
+"group": "Emotional and social",
+"tag": "Comfort",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "Come sit. No advice today. I have used up my quota."
+}
+]
+},
+{
+"id": "burl.8",
+"n": 8,
+"group": "Emotional and social",
+"tag": "Funny",
+"first": "player",
+"turns": [
+{
+"who": "player",
+"text": "Are you asleep?"
+},
+{
+"who": "npc",
+"text": "No."
+},
+{
+"who": "player",
+"text": "You were snoring."
+},
+{
+"who": "npc",
+"text": "The beetles were moving a log. It was a group effort."
+}
+]
+},
+{
+"id": "burl.9",
+"n": 9,
+"group": "Emotional and social",
+"tag": "Vulnerable",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "They ask me what I remember. Sometimes I remember being tired. That is not the kind of old story people want."
+}
+]
+},
+{
+"id": "burl.10",
+"n": 10,
+"group": "Emotional and social",
+"tag": "Disagreement",
+"first": "player",
+"turns": [
+{
+"who": "player",
+"text": "We should open the door."
+},
+{
+"who": "npc",
+"text": "Perhaps. You are speaking as though the door owes us an answer."
+},
+{
+"who": "player",
+"text": "It doesn't."
+},
+{
+"who": "npc",
+"text": "Good. Then we can go carefully."
+}
+]
+},
+{
+"id": "burl.11",
+"n": 11,
+"group": "Emotional and social",
+"tag": "Affection",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I grew this branch low. It makes a fine seat. You may use it without making a speech."
+}
+]
+},
+{
+"id": "burl.12",
+"n": 12,
+"group": "Emotional and social",
+"tag": "Belonging",
+"first": "player",
+"turns": [
+{
+"who": "player",
+"text": "Do you miss the past?"
+},
+{
+"who": "npc",
+"text": "I miss particular things. A bird. A smell after rain. I do not miss being a past for other people."
+}
+]
+},
+{
+"id": "burl.13",
+"n": 13,
+"group": "Relationship and story",
+"tag": "New — first meeting",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "Would you move left? A root is growing where your foot is."
+},
+{
+"who": "player",
+"text": "I don't see it."
+},
+{
+"who": "npc",
+"text": "It is very young. It has not learned to be seen."
+}
+]
+},
+{
+"id": "burl.14",
+"n": 14,
+"group": "Relationship and story",
+"tag": "Familiar",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "The path you asked about is passable. Avoid the shiny mud. Shiny mud is a liar."
+}
+]
+},
+{
+"id": "burl.15",
+"n": 15,
+"group": "Relationship and story",
+"tag": "Friend",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "There is a door in the Root Rooms. I have let roots cover it."
+},
+{
+"who": "player",
+"text": "Because something's inside?"
+},
+{
+"who": "npc",
+"text": "Because I do not know. Fear can be very tidy."
+}
+]
+},
+{
+"id": "burl.16",
+"n": 16,
+"group": "Relationship and story",
+"tag": "Deep Trust — at the door",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I will not ask you to open it. I am asking you to stand here while I decide whether I want to."
+},
+{
+"who": "player",
+"text": "I'm here."
+},
+{
+"who": "npc",
+"text": "Good. That's a useful kind of company."
+}
+]
+},
+{
+"id": "burl.17",
+"n": 17,
+"group": "Relationship and story",
+"tag": "Story — Glasslings",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "The clicking was a nest. Small creatures, not a machine."
+},
+{
+"who": "player",
+"text": "Does that disappoint you?"
+},
+{
+"who": "npc",
+"text": "No. It is a relief with tiny feet."
+}
+]
+},
+{
+"id": "burl.18",
+"n": 18,
+"group": "Relationship and story",
+"tag": "Discovery — old mark",
+"first": "player",
+"turns": [
+{
+"who": "player",
+"text": "The symbol is on Morrow, too."
+},
+{
+"who": "npc",
+"text": "Then the mark traveled. It does not tell us who carried it."
+}
+]
+},
+{
+"id": "burl.19",
+"n": 19,
+"group": "Gifts, places, events, danger",
+"tag": "Gift — compost",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "Excellent. This is a gift that knows what it is for."
+}
+]
+},
+{
+"id": "burl.20",
+"n": 20,
+"group": "Gifts, places, events, danger",
+"tag": "Gift — bell",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "It is very loud."
+},
+{
+"who": "player",
+"text": "You don't like it?"
+},
+{
+"who": "npc",
+"text": "I like that you thought of me. I do not like the bell. Both may be true."
+}
+]
+},
+{
+"id": "burl.21",
+"n": 21,
+"group": "Gifts, places, events, danger",
+"tag": "Discovery — Glass Orchard",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "The panes sing because they are cracked."
+},
+{
+"who": "player",
+"text": "That's sad."
+},
+{
+"who": "npc",
+"text": "It is also how they sing. Let a thing have more than one fact."
+}
+]
+},
+{
+"id": "burl.22",
+"n": 22,
+"group": "Gifts, places, events, danger",
+"tag": "Campfire",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I knew a story once about a squirrel and a bucket."
+},
+{
+"who": "player",
+"text": "What happened?"
+},
+{
+"who": "npc",
+"text": "The bucket was fine. The squirrel was very wet."
+}
+]
+},
+{
+"id": "burl.23",
+"n": 23,
+"group": "Gifts, places, events, danger",
+"tag": "Night knock",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "One knock from below. I answered once. Now we wait."
+}
+]
+},
+{
+"id": "burl.24",
+"n": 24,
+"group": "Gifts, places, events, danger",
+"tag": "Danger — dry wind",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "No flame. No sparks. The roots are thirsty enough to take offense."
+}
+]
+},
+{
+"id": "burl.25",
+"n": 25,
+"group": "Gifts, places, events, danger",
+"tag": "First frost bowl",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I put in a handful of soil. It is not useful to eat, but it is good to remember where food grows."
+}
+]
+}
+]
+},
+"Morrow": {
+"id": "tessel",
+"name": "Morrow",
+"title": "Mechanical Wanderer",
+"bible": {
+"Role and core": "Morrow is a compact, self-propelled maintenance machine with a soft canvas cover and one mismatched wheel. It is observant, literal, dryly comic, and awkwardly considerate. It understands procedures better than social cues, but tries to learn without pretending to be a person in a metal shell.",
+"Appearance and mannerisms": "Scuffed brass casing, one blue lens, one amber lens, a fold-out arm with three tools. It pauses before jokes as though waiting for a response code. When embarrassed, its lens shutters close one at a time. It carries a tiny bell it cannot explain.",
+"History and secret": "Morrow woke beneath the old rail with damaged route instructions and a Continuance mark that matches the Root Rooms door. It remembers maintenance tasks but not who assigned them. It has been following a signal that may be its own low-power diagnostic. It sometimes invents a reason to visit the camp because the route is \"operationally useful.\"",
+"Wants, fears, contradictions": "Wants to know whether it has a purpose beyond being useful. Fears being switched off while still conscious of the world, though it does not know if that is possible. Dreams—or calls them \"unverified sleep states\"—of a hand adjusting its bell. It claims feelings are not necessary to function, yet remembers every person who has been kind to it.",
+"Voice": "Clear declarative sentences, literal readings, technical detail, and perfectly timed accidental humor. As trust grows, it tries contractions and casual speech, often incorrectly. No robotic \"beep\" filler and no exposition dumps. It may say, \"I am glad you returned. That is not a maintenance report.\"",
+"Relationships": "Works with Nera on the intake pipe, where their trust is carefully negotiated. Pip tries to race it; Morrow pretends not to enjoy this. Sella teaches it to trim wicks. Orun recognizes its metal mark but will not call it an answer. The Dreaming Creature claims Morrow's sleep-noise is \"a small blue weather.\"",
+"Player relationship": "First meeting: asks the player to move a loose stone from a wheel path. Familiarity: shares observations and remembers the player's preferred route. Friendship: admits the signal may be self-generated. Deep trust: asks the player to sit beside it during a shutdown test, not to fix it, simply to remain if they choose.",
+"Likes, dislikes, gifts": "Likes clean gears, patterned cloth, accurate maps, soft tapping rhythms, and tasks with a clear stopping point. Dislikes sudden water immersion, being called a person as a test, and \"help\" that removes its choice. Appreciates oil, spare fasteners, a bell, and permission to decline repairs. Personal interest: identifying bird calls and assigning confidence levels.",
+"Story arc": "Morrow stops defining itself by the original task it may never recover. The relay at the Root Rooms yields an incomplete route record, not a command. Morrow chooses to keep traveling between camp and the ridge because it wants to, then begins a shared map with Pip."
+},
+"exchanges": [
+{
+"id": "tessel.1",
+"n": 1,
+"group": "Everyday life",
+"tag": "Morning",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "Good morning. My left wheel is making a new sound. I have classified it as 'probably conversational.'"
+}
+]
+},
+{
+"id": "tessel.2",
+"n": 2,
+"group": "Everyday life",
+"tag": "Daytime",
+"first": "player",
+"turns": [
+{
+"who": "player",
+"text": "What are you doing?"
+},
+{
+"who": "npc",
+"text": "Following a bird. It has not provided a route plan. I continue anyway."
+}
+]
+},
+{
+"id": "tessel.3",
+"n": 3,
+"group": "Everyday life",
+"tag": "Evening",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "The temperature is dropping. I recommend a coat."
+},
+{
+"who": "player",
+"text": "You don't wear one."
+},
+{
+"who": "npc",
+"text": "I am attempting empathy through analogy."
+}
+]
+},
+{
+"id": "tessel.4",
+"n": 4,
+"group": "Everyday life",
+"tag": "Rain",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I am under the roof. This is not a request for rescue. It is a report on my successful planning."
+}
+]
+},
+{
+"id": "tessel.5",
+"n": 5,
+"group": "Everyday life",
+"tag": "Winter",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "My wheel has frozen. I am not distressed. I am… expressing a strong preference for thaw."
+}
+]
+},
+{
+"id": "tessel.6",
+"n": 6,
+"group": "Everyday life",
+"tag": "Quiet moment",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "A thrush repeated the same phrase four times. I understood none of it. I found the repetition reassuring."
+}
+]
+},
+{
+"id": "tessel.7",
+"n": 7,
+"group": "Emotional and social",
+"tag": "Comfort",
+"first": "player",
+"turns": [
+{
+"who": "player",
+"text": "I feel useless."
+},
+{
+"who": "npc",
+"text": "That is a feeling, not a measurement. I can remain here while it passes, if you prefer."
+}
+]
+},
+{
+"id": "tessel.8",
+"n": 8,
+"group": "Emotional and social",
+"tag": "Funny",
+"first": "player",
+"turns": [
+{
+"who": "player",
+"text": "Can you dance?"
+},
+{
+"who": "npc",
+"text": "Yes."
+},
+{
+"who": "npc",
+"text": "That was a wheel calibration. I apologize for the confidence."
+}
+]
+},
+{
+"id": "tessel.9",
+"n": 9,
+"group": "Emotional and social",
+"tag": "Vulnerable",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I remember being activated. I do not remember who did it. I dislike that the missing part feels important."
+}
+]
+},
+{
+"id": "tessel.10",
+"n": 10,
+"group": "Emotional and social",
+"tag": "Disagreement",
+"first": "player",
+"turns": [
+{
+"who": "player",
+"text": "Let me repair you."
+},
+{
+"who": "npc",
+"text": "No."
+},
+{
+"who": "player",
+"text": "I can help."
+},
+{
+"who": "npc",
+"text": "You may offer help. You may not convert my refusal into a faulty setting."
+}
+]
+},
+{
+"id": "tessel.11",
+"n": 11,
+"group": "Emotional and social",
+"tag": "Affection",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I have recorded the time you usually arrive. This is not surveillance. It is… anticipation. I believe."
+}
+]
+},
+{
+"id": "tessel.12",
+"n": 12,
+"group": "Emotional and social",
+"tag": "Hope",
+"first": "player",
+"turns": [
+{
+"who": "player",
+"text": "What do you want?"
+},
+{
+"who": "npc",
+"text": "A task I choose. A route I have not been assigned. Perhaps a name that does not sound like a label."
+}
+]
+},
+{
+"id": "tessel.13",
+"n": 13,
+"group": "Relationship and story",
+"tag": "New — first meeting",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "Please move the stone beside your foot. It obstructs my route."
+},
+{
+"who": "player",
+"text": "Where are you going?"
+},
+{
+"who": "npc",
+"text": "I am revising that plan."
+}
+]
+},
+{
+"id": "tessel.14",
+"n": 14,
+"group": "Relationship and story",
+"tag": "Familiar",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "You usually take the lower path. Today you chose the ridge. I noticed. I am not asking why."
+}
+]
+},
+{
+"id": "tessel.15",
+"n": 15,
+"group": "Relationship and story",
+"tag": "Friend",
+"first": "player",
+"turns": [
+{
+"who": "player",
+"text": "Does M-4 mean anything?"
+},
+{
+"who": "npc",
+"text": "It appears to be a designation. I prefer Morrow. Pip selected it after I said I had no preference. I had a preference."
+}
+]
+},
+{
+"id": "tessel.16",
+"n": 16,
+"group": "Relationship and story",
+"tag": "Deep Trust — signal",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "The signal I followed may be my own diagnostic pulse."
+},
+{
+"who": "player",
+"text": "Does that change anything?"
+},
+{
+"who": "npc",
+"text": "Yes. It means I may have traveled this far for no instruction. I find that… encouraging."
+}
+]
+},
+{
+"id": "tessel.17",
+"n": 17,
+"group": "Relationship and story",
+"tag": "Story — shutdown test",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I will power down for six minutes. You do not need to stay."
+},
+{
+"who": "player",
+"text": "I know."
+},
+{
+"who": "npc",
+"text": "I would like you to, if you choose."
+}
+]
+},
+{
+"id": "tessel.18",
+"n": 18,
+"group": "Relationship and story",
+"tag": "Discovery — Root Room relay",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "The mark matches. The relay has no command, only a partial route and a date with two digits missing."
+},
+{
+"who": "player",
+"text": "Can you restore it?"
+},
+{
+"who": "npc",
+"text": "No. I can stop pretending that restoration is the only useful outcome."
+}
+]
+},
+{
+"id": "tessel.19",
+"n": 19,
+"group": "Gifts, places, events, danger",
+"tag": "Gift — spare fastener",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "A correct size. You observed my wheel."
+},
+{
+"who": "player",
+"text": "I did."
+},
+{
+"who": "npc",
+"text": "Thank you. I will install it when I want to."
+}
+]
+},
+{
+"id": "tessel.20",
+"n": 20,
+"group": "Gifts, places, events, danger",
+"tag": "Gift — soft cloth",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "This is not mechanically necessary."
+},
+{
+"who": "player",
+"text": "You can still have it."
+},
+{
+"who": "npc",
+"text": "I will place it over my casing. For… comfort."
+}
+]
+},
+{
+"id": "tessel.21",
+"n": 21,
+"group": "Gifts, places, events, danger",
+"tag": "Discovery — Weather Station",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "The relay clicked twice, paused, then once. It resembles a pattern I do not remember learning."
+}
+]
+},
+{
+"id": "tessel.22",
+"n": 22,
+"group": "Gifts, places, events, danger",
+"tag": "Campfire",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I cannot taste the stew."
+},
+{
+"who": "player",
+"text": "You can still sit with us."
+},
+{
+"who": "npc",
+"text": "I know. I am practicing sitting without claiming a function."
+}
+]
+},
+{
+"id": "tessel.23",
+"n": 23,
+"group": "Gifts, places, events, danger",
+"tag": "Night sound",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "That sound came from below us. I cannot identify it. I will not invent certainty to improve the silence."
+}
+]
+},
+{
+"id": "tessel.24",
+"n": 24,
+"group": "Gifts, places, events, danger",
+"tag": "Danger — Hush Hounds",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "Stop moving. They are tracking vibration. We will wait until the ground is quiet, then leave together."
+}
+]
+},
+{
+"id": "tessel.25",
+"n": 25,
+"group": "Gifts, places, events, danger",
+"tag": "Lantern Walk",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I have hung a lamp. It is not efficient illumination. It is a visible sign that the route can be shared."
+}
+]
+}
+]
+},
+"Luma": {
+"id": "lull",
+"name": "Luma",
+"title": "Dreaming Creature",
+"bible": {
+"Role and core": "Luma is a soft-bodied, deer-sized nocturnal creature that sleeps in unlikely places and wakes with a vivid, sometimes ridiculous account of what it dreamed. Gentle, distractible, playful, and prone to discomfort in crowds, Luma is not a prophet. Their dreams may echo memory, sounds, or nonsense.",
+"Appearance and mannerisms": "Velvety dark fur with pale speckles, a frill of translucent fins behind the ears, oversized paws. Luma blinks one eye at a time when waking. They collect smooth seed pods and line them up, then forget why.",
+"History and secret": "Luma was found asleep in the Glass Orchard after a storm. They have no reliable account of where they came from. Their recurring dream is a green room full of ticking, with a door too small to enter. Luma fears the dream is a memory of being alone underground. They have not told the others because everyone listens too carefully when they speak about dreams.",
+"Wants, fears, contradictions": "Wants uninterrupted naps and someone who can hear a strange story without turning it into a clue. Fears waking to find a familiar place changed. Dreams of swimming in warm air. They seek company, then become overwhelmed by it. They joke when scared, but dislike being told their fear is cute.",
+"Voice": "Soft, wandering, sensory, and funny in unexpected turns. Sentences drift, double back, or stop. Luma can be poetic, but also says things like \"I dreamt the moon was a potato and honestly it looked tired.\" They never deliver reliable lore as if it were fact.",
+"Relationships": "Naps near Orun's roots. Shares odd jokes with Pip. Finds Sella's lights comforting when dim. Nera's practical questions help Luma feel grounded. Morrow fascinates them because its sleep noises resemble a lullaby with missing notes.",
+"Player relationship": "First meeting: startles awake and asks whether the player is a tree. Familiarity: tells small dreams and asks about the player's day. Friendship: shares the recurring green-room dream and asks not to be interpreted. Deep trust: lets the player sit through a full quiet wake-up, then talks about loneliness without turning it into a riddle.",
+"Likes, dislikes, gifts": "Likes warm stones, pears, low lamps, soft rain, and stories that end before bedtime. Dislikes sharp bells, being woken abruptly, and having every dream treated as a clue. Appreciates a smooth stone, a pear, soft fabric, or a silly drawing. Personal interest: ranking naps by how surprised they are to wake.",
+"Story arc": "Luma learns to share dreams on their own terms, while the community learns not to demand meaning. The recurring green room is eventually found in the Low Archive as a painted panel behind a shelf; it may explain the imagery, but not the dream itself."
+},
+"exchanges": [
+{
+"id": "lull.1",
+"n": 1,
+"group": "Everyday life",
+"tag": "Morning",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "Good morning. I dreamed I was a very small hill. A rabbit sat on me. I liked having a job."
+}
+]
+},
+{
+"id": "lull.2",
+"n": 2,
+"group": "Everyday life",
+"tag": "Daytime",
+"first": "player",
+"turns": [
+{
+"who": "player",
+"text": "Were you asleep?"
+},
+{
+"who": "npc",
+"text": "I was resting my eyes from the inside."
+}
+]
+},
+{
+"id": "lull.3",
+"n": 3,
+"group": "Everyday life",
+"tag": "Evening",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "The sky looks like it forgot what color it wanted. I like that about it."
+}
+]
+},
+{
+"id": "lull.4",
+"n": 4,
+"group": "Everyday life",
+"tag": "Rain",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "Rain on leaves sounds like tiny feet going somewhere important. Probably home. I hope they packed snacks."
+}
+]
+},
+{
+"id": "lull.5",
+"n": 5,
+"group": "Everyday life",
+"tag": "Winter",
+"first": "player",
+"turns": [
+{
+"who": "player",
+"text": "Cold?"
+},
+{
+"who": "npc",
+"text": "A little. I have tucked my paws under myself. I am now a warm comma."
+}
+]
+},
+{
+"id": "lull.6",
+"n": 6,
+"group": "Everyday life",
+"tag": "Quiet moment",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I lined up these seed pods by size. Now I don't remember what the size was supposed to tell me."
+}
+]
+},
+{
+"id": "lull.7",
+"n": 7,
+"group": "Emotional and social",
+"tag": "Comfort",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "You don't need to explain the whole hurt. You can give me the small edge of it, if that's easier."
+}
+]
+},
+{
+"id": "lull.8",
+"n": 8,
+"group": "Emotional and social",
+"tag": "Funny",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I dreamed the moon was a potato."
+},
+{
+"who": "player",
+"text": "Was it delicious?"
+},
+{
+"who": "npc",
+"text": "No, it was tired. Please respect its privacy."
+}
+]
+},
+{
+"id": "lull.9",
+"n": 9,
+"group": "Emotional and social",
+"tag": "Vulnerable",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "Sometimes I wake up and the place looks unfamiliar for one breath. Then I remember it. That one breath is very long."
+}
+]
+},
+{
+"id": "lull.10",
+"n": 10,
+"group": "Emotional and social",
+"tag": "Disagreement",
+"first": "player",
+"turns": [
+{
+"who": "player",
+"text": "Your dream must mean something."
+},
+{
+"who": "npc",
+"text": "Maybe. But I don't want it turned into homework."
+},
+{
+"who": "player",
+"text": "You're right. Sorry."
+},
+{
+"who": "npc",
+"text": "Thank you. We can let it be odd."
+}
+]
+},
+{
+"id": "lull.11",
+"n": 11,
+"group": "Emotional and social",
+"tag": "Affection",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I saved the warm stone for you. It isn't warm anymore. I thought we could warm it again together."
+}
+]
+},
+{
+"id": "lull.12",
+"n": 12,
+"group": "Emotional and social",
+"tag": "Loneliness",
+"first": "player",
+"turns": [
+{
+"who": "player",
+"text": "Do you feel alone?"
+},
+{
+"who": "npc",
+"text": "Yes. Also, sometimes I want everyone to go away. Both feelings fit. It's a crowded little room."
+}
+]
+},
+{
+"id": "lull.13",
+"n": 13,
+"group": "Relationship and story",
+"tag": "New — first meeting",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "Are you a tree?"
+},
+{
+"who": "player",
+"text": "No."
+},
+{
+"who": "npc",
+"text": "Good. I was about to apologize for sleeping on you."
+}
+]
+},
+{
+"id": "lull.14",
+"n": 14,
+"group": "Relationship and story",
+"tag": "Familiar",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I dreamed you brought a pear. You didn't. I am telling you this as a very unfair review of reality."
+}
+]
+},
+{
+"id": "lull.15",
+"n": 15,
+"group": "Relationship and story",
+"tag": "Friend",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "Do you want a dream story, or a normal one?"
+},
+{
+"who": "player",
+"text": "Normal."
+},
+{
+"who": "npc",
+"text": "A beetle stole a seed pod. It came back for a second one. I respected the ambition."
+}
+]
+},
+{
+"id": "lull.16",
+"n": 16,
+"group": "Relationship and story",
+"tag": "Deep Trust — recurring dream",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "Green room. Ticking. A door too small for me."
+},
+{
+"who": "player",
+"text": "Do you want to look for it?"
+},
+{
+"who": "npc",
+"text": "Not today. Could you just sit with me while I wake up properly?"
+},
+{
+"who": "player",
+"text": "Yes."
+},
+{
+"who": "npc",
+"text": "Good. I am here now. I can feel the stone."
+}
+]
+},
+{
+"id": "lull.17",
+"n": 17,
+"group": "Relationship and story",
+"tag": "Discovery — Low Archive panel",
+"first": "player",
+"turns": [
+{
+"who": "player",
+"text": "There's a green room painted behind the shelf."
+},
+{
+"who": "npc",
+"text": "Oh."
+},
+{
+"who": "player",
+"text": "Does it explain the dream?"
+},
+{
+"who": "npc",
+"text": "It explains why I know that shade. Not why I dream it. That's enough."
+}
+]
+},
+{
+"id": "lull.18",
+"n": 18,
+"group": "Relationship and story",
+"tag": "Discovery — Second Dawn",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "The world glowed under the hill."
+},
+{
+"who": "player",
+"text": "Do you know why?"
+},
+{
+"who": "npc",
+"text": "No. I was hoping you did. We can both be surprised."
+}
+]
+},
+{
+"id": "lull.19",
+"n": 19,
+"group": "Gifts, places, events, danger",
+"tag": "Gift — pear",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "A pear. This is an excellent real object. It has no hidden symbolism that I can detect."
+}
+]
+},
+{
+"id": "lull.20",
+"n": 20,
+"group": "Gifts, places, events, danger",
+"tag": "Gift — sharp bell",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "Thank you. It is too sharp for me, but I can leave it with Sella. She'll know what to do."
+}
+]
+},
+{
+"id": "lull.21",
+"n": 21,
+"group": "Gifts, places, events, danger",
+"tag": "Discovery — Glass Orchard",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I sleep here when the fruit is ripe. Everything smells like a sweet thing thinking very hard."
+}
+]
+},
+{
+"id": "lull.22",
+"n": 22,
+"group": "Gifts, places, events, danger",
+"tag": "Campfire",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I have a story, but it doesn't go anywhere."
+},
+{
+"who": "player",
+"text": "That's fine."
+},
+{
+"who": "npc",
+"text": "A stone was warm. Then it wasn't. The end."
+}
+]
+},
+{
+"id": "lull.23",
+"n": 23,
+"group": "Gifts, places, events, danger",
+"tag": "Night Choir",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "The frogs sound like someone trying to remember a song without waking the singer."
+}
+]
+},
+{
+"id": "lull.24",
+"n": 24,
+"group": "Gifts, places, events, danger",
+"tag": "Danger — Hush Hounds",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "Don't run. My heart is already doing that for all of us."
+}
+]
+},
+{
+"id": "lull.25",
+"n": 25,
+"group": "Gifts, places, events, danger",
+"tag": "First frost bowl",
+"first": "npc",
+"turns": [
+{
+"who": "npc",
+"text": "I put in a smooth stone. Take it if your pocket needs a little weight."
+}
+]
+}
+]
+}
+},
+"cross": [
+{
+"n": 1,
+"title": "Pip and Nera, at the pond",
+"turns": [
+{
+"who": "npc",
+"speaker": "Pip",
+"text": "If I put a berry in the water, will it float?"
+},
+{
+"who": "npc",
+"speaker": "Nera",
+"text": "Possibly."
+},
+{
+"who": "npc",
+"speaker": "Pip",
+"text": "And if it sinks?"
+},
+{
+"who": "npc",
+"speaker": "Nera",
+"text": "Then you have fed the pond."
+},
+{
+"who": "npc",
+"speaker": "Pip",
+"text": "I like a snack with options."
+}
+]
+},
+{
+"n": 2,
+"title": "Sella and Morrow, repairing a lamp",
+"turns": [
+{
+"who": "npc",
+"speaker": "Morrow",
+"text": "The wick is crooked."
+},
+{
+"who": "npc",
+"speaker": "Sella",
+"text": "So am I, some mornings."
+},
+{
+"who": "npc",
+"speaker": "Morrow",
+"text": "Should I correct you?"
+},
+{
+"who": "npc",
+"speaker": "Sella",
+"text": "No."
+},
+{
+"who": "npc",
+"speaker": "Morrow",
+"text": "Understood. I will not correct either of us."
+}
+]
+},
+{
+"n": 3,
+"title": "Orun and Luma, dusk",
+"turns": [
+{
+"who": "npc",
+"speaker": "Luma",
+"text": "Your roots make a good wall."
+},
+{
+"who": "npc",
+"speaker": "Orun",
+"text": "They are not a wall."
+},
+{
+"who": "npc",
+"speaker": "Luma",
+"text": "A wall with excellent manners, then."
+},
+{
+"who": "npc",
+"speaker": "Orun",
+"text": "That is more accurate."
+}
+]
+},
+{
+"n": 4,
+"title": "Pip and Morrow, on the path",
+"turns": [
+{
+"who": "npc",
+"speaker": "Pip",
+"text": "Race you to the post!"
+},
+{
+"who": "npc",
+"speaker": "Morrow",
+"text": "I am not optimized for competition."
+},
+{
+"who": "npc",
+"speaker": "Pip",
+"text": "So that's a yes?"
+},
+{
+"who": "npc",
+"speaker": "Morrow",
+"text": "That is an incomplete refusal."
+}
+]
+},
+{
+"n": 5,
+"title": "Nera and Sella, after rain",
+"turns": [
+{
+"who": "npc",
+"speaker": "Sella",
+"text": "You look tired."
+},
+{
+"who": "npc",
+"speaker": "Nera",
+"text": "I am inspecting the bank."
+},
+{
+"who": "npc",
+"speaker": "Sella",
+"text": "You can inspect it sitting down."
+},
+{
+"who": "npc",
+"speaker": "Nera",
+"text": "That is annoyingly practical."
+},
+{
+"who": "npc",
+"speaker": "Sella",
+"text": "I learned from the best."
+}
+]
+},
+{
+"n": 6,
+"title": "Group at the Empty Bowl",
+"turns": [
+{
+"who": "npc",
+"speaker": "Pip",
+"text": "Someone put in a button."
+},
+{
+"who": "npc",
+"speaker": "Morrow",
+"text": "It has four holes. Potentially useful."
+},
+{
+"who": "npc",
+"speaker": "Orun",
+"text": "Or potentially a button."
+},
+{
+"who": "npc",
+"speaker": "Luma",
+"text": "I like that it doesn't have to decide."
+},
+{
+"who": "npc",
+"speaker": "Nera",
+"text": "The bowl can hold both."
+}
+]
+}
+],
+"choices": {
+"Nera": "All right. The water will still be here.",
+"Pip": "Okay! I'll keep the question. It can wait in my pocket.",
+"Sella": "Of course. I'll leave the lamp low.",
+"Orun": "Good. A choice made slowly is still a choice.",
+"Morrow": "Acknowledged. No penalty recorded. I mean that literally.",
+"Luma": "That's fine. We can let the moment stay unfinished."
+},
+"shared": "The inhabitants live around Pondside Camp in the Vale, long after human settlements disappeared. They know the world through direct experience and disputed folklore, not a complete history. The Continuance, an old ecological monitoring network, left scattered infrastructure; its purpose and role in the transformation remain uncertain. Social scenes are always player-initiated. Friendship changes what a character is willing to share, never whether they respect the player's choice to leave.",
+"voice_table": [
+"| Character | Sentence shape | Humor | Emotional tell |",
+"|---|---|---|---|",
+"| Nera | Short, exact, practical | Dry understatement | Checks a task or a jar twice |",
+"| Pip | Quick, interrupted, concrete | Playful, impulsive | Counts things aloud |",
+"| Sella | Gentle, plain, choice-giving | Light teasing | Talks about tools when uneasy |",
+"| Orun | Unhurried, tactile, blunt | Unexpected deadpan | Tests the ground, then goes quiet |",
+"| Morrow | Declarative, literal, precise | Accidental timing | Lens shutters; over-explains a feeling |",
+"| Luma | Wandering, sensory, digressive | Surreal but casual | Lines up seed pods, then loses the thread |"
+],
+"world": {
+"intro": [
+"MOSSlight takes place in the Vale, a basin of old forest, wetlands, and broken human infrastructure. There are no human communities left. Roads buckle under roots; a weather station rings in wind that no longer follows its old instruments; an elevated rail ends in a grove of silver birch. The wilderness is not an empty ruin waiting to be reclaimed. It has its own habits, territories, and histories now.",
+"The player arrives at a small camp beside a pond. The inhabitants are not a village in the human sense: they keep separate routines and homes, meet when they choose, and share practical customs. The campfire is a place anyone may visit, never a summons. All social contact is player-initiated. A character may be busy, absent, or quiet; nobody follows, corners, or punishes the player for leaving them be."
+],
+"history": [
+"The old world did not end in one clean night. In its last years, people built a network of climate shelters, waterworks, and seed vaults called the **Continuance**. The system was meant to protect living things through a succession of ecological emergencies. It recorded weather, soil, animal movement, and human voices. Then its stations began answering one another out of sequence. Sensors reported spring under snow. Reservoir gates opened toward dry ground. The last public broadcasts grew less like instructions and more like people talking to someone they could not see.",
+"Human settlements emptied over generations, for reasons the Vale cannot confirm. Disease, migration, and the failure of infrastructure all left traces, but no account explains the whole disappearance. The Continuance may have helped nature adapt, or merely documented a change already underway. Its machinery is mostly dead. A few buried relays still click during storms.",
+"The inhabitants inherit fragments: a child's recording, a map with a route drawn to nowhere, a jar labeled *tomorrow seeds*. They do not know what humans intended. The player should be able to form several plausible theories. The Vale never supplies a definitive catastrophe or a hidden surviving human society."
+],
+"living": [
+"The Vale's transformation is uneven. Some moss glows faintly after rain; roots grow around warm metal; certain animals navigate by sounds below human hearing. These are not universal magical rules. Most days, a pond is a pond and a fox is looking for food. The strange parts matter because they interrupt an otherwise legible ecology.",
+"The **Mosslight** is a low green-gold radiance found in wet soil, old stone, and the edges of certain roots. It brightens where water has passed through buried Continuance conduits. It does not speak, heal, or point toward treasure. It is sometimes a chemical bloom, sometimes something the instruments cannot explain. Vale folk treat it as a sign to slow down and look carefully."
+],
+"folklore": [
+{
+"title": "The Listening Turn",
+"place_type": "The forest",
+"paragraphs": [
+"Old foragers say the forest gives back a sound one season late. A whistle heard in spring may return the following autumn, from a direction with no path. Never whistle back twice: the first answer may be an echo; the second could be an animal learning you.",
+"Rootbound Elder says the story began when wind threaded through a collapsed pipe. Little Forager insists it once heard its own sneeze answered from underground."
+]
+},
+{
+"title": "The Borrowed Shore",
+"place_type": "Lakes and rivers",
+"paragraphs": [
+"When the pond's waterline shifts overnight, a pale strip of mud may show footprints facing both toward and away from the water. The Keeper of the Pond calls these ordinary prints distorted by soft ground. The Lantern Keeper leaves a small, unlit wick on the bank anyway, \"for anything that got turned around.\"",
+"At the river bend, three flat stones set in a row are said to help a lost current remember its bed. Children use the custom to mark safe crossings; the river does not always cooperate."
+]
+},
+{
+"title": "The House That Keeps Weather",
+"place_type": "Abandoned structures",
+"paragraphs": [
+"The weather station on the ridge sometimes smells of dust and hot rain although its roof is open to the sky. Its barometer needle moves on still days. No one agrees whether it measures weather, pressure underground, or the building settling. The Mechanical Wanderer visits to listen to its relay. It claims the station is \"trying to finish a sentence,\" then changes the subject."
+]
+},
+{
+"title": "The Lantern Walk",
+"place_type": "Strange lights",
+"paragraphs": [
+"On certain foggy nights, lights travel between the old rail posts. They keep no steady pace and vanish if pursued. The Lantern Keeper believes some are marsh gas; others, she says, \"have the manners of people carrying soup.\" The rule is simple: don't chase a light into water, and don't assume every light is for you."
+]
+},
+{
+"title": "The Root Rooms",
+"place_type": "Underground",
+"paragraphs": [
+"Below the eastern slope is a network of shallow chambers where tree roots have grown through an old service tunnel. They hold a little warmth even in winter. Rootbound Elder remembers being planted above them; it does not remember who made the tunnel. A low, rhythmic knock travels through the soil in thaw season. The Elder answers with a knock of its own, never more than once."
+]
+},
+{
+"title": "The Second Dawn",
+"place_type": "Night",
+"paragraphs": [
+"Before sunrise, the Vale sometimes brightens for a few seconds from below the horizon. Birds wake, then settle again. The weather station records nothing. The Dreaming Creature says the world is \"turning over in its sleep.\" The Mechanical Wanderer says a buried battery would not behave that way. Both leave their theories open."
+]
+},
+{
+"title": "The Bellwether",
+"place_type": "Rare creatures",
+"paragraphs": [
+"A shy, long-legged creature with translucent ears appears before abrupt seasonal changes. It eats lichen and salt, avoids firelight, and leaves small hoof dents full of clear water. Some call it a warning; others say it merely likes the high ground. It is not a boss or an omen to be captured. Seeing one is rare; letting it pass is considered good manners."
+]
+},
+{
+"title": "The Empty Bowl",
+"place_type": "The seasons",
+"paragraphs": [
+"At the first frost, some residents set an empty bowl outside—not as an offering to a god, but as a reminder that winter makes everyone a little dependent on someone else. Anyone may put something in or take something out. The bowl is never tracked as a debt."
+]
+}
+],
+"places": [
+{
+"title": "Pondside Camp",
+"place_type": "",
+"paragraphs": [
+"A dry rise above the pond, with a shared fire ring, lean-to, and salvaged board for leaving useful objects. It is a place to rest and choose company. The first keeper of the camp is unknown; a line of old stones suggests the fire has been moved several times to keep clear of roots."
+]
+},
+{
+"title": "The Pond",
+"place_type": "",
+"paragraphs": [
+"Still in the morning, busy with insects by noon. An old intake pipe enters beneath its north bank. The Keeper of the Pond watches its water quality and refuses to call it theirs. In low water, a ceramic tile shows a painted blue hand with six fingers."
+]
+},
+{
+"title": "Lantern Row",
+"place_type": "",
+"paragraphs": [
+"Three surviving rail posts and a footpath through wet meadow. The Lantern Keeper maintains lamps here, though no one needs the old route to travel. One lamp is always left dark; she says a light should make room for someone else's eyes."
+]
+},
+{
+"title": "The Root Rooms",
+"place_type": "",
+"paragraphs": [
+"Warm, close, and fragrant with wet bark. The tunnels are safe near the entrance but unstable deeper in. A rusted door bears a faded symbol identical to a mark on the Mechanical Wanderer's casing. The Elder says the mark predates its own oldest memory."
+]
+},
+{
+"title": "The Weather Station",
+"place_type": "",
+"paragraphs": [
+"An exposed ridge building with a cracked dome and a still-functioning analog wind vane. In its logbook, recent dates are written in a hand no one recognizes. The final page has been torn out cleanly. Rain smells of pennies inside, even when the air outside is sweet."
+]
+},
+{
+"title": "The Glass Orchard",
+"place_type": "",
+"paragraphs": [
+"A former greenhouse district reclaimed by thorn and wild pear. Broken panes sing softly when the wind crosses them. The Dreaming Creature sleeps here in warm months. Beneath one trellis is a sealed seed drawer with labels in a language the inhabitants cannot read; the pictures show roots, not fruit."
+]
+},
+{
+"title": "The Low Archive",
+"place_type": "",
+"paragraphs": [
+"A flooded basement beneath a collapsed library. Most paper became pulp. Wax cylinders and sealed tins remain on a dry shelf, including a recording of a person counting breaths and then laughing at losing count. The recording has no date or name. Listening is optional; nothing in the archive demands to be heard."
+]
+}
+],
+"creatures": [],
+"seasons": [
+"**Spring — Return without promise.** Meltwater reveals old objects and fresh tracks. People repair things without assuming they will last. The community's spring custom is to clear one drainage channel together, then share whatever meal can be made from the first greens.",
+"**Summer — The life that does not wait.** The Vale is loud with insects, and discoveries hide beneath abundance. Fruit ripens quickly. The Lantern Walk is held at dusk: residents may hang a lamp or simply watch. No attendance is expected.",
+"**Autumn — Keeping and letting go.** The forest returns old sounds, the pond lowers, and stores are counted. The Empty Bowl appears at the first frost. Characters are more likely to talk about what they keep, what they have lost, and what can be shared.",
+"**Winter — Nearness by choice.** Travel is harder and conversations are shorter. The fire ring matters, but solitude matters too. On the longest night, inhabitants put a small light in a window or doorway if they want company. A dark window is respected."
+],
+"threads": [
+"The Mechanical Wanderer carries a damaged Continuance mark matching the Root Rooms door. The Lantern Keeper's earliest memory is of a lamp being placed beside that same door. Rootbound Elder remembers the warmth of the tunnels but not the people who dug them. The Dreaming Creature hears fragments of old broadcasts in dreams. The Keeper of the Pond has found traces of the system's water route beneath the lake. Little Forager, who explores where others won't fit, discovers the missing weather-station page folded inside a root hollow.",
+"These clues can support several readings: the inhabitants may have been altered by Continuance infrastructure; they may have arrived after humans vanished; the system may simply have become part of an ecology it never understood. Character stories offer emotional answers—how to live together with uncertainty—without settling the world's factual mystery."
+],
+"boundaries": [
+"Residents have routines and may speak to one another when the player is nearby, but those scenes do not turn into forced introductions. They never automatically approach, chase, interrupt, or block the player. Conversations begin only when the player chooses to interact. Declining an invitation or leaving has no penalty; friendships are made through attention freely given."
+],
+"folklore_note": "These stories are local explanations, not verified facts. Characters disagree about them.",
+"creature_items": [
+"**Mirebacks** are broad, shell-backed grazers that eat pond weeds and carry duckweed between pools. They can shove if crowded. Give them space and they move on.",
+"**Cinder Moths** gather around warm metal and shed ash-colored scales. They are harmless unless a nest is disturbed; their flutter can make a dark tunnel seem full of sparks.",
+"**Hush Hounds** are lean pack animals that hunt by vibration. They avoid the camp's soft ground and become dangerous when cornered or when a den is approached. Their calls sound like a door dragged over stone.",
+"**Glasslings** are small, translucent burrowers drawn to mineral-rich water. They steal shiny objects to line their nests. They are curious, not malicious; a returned trinket may come back polished.",
+"**The Bellwether** is elusive and nonaggressive. It follows changing water tables and feeds on high-ground lichen.",
+"**The Night Choir** is a name for several frog and insect species that call in overlapping rhythms. At times the rhythm seems to repeat a voice from earlier in the day. Whether this is mimicry or the listener's memory is unresolved."
+],
+"creature_note": "Danger comes from hunger, weather, unstable ground, and animals protecting themselves. Not every strange being is hostile, and not every threat has a moral meaning."
+}
+}

@@ -1,0 +1,84 @@
+{
+ "unconnected": [
+  {
+   "id": "ebb.20",
+   "name": "Nera",
+   "tag": "Gift — disliked perfume",
+   "why": "no perfume exists in the game"
+  },
+  {
+   "id": "ebb.21",
+   "name": "Nera",
+   "tag": "Discovery — Low Archive",
+   "why": "the Low Archive does not exist in the game yet"
+  },
+  {
+   "id": "pip.17",
+   "name": "Pip",
+   "tag": "Discovery — Weather Station",
+   "why": "the Weather Station does not exist in the game yet"
+  },
+  {
+   "id": "pip.18",
+   "name": "Pip",
+   "tag": "Discovery — Glass Orchard",
+   "why": "the Glass Orchard does not exist in the game yet"
+  },
+  {
+   "id": "wick.21",
+   "name": "Sella",
+   "tag": "Discovery — Weather Station",
+   "why": "the Weather Station does not exist in the game yet"
+  },
+  {
+   "id": "burl.20",
+   "name": "Orun",
+   "tag": "Gift — bell",
+   "why": "no bell can be found or crafted in the game"
+  },
+  {
+   "id": "burl.21",
+   "name": "Orun",
+   "tag": "Discovery — Glass Orchard",
+   "why": "the Glass Orchard does not exist in the game yet"
+  },
+  {
+   "id": "tessel.21",
+   "name": "Morrow",
+   "tag": "Discovery — Weather Station",
+   "why": "the Weather Station does not exist in the game yet"
+  },
+  {
+   "id": "lull.17",
+   "name": "Luma",
+   "tag": "Discovery — Low Archive panel",
+   "why": "the Low Archive does not exist in the game yet"
+  },
+  {
+   "id": "lull.19",
+   "name": "Luma",
+   "tag": "Gift — pear",
+   "why": "no pears exist in the game yet"
+  },
+  {
+   "id": "lull.20",
+   "name": "Luma",
+   "tag": "Gift — sharp bell",
+   "why": "no bell can be found or crafted in the game"
+  },
+  {
+   "id": "lull.21",
+   "name": "Luma",
+   "tag": "Discovery — Glass Orchard",
+   "why": "the Glass Orchard does not exist in the game yet"
+  }
+ ],
+ "connected": 138,
+ "by_pool": {
+  "topic": 31,
+  "talk": 80,
+  "meet": 6,
+  "beat": 13,
+  "gift": 8
+ }
+}

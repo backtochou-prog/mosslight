@@ -55,11 +55,13 @@ window.Social = (() => {
   const stats = { cutToday: {}, lastFish: null, lastFishDay: -1, kills: 0, firstWeather: {} };
   function context(c) { const st = S[c], l = L[c] || {}, p = P(); const e = l.entry || {};
     const lastT = st.lastTalk == null ? null : st.lastTalk; const absent = lastT == null ? 0 : Math.floor((now() - lastT) / 24);
-    return { period: period(), season: W.SeasonState.season, weather: weather(), mood: st.mood.state, at: e.at, act: e.act, asleep: !!e.asleep, drowsy: !!e.drowsy, absent, met: st.met, met_days: st.metT == null ? -1 : (now() - st.metT) / 24, bond: Rel.tier(c), rel: st.rel,
+    return { period: period(), hour: hour(), player_low: playerLow(), on_ridge: p.y < 200, low_visits: st.flags.low_n || 0, hounds: W.Monsters.list.filter(m => (m.type === 'stalker' || m.type === 'howler') && l.x !== undefined && Math.hypot(m.x - l.x, m.y - l.y) < 220).length, season: W.SeasonState.season, weather: weather(), mood: st.mood.state, at: e.at, act: e.act, asleep: !!e.asleep, drowsy: !!e.drowsy, absent, met: st.met, met_days: st.metT == null ? -1 : (now() - st.metT) / 24, bond: Rel.tier(c), rel: st.rel,
       lantern: !!W.Monsters.Health.lantern, fished: W.Fishing.Book.stats.caught, caught_today: stats.lastFishDay === day(), lastFish: stats.lastFish, cut_today: (stats.cutToday[day()] || 0) > 0, monsters_seen: W.Monsters.Stats ? Object.values(W.Monsters.Stats.kills || {}).reduce((a, b) => a + b, 0) + (W.Monsters.list.length ? 1 : 0) : 0,
       monsters_near: W.Monsters.list.filter(m => l.x !== undefined && Math.hypot(m.x - l.x, m.y - l.y) < 200).length, lights: (W.Build.lights ? W.Build.lights().length : 0) + 2, day: day(), wind: W.WeatherState.wind || 0, after_rain: (W.WeatherState.recentRainHours ?? 99) < 10,
       pond_pressure: (W.Fishing.S.stock || {}).pond || 0, festival: window.Festival && window.Festival.active ? window.Festival.active() : null, festival_soon: soonFest(), milestone: st.milestones, trees_cut_recent: Object.entries(stats.cutToday).filter(([d]) => day() - d <= 3).reduce((a, [, v]) => a + v, 0) };
   }
+  // how the player is doing: tired or hurt (comfort is only offered when it is true)
+  function playerLow() { const E = W.Survival.Energy, H = W.Monsters.Health; return E.current < E.max * .4 || H.cur < H.max * .5; }
   function soonFest() { if (!window.Festival || !window.Festival.data()) return null; for (const f of Object.keys(window.Festival.data().festivals)) { const k = window.Festival.Cal.daysUntil(f); if (k >= 1 && k <= 3) return f; } return null; }
   function when(c, w, ctx) { if (!w) return true; ctx = ctx || context(c); const st = S[c];
     for (const [k, v] of Object.entries(w)) { switch (k) {
@@ -69,6 +71,12 @@ window.Social = (() => {
       case 'absent': if (ctx.absent < v) return false; break;
       case 'bond': if (Rel.tierIdx(ctx.bond) < Rel.tierIdx(v)) return false; break;
       case 'trust': case 'familiarity': case 'affection': case 'respect': case 'reliability': case 'shared': if (st.rel[k] < v) return false; break;
+      case 'hour': if (!(ctx.hour >= v[0] && ctx.hour < v[1])) return false; break;
+      case 'player_low': if (ctx.player_low !== v) return false; break;
+      case 'hounds': if (ctx.hounds < v) return false; break;
+      case 'on_ridge': if (ctx.on_ridge !== v) return false; break;
+      case 'low_visits': if (ctx.low_visits < v) return false; break;
+      case 'talk_days': if (st.talkDays.length < v) return false; break;
       case 'lantern': if (ctx.lantern !== v) return false; break;
       case 'fished': if (ctx.fished < v) return false; break;
       case 'caught_today': if (ctx.caught_today !== v) return false; break;
@@ -117,6 +125,41 @@ window.Social = (() => {
     if (line.learn && !st.known.includes(line.learn)) st.known.push(line.learn);
     if (line.sets) st.flags[line.sets] = true; if (line.reveals && window.Festival && window.Festival.Cal) window.Festival.Cal.discover(line.reveals, 'told by ' + CH[c].name);
     return { text: fill(line.text, vars(c, mem, extra.vars || {})), expr: line.expr, pics: line.pics, id: line.id, mem: mem ? mem.id : null }; }
+
+  // ================================================================= AUTHORED EXCHANGES (docs/narrative/DIALOGUE_LIBRARY.md)
+  // Each exchange is a short, written conversation (turns by the character and by the player). The player starts every one of them:
+  // "Talk" lets the character open with something that fits the moment, "Say something" lists exchanges that begin with the
+  // player's own words, and story moments are offered as their own button that can always be declined.
+  const exList = c => CH[c].ex || [];
+  const seenEx = (c, id) => !!(S[c] && S[c].flags['seen:' + id]);
+  const GAVE = { clean_glass: ['glass_pane', 'glass_shard', 'spore_jar'] };
+  function groupAgreed(c) { let n = 0; for (const o in CH) if (o !== c && S[o].met && Rel.tierIdx(Rel.tier(o)) >= 1) n++; return n >= 3; }
+  function tokenOk(c, tok) { const i = tok.indexOf(':'), kind = tok.slice(0, i), arg = tok.slice(i + 1), st = S[c];
+    switch (kind) {
+      case 'seen': { const oc = Object.keys(CH).find(k => arg.startsWith(k + '.')) || c; return seenEx(oc, arg); }
+      case 'disc': return !!((S._disc || {})[arg]);
+      case 'world': return !!((S._world || {})[arg]);
+      case 'met': return !!(S[arg] && S[arg].met);
+      case 'gave': { const ids = GAVE[arg] || [arg]; return st.gifts.some(g => ids.includes(g.id)); }
+      case 'flag': return arg === 'group_agreed' ? groupAgreed(c) : !!st.flags[arg];
+      default: return true; } }
+  function reqOk(c, e) { return (e.req || []).every(t => t.split('|').some(a => tokenOk(c, a))); }
+  function exOk(c, e, ctx) { if (e.once && seenEx(c, e.id)) return false; if (!when(c, e.w, ctx)) return false; return reqOk(c, e); }
+  function exScore(c, e) { return (e.weight || 1) + Object.keys(e.w || {}).length * .6 + (e.req || []).length * .3 + (e.once ? 1.2 : 0) + hash(`${day()}|${c}|${S[c].said.length}|${e.id}`) * .9; }
+  function pickEx(c, pools, ctx, o = {}) { const st = S[c]; let best = null, bs = -1e9;
+    for (const e of exList(c)) { if (!pools.includes(e.p)) continue; if (!exOk(c, e, ctx)) continue; if (o.specific && !Object.keys(e.w || {}).length && !e.once) continue;
+      const ri = st.said.lastIndexOf(e.id); if (ri >= 0 && st.said.length - ri <= 10) continue; const sc = exScore(c, e); if (sc > bs) { bs = sc; best = e; } }
+    return best; }
+  function applySets(c, e) { for (const t of e.sets || []) { const i = t.indexOf(':'), k = t.slice(0, i), a = t.slice(i + 1); if (k === 'flag') S[c].flags[a] = day(); else if (k === 'world') { S._world = S._world || {}; S._world[a] = true; } } }
+  const BEAT_FX = { beat: { trust: 3, affection: 2, shared: 3 }, topic: { familiarity: 1, affection: 1 }, talk: { familiarity: 1 }, meet: {}, gift: {} };
+  // play an exchange into the conversation; story beats are marked so the page can treat them as a distinct moment
+  function pushEx(c, e, o = {}) { const st = S[c]; st.flags['seen:' + e.id] = day(); st.said.push(e.id); if (st.said.length > 24) st.said.shift(); convoLog.push({ t: now(), c, line: e.id, mem: null, memT: null }); if (convoLog.length > 400) convoLog.shift();
+    const emph = e.p === 'beat' || !!o.emph;
+    e.turns.forEach(([who, text], i) => push(c, { text: fill(text, vars(c, null)), who: who === 'p' ? 'player' : 'npc', emph, exid: e.id, first: i === 0 }));
+    applySets(c, e); const fx = BEAT_FX[e.p]; if (fx && Object.keys(fx).length) Rel.change(c, fx, `a conversation: ${e.tag}`);
+    if (e.p === 'beat' && e.tag) Memory.add(c, 'shared_time', { detail: { detailText: e.tag.toLowerCase() }, tags: ['beat'] });
+    emit('exchange', c, e.id); }
+  function topicLabel(e) { if (e.label) return e.label; const t = (e.turns.find(x => x[0] === 'p') || ['p', e.tag])[1]; return t; }
 
   // ================================================================= ROUTINES and movement
   function entryFor(c) { if (S[c].flags.gone) return { at: null, act: 'gone' }; if (S[c].flags.away_until && day() < S[c].flags.away_until) return { at: null, act: 'away in the north woods' }; const ctx = context(c); const h = hour(); for (const e of CH[c].schedule) { if (!when(c, e.when, ctx)) continue; const inH = e.frm <= e.to ? (h >= e.frm && h < e.to) : (h >= e.frm || h < e.to); if (inH) return e; } return { at: null, act: 'elsewhere' }; }
@@ -196,10 +239,13 @@ window.Social = (() => {
   function begin(c) { const st = S[c], e = (L[c] || {}).entry || {}; W.Build.FX.say('', 0.01);
     UI.conv = { c, queue: [], choices: [], sel: 0, shown: 0, t: 0, open: 0 };
     if (e.asleep || (e.hidden && !e.asleep)) { push(c, say(c, CH[c].asleep) || { text: '...', expr: 'calm' }); UI.conv.choices = [{ label: 'Leave quietly', fn: end }]; if (e.asleep) UI.conv.choices.unshift({ label: 'Leave a gift', fn: () => itemPicker(c, 'gift') }); return; }
-    const first = !st.met; const greet = say(c, CH[c].greet);     // chosen before meeting is recorded, so a first meeting gets a first-meeting line
+    const first = !st.met; const ctx0 = context(c); if (P().y >= 250) st.flags.low_n = Math.min(9, (st.flags.low_n || 0) + 1);
+    // chosen before meeting is recorded, so a first meeting gets the first-meeting exchange; later visits open with something that fits the moment, or with what the character is doing
+    const opener = first ? exList(c).find(x => x.p === 'meet') || null : pickEx(c, ['talk'], ctx0, { specific: true });
+    const greet = opener ? null : (CH[c].greet && CH[c].greet.length ? say(c, CH[c].greet) : null);
     if (first) { st.met = true; st.metT = now(); Memory.add(c, 'met', { detail: { detailText: e.act } }); Rel.change(c, { familiarity: 3 }, 'you met'); emit('met', c); }
     else { Memory.add(c, 'visit', { consolidate: true }); }
-    push(c, greet);
+    if (opener) pushEx(c, opener); else if (greet) push(c, greet); else push(c, { narr: true, text: `${CH[c].name} is ${e.act || 'here'}.`, expr: 'calm' });
     const fu = followups(c); if (fu) push(c, fu);
     const lastDay = st.lastTalk == null ? null : Math.floor(st.lastTalk / 24); st.lastTalk = now(); if (!st.talkDays.includes(day())) { st.talkDays.push(day()); if (st.talkDays.length > 60) st.talkDays.shift(); Rel.change(c, { familiarity: 2 }, 'talked'); }
     for (const pr of st.promises) if (pr.status === 'open' && pr.check && pr.check.visit_days && !pr.visits.includes(day())) { pr.visits.push(day()); if (pr.visits.length >= pr.check.visit_days) keep(c, pr); }
@@ -217,16 +263,32 @@ window.Social = (() => {
       Mood.set(c, res === 'good' ? (a.used === a.stance ? 'grateful' : 'happy') : res === 'bad' ? 'sad' : 'relaxed', .6, `how ${con.id.replace(/_/g, ' ')} turned out`);
       m.recalled = 1; m.lastRecall = now(); return { text, expr: res === 'good' ? 'glad' : res === 'bad' ? 'troubled' : 'calm', id: 'followup:' + cid, mem: m.id }; }
     return null; }
+  // Talk: a memory the character really has comes first; otherwise an authored exchange that fits the moment
+  function talkNow(c) { const st = S[c], ch = CH[c], ctx = context(c); const rp = pick(c, ch.recall || [], ctx);
+    if (rp && rp.mem) { const l = say(c, ch.recall); push(c, l); if (l) Rel.change(c, { familiarity: 1, affection: l.mem ? 1 : 0 }, 'talked'); return; }
+    const e = pickEx(c, ['talk'], ctx); if (e) return pushEx(c, e);
+    const l = say(c, [...(ch.recall || []), ...(ch.chat || [])]); push(c, l || { narr: true, text: `${ch.name} is quiet for a moment, and that is fine.`, expr: 'calm' }); if (l) Rel.change(c, { familiarity: 1, affection: l.mem ? 1 : 0 }, 'talked'); }
+  function topicList(c, ctx) { const st = S[c]; return exList(c).filter(e => e.p === 'topic' && exOk(c, e, ctx) && !(st.said.lastIndexOf(e.id) >= 0 && st.said.length - st.said.lastIndexOf(e.id) <= 12)).map(e => [exScore(c, e), e]).sort((a, b) => b[0] - a[0]).slice(0, 3).map(x => x[1]); }
+  function topicMenu(c, list) { const st = S[c], cv = UI.conv; cv.choices = list.map(e => ({ label: topicLabel(e), fn: () => { st.chatsToday++; pushEx(c, e); hub(c); } })).concat([{ label: 'Never mind', fn: () => hub(c) }]); cv.sel = 0; }
+  // a story moment is its own button, and it can always be put off: no penalty, the character keeps it for later
+  function beatFor(c, ctx) { const inv = W.Gather.Inventory; return exList(c).filter(e => e.p === 'beat' && exOk(c, e, ctx) && (!e.needs || Object.entries(e.needs).every(([id, n]) => inv.count(id) >= n))).sort((a, b) => a.n - b.n)[0] || null; }
+  function beatConfirm(c, e) { const cv = UI.conv, ch = CH[c];
+    cv.choices = [{ label: e.stay || 'Stay', fn: () => { if (e.needs) for (const [id, n] of Object.entries(e.needs)) { const inv = W.Gather.Inventory; let left = n; for (let i = inv.slots.length - 1; i >= 0 && left > 0; i--) if (inv.slots[i] && inv.slots[i].id === id) left -= inv.remove(i, left) || 0; } pushEx(c, e, { emph: !e.soft }); if (e.minutes) W.Survival.Clock.advance(e.minutes); hub(c); } },
+                  { label: 'Not now', fn: () => { push(c, { text: (D.choices || {})[c] || 'Of course.', expr: 'calm' }); hub(c); } }]; cv.sel = 0; }
+  function farewell(c) { const ch = CH[c], st = S[c]; const arr = ch.farewell; if (arr && arr.length) return { text: arr[Math.floor(hash(`${c}bye${day()}${st.said.length}`) * arr.length)], expr: 'calm' };
+    return { text: ch.gesture ? '*Its light dips once.*' : ch.pictures ? '*It shows you a small wave.*' : (Rel.tierIdx(Rel.tier(c)) >= 2 ? 'Come back soon.' : '...'), expr: 'calm' }; }
   function hub(c) { const st = S[c], ch = CH[c], cv = UI.conv; const ch_ = []; const ctx = context(c);
     if (st.chatDay !== day()) { st.chatDay = day(); st.chatsToday = 0; }
-    if (st.chatsToday < 3) ch_.push({ label: ch.gesture ? 'Watch it' : ch.pictures ? 'Look at its pictures' : 'Talk', fn: () => { st.chatsToday++; const l = say(c, [...ch.recall, ...ch.chat]); push(c, l || { text: ch.gesture ? '*It is still, and so are you.*' : 'Nothing more to say just now.', expr: 'calm' }); if (l) Rel.change(c, { familiarity: 1, affection: l.mem ? 1 : 0 }, 'talked'); hub(c); } });
+    if (st.chatsToday < 3) { ch_.push({ label: ch.gesture ? 'Watch it' : ch.pictures ? 'Look at its pictures' : 'Talk', fn: () => { st.chatsToday++; talkNow(c); hub(c); } });
+      const tl = topicList(c, ctx); if (tl.length) ch_.push({ label: 'Say something', fn: () => topicMenu(c, tl) }); }
+    const bt = beatFor(c, ctx); if (bt) ch_.push({ label: bt.label, fn: () => beatConfirm(c, bt) });
     const q = activeQ(c); if (q) { const qs = qstate(c, q), s = qs.stage; if (s < 0 && when(c, q.stages[0].when, ctx) && when(c, q.requires, ctx)) ch_.push({ label: q.offer || (ch.gesture || ch.pictures ? 'What is troubling it?' : 'Ask if it needs a hand'), fn: () => questStart(c) }); else if (s >= 0) { const stg = q.stages[s]; if (qs.ready || stg.objective.type === 'choice') ch_.push({ label: `${q.title}${qs.ready ? ': tell it' : ''}`, fn: () => questTalk(c) }); if (stg.objective.type === 'deliver') ch_.push({ label: `${q.title}: hand over ${stg.objective.label || 'parts'}`, fn: () => deliver(c) }); if (stg.objective.type === 'escort' && !L[c].follow && !qs.data.lost) ch_.push({ label: stg.objective.go || "Let's go", fn: () => { L[c].follow = true; push(c, { text: stg.objective.start || 'Lead the way.', expr: 'glad' }); cv.choices = []; cv.closing = true; } }); } }
     activities(c, ch_, ctx);
     for (const con of ch.concerns || []) { const a = st.advice[con.id]; if ((!a || a.state === 'offered') && when(c, con.when, ctx)) { ch_.push({ label: ch.gesture || ch.pictures ? 'It seems unsettled' : 'It seems to have something on its mind', fn: () => advise(c, con) }); break; } }
     for (const t of ch.tells || []) { if (!st.tells[t.id] && when(c, t.when, ctx)) { ch_.push({ label: ch.gesture ? 'It is asking you something' : 'It wants to ask you something', fn: () => tell(c, t) }); break; } }
     for (const f of ch.facts || []) { const k = st.facts[f.id]; if (k && !k.mentioned && now() - k.learned >= 18 && when(c, f.when, ctx)) { ch_.push({ label: f.mention, fn: () => mention(c, f) }); break; } }
     if (ch.shows && W.Gather.Inventory.slots.some(s => s && ch.shows.cats.includes(itemCat(s.id)))) ch_.push({ label: ch.shows.label, fn: () => itemPicker(c, 'show') });
-    ch_.push({ label: 'Give something', fn: () => itemPicker(c, 'gift') }); ch_.push({ label: 'Goodbye', fn: () => { push(c, { text: ch.gesture ? '*Its light dips once.*' : ch.pictures ? '*It shows you a small wave.*' : (Rel.tierIdx(Rel.tier(c)) >= 2 ? 'Come back soon.' : '...'), expr: 'calm' }); cv.choices = []; cv.closing = true; } });
+    ch_.push({ label: 'Give something', fn: () => itemPicker(c, 'gift') }); ch_.push({ label: 'Goodbye', fn: () => { push(c, farewell(c)); cv.choices = []; cv.closing = true; } });
     cv.choices = ch_; cv.sel = 0; }
   function questStart(c) { const st = S[c], q = activeQ(c), stg = q.stages[0], qs = qstate(c, q); qs.stage = 0; qs.started = now(); qs.data = {}; st.flags.offered_quest = true; toast({ kicker: 'New storyline', title: q.title, sub: `with ${CH[c].name}`, glyph: 'book' }); push(c, { text: fill(stg.talk, vars(c, null)), expr: 'troubled' }); if (stg.objective.promise || stg.promise) promise(c, { ...(stg.promise || {}), what: (stg.promise || {}).what || q.title, days: (stg.promise || {}).days || 6, quest: q.id, check: { quest_stage: 0 } }); Rel.change(c, { trust: 2 }, `it told you about ${q.title.toLowerCase()}`); UI.conv.choices = [{ label: stg.accept || "I'll see what I can do.", fn: () => { Memory.add(c, 'promise_made', { detail: { detailText: q.title }, ref: q.id, tags: [q.id] }); hub(c); } }]; }
   function questTalk(c) { const st = S[c], q = activeQ(c), qs = qstate(c, q); const s = qs.stage, stg = q.stages[s];
@@ -285,7 +347,8 @@ window.Social = (() => {
     st.gifts.push({ id, day: day(), kind: lk }); if (st.gifts.length > 40) st.gifts.shift();
     for (const pr of st.promises) if (pr.status === 'open' && pr.check && pr.check.give === id) keep(c, pr);
     if (!st.known.includes('gift:' + id)) st.known.push('gift:' + id);
-    push(c, { text, expr: kind === 'disliked' ? 'troubled' : kind === 'neutral' ? 'calm' : 'glad' }); hub(c); }
+    const ge = lk !== 'repeat' ? exList(c).find(x => x.p === 'gift' && (x.items || []).includes(id) && !seenEx(c, x.id)) : null;
+    if (ge) pushEx(c, ge); else push(c, { text, expr: kind === 'disliked' ? 'troubled' : kind === 'neutral' ? 'calm' : 'glad' }); hub(c); }
   function show(c, id) { const st = S[c], ch = CH[c]; const f = W.Fishing.data && W.Fishing.data().fish.find(x => x.id === id); const before = Memory.find(c, { type: 'showed' }); const same = before.find(m => m.item === id);
     const rare = f ? ['rare', 'very_rare', 'exceptional', 'legendary'].includes(f.rarity) : ['rare', 'very_rare'].includes((W.Gather.DB.get(id) || {}).rarity);
     let out = null; if (!same && before.length) out = say(c, ch.recall.filter(l => l.id.endsWith('show_again')), { ctx: { showing: true } });
@@ -298,10 +361,31 @@ window.Social = (() => {
   // ================================================================= TICK
   let acc = 0, accH = -1, lastNow = null;
   let enabled = true;
+  /* ---- Overheard scenes and Vale notes. A scene plays only if the player has been standing near the speakers for a few seconds;
+     the speakers never turn to the player, walk over, or block anything. Each plays once and can be dismissed with a tap. */
+  const wd = () => S._world || (S._world = {});
+  const OH = { cur: null, near: 0, last: -99 };
+  function sceneReady(sc) { const ids = sc.who; if (!ids.every(c => S[c] && S[c].met && L[c] && L[c].present && !(L[c].entry || {}).hidden)) return false;
+    if (!sc.any_place && !ids.every(c => sc.at.includes((L[c].entry || {}).at))) return false;
+    if (!ids.every(c => near(c, 110))) return false; const ctx = context(ids[0]); return when(ids[0], sc.w || {}, ctx); }
+  function crossTick(dt) { const w = wd(); w.cross = w.cross || {};
+    if (UI.conv || UI.journal) { OH.cur = null; OH.near = 0; return; }
+    if (OH.cur) { const o = OH.cur; o.t += dt; if (!o.sc.who.every(c => near(c, 160))) { OH.cur = null; return; } if (o.t >= o.dur) { o.i++; o.t = 0; if (o.i >= o.sc.turns.length) { OH.cur = null; OH.last = T; return; } o.dur = lineSecs(o.sc.turns[o.i][1]); } return; }
+    if (T - OH.last < 20) return;
+    const sc = (D.cross || []).find(x => !w.cross[x.n] && sceneReady(x)); if (!sc) { OH.near = 0; return; }
+    OH.near += dt; if (OH.near < 3) return; OH.near = 0; w.cross[sc.n] = day(); OH.cur = { sc, i: 0, t: 0, dur: lineSecs(sc.turns[0][1]) }; }
+  const lineSecs = t => Math.min(7, 2.2 + t.length * .055);
+  const noteMet = () => Object.keys(CH).some(c => S[c].met);
+  function worldTick() { const w = wd(); w.notes = w.notes || {}; const p = P();
+    for (const n of D.world_notes || []) { if (w.notes[n.id]) continue;
+      let ok = (n.src || []).some(id => { const c = id.split('.')[0]; return S[c] && S[c].met && seenEx(c, id); }) || (n.world || []).some(f => w[f]);
+      if (!ok && noteMet()) ok = (n.disc || []).some(a => { const q = D.anchors[a]; return q && Math.hypot(p.x - q[0], p.y - q[1]) < 70; });
+      if (ok) { w.notes[n.id] = day(); toast({ kicker: n.kind === 'place' ? 'A place, written down' : 'A story, written down', title: n.title, sub: 'Neighbours, Stories', glyph: 'book' }); } } }
   function tick(dt) { if (!D || !enabled) return; T += dt; const n = now(); const jump = lastNow != null && Math.abs(n - lastNow) > .5; lastNow = n; acc += dt;
     if (acc > .5 || jump) { for (const c in CH) place(c, jump); acc = 0; checkPromises(); checkObjectives(); checkKills(); checkWitness(); checkIgnored(); for (const c in CH) sight(c); }
     const h = Math.floor(n); if (h !== accH) { accH = h; for (const c in CH) { Mood.hourly(c); milestones(c); } }
-    if (acc === 0) festivalTick();
+    if (acc === 0) { festivalTick(); worldTick(); }
+    crossTick(dt);
     if (UI.conv) { UI.conv.t += dt; UI.conv.open = Math.min(1, UI.conv.open + dt * 7); const l = L[UI.conv.c]; if (Math.hypot(l.x - P().x, l.y - P().y) > CH[UI.conv.c].talk_radius + 26) { UI.conv = null; S._walkedAway = (S._walkedAway || 0) + 1; } }
     const p = P();
     for (const c in CH) { const l = L[c]; if (!l.present) continue; const st = S[c]; const d = Math.hypot(l.x - p.x, l.y - p.y);
@@ -351,7 +435,11 @@ window.Social = (() => {
     drawWorld(g, vw, vh, tab) { VIEW_H = vh; if (!D) return; const ox = W.Camera.ix(), oy = W.Camera.iy(); keepsakes(g, tab, ox, oy); if (!enabled) return; for (const c in CH) emoteDraw(g, c, ox, oy); },
     overlay(g, vw, vh, safe, tab) { UI.buttons = []; if (!D) return; const k = window.UIKit; if (!k) return; US_ = VIEW_H ? k.scale(VIEW_H) : 1; tapHook();
       if (UI.journal) journal(g, vw, vh, tab); else { k.openT('folk', false); JT.key = ''; }
-      if (UI.conv && !UI.journal) dialogue(g, vw, vh, safe, tab); else k.openT('talk', false); } };
+      if (UI.conv && !UI.journal) dialogue(g, vw, vh, safe, tab); else k.openT('talk', false);
+      if (OH.cur && !UI.conv && !UI.journal) overheard(g, vw, vh, safe); } };
+  function overheard(g, vw, vh, safe) { const k = window.UIKit, C = k.C, o = OH.cur, [who, text] = o.sc.turns[o.i]; const w = Math.min(vw - 16, 290), ls = k.lines(text, w - 16), h = 20 + ls.length * 10, x = Math.round(vw / 2 - w / 2), y = Math.round(vh - (safe || 0) - h - 14);
+    g.save(); g.globalAlpha = Math.min(1, o.t * 4, (o.dur - o.t) * 4 + .3); k.tag(g, x, y, w, h, {}); k.text(g, who, x + 8, y + 11, { color: C.rust, bold: true }); ls.forEach((l, i) => k.text(g, l, x + 8, y + 22 + i * 10, { color: C.ink }));
+    g.restore(); rec(x, y, w, h, () => { OH.cur = null; OH.last = T; }); }
   function portrait(c, e) { const key = `${CH[c].portrait}_${e}`; PORT.cache = PORT.cache || {}; if (PORT.cache[key]) return PORT.cache[key]; const o = PORT.index[key] || PORT.index[`${CH[c].portrait}_calm`]; const cv = document.createElement('canvas'); cv.width = cv.height = 48; const gg = cv.getContext('2d'), im = gg.createImageData(48, 48); const pw = PORT.size * 3;
     for (let y = 0; y < 48; y++) for (let x = 0; x < 48; x++) { const i = PIDX[(o[1] + y) * pw + o[0] + x]; const q = (y * 48 + x) * 4; const p = PORT.palette[i] || [0, 0, 0]; im.data[q] = p[0]; im.data[q + 1] = p[1]; im.data[q + 2] = p[2]; im.data[q + 3] = i ? 255 : 0; } gg.putImageData(im, 0, 0); return PORT.cache[key] = cv; }
   // ================================================================= UI helpers: every control is a kit tap target; UI.buttons mirrors them in view pixels
@@ -378,16 +466,17 @@ window.Social = (() => {
       const rpc = Math.ceil(n / cols); if (need(ctxL, rpc, rh) > room) rh = Math.max(13, Math.floor((room - need([], 0, 0)) / rpc)); ph = need(ctxL, rpc, rh); }
     else { if (cv.last) body = k.lines(cv.last.text, tw); ph = 40 + Math.max(0, body.length - 1) * LH + 16; }
     ph = Math.max(68, Math.min(room, ph)); const y = Math.round(vh - ph - 8 - safe);
+    const isP = !!(cur && cur.who === 'player'), emph = !!(cur && cur.emph); if (emph) { g.fillStyle = 'rgba(16,10,4,.2)'; g.fillRect(0, 0, vw, vh); }          // a story moment: the world dims a little
     g.save(); k.enter(g, 'talk', true, x, y, pw, ph);
     if (cur || !n) { k.hit(x, y, pw, ph, cur ? advance : end, cur ? 'line' : 'close'); rec(x, y, pw, ph, cur ? advance : end); }   // the whole page turns the line
     k.paper(g, x, y, pw, ph, { close: () => end() });
     // the speaker, framed; it lifts a little when a new line begins
-    const e = (cur && cur.expr) || Mood.expr(c); const bob = !k.S.reduceMotion && cur && cv.t < .14 ? -1 : 0; frame(g, x + 10, y + 10 + bob, 48, portrait(c, e));
-    const name = st.met ? ch.name : '???'; k.text(g, name, tx, y + 23, { face: 2 }); const nw = k.measure(name, 2); g.fillStyle = C.ink2; g.fillRect(tx, y + 26, nw, 1); g.fillRect(tx + nw + 3, y + 26, 2, 1);
-    const subRoom = x + pw - 30 - (tx + nw + 10); let sub = st.met ? `${ch.epithet} · ${st.mood.state}` : ch.species; if (k.measure(sub) > subRoom && st.met) sub = ch.epithet; if (k.measure(sub) <= subRoom) k.text(g, sub, tx + nw + 10, y + 23, { color: C.faint });
+    const e = (cur && cur.expr) || Mood.expr(c); const bob = !k.S.reduceMotion && cur && cv.t < .14 && !isP ? -1 : 0; if (emph) { g.fillStyle = C.rust; g.fillRect(x + Math.round(pw / 2) - 14, y + 3, 28, 1); } g.save(); if (isP) g.globalAlpha = .5; frame(g, x + 10, y + 10 + bob, 48, portrait(c, e)); g.restore();
+    const name = isP ? 'You' : st.met ? ch.name : '???'; k.text(g, name, tx, y + 23, { face: 2 }); const nw = k.measure(name, 2); g.fillStyle = C.ink2; g.fillRect(tx, y + 26, nw, 1); g.fillRect(tx + nw + 3, y + 26, 2, 1);
+    const subRoom = x + pw - 30 - (tx + nw + 10); let sub = isP ? '' : st.met ? `${ch.epithet} · ${st.mood.state}` : ch.species; if (k.measure(sub) > subRoom && st.met) sub = ch.epithet; if (k.measure(sub) <= subRoom) k.text(g, sub, tx + nw + 10, y + 23, { color: C.faint });
     if (cur) { let by = y + 40; if (cur.pics) { cur.pics.forEach((id, i) => { k.slot(g, tx + i * 24, y + 31, 20); W.Gather.UI.drawIcon(g, id, tx + 2 + i * 24, y + 33, 1, tab); }); by += 24; }
-      cv.shown = Math.min(cur.text.length, (cv.shown || 0) + (k.S.reduceMotion ? 1e9 : 1.6)); let left = Math.floor(cv.shown);
-      body.forEach((l, i) => { if (left <= 0) return; k.text(g, l.slice(0, left), tx, by + i * LH, { color: quiet ? C.ink2 : C.ink }); left -= l.length + 1; });
+      cv.shown = Math.min(cur.text.length, (cv.shown || 0) + (k.S.reduceMotion ? 1e9 : cur.emph ? 1.0 : 1.6)); let left = Math.floor(cv.shown);
+      body.forEach((l, i) => { if (left <= 0) return; k.text(g, l.slice(0, left), tx, by + i * LH, { color: isP ? C.rust : (quiet || cur.narr) ? C.ink2 : C.ink }); left -= l.length + 1; });
       if (cv.shown >= cur.text.length) k.text(g, touch ? 'tap to go on ▸' : hints ? 'E  ▸' : '▸', x + pw - 12, y + ph - 9, { align: 'right', color: C.faint }); }
     else if (n) { let yy = y + 40; let top = y + 31; if (ctxL.length) { ctxL.forEach(l => { k.text(g, l, tx, yy, { color: C.faint }); yy += LH; }); g.fillStyle = 'rgba(58,42,26,.22)'; g.fillRect(tx, yy - 6, Math.min(tw, 120), 1); top = yy - 2; }
       const rpc = Math.ceil(n / cols), gap = cols > 1 ? 10 : 0, cw = Math.floor((tw - gap * (cols - 1)) / cols);
@@ -432,6 +521,14 @@ window.Social = (() => {
     else if (UI.jpage === 1) { const ms = Memory.important(c, 12).sort((a, b) => a.t - b.t || memN(a) - memN(b)).filter(m => DIARY[m.kind]); if (!ms.length) para('Nothing remembered yet.', { color: C.faint });
       for (const m of ms) para(diaryText(c, m), { bullet: m.sign < 0 ? '✗' : m.sign > 0 ? '●' : '○', bc: m.sign < 0 ? C.rust : m.sign > 0 ? C.moss : C.faint, indent: 9, color: m.sign < 0 ? C.ink2 : C.ink });
       const pr = st.promises.filter(p => p.status === 'open'); if (pr.length) { head('Promised'); for (const p of pr) para(`${p.what} (${dueText(p)})`, { bullet: '·', indent: 8 }); } }
+    else if (UI.jpage === 3) { const ti = Rel.tierIdx(Rel.tier(c));
+      /* the bible, opened one page at a time: what is written here is only what this friendship has earned */
+      const rel = ch.story && ch.story.Relationships; if (rel && ti >= 2) { head('Among the neighbours'); para(rel); }
+      const wf = ch.story && ch.story['Wants, fears, contradictions']; if (wf && ti >= 3) { head('Wants and fears'); para(wf); }
+      if (seenEx(c, c + '.16') && ch.secret) { head('Kept quiet'); para(ch.secret); }
+      const notes = (D.world_notes || []).filter(n => (n.show || []).includes(c) && (wd().notes || {})[n.id]);
+      if (notes.length) { head('Vale notes'); for (const n of notes) { para(n.title, { bold: true }); for (const t of n.text) para(t, { color: C.ink2 }); gap(3); } }
+      else { head('Vale notes'); para('Nothing written down yet. Notes appear as you walk the Vale and as neighbours tell you things.', { color: C.faint }); } }
     else { let any = false; const add = (b, bc, t, col) => { any = true; para(t, { bullet: b, bc, indent: 9, color: col }); };
       for (const m of D.milestones) if (st.milestones[m.id]) add('★', C.gold, `Day ${st.milestones[m.id].day}: ${m.label}.`);
       for (const q of chapters(c)) { const qs = st.qs[q.id]; if (!qs || qs.stage < 0) continue; add('●', C.ink2, `${q.title}: ${qs.done ? (qs.choice === 'lost' ? 'it ended badly' : 'finished') : q.stages[qs.stage].journal}`); }
@@ -475,7 +572,7 @@ window.Social = (() => {
     // right page
     const c = ids[UI.jc], st = S[c]; const px = x + lw + 12, pwid = bw - lw - 24, bot = y + bh - 10; const wide = pwid >= 400, sideW = wide ? Math.min(150, Math.round(pwid * .3)) : 0, cw = wide ? pwid - sideW - 14 : pwid;
     let cy = y + 12;
-    if (st.met) { const tabs = ['Who', 'Remembered', 'Together']; let tx = px; tabs.forEach((t, i) => { const tw = k.measure(t) + 14, on = i === UI.jpage; g.fillStyle = on ? C.paper : C.paper2; g.fillRect(tx, cy, tw, 14); g.strokeStyle = on ? C.ink2 : 'rgba(58,42,26,.3)'; g.strokeRect(tx + .5, cy + .5, tw - 1, 13); if (on) { g.fillStyle = C.rust; g.fillRect(tx + 1, cy + 1, tw - 2, 1); } k.text(g, t, tx + 7, cy + 10, { color: on ? C.ink : C.faint }); k.hit(tx, cy, tw, 14, () => { UI.jpage = i; }, 'tab'); rec(tx, cy, tw, 14, () => { UI.jpage = i; }); tx += tw + 3; });
+    if (st.met) { const tabs = ['Who', 'Remembered', 'Together', 'Stories']; let tx = px; tabs.forEach((t, i) => { const tw = k.measure(t) + 14, on = i === UI.jpage; g.fillStyle = on ? C.paper : C.paper2; g.fillRect(tx, cy, tw, 14); g.strokeStyle = on ? C.ink2 : 'rgba(58,42,26,.3)'; g.strokeRect(tx + .5, cy + .5, tw - 1, 13); if (on) { g.fillStyle = C.rust; g.fillRect(tx + 1, cy + 1, tw - 2, 1); } k.text(g, t, tx + 7, cy + 10, { color: on ? C.ink : C.faint }); k.hit(tx, cy, tw, 14, () => { UI.jpage = i; }, 'tab'); rec(tx, cy, tw, 14, () => { UI.jpage = i; }); tx += tw + 3; });
       if (UI.jpage === 0) { const lbl = 'Numbers', dw = k.measure(lbl) + 14, dx = Math.min(x + bw - 30 - dw, px + pwid - dw - 18); if (dx > tx + 4) { k.button(g, dx, cy, dw, 14, lbl, () => { UI.details = !UI.details; }, { primary: UI.details }); rec(dx, cy, dw, 14, () => { UI.details = !UI.details; }); } }
       cy += 20; g.fillStyle = 'rgba(58,42,26,.3)'; g.fillRect(px, cy, pwid - 20, 1); cy += 6; } else cy += 4;
     if (wide) { g.fillStyle = 'rgba(58,42,26,.18)'; g.fillRect(px + cw + 6, cy + 2, 1, bot - cy - 6); sideColumn(g, c, px + cw + 14, cy + 2, sideW, bot); }
@@ -504,6 +601,6 @@ window.Social = (() => {
   function init(data, world) { D = data.cast; W = world; A = data.atlas; AW = A.width; IDX = data.idx; PORT = data.portraits; PIDX = data.pidx; for (const [id, c] of Object.entries(D.characters)) CH[id] = c; for (const c in CH) { S[c] = fresh(c); L[c] = { anim: Math.random() * 4, present: false }; }
     announce(); W.Fishing.on('catch', onCatch); W.Gather.on('gathered', onGathered); for (const c in CH) place(c, true); lastNow = now();
     const SS = W.Survival.SaveState, sn = SS.snapshot.bind(SS), ld = SS.load.bind(SS); SS.snapshot = () => Object.assign(sn(), { social: Save.snapshot() }); SS.load = s => { s = s || SS.read(); const ok = ld(s); if (ok) SS.guard('neighbours', () => Save.restore(s.social)); return ok; }; }
-  return { world: () => S._world || {}, blocking, chapters, activeQ, qstate, setEnabled: v => { enabled = v; if (!v) { UI.conv = null; UI.journal = false; } }, init, tick, key, pointer, nearest, busy, begin, preStamp, on, render: R, Save, Memory, Rel, Mood, S, L, CH: () => CH, context, when, say, validate, setProvider: p => { provider = p || Provider; }, Provider, log: convoLog, UI, choose, advance, end, adviceScore, factsFor: c => ({ id: c, name: CH[c].name, traits: CH[c].traits, communication: CH[c].communication, mood: S[c].mood, relationship: S[c].rel, memories: Memory.important(c, 8).map(m => ({ id: m.id, kind: m.kind, day: m.day, item: m.item, detail: m.detailText || m.adviceShort || '' })) }),
+  return { ex: { list: exList, ok: (c, e) => exOk(c, e, context(c)), push: pushEx, seen: seenEx, overheard: () => OH.cur, unlockNotes: worldTick }, world: () => S._world || {}, blocking, chapters, activeQ, qstate, setEnabled: v => { enabled = v; if (!v) { UI.conv = null; UI.journal = false; } }, init, tick, key, pointer, nearest, busy, begin, preStamp, on, render: R, Save, Memory, Rel, Mood, S, L, CH: () => CH, context, when, say, validate, setProvider: p => { provider = p || Provider; }, Provider, log: convoLog, UI, choose, advance, end, adviceScore, factsFor: c => ({ id: c, name: CH[c].name, traits: CH[c].traits, communication: CH[c].communication, mood: S[c].mood, relationship: S[c].rel, memories: Memory.important(c, 8).map(m => ({ id: m.id, kind: m.kind, day: m.day, item: m.item, detail: m.detailText || m.adviceShort || '' })) }),
     audit() { const bad = []; for (const e of convoLog) if (e.mem) { const m = S[e.c].mem.find(x => x.id === e.mem); if (!m && e.memT == null) bad.push(e); if (e.memT != null && e.memT > e.t) bad.push(e); } return bad; } };
 })();

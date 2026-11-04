@@ -38,17 +38,17 @@
   {
    "name": "three days later Pip remembers the advice and says how it went",
    "ok": true,
-   "detail": "You were gone 3 days! I counted. I'm not upset. I made a pile of leaves for every day. It's a big pile. || Daylight only, like you said! I found the blue moss! It doesn't glow in the day. I'm going back to see it glow."
+   "detail": "Pip is turning over leaves. || Daylight only, like you said! I found the blue moss! It doesn't glow in the day. I'm going back to see it glow."
   },
   {
    "name": "later, ordinary talk recalls the advice with its real content",
    "ok": true,
-   "detail": "You told me to go in daylight, and come back before dusk. Daylight only, like you said! I found the blue moss! It doesn't glow in the day. I'm going back to see it glow. || Mushrooms don't grow, they arrive. One morning, there they are. Like they walked in at night. || This hat's name is Fennel. Don't tell anyone. Hats get embarrassed."
+   "detail": "You told me to go in daylight, and come back before dusk. Daylight only, like you said! I found the blue moss! It doesn't glow in the day. I'm going back to see it glow. || I'm trying to sit still. || How's it going? || I have learned the ground has at least seven textures. So, badly. || This hat's name is Fennel. Don't tell anyone. Hats get embarrassed."
   },
   {
    "name": "a personal detail told to Pip comes back days later, tied to what you did today",
    "ok": true,
-   "detail": "What do you like doing most? Tell me. I collect those too. >> You said you love fishing — and you caught a Roach today! I knew it. I knew it about you. || The mushrooms by the hollow log are mine. I mean, nobody owns mushrooms. But they are mine. || You told me to go in daylight, and come back before dusk. Daylight only, like you said! I found the blue moss! It doesn't glow in the day. I'm going back to see it glow."
+   "detail": "What do you like doing most? Tell me. I collect those too. >> You said you love fishing — and you caught a Roach today! I knew it. I knew it about you. || You told me to go in daylight, and come back before dusk. Daylight only, like you said! I found the blue moss! It doesn't glow in the day. I'm going back to see it glow. || Sometimes I talk fast so nobody has time to notice I don't know the answer. || I notice. || Yeah. You wait anyway. That's better."
   },
   {
    "name": "Ebb recognises a second fish and recalls the first one by name",
@@ -58,17 +58,17 @@
   {
    "name": "a broken promise is remembered and comes up later in its own words",
    "ok": true,
-   "detail": "Recommendation accepted. Logging the reason: you said it. >> broken >> 0 >> You know, I kept that little space open on my workbench. For the battery. I suppose you found something more interesting to do. || Fact: every ninth day I run a full diagnostic. It is my activation cycle. Nobody has observed it. || There is a flower growing on my back. I have not removed it. I am conducting a long experiment called \"letting it\"."
+   "detail": "Recommendation accepted. Logging the reason: you said it. >> broken >> 0 >> You know, I kept that little space open on my workbench. For the battery. I suppose you found something more interesting to do. || A thrush repeated the same phrase four times. I understood none of it. I found the repetition reassuring. || Fact: every ninth day I run a full diagnostic. It is my activation cycle. Nobody has observed it."
   },
   {
    "name": "the same character greets differently by hour, weather and absence",
    "ok": true,
-   "detail": "Morning comes up out of the water here. Watch. ... There. That was it. || Rain! Every drop is a small visitor. I greet them all. It takes a while. || The moon is on the water. I am reading it. It mostly says the same thing, but slowly. || This is the hour the pond breathes out. Stand still and you can hear it. || You were gone 5 days. The pond noticed. I said nothing. The pond is a gossip."
+   "detail": "Nera is watching the mist lift. || Rain makes every channel look like it has a plan. Give it an hour. It doesn't. || That knock came from below the bank. || I brought tea. It tastes like bark. || I brought tea. It tastes like bark."
   },
   {
    "name": "chatting over several days does not repeat itself back to back",
    "ok": true,
-   "detail": "...The sapling on my head woke before I did. ... Rude. || ...The small chestnut one. ... Pip. ... It talks to me all day. ... I listen to every third word. || ...That oak by your tent. ... Her name is long. ... You would not finish saying it. || ...You talk fast. ... Everything young talks fast. ... Rivers too. || ...The sapling on my head woke before I did. ... Rude. || ...The small chestnut one. ... Pip. ... It talks to me all day. ... I listen to every third word."
+   "detail": "That moss is growing on the north face. || Does that matter? || Not especially. I enjoy being right about small things. || ...The small chestnut one. ... Pip. ... It talks to me all day. ... I listen to every third word. || ...The sapling on my head woke before I did. ... Rude. || ...That oak by your tent. ... Her name is long. ... You would not finish saying it. || ...You talk fast. ... Everything young talks fast. ... Rivers too. || ...That oak by your tent. ... Her name is long. ... You would not finish saying it."
   },
   {
    "name": "no single answer is right for everyone; trust changes how advice lands",
@@ -83,7 +83,7 @@
   {
    "name": "relationships move on separate dimensions, each with a stated reason",
    "ok": true,
-   "detail": "{\"day\":21,\"d\":{\"affection\":6,\"trust\":1},\"why\":\"you gave it Wild seeds (loved)\"}"
+   "detail": "{\"day\":21,\"d\":{\"affection\":1},\"why\":\"you gave it Wild seeds (neutral)\"}"
   },
   {
    "name": "moods have causes and pass: rain cheers the pond elder, then it settles",
@@ -98,12 +98,12 @@
   {
    "name": "the same gift: one loves it, one dislikes it; a repeat is noticed and recalled",
    "ok": true,
-   "detail": "Moss. That will cause corrosion. Declining. Politely. Was that polite? I am still calibrating. >> -4 >> ...Moss. ... For my roots. ... Yes. >> 7 >> ...Another Moss. ... You brought one yesterday. ... I am still deciding about that one."
+   "detail": "Moss. That will cause corrosion. Declining. Politely. Was that polite? I am still calibrating. >> -4 >> Excellent. This is a gift that knows what it is for. >> 7 >> ...Another Moss. ... You brought one yesterday. ... I am still deciding about that one."
   },
   {
    "name": "Ebb's storyline: observe fish, investigate the inflow at night, decide together",
    "ok": true,
-   "detail": "The perch used to rise under the dock at dusk, seven or eight of them. Now two. I am old; maybe I count badly. Would you catch three different kinds from my pond and tell me? Not to keep. To know. >> true >> Three kinds: Perch, Bleak, Tench. So they are not gone. They are leaving. The inflow, then. Go and look at night, when the river talks louder. Take a light. >> true >> I will clear the old culvert myself. (needs 1 Plank) | Tessel knows those pipes. Let me ask it. | Let the river find its own way. It always has. | Not yet. >> Perhaps. Rivers are patient. So am I. Fewer perch this year, then. More the year after, if the river is kind. The perch rose under the dock tonight. Five of them. I counted twice. >> true >> true"
+   "detail": "The perch used to rise under the dock at dusk, seven or eight of them. Now two. I am old; maybe I count badly. Would you catch three different kinds from my pond and tell me? Not to keep. To know. >> true >> Three kinds: Perch, Bleak, Tench. So they are not gone. They are leaving. The inflow, then. Go and look at night, when the river talks louder. Take a light. >> true >> I will clear the old culvert myself. (needs 1 Plank) | Morrow knows those pipes. Let me ask it. | Let the river find its own way. It always has. | Not yet. >> Perhaps. Rivers are patient. So am I. Fewer perch this year, then. More the year after, if the river is kind. The perch rose under the dock tonight. Five of them. I counted twice. >> true >> true"
   },
   {
    "name": "Lull's storyline: old objects wake its pictures; you name what they were",
@@ -147,7 +147,7 @@
   {
    "name": "from a fresh start, nobody recalls anything that did not happen (every recall is tied to a real, earlier memory)",
    "ok": true,
-   "detail": "156 | 6 | 0 | 0 | met/milestone/visit"
+   "detail": "91 | 6 | 0 | 0 | met/milestone/visit"
   },
   {
    "name": "a future AI voice is checked: a line citing a memory that does not exist is refused",
@@ -162,7 +162,7 @@
   {
    "name": "touch: tap through a line and tap a choice on a phone",
    "ok": true,
-   "detail": "[3,[1,1]]"
+   "detail": "[4,[3,1]]"
   },
   {
    "name": "no page errors",

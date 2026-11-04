@@ -33,22 +33,22 @@
   {
    "name": "a new milestone is marked in the inhabitant's own words, the next time you choose to talk",
    "ok": true,
-   "detail": "Greeting again. Recognition: one hundred percent. || Disclosure: I have a record zero. I have never shown it to anyone. I may show it to you. Not yet. Soon. That is a promise. I have started making those."
+   "detail": "Morrow is surveying the path (counting stones). || Disclosure: I have a record zero. I have never shown it to anyone. I may show it to you. Not yet. Soon. That is a promise. I have started making those."
   },
   {
    "name": "milestones unlock activities: an evening by the fire with Pip",
    "ok": true,
-   "detail": "met,familiar,trusted,close >> 1 >> Talk | Ask if it needs a hand | Sit by the fire together | Ask what it found today | Come for a walk with me | Give something | Goodbye"
+   "detail": "met,familiar,trusted,close >> 1 >> Talk | Read Pip's field notes | Ask if it needs a hand | Sit by the fire together | Ask what it found today | Come for a walk with me | Give something | Goodbye"
   },
   {
    "name": "sitting by the fire passes time and becomes a shared memory",
    "ok": true,
-   "detail": "Sparks are just fire trying to be fireflies. I read that. I didn't read that. I made it up just now. | 0.5 | true"
+   "detail": "When I was a chestnut I fell a very long way. Your fire is the opposite of falling. | 0.5 | true"
   },
   {
    "name": "declining is free: no activity is ever offered by the inhabitant itself, only listed when you talk",
    "ok": true,
-   "detail": "Talk | Ask if it needs a hand | Ask what it found today | Come for a walk with me | Give something | Goodbye"
+   "detail": "Talk | Say something | Read Pip's field notes | Ask if it needs a hand | Ask what it found today | Come for a walk with me | Give something | Goodbye"
   },
   {
    "name": "the second chapter depends on the first chapter's choice",
@@ -63,12 +63,12 @@
   {
    "name": "rushing ahead loses Pip: the storyline ends badly and Pip remembers it",
    "ok": true,
-   "detail": "true >> I found my own way back. It took all night. I don't think I'm going north again. It's not your fault. It's a little bit your fault. >> lost >> You went too fast that night. I found my own way home. It's okay. It isn't okay. It's getting okay. || Remember when you caught that Roach and I was right there? I tell everyone. Well, I tell the beetle. || This hat's name is Fennel. Don't tell anyone. Hats get embarrassed."
+   "detail": "true >> I found my own way back. It took all night. I don't think I'm going north again. It's not your fault. It's a little bit your fault. >> lost >> You went too fast that night. I found my own way home. It's okay. It isn't okay. It's getting okay. || Remember when you caught that Roach and I was right there? I tell everyone. Well, I tell the beetle. || I didn't take it. I borrowed it. || You put it in your pocket. || A pocket can be a temporary museum. || Ask next time. || …Okay. Museums need permission."
   },
   {
    "name": "a choice changes the world: opening the knocking door makes the nights more dangerous",
    "ok": true,
-   "detail": "7 >> 8 >> *The last board comes away. Cold air, and nothing comes out, and nothing comes out, and then something does: you never see it, only feel it pass. Wick will not go near the arch for a long time.* *The arch is just an arch now. Whatever was behind it is somewhere else. Wick stays close to the camp.* >> true"
+   "detail": "7 >> 8 >> *The last board comes away. Cold air, and nothing comes out, and nothing comes out, and then something does: you never see it, only feel it pass. Sella will not go near the arch for a long time.* *The arch is just an arch now. Whatever was behind it is somewhere else. Sella stays close to the camp.* >> true"
   },
   {
    "name": "not every ending is happy: if Lull goes home, it never comes back",
@@ -118,7 +118,7 @@
   {
    "name": "talking to Pip at the Firefly Evening becomes a memory it brings up days later",
    "ok": true,
-   "detail": "fest_fireflies >> turning over leaves >> You were gone 42 days! I counted. I'm not upset. I made a pile of leaves for every day. It's a big pile. || I caught one! I let it go! I caught another one! I let it go! This is the best night! >> true >> You went too fast that night. I found my own way home. It's okay. It isn't okay. It's getting okay. || Remember when you caught that Roach and I was right there? I tell everyone. Well, I tell the beetle. || You were at the The Firefly Evening! I saw you! I waved! You did not see me wave. I waved very hard."
+   "detail": "fest_fireflies >> turning over leaves >> Something said my sneeze from under the ground. || Maybe an echo. || I hope so. I don't want to meet a better sneezer. || I caught one! I let it go! I caught another one! I let it go! This is the best night! >> true >> You went too fast that night. I found my own way home. It's okay. It isn't okay. It's getting okay. || Remember when you caught that Roach and I was right there? I tell everyone. Well, I tell the beetle. || You were at the The Firefly Evening! I saw you! I waved! You did not see me wave. I waved very hard."
   },
   {
    "name": "just being there together is remembered too, gently",
@@ -128,7 +128,7 @@
   {
    "name": "festivals are discovered by clues and by being told; the rest stay hidden",
    "ok": true,
-   "detail": "true | true | 2 | In a few nights the fireflies come down to the pond all at once. The lanterns go out on the water. You should be here. Or not. The pond will be. || Watch the do | hidden"
+   "detail": "true | true | 2 | That beetle has been trying to climb the same reed for ten minutes. || Should we help? || It hasn't asked. I respect that. || In a few nights the fireflies come | hidden"
   },
   {
    "name": "the calendar draws the season, upcoming and attended festivals, and turns its pages",
