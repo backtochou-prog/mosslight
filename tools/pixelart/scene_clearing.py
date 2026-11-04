@@ -64,6 +64,10 @@ def build(lib) -> Scene:
     # leaf litter builds up under the big trees at the edge
     for (x, y, r) in ((13, 13, 3), (7.5, 9.5, 3), (27, 7.5, 3), (20.5, 26, 3), (38.5, 19, 2), (6, 21, 2.5)):
         mm.litter_disc(x, y, r, 0.9)
+    # THE STONY RISE (north-west): the valley's bones come to the surface; bare rock shelves, a mossy step, thin soil
+    # THE SEDGE MARSH (south-east, where the river spreads out below the bridge): mud flats, standing pools
+    mm.metaball([(37.6, 27.4, 2.6), (39.6, 29.4, 2.2), (46.0, 26.8, 2.4), (46.8, 29.6, 2.2), (44.2, 25.2, 1.4)], MUD, threshold=0.85)
+    mm.pond([(37.4, 28.2, 1.25), (46.4, 27.6, 1.15), (39.2, 30.0, 1.0)], deep_threshold=9, shore=False)
 
     ctx = C.Context(sc, lib, seed=2026, paths=[main, branch],
                     keepouts=[(272, 250, 48), (318, 276, 34), (560, 290, 40), (616, 100, 60), (418, 190, 18), (330, 224, 40), (470, 358, 44), (654, 380, 70)])
@@ -93,6 +97,24 @@ def build(lib) -> Scene:
                            ('patch_blue', 212, 262, False), ('tall_c', 336, 314, True), ('patch_butter', 270, 308, False), ('tall_a', 384, 280, False),
                            ('patch_daisy', 236, 300, True), ('tall_b', 168, 276, False), ('fern_a', 160, 230, False)):
         put(nm, x, y, fl)
+    # THE STONY RISE — rock shelves stepping up toward the north-west woods, dark firs on the thin soil, heather in
+    # the cracks, scree fallen to the foot of each shelf. A different place from the meadow a few steps away.
+    for (nm, x, y, fl) in (('pine_0', 44, 118, False), ('ledge_2', 82, 112, False), ('pine_1', 128, 92, True), ('ledge_0', 150, 120, True),
+                           ('ledge_1', 58, 146, False), ('pine_0', 178, 112, False), ('pine_1', 26, 150, True), ('heather_0', 104, 126, False),
+                           ('heather_1', 124, 132, False), ('heather_0', 74, 156, True), ('rock_s0', 116, 116, False), ('rock_s2', 168, 128, False),
+                           ('rock_m0', 36, 160, False), ('heather_1', 160, 140, True), ('rock_s1', 92, 160, False), ('tuft_2', 140, 138, False)):
+        put(nm, x, y, fl)
+    # THE SEDGE MARSH — where the river slows and spreads below the bridge: sedge tussocks, cattails at the pool
+    # edges, lily pads on the still water, a willow leaning over it, a drowned tree gone silver.
+    for (nm, x, y, fl) in (('willow_1', 618, 446, False), ('dead_0', 708, 430, True), ('sedge_0', 586, 436, False), ('sedge_1', 628, 432, True),
+                           ('cattail_tall', 606, 458, False), ('sedge_0', 730, 432, True), ('cattail_tall', 736, 458, True), ('sedge_1', 756, 448, False),
+                           ('marsh_grass', 662, 428, False), ('reeds_1', 584, 462, False), ('marsh_grass', 690, 452, True), ('sedge_1', 650, 464, False)):
+        put(nm, x, y, fl)
+    for (nm, x, y) in (('lily_0', 598, 452), ('lily_2', 608, 446), ('lily_3', 744, 444), ('lily_1', 736, 440), ('lily_2', 626, 478)):
+        sc.add(lib[nm], x, y, layer='ground')
+    # WAYMARKS — a sign where the ruin path leaves the main path; a split-rail fence keeping the east path off the soft marsh edge
+    for (nm, x, y, fl) in (('signpost', 474, 232, False), ('fence_3', 574, 406, False), ('fence_2', 622, 410, True)):
+        put(nm, x, y, fl)
     # THE POND — dock on the near bank at the path's end, willow on the far bank, a mossy
     # boulder pair where the bank turns, reeds and lilies by rule.
     for (nm, x, y, fl) in (('willow_0', 730, 306, True), ('rock_xl', 600, 338, True), ('rock_s0', 577, 347, False), ('rock_s1', 584, 352, False)):
@@ -110,7 +132,7 @@ def build(lib) -> Scene:
     # its shade and a fern: a quiet corner at the clearing's south-east.
     for (nm, x, y, fl) in (('hollowlog_0', 470, 356, False), ('branch_1', 442, 372, False), ('fern_2', 502, 344, False), ('shroom_1', 446, 370, False)):
         put(nm, x, y, fl)
-    sc.add(lib['roots_1'], 490, 354, layer='ground', flip=True); sc.add(lib['glowshroom_0'], 490, 364)
+    sc.add(lib['glowshroom_0'], 490, 364)
     sc.decals.append(C.moss_patch(460, 360, 14, 5)); sc.decals.append(C.leaf_litter(472, 366, 24, 14))
     # THE LONE ROWAN — the meadow's landmark, with a flower ring at its foot
     ctx.place('rowan_0', 418, 186); sc.add(lib['flowers_b1'], 440, 198); sc.add(lib['flowers_w0'], 400, 196); sc.add(lib['tuft_1'], 426, 194)
@@ -123,6 +145,8 @@ def build(lib) -> Scene:
         return r_.choice(['pine_0', 'pine_1', 'oak_0', 'oak_2', 'oak_3'] if north else ['oak_0', 'oak_1', 'birch_1', 'pine_1', 'oak_2'])
     def exclude(tx, ty):
         if ty < 4.4: return True
+        if tx < 12.5 and ty < 9.5: return True                     # the stony rise is planted by hand
+        if (tx > 35.5 and ty > 24.5): return True                   # so is the marsh
         for (rx, ry) in ((48, 9), (46, 11.5), (44, 13), (39.8, 21), (40.4, 23.5), (42, 25.6), (43.4, 27.6), (42.8, 29.5)):
             if math.hypot(tx - rx, ty - ry) < 4.6: return True
         # the south-west leg of the main path stays open too
@@ -162,7 +186,7 @@ def build(lib) -> Scene:
 
     # ------------------------------------------------------------------ night-only
     ff = PAL.i('firefly', 0)
-    for (x, y) in ((300, 330), (340, 300), (380, 340), (420, 290), (250, 300), (460, 360), (530, 330), (590, 250), (620, 290), (660, 320), (560, 300), (200, 350), (350, 400), (500, 250), (440, 390), (610, 230)):
+    for (x, y) in ((300, 330), (340, 300), (380, 340), (420, 290), (250, 300), (460, 360), (530, 330), (590, 250), (620, 290), (660, 320), (560, 300), (200, 350), (350, 400), (500, 250), (440, 390), (610, 230), (600, 430), (640, 440), (690, 425), (720, 445), (660, 455)):
         sc.night_pixels.append((x, y, ff)); sc.night_pixels.append((x + 1, y, ff))
         sc.lights.append(Light(x, y, 7, color=(0.75, 0.95, 0.55), intensity=0.55))
     eyes = PAL.i('eyes', 0)

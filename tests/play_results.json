@@ -3,12 +3,12 @@
   {
    "name": "moves E",
    "ok": true,
-   "detail": "94.5 px"
+   "detail": "93.4 px"
   },
   {
    "name": "moves W",
    "ok": true,
-   "detail": "93.4 px"
+   "detail": "94.1 px"
   },
   {
    "name": "moves N",
@@ -18,22 +18,22 @@
   {
    "name": "moves S",
    "ok": true,
-   "detail": "94.5 px"
+   "detail": "93.4 px"
   },
   {
    "name": "moves NE",
    "ok": true,
-   "detail": "95.1 px"
+   "detail": "95.0 px"
   },
   {
    "name": "moves NW",
    "ok": true,
-   "detail": "93.7 px"
+   "detail": "94.5 px"
   },
   {
    "name": "moves SE",
    "ok": true,
-   "detail": "94.5 px"
+   "detail": "95.0 px"
   },
   {
    "name": "moves SW",
@@ -43,7 +43,7 @@
   {
    "name": "diagonal speed == cardinal speed",
    "ok": true,
-   "detail": "cardinal 94.1 px, diagonal 94.5 px over 1.5 s"
+   "detail": "cardinal 93.8 px, diagonal 94.7 px over 1.5 s"
   },
   {
    "name": "stops without sliding",
@@ -58,7 +58,7 @@
   {
    "name": "blocked by pond",
    "ok": true,
-   "detail": "stopped at x=567.5 walking east into the pond (bank near 548)"
+   "detail": "stopped at x=552.5 walking east into the pond (bank near 548)"
   },
   {
    "name": "blocked by tent",
@@ -73,12 +73,12 @@
   {
    "name": "dock is walkable (stops at the end of the deck)",
    "ok": true,
-   "detail": "reached x=590.5 on the deck"
+   "detail": "reached x=591.4 on the deck"
   },
   {
    "name": "path junction traversable",
    "ok": true,
-   "detail": "ended at (593, 256)"
+   "detail": "ended at (590, 271)"
   },
   {
    "name": "passes between edge trees on the ruin path",
@@ -98,7 +98,7 @@
   {
    "name": "behind oak trunk: partially hidden",
    "ok": true,
-   "detail": "35% of player visible"
+   "detail": "46% of player visible"
   },
   {
    "name": "in front of oak trunk: fully visible",
@@ -108,7 +108,7 @@
   {
    "name": "behind foreground canopy: hidden",
    "ok": true,
-   "detail": "38% visible under the framing oak"
+   "detail": "20% visible under the framing oak"
   },
   {
    "name": "under the oak canopy, in front of trunk base: visible",
@@ -177,7 +177,7 @@
   {
    "name": "frame cost (software Chromium, 640x360 at 3x)",
    "ok": true,
-   "detail": "20.0 ms/frame"
+   "detail": "16.4 ms/frame"
   },
   {
    "name": "no page errors",

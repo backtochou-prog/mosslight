@@ -299,9 +299,14 @@ def understorey(ctx: Context, clearing_dist, recipe=None, n_cand=900, spacing=2.
 def season_sprite(lib: dict, name: str, season: str):
     """Stable identity, seasonal appearance: resolve a sprite name for a season."""
     if season == 'summer':
-        swap = {'flowers_w0': 'flowers_y0', 'flowers_w1': 'flowers_y1', 'flowers_b0': 'flowers_r0', 'flowers_b1': 'flowers_r1', 'hedge_0': 'hedge_1'}
+        swap = {'flowers_w0': 'patch_butter', 'flowers_w1': 'patch_butter', 'flowers_b0': 'patch_pink', 'flowers_b1': 'patch_pink', 'hedge_0': 'hedge_1',
+                'patch_daisy': 'patch_butter', 'patch_blue': 'patch_pink', 'patch_daisy_s': 'patch_butter'}           # summer meadows turn yellow and pink
         return lib[swap.get(name, name)]
-    if season == 'autumn' and name.startswith(('flowers_w', 'flowers_b', 'flowers_p', 'patch_daisy', 'patch_blue', 'patch_pink')): return None   # meadow flowers are over by autumn
+    if season == 'autumn':                                                       # where the flowers were, mushrooms and fallen leaves
+        sw = {'patch_daisy': 'shrooms_brown', 'patch_daisy_s': 'leaf_heap_1', 'patch_blue': 'shrooms_red', 'patch_pink': 'leaf_heap_0', 'patch_butter': 'leaf_heap_0',
+              'flowers_w0': 'shrooms_brown', 'flowers_w1': 'leaf_heap_1', 'flowers_b0': 'leaf_heap_0', 'flowers_b1': 'shrooms_red', 'flowers_p0': 'leaf_heap_1', 'flowers_p1': 'leaf_heap_0',
+              'flowers_y0': 'leaf_heap_0', 'flowers_y1': 'shrooms_brown'}
+        if name in sw and sw[name] in lib: return lib[sw[name]]
     if season != 'winter': return lib[name]
     if name.startswith(('flowers_', 'lily_', 'arrowhead_', 'shroom_', 'patch_', 'shrooms_')): return None   # gone under snow / ice
     if name + '_winter' in lib: return lib[name + '_winter']

@@ -122,7 +122,7 @@
   {
    "name": "the rain ambience follows the weather",
    "ok": true,
-   "detail": "rain layer 0.3136"
+   "detail": "rain layer 0.3194"
   },
   {
    "name": "a festival day keeps its evening clear, and the morning forecast says so",
@@ -197,12 +197,12 @@
   {
    "name": "25 s of fast-forwarded play (rain, day into night): steady frame time, bounded particles, no runaway memory",
    "ok": true,
-   "detail": "969 frames, 25.8 ms/frame, heap +0.0 MB, particles fire 9 ripples 7 rain 192, 6 tap targets"
+   "detail": "1385 frames, 18.1 ms/frame, heap +0.0 MB, particles fire 18 ripples 5 rain 193, 6 tap targets"
   },
   {
    "name": "night with 12 creatures renders under the frame budget",
    "ok": true,
-   "detail": "23.8 ms/frame"
+   "detail": "19.4 ms/frame"
   },
   {
    "name": "the site root opens the game: no lab controls, a title page, the canvas fills the window",

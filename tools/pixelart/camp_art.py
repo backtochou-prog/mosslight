@@ -410,6 +410,8 @@ def add_camp_art(lib):
               boulder('step_stone', 7.5, 3.2, 31), boulder('rock_s0', 4.5, 3.4, 21), boulder('rock_s1', 3.6, 2.8, 24), boulder('rock_s2', 5, 3.2, 27, mossy=True)):
         lib[s.name] = s
     add_plants(lib); add_trees(lib)
+    from .tree_art import add_trees as _grown; _grown(lib)
+    from .world_art import add_world_art; add_world_art(lib)              # oaks, birches, willows, the dead snag: grown, with their own winter selves
     for s_ in (forage_basket(), water_bucket()): lib[s_.name] = s_
     return lib
 
@@ -705,3 +707,17 @@ def water_bucket():
     m = c.a != 0; p = np.pad(m, 1); edge = m & ~(p[:-2, 1:-1] & p[2:, 1:-1] & p[1:-1, :-2] & p[1:-1, 2:])
     c.a[edge & np.isin(c.a, wd[1:] + mt[1:])] = wd[0]
     return _sprite('water_bucket', c, 5, 11, shadow=(4, 1.5, 1, 0), soft_shadow=True, tags=('prop', 'ysort'), contact=(3, 1.0))
+
+
+
+def winter_dry(sprite):
+    """Winter keeps a plant's shape but takes its green: blades go to straw and dry brown, tips to pale stalk."""
+    import dataclasses
+    c = sprite.c.copy(); a = c.a
+    straw = R('rope'); dry = R('wood')
+    for fam in ('grass', 'reed', 'shrub', 'fern', 'lily'):
+        ramp = R(fam)
+        for k, idx in enumerate(ramp):
+            t = k / max(1, len(ramp) - 1)
+            a[a == idx] = dry[1] if t < 0.25 else straw[0] if t < 0.5 else straw[1] if t < 0.8 else straw[2]
+    return dataclasses.replace(sprite, c=c, name=sprite.name + '_winter', tags=tuple(sprite.tags) + ('winter',))

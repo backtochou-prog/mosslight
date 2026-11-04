@@ -3,13 +3,13 @@
   "w": 58,
   "h": 70,
   "origin": [
-   27,
+   29,
    68
   ],
   "shadow": [
-   20,
+   23,
+   4,
    6,
-   9,
    -1
   ],
   "tags": [
@@ -17,39 +17,59 @@
    "ysort"
   ],
   "solid": true,
-  "trunk_top": 47
+  "trunk_top": 49
  },
  "oak_1": {
-  "w": 57,
-  "h": 63,
-  "origin": [
-   28,
-   61
-  ],
-  "shadow": [
-   20,
-   6,
-   9,
-   -1
-  ],
-  "tags": [
-   "tree",
-   "ysort"
-  ],
-  "solid": true,
-  "trunk_top": null
- },
- "oak_2": {
-  "w": 43,
+  "w": 60,
   "h": 66,
   "origin": [
-   21,
+   30,
    64
   ],
   "shadow": [
-   15,
+   24,
+   4,
    6,
-   9,
+   -1
+  ],
+  "tags": [
+   "tree",
+   "ysort"
+  ],
+  "solid": true,
+  "trunk_top": 48
+ },
+ "oak_2": {
+  "w": 52,
+  "h": 72,
+  "origin": [
+   26,
+   70
+  ],
+  "shadow": [
+   20,
+   4,
+   6,
+   -1
+  ],
+  "tags": [
+   "tree",
+   "ysort"
+  ],
+  "solid": true,
+  "trunk_top": 48
+ },
+ "oak_3": {
+  "w": 62,
+  "h": 64,
+  "origin": [
+   32,
+   62
+  ],
+  "shadow": [
+   24,
+   4,
+   6,
    -1
   ],
   "tags": [
@@ -59,35 +79,15 @@
   "solid": true,
   "trunk_top": 46
  },
- "oak_3": {
-  "w": 56,
+ "birch_0": {
+  "w": 34,
   "h": 66,
   "origin": [
-   27,
+   17,
    64
   ],
   "shadow": [
-   20,
-   6,
-   9,
-   -1
-  ],
-  "tags": [
-   "tree",
-   "ysort"
-  ],
-  "solid": true,
-  "trunk_top": null
- },
- "birch_0": {
-  "w": 26,
-  "h": 64,
-  "origin": [
-   12,
-   62
-  ],
-  "shadow": [
-   9,
+   13,
    4,
    6,
    -1
@@ -97,17 +97,17 @@
    "ysort"
   ],
   "solid": true,
-  "trunk_top": 64
+  "trunk_top": 45
  },
  "birch_1": {
-  "w": 33,
-  "h": 64,
+  "w": 30,
+  "h": 60,
   "origin": [
-   17,
-   62
+   15,
+   58
   ],
   "shadow": [
-   11,
+   12,
    4,
    6,
    -1
@@ -117,7 +117,7 @@
    "ysort"
   ],
   "solid": true,
-  "trunk_top": 57
+  "trunk_top": 42
  },
  "pine_0": {
   "w": 34,
@@ -201,16 +201,16 @@
  },
  "dead_0": {
   "w": 40,
-  "h": 70,
+  "h": 58,
   "origin": [
    20,
-   67
+   56
   ],
   "shadow": [
-   6,
+   12,
    3,
-   3,
-   1
+   5,
+   -1
   ],
   "tags": [
    "tree",
@@ -479,15 +479,16 @@
  },
  "glowshroom_0": {
   "w": 14,
-  "h": 10,
+  "h": 11,
   "origin": [
    7,
-   9
+   11
   ],
   "shadow": null,
   "tags": [
    "plant",
-   "ysort"
+   "ysort",
+   "light"
   ],
   "solid": false,
   "trunk_top": null
@@ -510,100 +511,106 @@
  },
  "glowshroom_1": {
   "w": 14,
-  "h": 10,
+  "h": 11,
   "origin": [
    7,
-   9
+   11
   ],
   "shadow": null,
   "tags": [
    "plant",
-   "ysort"
+   "ysort",
+   "light"
   ],
   "solid": false,
   "trunk_top": null
  },
  "tuft_0": {
-  "w": 10,
-  "h": 8,
+  "w": 12,
+  "h": 10,
   "origin": [
-   5,
-   7
+   6,
+   9
   ],
   "shadow": null,
   "tags": [
    "plant",
-   "ysort"
+   "ysort",
+   "grass"
   ],
   "solid": false,
   "trunk_top": null
  },
  "tuft_1": {
-  "w": 10,
-  "h": 8,
+  "w": 12,
+  "h": 9,
   "origin": [
-   5,
-   7
+   6,
+   8
   ],
   "shadow": null,
   "tags": [
    "plant",
-   "ysort"
+   "ysort",
+   "grass"
   ],
   "solid": false,
   "trunk_top": null
  },
  "tuft_2": {
-  "w": 10,
-  "h": 8,
+  "w": 12,
+  "h": 11,
   "origin": [
-   5,
-   7
+   6,
+   10
   ],
   "shadow": null,
   "tags": [
    "plant",
-   "ysort"
+   "ysort",
+   "grass"
   ],
   "solid": false,
   "trunk_top": null
  },
  "reeds_0": {
-  "w": 20,
-  "h": 38,
+  "w": 22,
+  "h": 36,
   "origin": [
-   9,
-   36
+   11,
+   35
   ],
   "shadow": null,
   "tags": [
    "plant",
-   "ysort"
+   "ysort",
+   "water"
   ],
   "solid": false,
   "trunk_top": null
  },
  "reeds_1": {
   "w": 22,
-  "h": 23,
+  "h": 30,
   "origin": [
    11,
-   21
+   29
   ],
   "shadow": null,
   "tags": [
    "plant",
-   "ysort"
+   "ysort",
+   "water"
   ],
   "solid": false,
   "trunk_top": null
  },
  "lily_0": {
-  "w": 16,
-  "h": 9,
+  "w": 18,
+  "h": 14,
   "origin": [
-   6,
-   7
+   9,
+   11
   ],
   "shadow": null,
   "tags": [
@@ -614,10 +621,10 @@
  },
  "lily_1": {
   "w": 16,
-  "h": 10,
+  "h": 13,
   "origin": [
-   6,
-   8
+   8,
+   10
   ],
   "shadow": null,
   "tags": [
@@ -627,11 +634,11 @@
   "trunk_top": null
  },
  "lily_2": {
-  "w": 10,
-  "h": 8,
+  "w": 14,
+  "h": 11,
   "origin": [
-   5,
-   6
+   7,
+   8
   ],
   "shadow": null,
   "tags": [
@@ -641,11 +648,11 @@
   "trunk_top": null
  },
  "lily_3": {
-  "w": 10,
-  "h": 8,
+  "w": 16,
+  "h": 13,
   "origin": [
-   5,
-   6
+   8,
+   10
   ],
   "shadow": null,
   "tags": [
@@ -863,11 +870,11 @@
   "trunk_top": null
  },
  "branch_0": {
-  "w": 26,
+  "w": 28,
   "h": 10,
   "origin": [
    13,
-   8
+   9
   ],
   "shadow": null,
   "tags": [
@@ -878,11 +885,11 @@
   "trunk_top": null
  },
  "branch_1": {
-  "w": 26,
+  "w": 28,
   "h": 10,
   "origin": [
    13,
-   8
+   9
   ],
   "shadow": null,
   "tags": [
@@ -1153,14 +1160,14 @@
   "trunk_top": null
  },
  "rubble_1": {
-  "w": 28,
-  "h": 17,
+  "w": 32,
+  "h": 19,
   "origin": [
-   12,
-   15
+   16,
+   17
   ],
   "shadow": [
-   10,
+   11,
    2,
    1,
    1
@@ -1430,17 +1437,17 @@
   "trunk_top": null
  },
  "hollowlog_0": {
-  "w": 46,
-  "h": 30,
+  "w": 48,
+  "h": 24,
   "origin": [
-   11,
-   28
+   22,
+   21
   ],
   "shadow": [
-   16,
-   2.5,
+   21,
+   3,
    2,
-   1
+   0
   ],
   "tags": [
    "prop",
@@ -1451,15 +1458,21 @@
   "trunk_top": null
  },
  "roots_1": {
-  "w": 48,
-  "h": 18,
+  "w": 30,
+  "h": 26,
   "origin": [
-   24,
-   4
+   15,
+   23
   ],
-  "shadow": null,
+  "shadow": [
+   10,
+   2.5,
+   1,
+   0
+  ],
   "tags": [
-   "ground"
+   "prop",
+   "ysort"
   ],
   "solid": false,
   "trunk_top": null
@@ -1584,16 +1597,16 @@
   "trunk_top": null
  },
  "willow_0": {
-  "w": 48,
-  "h": 64,
+  "w": 64,
+  "h": 62,
   "origin": [
-   26,
-   62
+   32,
+   60
   ],
   "shadow": [
-   17,
+   25,
+   4,
    6,
-   8,
    -1
   ],
   "tags": [
@@ -1601,19 +1614,19 @@
    "ysort"
   ],
   "solid": true,
-  "trunk_top": 50
+  "trunk_top": 44
  },
  "willow_1": {
-  "w": 48,
-  "h": 64,
+  "w": 56,
+  "h": 58,
   "origin": [
-   26,
-   62
+   28,
+   56
   ],
   "shadow": [
-   17,
+   22,
+   4,
    6,
-   8,
    -1
   ],
   "tags": [
@@ -1621,14 +1634,14 @@
    "ysort"
   ],
   "solid": true,
-  "trunk_top": 50
+  "trunk_top": 45
  },
  "arrowhead_0": {
-  "w": 14,
-  "h": 16,
+  "w": 18,
+  "h": 20,
   "origin": [
-   6,
-   15
+   9,
+   19
   ],
   "shadow": null,
   "tags": [
@@ -1640,11 +1653,11 @@
   "trunk_top": null
  },
  "arrowhead_1": {
-  "w": 14,
-  "h": 16,
+  "w": 18,
+  "h": 20,
   "origin": [
-   6,
-   15
+   9,
+   19
   ],
   "shadow": null,
   "tags": [
@@ -2077,7 +2090,8 @@
   ],
   "tags": [
    "structure",
-   "ysort"
+   "ysort",
+   "winter"
   ],
   "solid": true,
   "trunk_top": null
@@ -2097,7 +2111,8 @@
   ],
   "tags": [
    "structure",
-   "ysort"
+   "ysort",
+   "winter"
   ],
   "solid": true,
   "trunk_top": null
@@ -2117,7 +2132,8 @@
   ],
   "tags": [
    "structure",
-   "ysort"
+   "ysort",
+   "winter"
   ],
   "solid": true,
   "trunk_top": null
@@ -2137,7 +2153,8 @@
   ],
   "tags": [
    "prop",
-   "ysort"
+   "ysort",
+   "winter"
   ],
   "solid": false,
   "trunk_top": null
@@ -2206,16 +2223,16 @@
   "trunk_top": null
  },
  "rowan_0_winter": {
-  "w": 32,
-  "h": 52,
+  "w": 36,
+  "h": 44,
   "origin": [
-   16,
-   49
+   18,
+   42
   ],
   "shadow": [
-   11,
-   3,
+   14,
    4,
+   6,
    -1
   ],
   "tags": [
@@ -2224,7 +2241,7 @@
    "winter"
   ],
   "solid": true,
-  "trunk_top": 33
+  "trunk_top": null
  },
  "fern_0_winter": {
   "w": 26,
@@ -2290,31 +2307,35 @@
   "trunk_top": null
  },
  "reeds_0_winter": {
-  "w": 20,
-  "h": 38,
+  "w": 22,
+  "h": 36,
   "origin": [
-   9,
-   36
+   11,
+   35
   ],
   "shadow": null,
   "tags": [
    "plant",
-   "ysort"
+   "ysort",
+   "water",
+   "winter"
   ],
   "solid": false,
   "trunk_top": null
  },
  "reeds_1_winter": {
   "w": 22,
-  "h": 23,
+  "h": 30,
   "origin": [
    11,
-   21
+   29
   ],
   "shadow": null,
   "tags": [
    "plant",
-   "ysort"
+   "ysort",
+   "water",
+   "winter"
   ],
   "solid": false,
   "trunk_top": null
@@ -2606,21 +2627,22 @@
   "trunk_top": null
  },
  "rubble_1_winter": {
-  "w": 28,
-  "h": 17,
+  "w": 32,
+  "h": 19,
   "origin": [
-   12,
-   15
+   16,
+   17
   ],
   "shadow": [
-   10,
+   11,
    2,
    1,
    1
   ],
   "tags": [
    "prop",
-   "ysort"
+   "ysort",
+   "winter"
   ],
   "solid": false,
   "trunk_top": null
@@ -2711,22 +2733,23 @@
   "trunk_top": null
  },
  "hollowlog_0_winter": {
-  "w": 46,
-  "h": 30,
+  "w": 48,
+  "h": 24,
   "origin": [
-   11,
-   28
+   22,
+   21
   ],
   "shadow": [
-   16,
-   2.5,
+   21,
+   3,
    2,
-   1
+   0
   ],
   "tags": [
    "prop",
    "ysort",
-   "solid"
+   "solid",
+   "winter"
   ],
   "solid": true,
   "trunk_top": null
@@ -2758,158 +2781,166 @@
   "w": 58,
   "h": 70,
   "origin": [
-   27,
+   29,
    68
   ],
   "shadow": [
-   20,
+   23,
+   4,
    6,
-   9,
    -1
   ],
   "tags": [
    "tree",
-   "ysort"
+   "ysort",
+   "winter"
   ],
   "solid": true,
   "trunk_top": null
  },
  "oak_1_winter": {
-  "w": 57,
-  "h": 63,
+  "w": 60,
+  "h": 66,
   "origin": [
-   28,
-   61
+   30,
+   64
   ],
   "shadow": [
-   20,
+   24,
+   4,
    6,
-   9,
    -1
   ],
   "tags": [
    "tree",
-   "ysort"
+   "ysort",
+   "winter"
   ],
   "solid": true,
   "trunk_top": null
  },
  "oak_2_winter": {
-  "w": 43,
-  "h": 66,
+  "w": 52,
+  "h": 72,
   "origin": [
-   21,
-   64
+   26,
+   70
   ],
   "shadow": [
-   15,
+   20,
+   4,
    6,
-   9,
    -1
   ],
   "tags": [
    "tree",
-   "ysort"
+   "ysort",
+   "winter"
   ],
   "solid": true,
   "trunk_top": null
  },
  "oak_3_winter": {
-  "w": 56,
-  "h": 66,
+  "w": 62,
+  "h": 64,
   "origin": [
-   27,
-   64
+   32,
+   62
   ],
   "shadow": [
-   20,
+   24,
+   4,
    6,
-   9,
    -1
   ],
   "tags": [
    "tree",
-   "ysort"
+   "ysort",
+   "winter"
   ],
   "solid": true,
   "trunk_top": null
  },
  "birch_0_winter": {
-  "w": 26,
-  "h": 64,
+  "w": 34,
+  "h": 66,
   "origin": [
-   12,
-   62
+   17,
+   64
   ],
   "shadow": [
-   9,
+   13,
    4,
    6,
    -1
   ],
   "tags": [
    "tree",
-   "ysort"
+   "ysort",
+   "winter"
   ],
   "solid": true,
   "trunk_top": null
  },
  "birch_1_winter": {
-  "w": 33,
-  "h": 64,
+  "w": 30,
+  "h": 60,
   "origin": [
-   17,
-   62
+   15,
+   58
   ],
   "shadow": [
-   11,
+   12,
    4,
    6,
    -1
   ],
   "tags": [
    "tree",
-   "ysort"
+   "ysort",
+   "winter"
   ],
   "solid": true,
   "trunk_top": null
  },
  "willow_0_winter": {
-  "w": 48,
-  "h": 64,
+  "w": 64,
+  "h": 62,
   "origin": [
-   26,
-   62
+   32,
+   60
   ],
   "shadow": [
-   17,
+   25,
+   4,
    6,
-   8,
    -1
   ],
   "tags": [
    "tree",
-   "ysort"
+   "ysort",
+   "winter"
   ],
   "solid": true,
   "trunk_top": null
  },
  "willow_1_winter": {
-  "w": 48,
-  "h": 64,
+  "w": 56,
+  "h": 58,
   "origin": [
-   26,
-   62
+   28,
+   56
   ],
   "shadow": [
-   17,
+   22,
+   4,
    6,
-   8,
    -1
   ],
   "tags": [
    "tree",
-   "ysort"
+   "ysort",
+   "winter"
   ],
   "solid": true,
   "trunk_top": null
@@ -2949,7 +2980,8 @@
   ],
   "tags": [
    "structure",
-   "ysort"
+   "ysort",
+   "winter"
   ],
   "solid": true,
   "trunk_top": null
@@ -2979,7 +3011,8 @@
   "shadow": null,
   "tags": [
    "structure",
-   "ysort"
+   "ysort",
+   "winter"
   ],
   "solid": true,
   "trunk_top": null
@@ -4021,6 +4054,289 @@
   "solid": true,
   "trunk_top": 44
  },
+ "rowan_1_winter": {
+  "w": 30,
+  "h": 40,
+  "origin": [
+   15,
+   38
+  ],
+  "shadow": [
+   12,
+   4,
+   6,
+   -1
+  ],
+  "tags": [
+   "tree",
+   "ysort",
+   "winter"
+  ],
+  "solid": true,
+  "trunk_top": null
+ },
+ "cattail_tall": {
+  "w": 22,
+  "h": 40,
+  "origin": [
+   11,
+   39
+  ],
+  "shadow": null,
+  "tags": [
+   "plant",
+   "ysort",
+   "water"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "sedge_0": {
+  "w": 20,
+  "h": 16,
+  "origin": [
+   10,
+   15
+  ],
+  "shadow": [
+   6,
+   1.5,
+   1,
+   0
+  ],
+  "tags": [
+   "plant",
+   "ysort"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "sedge_1": {
+  "w": 20,
+  "h": 14,
+  "origin": [
+   10,
+   13
+  ],
+  "shadow": [
+   6,
+   1.5,
+   1,
+   0
+  ],
+  "tags": [
+   "plant",
+   "ysort"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "marsh_grass": {
+  "w": 20,
+  "h": 18,
+  "origin": [
+   10,
+   17
+  ],
+  "shadow": [
+   6,
+   1.5,
+   1,
+   0
+  ],
+  "tags": [
+   "plant",
+   "ysort"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "fence_3": {
+  "w": 52,
+  "h": 20,
+  "origin": [
+   26,
+   18
+  ],
+  "shadow": [
+   24,
+   2,
+   1,
+   0
+  ],
+  "tags": [
+   "structure",
+   "ysort",
+   "solid"
+  ],
+  "solid": true,
+  "trunk_top": null
+ },
+ "fence_2": {
+  "w": 36,
+  "h": 20,
+  "origin": [
+   18,
+   18
+  ],
+  "shadow": [
+   16,
+   2,
+   1,
+   0
+  ],
+  "tags": [
+   "structure",
+   "ysort",
+   "solid"
+  ],
+  "solid": true,
+  "trunk_top": null
+ },
+ "signpost": {
+  "w": 22,
+  "h": 30,
+  "origin": [
+   11,
+   29
+  ],
+  "shadow": [
+   5,
+   1.5,
+   3,
+   0
+  ],
+  "tags": [
+   "structure",
+   "ysort",
+   "solid"
+  ],
+  "solid": true,
+  "trunk_top": null
+ },
+ "ledge_0": {
+  "w": 52,
+  "h": 34,
+  "origin": [
+   26,
+   32
+  ],
+  "shadow": [
+   22,
+   3,
+   3,
+   0
+  ],
+  "tags": [
+   "rock",
+   "ysort",
+   "solid"
+  ],
+  "solid": true,
+  "trunk_top": null
+ },
+ "ledge_1": {
+  "w": 44,
+  "h": 28,
+  "origin": [
+   22,
+   26
+  ],
+  "shadow": [
+   18,
+   3,
+   3,
+   0
+  ],
+  "tags": [
+   "rock",
+   "ysort",
+   "solid"
+  ],
+  "solid": true,
+  "trunk_top": null
+ },
+ "ledge_2": {
+  "w": 62,
+  "h": 38,
+  "origin": [
+   31,
+   36
+  ],
+  "shadow": [
+   28,
+   3,
+   3,
+   0
+  ],
+  "tags": [
+   "rock",
+   "ysort",
+   "solid"
+  ],
+  "solid": true,
+  "trunk_top": null
+ },
+ "heather_0": {
+  "w": 16,
+  "h": 9,
+  "origin": [
+   8,
+   8
+  ],
+  "shadow": null,
+  "tags": [
+   "plant",
+   "ysort"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "heather_1": {
+  "w": 16,
+  "h": 9,
+  "origin": [
+   8,
+   8
+  ],
+  "shadow": null,
+  "tags": [
+   "plant",
+   "ysort"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "leaf_heap_0": {
+  "w": 18,
+  "h": 8,
+  "origin": [
+   9,
+   7
+  ],
+  "shadow": null,
+  "tags": [
+   "ground_plant",
+   "ysort"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "leaf_heap_1": {
+  "w": 18,
+  "h": 8,
+  "origin": [
+   9,
+   7
+  ],
+  "shadow": null,
+  "tags": [
+   "ground_plant",
+   "ysort"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
  "forage_basket": {
   "w": 14,
   "h": 12,
@@ -4474,6 +4790,433 @@
   ],
   "tags": [
    "prop",
+   "ysort",
+   "winter"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "fence_3_winter": {
+  "w": 52,
+  "h": 20,
+  "origin": [
+   26,
+   18
+  ],
+  "shadow": [
+   24,
+   2,
+   1,
+   0
+  ],
+  "tags": [
+   "structure",
+   "ysort",
+   "solid",
+   "winter"
+  ],
+  "solid": true,
+  "trunk_top": null
+ },
+ "fence_2_winter": {
+  "w": 36,
+  "h": 20,
+  "origin": [
+   18,
+   18
+  ],
+  "shadow": [
+   16,
+   2,
+   1,
+   0
+  ],
+  "tags": [
+   "structure",
+   "ysort",
+   "solid",
+   "winter"
+  ],
+  "solid": true,
+  "trunk_top": null
+ },
+ "signpost_winter": {
+  "w": 22,
+  "h": 30,
+  "origin": [
+   11,
+   29
+  ],
+  "shadow": [
+   5,
+   1.5,
+   3,
+   0
+  ],
+  "tags": [
+   "structure",
+   "ysort",
+   "solid",
+   "winter"
+  ],
+  "solid": true,
+  "trunk_top": null
+ },
+ "ledge_0_winter": {
+  "w": 52,
+  "h": 34,
+  "origin": [
+   26,
+   32
+  ],
+  "shadow": [
+   22,
+   3,
+   3,
+   0
+  ],
+  "tags": [
+   "rock",
+   "ysort",
+   "solid",
+   "winter"
+  ],
+  "solid": true,
+  "trunk_top": null
+ },
+ "ledge_1_winter": {
+  "w": 44,
+  "h": 28,
+  "origin": [
+   22,
+   26
+  ],
+  "shadow": [
+   18,
+   3,
+   3,
+   0
+  ],
+  "tags": [
+   "rock",
+   "ysort",
+   "solid",
+   "winter"
+  ],
+  "solid": true,
+  "trunk_top": null
+ },
+ "ledge_2_winter": {
+  "w": 62,
+  "h": 38,
+  "origin": [
+   31,
+   36
+  ],
+  "shadow": [
+   28,
+   3,
+   3,
+   0
+  ],
+  "tags": [
+   "rock",
+   "ysort",
+   "solid",
+   "winter"
+  ],
+  "solid": true,
+  "trunk_top": null
+ },
+ "cattail_tall_winter": {
+  "w": 22,
+  "h": 40,
+  "origin": [
+   11,
+   39
+  ],
+  "shadow": null,
+  "tags": [
+   "plant",
+   "ysort",
+   "water",
+   "winter"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "sedge_0_winter": {
+  "w": 20,
+  "h": 16,
+  "origin": [
+   10,
+   15
+  ],
+  "shadow": [
+   6,
+   1.5,
+   1,
+   0
+  ],
+  "tags": [
+   "plant",
+   "ysort",
+   "winter"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "sedge_1_winter": {
+  "w": 20,
+  "h": 14,
+  "origin": [
+   10,
+   13
+  ],
+  "shadow": [
+   6,
+   1.5,
+   1,
+   0
+  ],
+  "tags": [
+   "plant",
+   "ysort",
+   "winter"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "marsh_grass_winter": {
+  "w": 20,
+  "h": 18,
+  "origin": [
+   10,
+   17
+  ],
+  "shadow": [
+   6,
+   1.5,
+   1,
+   0
+  ],
+  "tags": [
+   "plant",
+   "ysort",
+   "winter"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "tall_a_winter": {
+  "w": 18,
+  "h": 16,
+  "origin": [
+   9,
+   15
+  ],
+  "shadow": [
+   5,
+   1.5,
+   1,
+   0
+  ],
+  "tags": [
+   "plant",
+   "ysort",
+   "grass",
+   "winter"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "tall_b_winter": {
+  "w": 15,
+  "h": 13,
+  "origin": [
+   7,
+   12
+  ],
+  "shadow": [
+   4,
+   1.5,
+   1,
+   0
+  ],
+  "tags": [
+   "plant",
+   "ysort",
+   "grass",
+   "winter"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "tall_c_winter": {
+  "w": 19,
+  "h": 17,
+  "origin": [
+   9,
+   16
+  ],
+  "shadow": [
+   5,
+   1.5,
+   1,
+   0
+  ],
+  "tags": [
+   "plant",
+   "ysort",
+   "grass",
+   "winter"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "tallgrass_0_winter": {
+  "w": 18,
+  "h": 16,
+  "origin": [
+   9,
+   15
+  ],
+  "shadow": [
+   5,
+   1.5,
+   1,
+   0
+  ],
+  "tags": [
+   "plant",
+   "ysort",
+   "grass",
+   "winter"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "tallgrass_1_winter": {
+  "w": 15,
+  "h": 13,
+  "origin": [
+   7,
+   12
+  ],
+  "shadow": [
+   4,
+   1.5,
+   1,
+   0
+  ],
+  "tags": [
+   "plant",
+   "ysort",
+   "grass",
+   "winter"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "tallgrass_2_winter": {
+  "w": 19,
+  "h": 17,
+  "origin": [
+   9,
+   16
+  ],
+  "shadow": [
+   5,
+   1.5,
+   1,
+   0
+  ],
+  "tags": [
+   "plant",
+   "ysort",
+   "grass",
+   "winter"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "tuft_0_winter": {
+  "w": 12,
+  "h": 10,
+  "origin": [
+   6,
+   9
+  ],
+  "shadow": null,
+  "tags": [
+   "plant",
+   "ysort",
+   "grass",
+   "winter"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "tuft_1_winter": {
+  "w": 12,
+  "h": 9,
+  "origin": [
+   6,
+   8
+  ],
+  "shadow": null,
+  "tags": [
+   "plant",
+   "ysort",
+   "grass",
+   "winter"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "tuft_2_winter": {
+  "w": 12,
+  "h": 11,
+  "origin": [
+   6,
+   10
+  ],
+  "shadow": null,
+  "tags": [
+   "plant",
+   "ysort",
+   "grass",
+   "winter"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "heather_0_winter": {
+  "w": 16,
+  "h": 9,
+  "origin": [
+   8,
+   8
+  ],
+  "shadow": null,
+  "tags": [
+   "plant",
+   "ysort",
+   "winter"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "heather_1_winter": {
+  "w": 16,
+  "h": 9,
+  "origin": [
+   8,
+   8
+  ],
+  "shadow": null,
+  "tags": [
+   "plant",
    "ysort",
    "winter"
   ],

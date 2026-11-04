@@ -1262,9 +1262,14 @@ def build_library_extended(lib: dict) -> dict:
         if new in lib: lib[old] = dataclasses.replace(lib[new], name=old)
     for n in ('tent', 'woodpile', 'log_seat', 'log_seat_b', 'chop_block', 'supply_crate', 'lantern_post', 'rock_l0', 'rock_l1', 'rock_m0', 'rock_m1',
               'rock_s0', 'rock_s1', 'rock_s2', 'bush_a', 'bush_b', 'bush_berry', 'shrub_0', 'shrub_1', 'shrub_2', 'fern_0', 'fern_1', 'fern_2', 'stone_0', 'stone_1',
-              'boulder_l0', 'boulder_m0', 'boulder_s0', 'boulder_s1', 'boulder_mossy_l0', 'boulder_mossy_m1', 'pine_0', 'pine_1', 'rock_xl', 'step_stone', 'forage_basket', 'water_bucket'):
+              'boulder_l0', 'boulder_m0', 'boulder_s0', 'boulder_s1', 'boulder_mossy_l0', 'boulder_mossy_m1', 'pine_0', 'pine_1', 'rock_xl', 'step_stone', 'forage_basket', 'water_bucket',
+              'dock', 'ruin_back', 'ruin_side', 'ruin_wall', 'rubble_0', 'rubble_1', 'beam', 'hollowlog_0', 'fence_3', 'fence_2', 'signpost', 'ledge_0', 'ledge_1', 'ledge_2', 'bridge'):
         if n in lib: lib[n + '_winter'] = snowcap(lib[n]); refine(lib[n + '_winter'].c)
     lib['tent_winter'] = icicles(lib['tent_winter'])
+    for n in ('dock', 'ruin_back', 'ruin_side', 'beam'): lib[n + '_winter'] = icicles(lib[n + '_winter'])
+    from .camp_art import winter_dry
+    for n in ('reeds_0', 'reeds_1', 'cattail_tall', 'sedge_0', 'sedge_1', 'marsh_grass', 'tall_a', 'tall_b', 'tall_c', 'tallgrass_0', 'tallgrass_1', 'tallgrass_2', 'tuft_0', 'tuft_1', 'tuft_2', 'heather_0', 'heather_1'):
+        if n in lib: lib[n + '_winter'] = winter_dry(lib[n])
     for n in ('campfire', 'campfire_embers', 'campfire_unlit', 'stump_0'):           # stale winter copies of the old art: the new props carry their own
         lib.pop(n + '_winter', None)
     return lib
