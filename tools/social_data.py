@@ -568,6 +568,7 @@ def attach_narrative():
         cid = nc['id']; c = C[cid]; b = nc['bible']
         c.update(name=name, epithet=nc['title'], species=SPECIES[name], communication=COMM[name], description=b['Role and core'], appearance=b['Appearance and mannerisms'], voice=b['Voice'])
         c.pop('gesture', None); c.pop('pictures', None)
+        c['notice'] = [L(i, t, when=w) for i, t, w in NM.NOTICE[cid]]
         hs = _sentences(b['History and secret']); k = HISTORY_SENTENCES[name]
         if k is None: c['background'], c['secret'] = hs[1], ' '.join([hs[0]] + hs[2:])        # Morrow: the Root Rooms mark is a discovery, so it stays with the secret
         else: c['background'], c['secret'] = ' '.join(hs[:k]), ' '.join(hs[k:])

@@ -18,7 +18,7 @@
   {
    "name": "canopy tone changes between neighbouring pixels stay low (≤ 16% including the outline; was 21-40%)",
    "ok": true,
-   "detail": "14.7%, canopy covers 23% of the map"
+   "detail": "14.8%, canopy covers 23% of the map"
   },
   {
    "name": "shadow field is soft: the biggest step between neighbouring pixels is small (≤ 0.22; a dithered edge jumps by 0.55-1)",
@@ -33,12 +33,12 @@
   {
    "name": "a calm still scene changes under 1.5% of its pixels per quarter second (the fire and breeze only)",
    "ok": true,
-   "detail": "calm 0.42%, breezy 0.84%"
+   "detail": "calm 0.44%, breezy 0.52%"
   },
   {
    "name": "pond rows agree with their neighbours (no striping; ≤ 6% of pixels differ sharply from the row above)",
    "ok": true,
-   "detail": "4.4%"
+   "detail": "4.3%"
   },
   {
    "name": "night still runs at 240 game-min per real-min; midday runs at about 93",

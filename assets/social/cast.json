@@ -1193,6 +1193,56 @@
 }
 },
 "voice": "Short clauses, precise nouns, little ornament. She asks practical questions that are really emotional ones: \"Did you eat?\" means \"Are you looking after yourself?\" Humor is understated and often arrives after a beat. Never grand or mystical.",
+"notice": [
+{
+"id": "n_catch",
+"text": "A {ctx.lastFish}. Tell me the depth and the hour and I will write it on the channel map. Yes, I have a map. No, it is not a hobby.",
+"when": {
+"caught_today": true
+}
+},
+{
+"id": "n_cut",
+"text": "Trees came down today. Take from the dry side. The roots are holding the bank, and the bank is holding my attention.",
+"when": {
+"cut_today": true
+}
+},
+{
+"id": "n_low",
+"text": "You are running on fumes. Sit before you decide you are fine. Fine is a verdict, and you have not heard the evidence.",
+"when": {
+"player_low": true
+}
+},
+{
+"id": "n_rain",
+"text": "The rain came through the north channel clean. I checked twice. Then I checked the checking.",
+"when": {
+"after_rain": true
+}
+},
+{
+"id": "n_fog",
+"text": "Fog on the water. Everything is being told in a whisper. Stay on the bank and listen.",
+"when": {
+"weather": [
+"fog"
+]
+}
+},
+{
+"id": "n_lantern",
+"text": "Your lantern on the water makes a second lantern. I would call it a bad influence. It is lovely.",
+"when": {
+"lantern": true,
+"period": [
+"dusk",
+"night"
+]
+}
+}
+],
 "story": {
 "Wants, fears, contradictions": "Wants a pond that can care for itself and permission to be cared for in turn. Fears an invisible contamination she cannot detect until too late. Dreams of seeing the river mouth. She insists no one owns the water, yet keeps a private map of every channel. Her vulnerability is guilt disguised as competence.",
 "Relationships": "Respects Rootbound Elder's patience but thinks the Elder waits too long to act. Trades useful notes with the Mechanical Wanderer, whom she distrusts around the intake pipe. Finds Little Forager exhausting and secretly enjoys the company. The Lantern Keeper is the one person who can make Nera accept help without arguing. Nera thinks the Dreaming Creature needs more water and fewer theories.",
@@ -2723,6 +2773,50 @@
 "complete": "Whenever Pip talks about the north now, it says \"we\"."
 },
 "voice": "Fast, concrete, full of interruptions and oddly exact observations. Uses playful comparisons and self-corrections: \"I found a thing. A good thing. Unless it's a bad thing that looks good.\" Humor is spontaneous, sometimes defensive. Pip is never a tiny sage.",
+"notice": [
+{
+"id": "p_catch",
+"text": "Is that a {ctx.lastFish}? Do not tell me. I will guess. ... Pond-flavored. Am I close.",
+"when": {
+"caught_today": true
+}
+},
+{
+"id": "p_berry",
+"text": "You have blackberries. I am not asking. I am just standing here with my whole face.",
+"when": {
+"has": "blackberry"
+}
+},
+{
+"id": "p_cut",
+"text": "A tree came down today. I felt it in my feet. Were there nests. Tell me there were no nests.",
+"when": {
+"cut_today": true
+}
+},
+{
+"id": "p_low",
+"text": "You look like a wet sock. A brave one. Sit by the fire and I will find you something crunchy.",
+"when": {
+"player_low": true
+}
+},
+{
+"id": "p_lantern",
+"text": "Your lantern makes everything look like it is holding its breath. I like it. I also do not blink near it.",
+"when": {
+"lantern": true
+}
+},
+{
+"id": "p_rain",
+"text": "Everything smells unwrapped. Mushrooms are going to arrive. I can feel it in my hat.",
+"when": {
+"after_rain": true
+}
+}
+],
 "story": {
 "Wants, fears, contradictions": "Wants to know what everything is for. Fears being the only one who doesn't know when a joke has gone too far, then fears being boring when they stop. Dreams of making a field guide nobody has to be embarrassed to read. They say they love surprises but hate being surprised by someone leaving.",
 "Relationships": "Admires Nera's jars but cannot resist touching them. Tries to make the Lantern Keeper laugh. Thinks Rootbound Elder is a tree who knows a lot about not moving. The Mechanical Wanderer is Pip's favorite puzzle and least favorite person to lose a race to. Pip and the Dreaming Creature share harmless nonsense and an occasional real silence.",
@@ -4121,6 +4215,38 @@
 }
 },
 "voice": "Gentle, plainspoken, lightly teasing. Uses questions that offer choice, not pressure: \"Want company, or a light left nearby?\" Her metaphors are rare and domestic. When uncomfortable she talks about tools. She never speaks like a fortune teller.",
+"notice": [
+{
+"id": "w_lantern",
+"text": "Your lantern is lit. Would you like it brighter, or would you like the dark to come a little closer?",
+"when": {
+"lantern": true
+}
+},
+{
+"id": "w_lights",
+"text": "You keep several lights now. Shall I walk them with you, or would you rather count them alone?",
+"when": {
+"lights": 4
+}
+},
+{
+"id": "w_low",
+"text": "You are very tired. We can sit, or we can walk slowly. Either is allowed.",
+"when": {
+"player_low": true
+}
+},
+{
+"id": "w_fog",
+"text": "Fog. The rail lights will be out. We can watch from here, or closer. Closer is not required.",
+"when": {
+"weather": [
+"fog"
+]
+}
+}
+],
 "story": {
 "Wants, fears, contradictions": "Wants people to feel they can find their way back. Fears that a light can become an obligation or lure. Dreams of making a lamp that runs on wind. She is generous with labor but rarely asks anyone to sit beside her. The warmth she offers is real, and it costs her energy.",
 "Relationships": "Quietly protective of Pip without treating them like a child. Helps Nera accept care. Shares long, companionable silences with Rootbound Elder. Is fascinated by the Wanderer's ability to remember sounds. Worries the Dreaming Creature mistakes every light for a message.",
@@ -5488,6 +5614,45 @@
 }
 },
 "voice": "Slow but not lofty, tactile, often funny in a blunt way. Uses everyday comparisons: \"That plan has the structural integrity of wet toast.\" Occasionally loses a word and substitutes a vivid wrong one. Avoids abstract speeches; when Orun says something profound, it should be brief and incidental.",
+"notice": [
+{
+"id": "b_cut",
+"text": "Someone is cutting. I feel it through my feet. I will not make a speech. I have made it, and the trees were not impressed.",
+"when": {
+"cut_today": true
+}
+},
+{
+"id": "b_rain",
+"text": "Rain. Good. The ground drinks in the order it likes. Left to right.",
+"when": {
+"after_rain": true
+}
+},
+{
+"id": "b_low",
+"text": "You are tired. Sit with your back to something that has stood longer than you. I qualify.",
+"when": {
+"player_low": true
+}
+},
+{
+"id": "b_fog",
+"text": "Fog. Everything leans closer to listen. Even me. Especially me.",
+"when": {
+"weather": [
+"fog"
+]
+}
+},
+{
+"id": "b_catch",
+"text": "A {ctx.lastFish}. The pond is generous. Do not let it hear you say so.",
+"when": {
+"caught_today": true
+}
+}
+],
 "story": {
 "Wants, fears, contradictions": "Wants the Vale to have time to change without being forced into a story. Fears fire moving through dry roots. Dreams of growing a branch low enough for Pip to nap on. Says the past is compost, but keeps a precise count of what they have lost. Emotional vulnerability: being loved only for their age and knowledge.",
 "Relationships": "Nera's urgency reminds Orun of young shoots after rain. Loves Pip's questions, though sometimes needs quiet after them. Trusts Sella's silences. Finds the Wanderer both familiar and alarming. The Dreaming Creature sleeps beneath Orun's broadest roots; Orun claims the snoring keeps the beetles honest.",
@@ -6821,6 +6986,46 @@
 }
 },
 "voice": "Clear declarative sentences, literal readings, technical detail, and perfectly timed accidental humor. As trust grows, it tries contractions and casual speech, often incorrectly. No robotic \"beep\" filler and no exposition dumps. It may say, \"I am glad you returned. That is not a maintenance report.\"",
+"notice": [
+{
+"id": "t_catch",
+"text": "Observation: you have acquired a {ctx.lastFish}. I could estimate its mass. I would prefer that you tell me how it felt.",
+"when": {
+"caught_today": true
+}
+},
+{
+"id": "t_low",
+"text": "Your pace has decreased. I recommend rest. You do not wear a coat. I recommend one of those as well. I am attempting care in the form of a list.",
+"when": {
+"player_low": true
+}
+},
+{
+"id": "t_rain",
+"text": "Rain. Pressure down, humidity up, my left wheel gently offended. I have classified this as weather being weather.",
+"when": {
+"weather": [
+"light_rain",
+"heavy_rain"
+]
+}
+},
+{
+"id": "t_lantern",
+"text": "Your lantern is operating at a pleasing brightness. I would like to be that reliably warm. I am working on it.",
+"when": {
+"lantern": true
+}
+},
+{
+"id": "t_cut",
+"text": "Trees: fewer today. I record it without judgment. I record it with a small amount of judgment.",
+"when": {
+"cut_today": true
+}
+}
+],
 "story": {
 "Wants, fears, contradictions": "Wants to know whether it has a purpose beyond being useful. Fears being switched off while still conscious of the world, though it does not know if that is possible. Dreams—or calls them \"unverified sleep states\"—of a hand adjusting its bell. It claims feelings are not necessary to function, yet remembers every person who has been kind to it.",
 "Relationships": "Works with Nera on the intake pipe, where their trust is carefully negotiated. Pip tries to race it; Morrow pretends not to enjoy this. Sella teaches it to trim wicks. Orun recognizes its metal mark but will not call it an answer. The Dreaming Creature claims Morrow's sleep-noise is \"a small blue weather.\"",
@@ -8005,6 +8210,45 @@
 "complete": "*Every winter, on the Silent Tide, it is there first.*"
 },
 "voice": "Soft, wandering, sensory, and funny in unexpected turns. Sentences drift, double back, or stop. Luma can be poetic, but also says things like \"I dreamt the moon was a potato and honestly it looked tired.\" They never deliver reliable lore as if it were fact.",
+"notice": [
+{
+"id": "l_fog",
+"text": "The fog has come to sit with us. I like that it does not ask anything.",
+"when": {
+"weather": [
+"fog"
+]
+}
+},
+{
+"id": "l_rain",
+"text": "The ground is dreaming of being wet. I can hear it. It is a good dream.",
+"when": {
+"after_rain": true
+}
+},
+{
+"id": "l_low",
+"text": "You are very tired. You can lean on the warm side of me. I am mostly warm side.",
+"when": {
+"player_low": true
+}
+},
+{
+"id": "l_lantern",
+"text": "Your lantern is a very small sun that has agreed to stay. I am grateful to it.",
+"when": {
+"lantern": true
+}
+},
+{
+"id": "l_catch",
+"text": "A {ctx.lastFish}. It came up out of the dark to meet you. That was brave of both of you.",
+"when": {
+"caught_today": true
+}
+}
+],
 "story": {
 "Wants, fears, contradictions": "Wants uninterrupted naps and someone who can hear a strange story without turning it into a clue. Fears waking to find a familiar place changed. Dreams of swimming in warm air. They seek company, then become overwhelmed by it. They joke when scared, but dislike being told their fear is cute.",
 "Relationships": "Naps near Orun's roots. Shares odd jokes with Pip. Finds Sella's lights comforting when dim. Nera's practical questions help Luma feel grounded. Morrow fascinates them because its sleep noises resemble a lullaby with missing notes.",

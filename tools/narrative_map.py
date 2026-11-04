@@ -160,3 +160,40 @@ WORLD_NOTES = [
 ]
 # Folklore with no connected way in yet: The House That Keeps Weather (Weather Station), The Bellwether (no creature in game).
 # Places: The Weather Station, The Glass Orchard, The Low Archive.
+
+# "Notice" lines: what a neighbour says about what is true of the player right now (the fish in their hands, the lantern they carry,
+# trees cut today, how tired they look). They are written in the library's voices, say nothing about the past, and are offered
+# before the ambient talk when one fits, so a conversation answers the player rather than the clock.
+NOTICE = {
+ 'ebb': [('n_catch', 'A {ctx.lastFish}. Tell me the depth and the hour and I will write it on the channel map. Yes, I have a map. No, it is not a hobby.', dict(caught_today=True)),
+         ('n_cut', 'Trees came down today. Take from the dry side. The roots are holding the bank, and the bank is holding my attention.', dict(cut_today=True)),
+         ('n_low', 'You are running on fumes. Sit before you decide you are fine. Fine is a verdict, and you have not heard the evidence.', dict(player_low=True)),
+         ('n_rain', 'The rain came through the north channel clean. I checked twice. Then I checked the checking.', dict(after_rain=True)),
+         ('n_fog', 'Fog on the water. Everything is being told in a whisper. Stay on the bank and listen.', dict(weather=['fog'])),
+         ('n_lantern', 'Your lantern on the water makes a second lantern. I would call it a bad influence. It is lovely.', dict(lantern=True, period=['dusk', 'night']))],
+ 'pip': [('p_catch', 'Is that a {ctx.lastFish}? Do not tell me. I will guess. ... Pond-flavored. Am I close.', dict(caught_today=True)),
+         ('p_berry', 'You have blackberries. I am not asking. I am just standing here with my whole face.', dict(has='blackberry')),
+         ('p_cut', 'A tree came down today. I felt it in my feet. Were there nests. Tell me there were no nests.', dict(cut_today=True)),
+         ('p_low', 'You look like a wet sock. A brave one. Sit by the fire and I will find you something crunchy.', dict(player_low=True)),
+         ('p_lantern', 'Your lantern makes everything look like it is holding its breath. I like it. I also do not blink near it.', dict(lantern=True)),
+         ('p_rain', 'Everything smells unwrapped. Mushrooms are going to arrive. I can feel it in my hat.', dict(after_rain=True))],
+ 'wick': [('w_lantern', 'Your lantern is lit. Would you like it brighter, or would you like the dark to come a little closer?', dict(lantern=True)),
+          ('w_lights', 'You keep several lights now. Shall I walk them with you, or would you rather count them alone?', dict(lights=4)),
+          ('w_low', 'You are very tired. We can sit, or we can walk slowly. Either is allowed.', dict(player_low=True)),
+          ('w_fog', 'Fog. The rail lights will be out. We can watch from here, or closer. Closer is not required.', dict(weather=['fog']))],
+ 'burl': [('b_cut', 'Someone is cutting. I feel it through my feet. I will not make a speech. I have made it, and the trees were not impressed.', dict(cut_today=True)),
+          ('b_rain', 'Rain. Good. The ground drinks in the order it likes. Left to right.', dict(after_rain=True)),
+          ('b_low', 'You are tired. Sit with your back to something that has stood longer than you. I qualify.', dict(player_low=True)),
+          ('b_fog', 'Fog. Everything leans closer to listen. Even me. Especially me.', dict(weather=['fog'])),
+          ('b_catch', 'A {ctx.lastFish}. The pond is generous. Do not let it hear you say so.', dict(caught_today=True))],
+ 'tessel': [('t_catch', 'Observation: you have acquired a {ctx.lastFish}. I could estimate its mass. I would prefer that you tell me how it felt.', dict(caught_today=True)),
+            ('t_low', 'Your pace has decreased. I recommend rest. You do not wear a coat. I recommend one of those as well. I am attempting care in the form of a list.', dict(player_low=True)),
+            ('t_rain', 'Rain. Pressure down, humidity up, my left wheel gently offended. I have classified this as weather being weather.', dict(weather=['light_rain', 'heavy_rain'])),
+            ('t_lantern', 'Your lantern is operating at a pleasing brightness. I would like to be that reliably warm. I am working on it.', dict(lantern=True)),
+            ('t_cut', 'Trees: fewer today. I record it without judgment. I record it with a small amount of judgment.', dict(cut_today=True))],
+ 'lull': [('l_fog', 'The fog has come to sit with us. I like that it does not ask anything.', dict(weather=['fog'])),
+          ('l_rain', 'The ground is dreaming of being wet. I can hear it. It is a good dream.', dict(after_rain=True)),
+          ('l_low', 'You are very tired. You can lean on the warm side of me. I am mostly warm side.', dict(player_low=True)),
+          ('l_lantern', 'Your lantern is a very small sun that has agreed to stay. I am grateful to it.', dict(lantern=True)),
+          ('l_catch', 'A {ctx.lastFish}. It came up out of the dark to meet you. That was brave of both of you.', dict(caught_today=True))],
+}

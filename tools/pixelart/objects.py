@@ -1208,7 +1208,7 @@ def reeds_winter(variant=0) -> Sprite:
 # stoop into, a woodpile that reaches the hip). Rational resample: nearest-neighbour up by p, majority vote down by q.
 # ---------------------------------------------------------------------------
 PROP_SCALE = {'tent': (4, 3), 'woodpile': (3, 2), 'log_seat': (3, 2), 'stump_0': (3, 2), 'flatstone_0': (3, 2), 'flatstone_1': (3, 2),
-              'campfire': (3, 4), 'campfire_unlit': (3, 4), 'campfire_embers': (3, 4), 'lantern_post': (5, 4), 'lantern_hanging': (5, 4)}
+              'campfire': (5, 8), 'campfire_unlit': (5, 8), 'campfire_embers': (5, 8), 'lantern_post': (5, 4), 'lantern_hanging': (5, 4)}
 def _rescale(sp, p, q):
     import dataclasses
     a = np.repeat(np.repeat(sp.c.a, p, 0), p, 1); h, w = a.shape; H2, W2 = -(-h // q), -(-w // q)

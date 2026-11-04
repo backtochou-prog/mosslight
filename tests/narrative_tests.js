@@ -57,6 +57,9 @@ const ck = (n, ok, d) => { total++; if (!ok) fails++; check(n, ok, d); };
   // ---- 9. saves: old saves load, new keys survive a round trip, nothing doubles
   const sv = await ev(() => { const w = So.world(); w.notes = { folklore_0: 3 }; w.cross = { 1: 4 }; const snap = JSON.parse(JSON.stringify(So.Save.snapshot())); So.Save.restore(snap); const a = So.world(); const old = JSON.parse(JSON.stringify(snap)); delete old.world.notes; delete old.world.cross; So.Save.restore(old); const b2 = So.world(); return [a.notes && a.notes.folklore_0, a.cross && a.cross[1], typeof b2 === 'object']; });
   ck('saves keep notes and heard scenes; an older save without them still loads', sv[0] === 3 && sv[1] === 4 && sv[2] === true, JSON.stringify(sv));
+  // ---- 9b. neighbours answer what is true of the player right now
+  const nt = await ev(() => { const out = {}; for (const [c, setup] of [['pip', () => { Monsters.Health.lantern = true; }], ['ebb', () => { Monsters.Health.lantern = false; wx('fog'); }], ['wick', () => { Monsters.Health.lantern = true; }]]) { So.S[c].met = true; setBond(c, 30); setup(); const seen = new Set(); for (let i = 0; i < 12; i++) { at(11 + i * .01); const t = open_(c); t.forEach(x => seen.add(x)); } out[c] = [...seen].filter(x => /lantern|whisper|lit\b/i.test(x)).length; } Monsters.Health.lantern = false; wx('clear'); return out; });
+  ck('neighbours say something about what is true now: the lantern in hand', nt.pip >= 1 && nt.wick >= 1, JSON.stringify(nt));
   // ---- 10. no one speaks of a past that did not happen
   const inv = await ev(() => { const bad = []; for (const c of Object.keys(So.CH())) { So.S[c] = JSON.parse(JSON.stringify(So.S[c])); } return bad; });
   ck('offline: no outside request, no page errors', external.length === 0 && errs.length === 0, external.concat(errs).join());

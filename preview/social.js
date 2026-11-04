@@ -242,7 +242,8 @@ window.Social = (() => {
     const first = !st.met; const ctx0 = context(c); if (P().y >= 250) st.flags.low_n = Math.min(9, (st.flags.low_n || 0) + 1);
     // chosen before meeting is recorded, so a first meeting gets the first-meeting exchange; later visits open with something that fits the moment, or with what the character is doing
     const opener = first ? exList(c).find(x => x.p === 'meet') || null : pickEx(c, ['talk'], ctx0, { specific: true });
-    const greet = opener ? null : (CH[c].greet && CH[c].greet.length ? say(c, CH[c].greet) : null);
+    const noticed = opener || first ? null : say(c, CH[c].notice || []);   /* a line about what is true of the player right now opens the talk when one fits */
+    const greet = opener ? null : noticed || (CH[c].greet && CH[c].greet.length ? say(c, CH[c].greet) : null);
     if (first) { st.met = true; st.metT = now(); Memory.add(c, 'met', { detail: { detailText: e.act } }); Rel.change(c, { familiarity: 3 }, 'you met'); emit('met', c); }
     else { Memory.add(c, 'visit', { consolidate: true }); }
     if (opener) pushEx(c, opener); else if (greet) push(c, greet); else push(c, { narr: true, text: `${CH[c].name} is ${e.act || 'here'}.`, expr: 'calm' });
@@ -266,6 +267,7 @@ window.Social = (() => {
   // Talk: a memory the character really has comes first; otherwise an authored exchange that fits the moment
   function talkNow(c) { const st = S[c], ch = CH[c], ctx = context(c); const rp = pick(c, ch.recall || [], ctx);
     if (rp && rp.mem) { const l = say(c, ch.recall); push(c, l); if (l) Rel.change(c, { familiarity: 1, affection: l.mem ? 1 : 0 }, 'talked'); return; }
+    if ((day() + st.said.length) % 3 !== 0) { const l = say(c, ch.notice || []); if (l) { push(c, l); Rel.change(c, { familiarity: 1 }, 'talked'); return; } }   /* what is true of the player right now comes first, most of the time */
     const e = pickEx(c, ['talk'], ctx); if (e) return pushEx(c, e);
     const l = say(c, [...(ch.recall || []), ...(ch.chat || [])]); push(c, l || { narr: true, text: `${ch.name} is quiet for a moment, and that is fine.`, expr: 'calm' }); if (l) Rel.change(c, { familiarity: 1, affection: l.mem ? 1 : 0 }, 'talked'); }
   function topicList(c, ctx) { const st = S[c]; return exList(c).filter(e => e.p === 'topic' && exOk(c, e, ctx) && !(st.said.lastIndexOf(e.id) >= 0 && st.said.length - st.said.lastIndexOf(e.id) <= 12)).map(e => [exScore(c, e), e]).sort((a, b) => b[0] - a[0]).slice(0, 3).map(x => x[1]); }

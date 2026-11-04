@@ -38,7 +38,7 @@
   {
    "name": "three days later Pip remembers the advice and says how it went",
    "ok": true,
-   "detail": "Pip is turning over leaves. || Daylight only, like you said! I found the blue moss! It doesn't glow in the day. I'm going back to see it glow."
+   "detail": "Everything smells unwrapped. Mushrooms are going to arrive. I can feel it in my hat. || Daylight only, like you said! I found the blue moss! It doesn't glow in the day. I'm going back to see it glow."
   },
   {
    "name": "later, ordinary talk recalls the advice with its real content",
@@ -48,7 +48,7 @@
   {
    "name": "a personal detail told to Pip comes back days later, tied to what you did today",
    "ok": true,
-   "detail": "What do you like doing most? Tell me. I collect those too. >> You said you love fishing — and you caught a Roach today! I knew it. I knew it about you. || You told me to go in daylight, and come back before dusk. Daylight only, like you said! I found the blue moss! It doesn't glow in the day. I'm going back to see it glow. || Sometimes I talk fast so nobody has time to notice I don't know the answer. || I notice. || Yeah. You wait anyway. That's better."
+   "detail": "What do you like doing most? Tell me. I collect those too. >> You said you love fishing — and you caught a Roach today! I knew it. I knew it about you. || You told me to go in daylight, and come back before dusk. Daylight only, like you said! I found the blue moss! It doesn't glow in the day. I'm going back to see it glow. || Is that a Roach? Do not tell me. I will guess. ... Pond-flavored. Am I close."
   },
   {
    "name": "Ebb recognises a second fish and recalls the first one by name",
@@ -68,7 +68,7 @@
   {
    "name": "chatting over several days does not repeat itself back to back",
    "ok": true,
-   "detail": "That moss is growing on the north face. || Does that matter? || Not especially. I enjoy being right about small things. || ...The small chestnut one. ... Pip. ... It talks to me all day. ... I listen to every third word. || ...The sapling on my head woke before I did. ... Rude. || ...That oak by your tent. ... Her name is long. ... You would not finish saying it. || ...You talk fast. ... Everything young talks fast. ... Rivers too. || ...That oak by your tent. ... Her name is long. ... You would not finish saying it."
+   "detail": "Rain. Good. The ground drinks in the order it likes. Left to right. || That moss is growing on the north face. || Does that matter? || Not especially. I enjoy being right about small things. || ...The sapling on my head woke before I did. ... Rude. || ...That oak by your tent. ... Her name is long. ... You would not finish saying it. || ...The small chestnut one. ... Pip. ... It talks to me all day. ... I listen to every third word. || ...You talk fast. ... Everything young talks fast. ... Rivers too."
   },
   {
    "name": "no single answer is right for everyone; trust changes how advice lands",
@@ -147,7 +147,7 @@
   {
    "name": "from a fresh start, nobody recalls anything that did not happen (every recall is tied to a real, earlier memory)",
    "ok": true,
-   "detail": "91 | 6 | 0 | 0 | met/milestone/visit"
+   "detail": "137 | 6 | 0 | 0 | met/milestone/visit"
   },
   {
    "name": "a future AI voice is checked: a line citing a memory that does not exist is refused",
