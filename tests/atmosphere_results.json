@@ -127,37 +127,37 @@
   {
    "name": "night: the camp spill is lit and warm, open ground away from camp falls into darkness",
    "ok": true,
-   "detail": "camp lum 63 (r71/b62), far 26"
+   "detail": "camp lum 61 (r68/b62), far 27"
   },
   {
    "name": "the small hours are darker than early night",
    "ok": true,
-   "detail": "21:00 32.9 vs 01:30 31.3"
+   "detail": "21:00 32.9 vs 01:30 30.4"
   },
   {
    "name": "the fire breathes smoke and spits embers",
    "ok": true,
-   "detail": "3 embers, 6 smoke"
+   "detail": "2 embers, 3 smoke"
   },
   {
    "name": "a gentle breeze moves foliage even on a still day",
    "ok": true,
-   "detail": "16443 px changed"
+   "detail": "16407 px changed"
   },
   {
    "name": "rain rings form on open water",
    "ok": true,
-   "detail": "8 rings"
+   "detail": "7 rings"
   },
   {
    "name": "snow settles on the ground while it falls",
    "ok": true,
-   "detail": "0.000 → 0.016"
+   "detail": "0.000 → 0.017"
   },
   {
    "name": "reduce motion stills foliage sway and cloth (only fire, water and particles move)",
    "ok": true,
-   "detail": "2637 px changed vs 16443"
+   "detail": "2848 px changed vs 16407"
   },
   {
    "name": "no page errors",

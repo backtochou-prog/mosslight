@@ -124,14 +124,14 @@ async function boot() {
   Build.init({ atlas: await loadJSON(BL + 'build_atlas.json'), idx: await loadIdx(BL + 'build_idx.png'), recipes: await loadJSON(BL + 'recipes.json'), components: await loadJSON(BL + 'components.json') }, { Survival, Gather, WorldClock, SeasonState, Player, Camera, DATA, relight: () => buildLightMap(EventState.current ? EventState.current.extra_lights : []) });
   Monsters.init({ cfg: await loadJSON('../assets/monsters/monsters.json'), atlas: await loadJSON('../assets/monsters/monsters_atlas.json'), idx: await loadIdx('../assets/monsters/monsters_idx.png') }, { Survival, Gather, Build, WorldClock, SeasonState, WeatherState, Player, Camera, DATA, Input,
     isWater: (x, y) => CLS[DATA.idx[SeasonState.season][y * 768 + x]] & 2,
-    lightAt: (x, y) => { if (x < 0 || y < 0 || x >= 768 || y >= 480) return 0; const i = y * 768 + x; if (!LWC[i] || LIGHTS[LI[i]].kind === 'firefly' || LIGHTS[LI[i]].kind === 'glow') return 0; return LWC[i] * Math.max(0, Math.min(1, (tableAt(SeasonState.season, WorldClock.hour()).darkness - .08) / .6)); },
+    lightAt: (x, y) => { if (x < 0 || y < 0 || x >= 768 || y >= 480) return 0; const i = y * 768 + x; if (!LWC[i] || LIGHTS[LI[i]].kind === 'firefly' || LIGHTS[LI[i]].kind === 'glow') return 0; return LWC[i] * Math.max(0, Math.min(1, (tableAt(SeasonState.season, WorldClock.hour(), true).darkness - .08) / .6)); },
     foliageAt: (x, y) => { x = Math.round(x); y = Math.round(y); if (x < 0 || y < 0 || x >= 768 || y >= 480) return false; return depthNow()[y * 768 + x] > y; } });
   classify(); { const FB = '../assets/fishing/'; const vistas = {}; for (const h of ['stream', 'marsh', 'lake', 'reservoir', 'tide']) vistas[h] = await loadIdx(FB + 'vista_' + h + '_idx.png');
     Fishing.init({ cfg: await loadJSON(FB + 'fishing.json'), atlas: await loadJSON(FB + 'fish_atlas.json'), idx: await loadIdx(FB + 'fish_idx.png'), vistas, sign: await loadIdx(FB + 'trail_sign_idx.png') }, { Survival, Gather, Build, Monsters, WorldClock, SeasonState, WeatherState, Player, Camera, DATA, Input, CLS,
-      isWater: (x, y) => CLS[DATA.idx[SeasonState.season][y * 768 + x]] & 2, touchOn: () => Touch.enabled, tableDark: () => tableAt(SeasonState.season, WorldClock.hour()).darkness }); }
+      isWater: (x, y) => CLS[DATA.idx[SeasonState.season][y * 768 + x]] & 2, touchOn: () => Touch.enabled, tableDark: () => tableAt(SeasonState.season, WorldClock.hour(), true).darkness }); }
   Social.init({ cast: CAST, atlas: await loadJSON('../assets/social/folk_atlas.json'), idx: await loadIdx('../assets/social/folk_idx.png'), portraits: await loadJSON('../assets/social/portraits.json'), pidx: await loadIdx('../assets/social/portraits_idx.png') },
     { Survival, Gather, Build, Monsters, Fishing, WorldClock, SeasonState, WeatherState, Player, Camera, DATA, touchOn: () => Touch.enabled });
-  Festival.init(await loadJSON('../assets/festivals/festivals.json'), { Survival, Gather, Build, Monsters, Fishing, Social, WorldClock, SeasonState, WeatherState, Player, applyEvent: (n, keep) => { applyEvent(n, keep); }, tableDark: () => tableAt(SeasonState.season, WorldClock.hour()).darkness, waterPixels: (() => { let wp = null; return () => wp || (wp = (() => { const a = [], sp = DATA.idx.spring; for (let i = 0; i < sp.length; i++) if (CLS[sp[i]] & 2) a.push(i); return a; })()); })() });
+  Festival.init(await loadJSON('../assets/festivals/festivals.json'), { Survival, Gather, Build, Monsters, Fishing, Social, WorldClock, SeasonState, WeatherState, Player, applyEvent: (n, keep) => { applyEvent(n, keep); }, tableDark: () => tableAt(SeasonState.season, WorldClock.hour(), true).darkness, waterPixels: (() => { let wp = null; return () => wp || (wp = (() => { const a = [], sp = DATA.idx.spring; for (let i = 0; i < sp.length; i++) if (CLS[sp[i]] & 2) a.push(i); return a; })()); })() });
   // one ribbon of tabs joins every book: whichever is open, the others are a tap away
   const shut = () => { Gather.UI.open = null; if (Build.UI.open) Build.UI.open = null; Fishing.Book.open = false; Monsters.Journal.open = false; Social.UI.journal = false; Festival.UI.open = false; };
   for (const [id, label, isOpen, open] of [
@@ -181,7 +181,7 @@ const UIW = { get Gather() { return Gather; }, get Fishing() { return Fishing; }
     try { const sg = Fishing.data().sign; pins.push({ x: sg.x, y: sg.y, label: 'signpost', color: '#2a6680' }); } catch (_) {}
     try { for (const c in Social.L) { const l = Social.L[c]; if (l && l.present && !(l.entry || {}).hidden) pins.push({ x: l.x, y: l.y, label: Social.CH()[c].name, color: '#4c6a28' }); } } catch (_) {}
     try { for (const e of Build.S.list) if (['campfire', 'workbench', 'bedroll', 'chest', 'crate'].some(k => e.type.includes(k))) pins.push({ x: (e.cx + .5) * 16, y: (e.cy + .5) * 16, color: '#9a6a14' }); } catch (_) {}
-    try { if (Build.homeBonus().watch && tableAt(SeasonState.season, WorldClock.hour()).darkness > .35) for (const m of Monsters.list) if (!m.dawn && !m.distant) pins.push({ x: m.x, y: m.y, label: Monsters.cfg().creatures[m.type].name, color: '#9a2e16', always: true }); } catch (_) {}
+    try { if (Build.homeBonus().watch && tableAt(SeasonState.season, WorldClock.hour(), true).darkness > .35) for (const m of Monsters.list) if (!m.dawn && !m.distant) pins.push({ x: m.x, y: m.y, label: Monsters.cfg().creatures[m.type].name, color: '#9a2e16', always: true }); } catch (_) {}
     return pins; },
   hasSave: () => { try { return Survival.SaveState.exists(); } catch (_) { return false; } }, dayLine: () => `Day ${Survival.Clock.day}, ${SeasonState.season}`,
   homeLine: () => { try { return `home ${Build.homeStage()}/5`; } catch (_) { return ''; } },
@@ -218,10 +218,10 @@ function lerp3(a, b, t) { return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1])
 function darknessAt(season, hour) { const kf = DATA.keyframes[season], hs = kf.hours, n = hs.length; for (let k = 0; k < n; k++) { const h0 = hs[k], h1 = hs[(k + 1) % n] + (k === n - 1 ? 24 : 0), hh = hour + ((k === n - 1 && hour < hs[0]) ? 24 : 0); if (hh >= h0 && hh <= h1) { let t = (hh - h0) / (h1 - h0); t = t * t * (3 - 2 * t); return kf.darkness[k] * (1 - t) + kf.darkness[(k + 1) % n] * t; } } return 1; }
 const SAT_BOOST = 0.28;
 function satBoost(c, k) { const lum = 0.299 * c[0] + 0.587 * c[1] + 0.114 * c[2]; return [Math.max(0, Math.min(255, lum + (c[0] - lum) * k)), Math.max(0, Math.min(255, lum + (c[1] - lum) * k)), Math.max(0, Math.min(255, lum + (c[2] - lum) * k))]; }
-function tableAt(season, hour) { const kf = DATA.keyframes[season]; const hs = kf.hours, n = hs.length;
+function tableAt(season, hour, darkOnly) { const kf = DATA.keyframes[season]; const hs = kf.hours, n = hs.length;
   for (let k = 0; k < n; k++) { const h0 = hs[k]; const h1 = hs[(k + 1) % n] + (k === n - 1 ? 24 : 0); const hh = hour + ((k === n - 1 && hour < hs[0]) ? 24 : 0);
     if (hh >= h0 && hh <= h1) { let t = (hh - h0) / (h1 - h0); t = t * t * (3 - 2 * t); const a = kf.tables[k], b = kf.tables[(k + 1) % n];
-      const dk = kf.darkness[k] * (1 - t) + kf.darkness[(k + 1) % n] * t, sk = 1 + SAT_BOOST * (1 - dk * .6);      /* richer, storybook colour in daylight; a lighter touch at night */
+      const dk = kf.darkness[k] * (1 - t) + kf.darkness[(k + 1) % n] * t, sk = 1 + SAT_BOOST * (1 - dk * .6); if (darkOnly) return { darkness: dk };      /* richer, storybook colour in daylight; a lighter touch at night */
       return { table: a.map((c, i) => satBoost(lerp3(c, b[i], t), sk)), darkness: dk }; } }
   return { table: kf.tables[n - 1], darkness: 1 }; }
 function gradeTable(table, wkind, wi, ev) { // weather + event grades on the 200-entry table, never per pixel
@@ -378,7 +378,7 @@ const Touch = { enabled: false, btn: { x: 0, y: 0, r: 22 },
     this.seal(g, bx - 62, by - 4, 15, 'pack', () => UIKit.openBook('pack'), 'pack');
     this.seal(g, bx - 52, by - 50, 15, 'book', () => UIKit.openBook(UIKit.lastTab() === 'pack' ? 'guide' : UIKit.lastTab()), 'journal');
     this.seal(g, bx - 6, by - 66, 15, 'map', () => { UIKit.Map.open = true; }, 'map');
-    if (tableAt(SeasonState.season, WorldClock.hour()).darkness > .35 && window.Monsters) { const on = Monsters.Health && Monsters.Health.lantern; this.seal(g, bx - 110, by - 4, 15, 'lantern', () => Monsters.key('l'), 'lamp', { on }); this.seal(g, bx - 104, by - 50, 15, 'strike', () => Monsters.key('f'), 'strike'); } } };
+    if (tableAt(SeasonState.season, WorldClock.hour(), true).darkness > .35 && window.Monsters) { const on = Monsters.Health && Monsters.Health.lantern; this.seal(g, bx - 110, by - 4, 15, 'lantern', () => Monsters.key('l'), 'lamp', { on }); this.seal(g, bx - 104, by - 50, 15, 'strike', () => Monsters.key('f'), 'strike'); } } };
 
 // ---------------------------------------------------------------- the world pixel pass (hot path: flat typed arrays, numbers only)
 const SPR = [0, 0, 0];
