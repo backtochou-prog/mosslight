@@ -190,20 +190,21 @@ window.Gather = (() => {
       g.globalAlpha = 1; },
     // the tool strip: paper slots on a stitched leather band, top-right; tap a slot to take that tool
     drawToolbar(g, vw, vh, safe, table) { const U = K(), C = U.C; if (U.anyBook() || U.Map.open || U.paused() || this.open) return;
-      const touch = U.touch(), s = touch ? 28 : 22, gap = touch ? 4 : 1, isz = touch ? 24 : 16, packW = touch ? 0 : s + 5, now = U.now(), P = U.Ptr;
-      const w = TOOLBAR.length * (s + gap) - gap + 6 + packW, right = vw - safe - (touch ? 38 : 6), x0 = Math.round(right - w), y0 = 5 + safe, h = s + 6;
+      /* tools stand in a column down the left edge, under the vitals slip, like a hotbar turned on its side: tap or click a tool to hold it */
+      const touch = U.touch(), s = touch ? 28 : 22, gap = touch ? 4 : 2, isz = touch ? 24 : 16, packH = touch ? 0 : s + 5, now = U.now(), P = U.Ptr;
+      const w = s + 6, h = TOOLBAR.length * (s + gap) - gap + 6 + packH, x0 = 6 + safe, y0 = 41 + safe;
       g.fillStyle = C.shadow; g.fillRect(x0 + 1, y0 + 2, w, h); g.fillStyle = C.leather; g.fillRect(x0, y0, w, h); g.fillStyle = C.leather2; g.fillRect(x0, y0, w, 1);
-      g.fillStyle = 'rgba(246,236,210,.22)'; for (let k = x0 + 3; k < x0 + w - 3; k += 4) { g.fillRect(k, y0 + 1, 2, 1); g.fillRect(k, y0 + h - 2, 2, 1); }      // stitching
-      const over = (x, y) => P.over && P.x >= x && P.y >= y && P.x < x + s && P.y < y + s; let sx = x0 + 3, tip = null;
-      if (!touch) { const lift = now - U.bumpT() < .18 && !U.S.reduceMotion ? 1 : 0, by = y0 + 3 - lift; U.slot(g, sx, by, s, { hover: over(sx, by) }); U.glyph(g, 'pack', sx + 6, by + 7, lift ? C.rust : C.ink2, 2 > s / 11 ? 1 : 2);
-        U.hit(sx, y0 + 3, s, s, () => U.openBook('pack'), 'pack'); if (over(sx, y0 + 3)) tip = [sx, 'Pack', null, 'I']; sx += s + 2; g.fillStyle = 'rgba(246,236,210,.3)'; g.fillRect(sx, y0 + 4, 1, s - 2); sx += 3; }
-      TOOLBAR.forEach((id, i) => { const o = Tools.owned[id], on = Tools.active === id, x = sx + i * (s + gap); const lift = on && now - this.toolBump < .16 && !U.S.reduceMotion ? 1 : 0, y = y0 + 3 - lift;
-        U.slot(g, x, y, s, { sel: on, empty: !o, hover: over(x, y) });
+      g.fillStyle = 'rgba(246,236,210,.22)'; for (let k = y0 + 3; k < y0 + h - 3; k += 4) { g.fillRect(x0 + 1, k, 1, 2); g.fillRect(x0 + w - 2, k, 1, 2); }      // stitching
+      const over = (x, y) => P.over && P.x >= x && P.y >= y && P.x < x + s && P.y < y + s; const sx = x0 + 3; let sy = y0 + 3, tip = null;
+      if (!touch) { const lift = now - U.bumpT() < .18 && !U.S.reduceMotion ? 1 : 0, bx = sx + lift; U.slot(g, bx, sy, s, { hover: over(bx, sy) }); U.glyph(g, 'pack', bx + 6, sy + 7, lift ? C.rust : C.ink2, 2 > s / 11 ? 1 : 2);
+        U.hit(sx, sy, s, s, () => U.openBook('pack'), 'pack'); if (over(sx, sy)) tip = [sy, 'Pack', null, 'I']; sy += s + 2; g.fillStyle = 'rgba(246,236,210,.3)'; g.fillRect(sx + 2, sy, s - 4, 1); sy += 3; }
+      TOOLBAR.forEach((id, i) => { const o = Tools.owned[id], on = Tools.active === id, y = sy + i * (s + gap); const lift = on && now - this.toolBump < .16 && !U.S.reduceMotion ? 1 : 0, x = sx + (on ? 1 : 0) + lift;
+        U.slot(g, x, y, s, { sel: on, empty: !o, hover: over(sx, y) });
         if (o) { const broken = o.durability === 0; if (broken) g.globalAlpha = .4; this.icon(g, 'tool_' + id, x + (s - isz) / 2, y + (s - isz) / 2 - 1, isz, table); g.globalAlpha = 1;
           if (o.durability !== null && TOOLS[id].durability) { const f = o.durability / Tools.info(id).durability, bw = s - 6; g.fillStyle = 'rgba(58,42,26,.28)'; g.fillRect(x + 3, y + s - 3, bw, 1); g.fillStyle = f > .25 ? C.moss : C.danger; g.fillRect(x + 3, y + s - 3, broken ? 0 : Math.max(1, Math.round(bw * f)), 1); } }
         else silhouette(g, 'tool_' + id, x + (s - 16) / 2, y + (s - 16) / 2 - 1, 16);
-        U.hit(x, y0 + 3, s, s, () => this.selectTool(id), 'tool'); if (over(x, y0 + 3)) tip = [x, o ? Tools.info(id).name : 'No ' + id + ' yet', o && o.durability !== null ? `${o.durability}/${Tools.info(id).durability}` + (o.durability === 0 ? ' · mend it by hand (C)' : '') : null, String(i + 1)]; });
-      if (tip && !touch) { const [tx, name, dur, key] = tip; const extra = (dur ? '  ' + dur : '') + (U.S.hints ? '  [' + key + ']' : ''); const tw = U.measure(name) + U.measure(extra) + 12, x = Math.max(4, Math.min(tx, vw - safe - 6 - tw)), y = y0 + h + 4;
+        U.hit(sx, y, s, s, () => this.selectTool(id), 'tool'); if (over(sx, y)) tip = [y, o ? Tools.info(id).name : 'No ' + id + ' yet', o && o.durability !== null ? `${o.durability}/${Tools.info(id).durability}` + (o.durability === 0 ? ' · mend it by hand (C)' : '') : null, String(i + 1)]; });
+      if (tip && !touch) { const [ty, name, dur, key] = tip; const extra = (dur ? '  ' + dur : '') + (U.S.hints ? '  [' + key + ']' : ''); const tw = U.measure(name) + U.measure(extra) + 12, x = x0 + w + 4, y = Math.max(4, ty + 4);
         U.tag(g, x, y, tw, 14); U.text(g, name, x + 6, y + 10); if (extra) U.text(g, extra, x + 6 + U.measure(name), y + 10, { color: C.faint }); } },
     drawInventory(g, vw, vh, safe, table) { const U = K(), C = U.C, touch = U.touch(), now = U.now(), P = U.Ptr;
       const cols = 6, rows = Math.ceil(Inventory.size / cols), pw = Math.min(vw - 16, 480), availH = vh - 26;

@@ -137,12 +137,12 @@
   {
    "name": "the fire breathes smoke and spits embers",
    "ok": true,
-   "detail": "3 embers, 6 smoke"
+   "detail": "5 embers, 7 smoke"
   },
   {
    "name": "a gentle breeze moves foliage even on a still day",
    "ok": true,
-   "detail": "9332 px changed"
+   "detail": "9628 px changed"
   },
   {
    "name": "rain rings form on open water",
@@ -157,7 +157,7 @@
   {
    "name": "reduce motion stills foliage sway and cloth (only fire, water and particles move)",
    "ok": true,
-   "detail": "2401 px changed vs 9332"
+   "detail": "2825 px changed vs 9628"
   },
   {
    "name": "no page errors",

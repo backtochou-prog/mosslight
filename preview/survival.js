@@ -183,15 +183,17 @@ window.Survival = (() => {
       const h = Clock.hour(), ph = Clock.phase(), night = Clock.isNight() || ph === 'dawn_transition'; const M = window.Monsters, H = M && M.Health;
       const season = W.SeasonState.season, day = `Day ${Clock.day}`, time = W.WorldClock.label(); const seasonName = season[0].toUpperCase() + season.slice(1);
       const wk = (window.WeatherState || {}).kind || 'clear'; const wg = { light_rain: 'rain', heavy_rain: 'rain', snow: 'snow', fog: 'fog', wind: 'wind' }[wk];
-      const tw = 132, th = H ? 40 : 29; const mood = { energetic: 'rested', tired: 'tired', exhausted: 'worn out', critical: 'spent', zero: 'empty' }[Energy.state];
-      K.tag(g, x0, y0, tw, th); K.glyph(g, night ? 'moon' : 'sun', x0 + 4, y0 + 3, night ? '#3a4a7a' : C.gold); K.text(g, time, x0 + 13, y0 + 9, { bold: true }); K.text(g, `${day} · ${seasonName}`, x0 + 43, y0 + 9, { color: C.ink2 }); if (wg) K.glyph(g, wg, x0 + tw - 10, y0 + 3, C.water);
-      // the day arc: a tick for the sun between dawn and dusk, under the time
-      const sc = Clock.schedule(); const u = Math.max(0, Math.min(1, (h - sc.dawn) / (sc.early_night - sc.dawn))); g.fillStyle = 'rgba(58,42,26,.25)'; g.fillRect(x0 + 4, y0 + 12, tw - 8, 1); g.fillStyle = night ? '#3a4a7a' : C.gold; g.fillRect(x0 + 4 + Math.round((tw - 10) * (night ? 1 : u)), y0 + 11, 2, 3);
+      const tw = 132, th = H ? 29 : 18; const mood = { energetic: 'rested', tired: 'tired', exhausted: 'worn out', critical: 'spent', zero: 'empty' }[Energy.state];
+      /* the date and time have their own slip, top right (clear of the menu button on a phone); vitals stay top left */
+      const cw = 122, cx0 = vw - safe - cw - (K.touch() ? 40 : 6), cy0 = y0, ink = night ? '#3a4a7a' : C.gold;
+      K.tag(g, cx0, cy0, cw, 29); K.glyph(g, night ? 'moon' : 'sun', cx0 + 4, cy0 + 3, ink); K.text(g, time, cx0 + 14, cy0 + 9, { bold: true }); K.text(g, `${day} · ${seasonName}`, cx0 + 14, cy0 + 21, { color: C.ink2 }); if (wg) K.glyph(g, wg, cx0 + cw - 12, cy0 + 3, C.water);
+      const sc = Clock.schedule(); const u = Math.max(0, Math.min(1, (h - sc.dawn) / (sc.early_night - sc.dawn))); g.fillStyle = 'rgba(58,42,26,.25)'; g.fillRect(cx0 + 52, cy0 + 6, cw - 66, 1); g.fillStyle = ink; g.fillRect(cx0 + 52 + Math.round((cw - 68) * (night ? 1 : u)), cy0 + 4, 2, 5);
+      K.tag(g, x0, y0, tw, th);
       const row = (yy, glyph, gcol, v, max, col, label, low) => { K.glyph(g, glyph, x0 + 4, yy - 1, gcol); K.bar(g, x0 + 14, yy + 1, 60, 4, v / max, { color: col, low }); K.text(g, String(Math.round(v)), x0 + 78, yy + 6, { color: C.ink }); K.text(g, label, x0 + 96, yy + 6, { color: C.ink2 }); };
       const frac = Energy.current / Energy.max; const pulse = (Energy.state === 'critical' || Energy.state === 'zero') && !K.S.reduceMotion ? (Math.sin(T * 3) > 0 ? 1 : .55) : 1;
-      g.globalAlpha = pulse; row(y0 + 17, 'leaf', this.col[Energy.state] || C.ink2, Energy.current, Energy.max, this.col[Energy.state] || this.col.zero, mood, .4); g.globalAlpha = 1;
+      g.globalAlpha = pulse; row(y0 + 6, 'leaf', this.col[Energy.state] || C.ink2, Energy.current, Energy.max, this.col[Energy.state] || this.col.zero, mood, .4); g.globalAlpha = 1;
       if (H) { if (this.hp !== null && H.cur < this.hp) this.hurtT = .45; this.hp = H.cur; if (this.hurtT > 0) this.hurtT -= 1 / 60; const sh = this.hurtT > 0 && !K.S.reduceMotion ? Math.round(Math.sin(T * 60)) : 0; const hf = H.cur / H.max;
-        g.save(); g.translate(sh, 0); row(y0 + 28, 'heart', '#9a2e16', H.cur, H.max, hf > .35 ? '#9a2e16' : '#c23a1a', hf > .7 ? 'well' : hf > .35 ? 'hurt' : 'badly hurt', .35); g.restore();
+        g.save(); g.translate(sh, 0); row(y0 + 17, 'heart', '#9a2e16', H.cur, H.max, hf > .35 ? '#9a2e16' : '#c23a1a', hf > .7 ? 'well' : hf > .35 ? 'hurt' : 'badly hurt', .35); g.restore();
         let bx = x0 + tw + 4; const badge = (gl, lab) => { K.tag(g, bx, y0, 16, 14); K.glyph(g, gl, bx + 5, y0 + 3, C.ink); bx += 20; }; if (H.lantern) badge('lantern'); if (H.sneak) badge('sneak'); if (window.Build && Build.sheltered && Build.sheltered(W.Player.x, W.Player.y)) badge('shelter'); }
       // low energy: a calm reminder once per state change, never a flash
       if (Energy.state !== this._lastState) { if (this._lastState && (Energy.state === 'exhausted' || Energy.state === 'critical' || Energy.state === 'zero')) K.note(Energy.state === 'exhausted' ? 'You are worn out. Heavy work will be refused until you rest.' : 'You are running on nothing. Find the tent and sleep.', 4); this._lastState = Energy.state; }

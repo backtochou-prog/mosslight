@@ -18,7 +18,7 @@
   {
    "name": "dawn: creatures retreat gradually, not instantly",
    "ok": true,
-   "detail": "3,4.0,0"
+   "detail": "3,3.7,0"
   },
   {
    "name": "lantern extends how far you are seen",
@@ -171,7 +171,7 @@
   {
    "name": "frame time with creatures (software Chromium)",
    "ok": true,
-   "detail": "23.6 ms"
+   "detail": "43.3 ms"
   },
   {
    "name": "real keys: L lantern, F strike, K guide, Shift sneak",

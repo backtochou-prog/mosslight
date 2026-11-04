@@ -1,10 +1,10 @@
 {
- "name": "camper v4 (original, hand-drawn; slim proportions under a wide felt hat)",
- "frame_w": 16,
- "frame_h": 32,
+ "name": "survivor v5 (original; cozy chunky camper, built from parts)",
+ "frame_w": 22,
+ "frame_h": 38,
  "origin": [
-  8,
-  31
+  11,
+  37
  ],
  "facings": [
   "down",
@@ -49,13 +49,13 @@
  "run_fps": 10,
  "idle_fps": 1.0,
  "foot_box": [
-  8,
+  9,
   4
  ],
  "action_frames": 4,
  "action_fps": 6,
  "shadow": [
-  6,
+  8,
   2
  ],
  "run": {

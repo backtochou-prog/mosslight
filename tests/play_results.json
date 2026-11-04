@@ -23,12 +23,12 @@
   {
    "name": "moves NE",
    "ok": true,
-   "detail": "93.7 px"
+   "detail": "94.5 px"
   },
   {
    "name": "moves NW",
    "ok": true,
-   "detail": "89.2 px"
+   "detail": "88.8 px"
   },
   {
    "name": "moves SE",
@@ -38,12 +38,12 @@
   {
    "name": "moves SW",
    "ok": true,
-   "detail": "94.5 px"
+   "detail": "93.7 px"
   },
   {
    "name": "diagonal speed == cardinal speed",
    "ok": true,
-   "detail": "cardinal 93.4 px, diagonal 93.0 px over 1.5 s"
+   "detail": "cardinal 93.4 px, diagonal 92.9 px over 1.5 s"
   },
   {
    "name": "stops without sliding",
@@ -98,7 +98,7 @@
   {
    "name": "behind oak trunk: partially hidden",
    "ok": true,
-   "detail": "44% of player visible"
+   "detail": "29% of player visible"
   },
   {
    "name": "in front of oak trunk: fully visible",
@@ -108,7 +108,7 @@
   {
    "name": "behind foreground canopy: hidden",
    "ok": true,
-   "detail": "27% visible under the framing oak"
+   "detail": "49% visible under the framing oak"
   },
   {
    "name": "under the oak canopy, in front of trunk base: visible",
@@ -177,7 +177,7 @@
   {
    "name": "frame cost (software Chromium, 640x360 at 3x)",
    "ok": true,
-   "detail": "16.4 ms/frame"
+   "detail": "17.7 ms/frame"
   },
   {
    "name": "no page errors",
