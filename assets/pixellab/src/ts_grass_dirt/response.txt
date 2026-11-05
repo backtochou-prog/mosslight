@@ -1,0 +1,19 @@
+status: completed
+id: 91fd70c9-3da5-403c-9248-de141fb7b3e4
+terrain: soft brown dirt path, trodden earth with small pebbles and fine grit -> lush meadow grass with small blade clumps in close green tones
+tiles: 16
+tile_size: 16x16px
+view: high top-down
+
+download_png: https://api.pixellab.ai/mcp/tilesets/91fd70c9-3da5-403c-9248-de141fb7b3e4/image
+download_png_inline: https://api.pixellab.ai/mcp/tilesets/91fd70c9-3da5-403c-9248-de141fb7b3e4/image?inline=true  (same PNG served from this host — use it if your egress blocks backblaze.pixellab.ai)
+download_metadata: https://api.pixellab.ai/mcp/tilesets/91fd70c9-3da5-403c-9248-de141fb7b3e4/metadata
+
+placement: pick each tile by its corners (NW/NE/SW/SE) or pattern_4x4, then slice the sheet with that tile's `bounding_box` from the metadata — it is the exact rect, and it is correct for BOTH the 16-tile sheet and the 25-tile transition sheet. The metadata endpoint computes bounding_box when serving (it is not a stored column, so querying the database for it finds nothing) and strips each tile's `image` object, so there is no per-tile URL to fetch. Two things are NOT sheet positions: the `wang_N` NAME, and `original_position` (the generation grid — its row can exceed this sheet). Using either is what produces horizontal banding.
+
+base_tile_ids (for chaining):
+  lower (soft brown dirt path, trodden earth with small pebbles and fine grit): 5782ccf1-7773-4396-8402-2c17e68c76c0
+  upper (lush meadow grass with small blade clumps in close green tones): 27746f94-fb49-4b10-95f0-5716247245da
+
+hint: use upper ID as lower_base_tile_id in next tileset for seamless transitions
+resource: pixellab://docs/godot/wang-tilesets

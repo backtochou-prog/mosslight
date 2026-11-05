@@ -411,7 +411,8 @@ def add_camp_art(lib):
         lib[s.name] = s
     add_plants(lib); add_trees(lib)
     from .tree_art import add_trees as _grown; _grown(lib)
-    from .world_art import add_world_art; add_world_art(lib)              # oaks, birches, willows, the dead snag: grown, with their own winter selves
+    from .world_art import add_world_art; add_world_art(lib)
+    from .pl_pilot import add_pilot; add_pilot(lib)                       # PixelLab pilot pack: the art-directed picks replace the drawn ones              # oaks, birches, willows, the dead snag: grown, with their own winter selves
     for s_ in (forage_basket(), water_bucket()): lib[s_.name] = s_
     return lib
 

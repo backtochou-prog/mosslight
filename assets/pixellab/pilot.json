@@ -1,0 +1,717 @@
+{
+ "oak": {
+  "tool": "create_image_pro",
+  "description": "a single large broadleaf oak tree ... (first anchor run)",
+  "size": [
+   64,
+   80
+  ],
+  "seed": 7,
+  "palette_families": [
+   "oak",
+   "wood",
+   "grass"
+  ],
+  "job_id": "307d75cc-eb1a-4ae0-81e4-151641f8629b",
+  "candidates": 9,
+  "cost": "15 generations"
+ },
+ "pine": {
+  "tool": "create_image_pro",
+  "description": "a tall evergreen fir tree with tiers of drooping dark green boughs, straight brown trunk at the base. cozy top-down farming-game pixel art in the spirit of a handcrafted 16-bit valley, three-quarter top-down view, light from the upper left, soft dark selective outline, clean readable clusters, no ground, no cast shadow",
+  "size": [
+   44,
+   80
+  ],
+  "seed": 11,
+  "palette_families": [
+   "pine",
+   "wood"
+  ],
+  "style_anchor": "src/oak/cand_06.png",
+  "job_id": "c1375959-c7ef-48a0-8521-cfa3ccfc9f4b",
+  "candidates": 16,
+  "cost": "10 generations"
+ },
+ "rocks": {
+  "tool": "create_image_pro",
+  "description": "a natural rock formation: one large grey boulder with a smaller stone leaning on it and pebbles at its foot, flat planes, moss on top, grass tufts at the base. cozy top-down farming-game pixel art in the spirit of a handcrafted 16-bit valley, three-quarter top-down view, light from the upper left, soft dark selective outline, clean readable clusters, no ground, no cast shadow",
+  "size": [
+   48,
+   40
+  ],
+  "seed": 11,
+  "palette_families": [
+   "stone",
+   "moss",
+   "grass"
+  ],
+  "style_anchor": "src/oak/cand_06.png",
+  "job_id": "879c7578-8bfd-44dc-bc8d-0921a6d8e0ff",
+  "candidates": 25,
+  "cost": "10 generations"
+ },
+ "rocks_small": {
+  "tool": "create_image_pro",
+  "description": "a small cluster of two or three grey stones with moss, grass tuft at the base. cozy top-down farming-game pixel art in the spirit of a handcrafted 16-bit valley, three-quarter top-down view, light from the upper left, soft dark selective outline, clean readable clusters, no ground, no cast shadow",
+  "size": [
+   32,
+   24
+  ],
+  "seed": 11,
+  "palette_families": [
+   "stone",
+   "moss",
+   "grass"
+  ],
+  "style_anchor": "src/oak/cand_06.png",
+  "job_id": "1884b0e0-d3df-4ab9-a018-16dea276714e",
+  "candidates": 64,
+  "cost": "10 generations"
+ },
+ "mushrooms": {
+  "tool": "create_image_pro",
+  "description": "a small cluster of three forest mushrooms of different sizes, brown and red caps with pale stems, moss at their base. cozy top-down farming-game pixel art in the spirit of a handcrafted 16-bit valley, three-quarter top-down view, light from the upper left, soft dark selective outline, clean readable clusters, no ground, no cast shadow",
+  "size": [
+   32,
+   32
+  ],
+  "seed": 11,
+  "palette_families": [
+   "shroom",
+   "shroom_stem",
+   "wood",
+   "moss"
+  ],
+  "style_anchor": "src/oak/cand_06.png",
+  "job_id": "63b6cdd2-edac-4560-a68d-880164528951",
+  "candidates": 64,
+  "cost": "10 generations"
+ },
+ "flowers": {
+  "tool": "create_image_pro",
+  "description": "a small clump of wildflowers growing from a tuft of leaves: daisies, buttercups and bluebells. cozy top-down farming-game pixel art in the spirit of a handcrafted 16-bit valley, three-quarter top-down view, light from the upper left, soft dark selective outline, clean readable clusters, no ground, no cast shadow",
+  "size": [
+   32,
+   32
+  ],
+  "seed": 11,
+  "palette_families": [
+   "flower_w",
+   "flower_y",
+   "flower_b",
+   "flower_p",
+   "grass"
+  ],
+  "style_anchor": "src/oak/cand_06.png",
+  "job_id": "ce264c77-cfc4-41d6-965a-2c40b55443b5",
+  "candidates": 64,
+  "cost": "10 generations"
+ },
+ "bush": {
+  "tool": "create_image_pro",
+  "description": "a round leafy shrub built from overlapping leaf clumps, a few red berries tucked in. cozy top-down farming-game pixel art in the spirit of a handcrafted 16-bit valley, three-quarter top-down view, light from the upper left, soft dark selective outline, clean readable clusters, no ground, no cast shadow",
+  "size": [
+   48,
+   40
+  ],
+  "seed": 11,
+  "palette_families": [
+   "shrub",
+   "berry",
+   "wood"
+  ],
+  "style_anchor": "src/oak/cand_06.png",
+  "job_id": "33ee6972-81e6-4dcf-a844-aa44bd3d53b9",
+  "candidates": 25,
+  "cost": "10 generations"
+ },
+ "log": {
+  "tool": "create_image_pro",
+  "description": "a fallen tree log lying horizontally with bark texture, a sawn end showing rings, moss on top, small shelf fungus on its side. cozy top-down farming-game pixel art in the spirit of a handcrafted 16-bit valley, three-quarter top-down view, light from the upper left, soft dark selective outline, clean readable clusters, no ground, no cast shadow",
+  "size": [
+   64,
+   32
+  ],
+  "seed": 11,
+  "palette_families": [
+   "wood",
+   "moss",
+   "shroom",
+   "grass"
+  ],
+  "style_anchor": "src/oak/cand_06.png",
+  "job_id": "63d8d3d0-3988-4ad7-97dc-4c62fe25ae84",
+  "candidates": 25,
+  "cost": "10 generations"
+ },
+ "ts_grass_dirt": {
+  "tool": "create_topdown_tileset",
+  "args": {
+   "lower_description": "soft brown dirt path, trodden earth with small pebbles and fine grit",
+   "upper_description": "lush meadow grass with small blade clumps in close green tones",
+   "mode": "pro",
+   "tile_size": 16,
+   "transition_size": 0.0,
+   "raggedness": 0.45,
+   "boundary_amplitude": 0.12,
+   "boundary_seed": 3,
+   "view": "high top-down",
+   "shading": "detailed shading",
+   "detail": "highly detailed",
+   "palette_name": "MOSSlight"
+  },
+  "palette_families": [
+   "dirt",
+   "grass",
+   "earth"
+  ],
+  "response": "id: 91fd70c9-3da5-403c-9248-de141fb7b3e4\nterrain: soft brown dirt path, trodden earth with small pebbles and fine grit \u2192 lush meadow grass with small blade clumps in close green tones\ntiles: 16 (generating ~100s)\n\nbase_tile_ids:\n  lower (soft brown dirt path, trodden earth with small pebbles and fine grit): 5782ccf1-7773-4396-8402-2c17e68c76c0\n  upper (lush meadow grass with small blade clumps in close green tones): 27746f94-fb49-4b10-95f0-5716247245da\n\nhint: get_topdown_tileset(\"91fd70c9-3da5-403c-9248-de141fb7b3e4\")\nresource: pixellab://docs/godot/wang-tilesets",
+  "tileset_id": "91fd70c9-3da5-403c-9248-de141fb7b3e4"
+ },
+ "ts_grass_forest": {
+  "tool": "create_topdown_tileset",
+  "args": {
+   "lower_description": "shaded forest floor: dark moss, fallen needles and leaf litter",
+   "upper_description": "soft lush grass in calm close green tones, fine short blade texture, low contrast, no bright speckles",
+   "mode": "pro",
+   "tile_size": 16,
+   "transition_size": 0.0,
+   "raggedness": 0.5,
+   "boundary_amplitude": 0.15,
+   "boundary_seed": 3,
+   "view": "high top-down",
+   "shading": "detailed shading",
+   "detail": "highly detailed",
+   "palette_name": "MOSSlight"
+  },
+  "palette_families": [
+   "forest",
+   "leaf_litter",
+   "grass",
+   "moss"
+  ],
+  "response": "id: d3712347-c81a-4b1f-8ef5-d7bd1150fb29\nterrain: shaded forest floor: dark moss, fallen needles and leaf litter \u2192 soft lush grass in calm close green tones, fine short blade texture, low contrast, no bright speckles\ntiles: 16 (generating ~100s)\n\nbase_tile_ids:\n  lower (shaded forest floor: dark moss, fallen needles and leaf litter): d14836b9-9531-439c-80e4-317702c65b0f\n  upper (soft lush grass in calm close green tones, fine short blade texture, low contrast, no bright speckles): 4cf3ad13-702c-45c3-a9fb-6b1bd63943e4\n\nhint: get_topdown_tileset(\"d3712347-c81a-4b1f-8ef5-d7bd1150fb29\")\nresource: ",
+  "tileset_id": "d3712347-c81a-4b1f-8ef5-d7bd1150fb29"
+ },
+ "ts_water_grass": {
+  "tool": "create_topdown_tileset",
+  "args": {
+   "lower_description": "calm clear pond water, deep blue with a few soft glints",
+   "upper_description": "soft lush grass in calm close green tones, fine short blade texture, low contrast",
+   "mode": "pro",
+   "tile_size": 16,
+   "transition_size": 0.25,
+   "raggedness": 0.35,
+   "boundary_amplitude": 0.12,
+   "boundary_seed": 3,
+   "view": "high top-down",
+   "shading": "detailed shading",
+   "detail": "highly detailed",
+   "palette_name": "MOSSlight",
+   "transition_description": "a low earthy bank with wet mud at the waterline"
+  },
+  "palette_families": [
+   "water",
+   "grass",
+   "mud",
+   "sand"
+  ],
+  "response": "id: a1523372-e9c3-4968-aa43-74a6d6beb080\nterrain: calm clear pond water, deep blue with a few soft glints \u2192 soft lush grass in calm close green tones, fine short blade texture, low contrast\ntransition: a low earthy bank with wet mud at the waterline (size=0.25)\ntiles: 16 (generating ~100s)\n\nbase_tile_ids:\n  lower (calm clear pond water, deep blue with a few soft glints): 8083f718-cd69-4b89-a98b-329aef35bfcc\n  upper (soft lush grass in calm close green tones, fine short blade texture, low contrast): f25d50ae-78b1-4c09-9696-5182472d0d57\n\nhint: get_topdown_tileset(\"a1523372-e9c3-4968-aa43-74a6d6b",
+  "tileset_id": "a1523372-e9c3-4968-aa43-74a6d6beb080"
+ },
+ "tent": {
+  "tool": "create_image_pro",
+  "description": "a canvas ridge camping tent, front view slightly from the right, door flaps rolled and tied back showing a dark interior with a blue bedroll, guy ropes to wooden pegs, a sewn patch. cozy top-down farming-game pixel art in the spirit of a handcrafted 16-bit valley, three-quarter top-down view, light from the upper left, soft dark selective outline, clean readable clusters, no ground, no cast shadow",
+  "size": [
+   80,
+   64
+  ],
+  "seed": 11,
+  "palette_families": [
+   "canvas",
+   "rope",
+   "wood",
+   "tent_interior",
+   "flower_b",
+   "berry"
+  ],
+  "style_anchor": "src/oak/cand_06.png",
+  "job_id": "ab27f205-d3dc-4796-ba66-8ac35717f2b1",
+  "candidates": 9,
+  "cost": "15 generations"
+ },
+ "campfire": {
+  "tool": "create_image_pro",
+  "description": "a campfire: a ring of nine grey stones around an ash bed, split logs leaning into a small tipi, bright flames with a yellow core and glowing embers. cozy top-down farming-game pixel art in the spirit of a handcrafted 16-bit valley, three-quarter top-down view, light from the upper left, soft dark selective outline, clean readable clusters, no ground, no cast shadow",
+  "size": [
+   48,
+   48
+  ],
+  "seed": 11,
+  "palette_families": [
+   "stone",
+   "wood",
+   "fire",
+   "ember",
+   "earth"
+  ],
+  "style_anchor": "src/oak/cand_06.png",
+  "job_id": "ee4b183c-73d3-49df-821a-1438a90cd6f1",
+  "candidates": 25,
+  "cost": "10 generations"
+ },
+ "lantern": {
+  "tool": "create_image_pro",
+  "description": "a wooden lantern post with a crossarm and an iron lantern with warm glowing glass hanging from it, stones wedged at its foot. cozy top-down farming-game pixel art in the spirit of a handcrafted 16-bit valley, three-quarter top-down view, light from the upper left, soft dark selective outline, clean readable clusters, no ground, no cast shadow",
+  "size": [
+   24,
+   48
+  ],
+  "seed": 11,
+  "palette_families": [
+   "wood",
+   "metal",
+   "lantern_glass",
+   "stone"
+  ],
+  "style_anchor": "src/oak/cand_06.png",
+  "job_id": "5b042b94-24f8-4158-9e4a-c6cf2d855ce5",
+  "candidates": 49,
+  "cost": "10 generations"
+ },
+ "woodpile": {
+  "tool": "create_image_pro",
+  "description": "a neat stack of split firewood rounds seen end-on, pale end grain with rings, held between two wooden stakes. cozy top-down farming-game pixel art in the spirit of a handcrafted 16-bit valley, three-quarter top-down view, light from the upper left, soft dark selective outline, clean readable clusters, no ground, no cast shadow",
+  "size": [
+   48,
+   40
+  ],
+  "seed": 11,
+  "palette_families": [
+   "wood",
+   "wood_grey"
+  ],
+  "style_anchor": "src/oak/cand_06.png",
+  "job_id": "6d5e0157-ab7d-4d8f-a856-0eb7b7a996bb",
+  "candidates": 25,
+  "cost": "10 generations"
+ },
+ "chopblock": {
+  "tool": "create_image_pro",
+  "description": "a tree stump used as a chopping block with an axe embedded in the top and wood chips around its base. cozy top-down farming-game pixel art in the spirit of a handcrafted 16-bit valley, three-quarter top-down view, light from the upper left, soft dark selective outline, clean readable clusters, no ground, no cast shadow",
+  "size": [
+   32,
+   32
+  ],
+  "seed": 11,
+  "palette_families": [
+   "wood",
+   "metal"
+  ],
+  "style_anchor": "src/oak/cand_06.png",
+  "job_id": "0995858b-103a-4e85-b76a-c51cc4210cae",
+  "candidates": 64,
+  "cost": "10 generations"
+ },
+ "crate": {
+  "tool": "create_image_pro",
+  "description": "a wooden supply crate with a dented metal kettle and a tin mug on top and a coil of rope on its side. cozy top-down farming-game pixel art in the spirit of a handcrafted 16-bit valley, three-quarter top-down view, light from the upper left, soft dark selective outline, clean readable clusters, no ground, no cast shadow",
+  "size": [
+   32,
+   32
+  ],
+  "seed": 11,
+  "palette_families": [
+   "wood",
+   "metal",
+   "rope"
+  ],
+  "style_anchor": "src/oak/cand_06.png",
+  "job_id": "d9a215ae-0440-4dbd-84c6-96e41424da8e",
+  "candidates": 64,
+  "cost": "10 generations"
+ },
+ "bench": {
+  "tool": "create_image_pro",
+  "description": "a rustic log bench: a split log seat on two short stump legs, worn smooth on top. cozy top-down farming-game pixel art in the spirit of a handcrafted 16-bit valley, three-quarter top-down view, light from the upper left, soft dark selective outline, clean readable clusters, no ground, no cast shadow",
+  "size": [
+   48,
+   32
+  ],
+  "seed": 11,
+  "palette_families": [
+   "wood",
+   "moss"
+  ],
+  "style_anchor": "src/oak/cand_06.png",
+  "job_id": "ba10fd57-5110-49b4-9eca-75865c7f4d45",
+  "candidates": 36,
+  "cost": "10 generations"
+ },
+ "ts_grass_dirt2": {
+  "tool": "create_topdown_tileset",
+  "args": {
+   "lower_description": "smooth trodden dirt path in warm brown, gently mottled, a few small pebbles, low contrast",
+   "upper_description": "soft lush grass in calm close green tones, fine short blade texture, low contrast, no bright speckles",
+   "mode": "pro",
+   "tile_size": 16,
+   "transition_size": 0.0,
+   "raggedness": 0.4,
+   "boundary_amplitude": 0.15,
+   "boundary_seed": 3,
+   "view": "high top-down",
+   "shading": "detailed shading",
+   "detail": "highly detailed",
+   "palette_name": "MOSSlight"
+  },
+  "palette_families": [
+   "dirt",
+   "grass",
+   "earth"
+  ],
+  "response": "id: 2ba5b985-0ffd-487b-a787-36c5f8cca766\nterrain: smooth trodden dirt path in warm brown, gently mottled, a few small pebbles, low contrast \u2192 soft lush grass in calm close green tones, fine short blade texture, low contrast, no bright speckles\ntiles: 16 (generating ~100s)\n\nbase_tile_ids:\n  lower (smooth trodden dirt path in warm brown, gently mottled, a few small pebbles, low contrast): 5a8ff1c8-b3bb-407d-b50c-7b43d3cea6c2\n  upper (soft lush grass in calm close green tones, fine short blade texture, low contrast, no bright speckles): a056a28f-6107-4c23-9cee-4011af94f303\n\nhint: get_topdown_tile",
+  "tileset_id": "2ba5b985-0ffd-487b-a787-36c5f8cca766"
+ },
+ "mushrooms_s": {
+  "tool": "create_image_pro",
+  "description": "a tiny cluster of two or three small forest mushrooms with brown and red caps and pale stems on a little moss. cozy top-down farming-game pixel art in the spirit of a handcrafted 16-bit valley, three-quarter top-down view, light from the upper left, soft dark selective outline, clean readable clusters, no ground, no cast shadow",
+  "size": [
+   20,
+   20
+  ],
+  "seed": 11,
+  "palette_families": [
+   "shroom",
+   "shroom_stem",
+   "wood",
+   "moss"
+  ],
+  "style_anchor": "src/oak/cand_06.png",
+  "job_id": "fbc7fddd-35a3-4376-8fa9-084219505abb",
+  "candidates": 64,
+  "cost": "10 generations"
+ },
+ "flowers_s": {
+  "tool": "create_image_pro",
+  "description": "a tiny clump of wildflowers on a small tuft of leaves, a few small blossoms. cozy top-down farming-game pixel art in the spirit of a handcrafted 16-bit valley, three-quarter top-down view, light from the upper left, soft dark selective outline, clean readable clusters, no ground, no cast shadow",
+  "size": [
+   20,
+   20
+  ],
+  "seed": 11,
+  "palette_families": [
+   "flower_w",
+   "flower_y",
+   "flower_b",
+   "flower_p",
+   "grass"
+  ],
+  "style_anchor": "src/oak/cand_06.png",
+  "job_id": "ce12489a-288f-4399-9531-713e0a02963b",
+  "candidates": 64,
+  "cost": "10 generations"
+ },
+ "ts_grass_forest2": {
+  "tool": "create_topdown_tileset",
+  "args": {
+   "lower_description": "shaded forest floor: dark moss, fallen needles and leaf litter, calm low contrast",
+   "upper_description": "soft lush grass",
+   "mode": "pro",
+   "tile_size": 16,
+   "transition_size": 0.0,
+   "raggedness": 0.5,
+   "boundary_amplitude": 0.15,
+   "boundary_seed": 3,
+   "view": "high top-down",
+   "shading": "detailed shading",
+   "detail": "highly detailed",
+   "palette_name": "MOSSlight",
+   "upper_base_tile_id": "a056a28f-6107-4c23-9cee-4011af94f303"
+  },
+  "palette_families": [
+   "forest",
+   "leaf_litter",
+   "grass",
+   "moss"
+  ],
+  "response": "id: f361dd83-8189-4ec9-a878-1fba49d6fa9b\nterrain: shaded forest floor: dark moss, fallen needles and leaf litter, calm low contrast \u2192 soft lush grass\ntiles: 16 (generating ~100s)\n\nbase_tile_ids:\n  lower (shaded forest floor: dark moss, fallen needles and leaf litter, calm low contrast): f17949ea-f12b-42dd-8002-05ce9a8859ad\n  upper (soft lush grass): a056a28f-6107-4c23-9cee-4011af94f303\n\nhint: get_topdown_tileset(\"f361dd83-8189-4ec9-a878-1fba49d6fa9b\")\nresource: pixellab://docs/godot/wang-tilesets",
+  "tileset_id": "f361dd83-8189-4ec9-a878-1fba49d6fa9b"
+ },
+ "ts_water_grass2": {
+  "tool": "create_topdown_tileset",
+  "args": {
+   "lower_description": "calm clear pond water, deep blue with a few soft glints",
+   "upper_description": "soft lush grass",
+   "mode": "pro",
+   "tile_size": 16,
+   "transition_size": 0.25,
+   "raggedness": 0.35,
+   "boundary_amplitude": 0.12,
+   "boundary_seed": 3,
+   "view": "high top-down",
+   "shading": "detailed shading",
+   "detail": "highly detailed",
+   "palette_name": "MOSSlight",
+   "transition_description": "a low earthy bank with wet mud at the waterline",
+   "upper_base_tile_id": "a056a28f-6107-4c23-9cee-4011af94f303"
+  },
+  "palette_families": [
+   "water",
+   "grass",
+   "mud",
+   "sand"
+  ],
+  "response": "id: 8ed31c0d-61f4-4c3c-933a-15ee7b18c37b\nterrain: calm clear pond water, deep blue with a few soft glints \u2192 soft lush grass\ntransition: a low earthy bank with wet mud at the waterline (size=0.25)\ntiles: 16 (generating ~100s)\n\nbase_tile_ids:\n  lower (calm clear pond water, deep blue with a few soft glints): ba9d36c8-f28e-49aa-86c1-cb11707477c3\n  upper (soft lush grass): a056a28f-6107-4c23-9cee-4011af94f303\n\nhint: get_topdown_tileset(\"8ed31c0d-61f4-4c3c-933a-15ee7b18c37b\")\nresource: pixellab://docs/godot/wang-tilesets",
+  "tileset_id": "8ed31c0d-61f4-4c3c-933a-15ee7b18c37b"
+ },
+ "ts_grass_clover": {
+  "tool": "create_topdown_tileset",
+  "args": {
+   "lower_description": "deeper, slightly darker meadow grass with clover leaves and longer blades, calm low contrast",
+   "upper_description": "soft lush grass",
+   "mode": "pro",
+   "tile_size": 16,
+   "transition_size": 0.0,
+   "raggedness": 0.6,
+   "boundary_amplitude": 0.2,
+   "boundary_seed": 3,
+   "view": "high top-down",
+   "shading": "detailed shading",
+   "detail": "highly detailed",
+   "palette_name": "MOSSlight",
+   "upper_base_tile_id": "a056a28f-6107-4c23-9cee-4011af94f303"
+  },
+  "palette_families": [
+   "grass",
+   "fern"
+  ],
+  "response": "id: f74a4089-8cbd-4093-8af5-650021f501e7\nterrain: deeper, slightly darker meadow grass with clover leaves and longer blades, calm low contrast \u2192 soft lush grass\ntiles: 16 (generating ~100s)\n\nbase_tile_ids:\n  lower (deeper, slightly darker meadow grass with clover leaves and longer blades, calm low contrast): 5d3231b4-7987-4464-952b-fd257c2cc69a\n  upper (soft lush grass): a056a28f-6107-4c23-9cee-4011af94f303\n\nhint: get_topdown_tileset(\"f74a4089-8cbd-4093-8af5-650021f501e7\")\nresource: pixellab://docs/godot/wang-tilesets",
+  "tileset_id": "f74a4089-8cbd-4093-8af5-650021f501e7"
+ },
+ "fern": {
+  "tool": "create_image_pro",
+  "description": "a forest fern: five or six arching fronds with fine leaflets fanning from one crown, lighter tips. cozy top-down farming-game pixel art in the spirit of a handcrafted 16-bit valley, three-quarter top-down view, light from the upper left, soft dark selective outline, clean readable clusters, no ground, no cast shadow",
+  "size": [
+   28,
+   24
+  ],
+  "seed": 11,
+  "palette_families": [
+   "fern",
+   "grass"
+  ],
+  "style_anchor": "src/oak/cand_06.png",
+  "job_id": "fbb00add-c9a3-4c2f-b6a7-c23a9a17f8c8",
+  "candidates": 64,
+  "cost": "10 generations"
+ },
+ "tuft": {
+  "tool": "create_image_pro",
+  "description": "a small tuft of meadow grass blades, a few lighter tips. cozy top-down farming-game pixel art in the spirit of a handcrafted 16-bit valley, three-quarter top-down view, light from the upper left, soft dark selective outline, clean readable clusters, no ground, no cast shadow",
+  "size": [
+   20,
+   16
+  ],
+  "seed": 11,
+  "palette_families": [
+   "grass",
+   "reed"
+  ],
+  "style_anchor": "src/oak/cand_06.png",
+  "job_id": "d9e53d41-8cba-476d-912a-82e2a7092745",
+  "candidates": 64,
+  "cost": "10 generations"
+ },
+ "tallgrass": {
+  "tool": "create_image_pro",
+  "description": "a clump of tall wild grass with long arching blades and a couple of seed heads. cozy top-down farming-game pixel art in the spirit of a handcrafted 16-bit valley, three-quarter top-down view, light from the upper left, soft dark selective outline, clean readable clusters, no ground, no cast shadow",
+  "size": [
+   24,
+   28
+  ],
+  "seed": 11,
+  "palette_families": [
+   "grass",
+   "reed"
+  ],
+  "style_anchor": "src/oak/cand_06.png",
+  "job_id": "c070539e-e241-4286-9d06-aea46376f68e",
+  "candidates": 64,
+  "cost": "10 generations"
+ },
+ "tent2d": {
+  "tool": "create_image_pro",
+  "description": "a canvas A-frame camping tent seen straight from the front, flat 2D front view like a classic 16-bit RPG: a symmetrical triangular front with the door flaps tied back on both sides, dark interior with a blue bedroll, the roof slope visible above, guy ropes to pegs on both sides. Orthographic, not isometric, no corner angle. cozy top-down farming-game pixel art in the spirit of a handcrafted 16-bit valley, three-quarter top-down view, light from the upper left, soft dark selective outline, clean readable clusters, no ground, no cast shadow",
+  "size": [
+   80,
+   64
+  ],
+  "seed": 21,
+  "palette_families": [
+   "canvas",
+   "rope",
+   "wood",
+   "tent_interior",
+   "flower_b",
+   "berry"
+  ],
+  "style_anchor": "src/oak/cand_06.png",
+  "job_id": "301b7ba0-3b8d-44c9-9520-1dbfad13be24",
+  "candidates": 9,
+  "cost": "15 generations"
+ },
+ "crate2d": {
+  "tool": "create_image_pro",
+  "description": "a wooden supply crate seen straight from the front, flat 2D front view like a classic 16-bit RPG: plank front face with the lid's top edge visible, a small kettle and a tin mug on top. Orthographic, not isometric, no corner angle. cozy top-down farming-game pixel art in the spirit of a handcrafted 16-bit valley, three-quarter top-down view, light from the upper left, soft dark selective outline, clean readable clusters, no ground, no cast shadow",
+  "size": [
+   32,
+   32
+  ],
+  "seed": 21,
+  "palette_families": [
+   "wood",
+   "metal",
+   "rope"
+  ],
+  "style_anchor": "src/oak/cand_06.png",
+  "job_id": "caf57680-fbac-40ee-be8d-d3d91d2f0a79",
+  "candidates": 64,
+  "cost": "10 generations"
+ },
+ "bench2d": {
+  "tool": "create_image_pro",
+  "description": "a rustic log bench seen straight from the front, flat 2D front view like a classic 16-bit RPG: a long split-log seat on two short stump legs, the seat's top surface visible, a little moss. Orthographic, not isometric, horizontal, no corner angle. cozy top-down farming-game pixel art in the spirit of a handcrafted 16-bit valley, three-quarter top-down view, light from the upper left, soft dark selective outline, clean readable clusters, no ground, no cast shadow",
+  "size": [
+   48,
+   24
+  ],
+  "seed": 21,
+  "palette_families": [
+   "wood",
+   "moss"
+  ],
+  "style_anchor": "src/oak/cand_06.png",
+  "job_id": "773c4f84-ebcf-4ea8-abf0-1f0034aa90cf",
+  "candidates": 49,
+  "cost": "10 generations"
+ },
+ "woodpile2d": {
+  "tool": "create_image_pro",
+  "description": "a stack of split firewood seen straight from the front, flat 2D front view like a classic 16-bit RPG: round log ends facing the viewer in neat rows between two upright stakes. Orthographic, not isometric, no corner angle. cozy top-down farming-game pixel art in the spirit of a handcrafted 16-bit valley, three-quarter top-down view, light from the upper left, soft dark selective outline, clean readable clusters, no ground, no cast shadow",
+  "size": [
+   48,
+   40
+  ],
+  "seed": 21,
+  "palette_families": [
+   "wood",
+   "wood_grey"
+  ],
+  "style_anchor": "src/oak/cand_06.png",
+  "job_id": "0f28a22a-d438-4207-b2c8-2fcaf10e35d5",
+  "candidates": 25,
+  "cost": "10 generations"
+ },
+ "ts_grass_dirt3": {
+  "tool": "create_topdown_tileset",
+  "args": {
+   "lower_description": "smooth trodden dirt path in warm brown, mostly flat calm colour with only a few sparse soft texture marks, large quiet areas, no speckles, no noise, low contrast",
+   "upper_description": "soft meadow grass in one calm green, mostly flat calm colour with only a few sparse soft texture marks, large quiet areas, no speckles, no noise, low contrast",
+   "mode": "pro",
+   "tile_size": 16,
+   "transition_size": 0.0,
+   "raggedness": 0.35,
+   "boundary_amplitude": 0.15,
+   "boundary_seed": 3,
+   "view": "high top-down",
+   "shading": "basic shading",
+   "detail": "low detail",
+   "palette_name": "MOSSlight"
+  },
+  "palette_families": [
+   "dirt",
+   "grass",
+   "earth"
+  ],
+  "response": "id: ef3c5abb-85a6-415b-92fe-54d986b2cc6a\nterrain: smooth trodden dirt path in warm brown, mostly flat calm colour with only a few sparse soft texture marks, large quiet areas, no speckles, no noise, low contrast \u2192 soft meadow grass in one calm green, mostly flat calm colour with only a few sparse soft texture marks, large quiet areas, no speckles, no noise, low contrast\ntiles: 16 (generating ~100s)\n\nbase_tile_ids:\n  lower (smooth trodden dirt path in warm brown, mostly flat calm colour with only a few sparse soft texture marks, large quiet areas, no speckles, no noise, low contrast): 9f436a35-",
+  "tileset_id": "ef3c5abb-85a6-415b-92fe-54d986b2cc6a"
+ },
+ "ts_grass_forest3": {
+  "tool": "create_topdown_tileset",
+  "args": {
+   "lower_description": "shaded forest floor: dark moss and a little leaf litter, mostly flat calm colour with only a few sparse soft texture marks, large quiet areas, no speckles, no noise, low contrast",
+   "upper_description": "soft meadow grass",
+   "mode": "pro",
+   "tile_size": 16,
+   "transition_size": 0.0,
+   "raggedness": 0.45,
+   "boundary_amplitude": 0.15,
+   "boundary_seed": 3,
+   "view": "high top-down",
+   "shading": "basic shading",
+   "detail": "low detail",
+   "palette_name": "MOSSlight",
+   "upper_base_tile_id": "264a9b50-d544-4a09-8f08-0d02e3615970"
+  },
+  "palette_families": [
+   "forest",
+   "leaf_litter",
+   "grass",
+   "moss"
+  ],
+  "response": "id: 6dd6e721-b2fb-4fa3-be64-78a38ad87fb3\nterrain: shaded forest floor: dark moss and a little leaf litter, mostly flat calm colour with only a few sparse soft texture marks, large quiet areas, no speckles, no noise, low contrast \u2192 soft meadow grass\ntiles: 16 (generating ~100s)\n\nbase_tile_ids:\n  lower (shaded forest floor: dark moss and a little leaf litter, mostly flat calm colour with only a few sparse soft texture marks, large quiet areas, no speckles, no noise, low contrast): df106e0b-8624-43b5-84cd-e3a3944b795d\n  upper (soft meadow grass): 264a9b50-d544-4a09-8f08-0d02e3615970\n\nhint: get_to",
+  "tileset_id": "6dd6e721-b2fb-4fa3-be64-78a38ad87fb3"
+ },
+ "ts_water_grass3": {
+  "tool": "create_topdown_tileset",
+  "args": {
+   "lower_description": "calm clear pond water, deep blue, mostly flat calm colour with only a few sparse soft texture marks, large quiet areas, no speckles, no noise, low contrast",
+   "upper_description": "soft meadow grass",
+   "mode": "pro",
+   "tile_size": 16,
+   "transition_size": 0.25,
+   "raggedness": 0.3,
+   "boundary_amplitude": 0.12,
+   "boundary_seed": 3,
+   "view": "high top-down",
+   "shading": "basic shading",
+   "detail": "low detail",
+   "palette_name": "MOSSlight",
+   "transition_description": "a low earthy bank",
+   "upper_base_tile_id": "264a9b50-d544-4a09-8f08-0d02e3615970"
+  },
+  "palette_families": [
+   "water",
+   "grass",
+   "mud",
+   "sand"
+  ],
+  "response": "id: 870e5866-98a7-4896-9fbe-42b73de3963a\nterrain: calm clear pond water, deep blue, mostly flat calm colour with only a few sparse soft texture marks, large quiet areas, no speckles, no noise, low contrast \u2192 soft meadow grass\ntransition: a low earthy bank (size=0.25)\ntiles: 16 (generating ~100s)\n\nbase_tile_ids:\n  lower (calm clear pond water, deep blue, mostly flat calm colour with only a few sparse soft texture marks, large quiet areas, no speckles, no noise, low contrast): a7a2707a-8c42-4d2d-8c11-92ff7a5f59db\n  upper (soft meadow grass): 264a9b50-d544-4a09-8f08-0d02e3615970\n\nhint: get_topdow",
+  "tileset_id": "870e5866-98a7-4896-9fbe-42b73de3963a"
+ },
+ "ts_grass_clover3": {
+  "tool": "create_topdown_tileset",
+  "args": {
+   "lower_description": "slightly deeper green meadow grass with a few clover leaves, mostly flat calm colour with only a few sparse soft texture marks, large quiet areas, no speckles, no noise, low contrast",
+   "upper_description": "soft meadow grass",
+   "mode": "pro",
+   "tile_size": 16,
+   "transition_size": 0.0,
+   "raggedness": 0.6,
+   "boundary_amplitude": 0.2,
+   "boundary_seed": 3,
+   "view": "high top-down",
+   "shading": "basic shading",
+   "detail": "low detail",
+   "palette_name": "MOSSlight",
+   "upper_base_tile_id": "264a9b50-d544-4a09-8f08-0d02e3615970"
+  },
+  "palette_families": [
+   "grass",
+   "fern"
+  ],
+  "response": "id: 74a6ad19-8a5b-4458-9d6c-9c4ffa6610a9\nterrain: slightly deeper green meadow grass with a few clover leaves, mostly flat calm colour with only a few sparse soft texture marks, large quiet areas, no speckles, no noise, low contrast \u2192 soft meadow grass\ntiles: 16 (generating ~100s)\n\nbase_tile_ids:\n  lower (slightly deeper green meadow grass with a few clover leaves, mostly flat calm colour with only a few sparse soft texture marks, large quiet areas, no speckles, no noise, low contrast): 5b13806c-b44b-4069-93f5-ae70adb8444a\n  upper (soft meadow grass): 264a9b50-d544-4a09-8f08-0d02e3615970\n\nhint",
+  "tileset_id": "74a6ad19-8a5b-4458-9d6c-9c4ffa6610a9"
+ }
+}

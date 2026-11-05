@@ -190,10 +190,13 @@ window.Survival = (() => {
       const sc = Clock.schedule(); const u = Math.max(0, Math.min(1, (h - sc.dawn) / (sc.early_night - sc.dawn))); g.fillStyle = 'rgba(58,42,26,.25)'; g.fillRect(cx0 + 52, cy0 + 6, cw - 66, 1); g.fillStyle = ink; g.fillRect(cx0 + 52 + Math.round((cw - 68) * (night ? 1 : u)), cy0 + 4, 2, 5);
       K.tag(g, x0, y0, tw, th);
       /* music button under the clock: tap to mute or bring back the music (effects and ambience stay) */
-      { const A = window.Sound; if (A && A.setMusicMuted) { const off = !!A.settings.musicMuted, bw = K.touch() ? 30 : 22, bh = K.touch() ? 24 : 18, bx = cx0 + cw - bw, by = cy0 + 33;
-          K.tag(g, bx, by, bw, bh); K.glyph(g, 'note', bx + Math.round((bw - 5) / 2), by + Math.round((bh - 7) / 2), off ? C.faint : C.ink);
-          if (off) { g.fillStyle = C.rust; for (let i = 0; i < 9; i++) g.fillRect(bx + Math.round((bw - 9) / 2) + i, by + Math.round((bh - 9) / 2) + 8 - i, 1, 1); }
-          K.hit(bx, by, bw, bh, () => A.setMusicMuted(!A.settings.musicMuted), 'music'); } }
+      { const A = window.Sound; if (A && A.setMusicMuted) {            /* two buttons under the clock: the music, and every other sound */
+          const bw = K.touch() ? 30 : 22, bh = K.touch() ? 24 : 18, by = cy0 + 33;
+          const btn = (bx, glyph, off, fn, label) => { K.tag(g, bx, by, bw, bh); K.glyph(g, glyph, bx + Math.round((bw - 5) / 2), by + Math.round((bh - 7) / 2), off ? C.faint : C.ink);
+            if (off) { g.fillStyle = C.rust; for (let i = 0; i < 9; i++) g.fillRect(bx + Math.round((bw - 9) / 2) + i, by + Math.round((bh - 9) / 2) + 8 - i, 1, 1); }
+            K.hit(bx, by, bw, bh, fn, label); };
+          btn(cx0 + cw - bw, 'note', !!A.settings.musicMuted, () => A.setMusicMuted(!A.settings.musicMuted), 'music');
+          if (A.setSoundsMuted) btn(cx0 + cw - bw * 2 - 4, 'speaker', !!A.settings.soundsMuted, () => A.setSoundsMuted(!A.settings.soundsMuted), 'sounds'); } }
       const row = (yy, glyph, gcol, v, max, col, label, low) => { K.glyph(g, glyph, x0 + 4, yy - 1, gcol); K.bar(g, x0 + 14, yy + 1, 60, 4, v / max, { color: col, low }); K.text(g, String(Math.round(v)), x0 + 78, yy + 6, { color: C.ink }); K.text(g, label, x0 + 96, yy + 6, { color: C.ink2 }); };
       const frac = Energy.current / Energy.max; const pulse = (Energy.state === 'critical' || Energy.state === 'zero') && !K.S.reduceMotion ? (Math.sin(T * 3) > 0 ? 1 : .55) : 1;
       g.globalAlpha = pulse; row(y0 + 6, 'leaf', this.col[Energy.state] || C.ink2, Energy.current, Energy.max, this.col[Energy.state] || this.col.zero, mood, .4); g.globalAlpha = 1;

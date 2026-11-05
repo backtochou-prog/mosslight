@@ -92,7 +92,7 @@ for p in sc.placements:
     if 'tree' in tags:
         ellipse(p.x, p.y - 1, max(5, s.w // 9), 3)
     elif nm == 'tent':
-        rect(p.x - 26, p.y - 30, p.x + 48, p.y - 3)            # the canvas body; the guy lines are not walls
+        rect(p.x - 36, p.y - 26, p.x + 36, p.y - 3)            # the canvas body; the guy lines are not walls
     elif nm == 'ruin_back':
         rect(p.x - 46, p.y - 12, p.x + 47, p.y + 1); rect(p.x - 13, p.y - 12, p.x + 6, p.y + 1, 0)   # doorway stays open
     elif nm == 'ruin_side':
@@ -109,7 +109,7 @@ Image.fromarray(col * 255, 'L').save(os.path.join(out, 'collision.png'))
 
 # ---- interactables: driven by data, not by the player script
 inter = [
-    {'id': 'tent', 'label': 'Rest until morning', 'x': 254, 'y': 250, 'r': 30, 'sleep': True, 'text': 'A worn canvas tent. The flap is rolled back; your bedroll is inside.'},
+    {'id': 'tent', 'label': 'Rest until morning', 'x': 262, 'y': 252, 'r': 30, 'sleep': True, 'text': 'A worn canvas tent. The flap is rolled back; your bedroll is inside.'},
     {'id': 'lantern', 'label': 'Inspect lantern', 'x': 240, 'y': 262, 'r': 18, 'activity': 'inspect', 'text': 'An oil lantern on a crooked post. It will burn through the night.'},
     {'id': 'campfire', 'label': 'Tend the fire', 'x': 318, 'y': 272, 'r': 22, 'activity': 'tend_fire', 'text': 'You feed the fire a few sticks. The embers brighten.'},
     {'id': 'dock', 'label': 'Fish from the platform', 'x': 562, 'y': 278, 'r': 30, 'activity': 'fish_attempt', 'text': 'You cast from the weathered platform. Something stirs under the lily pads.'},

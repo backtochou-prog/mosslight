@@ -3,12 +3,12 @@
   {
    "name": "moves E",
    "ok": true,
-   "detail": "93.4 px"
+   "detail": "94.5 px"
   },
   {
    "name": "moves W",
    "ok": true,
-   "detail": "94.1 px"
+   "detail": "93.4 px"
   },
   {
    "name": "moves N",
@@ -18,47 +18,47 @@
   {
    "name": "moves S",
    "ok": true,
-   "detail": "93.4 px"
+   "detail": "94.1 px"
   },
   {
    "name": "moves NE",
    "ok": true,
-   "detail": "95.0 px"
+   "detail": "93.7 px"
   },
   {
    "name": "moves NW",
    "ok": true,
-   "detail": "94.5 px"
+   "detail": "95.1 px"
   },
   {
    "name": "moves SE",
    "ok": true,
-   "detail": "95.0 px"
+   "detail": "94.5 px"
   },
   {
    "name": "moves SW",
    "ok": true,
-   "detail": "94.5 px"
+   "detail": "93.7 px"
   },
   {
    "name": "diagonal speed == cardinal speed",
    "ok": true,
-   "detail": "cardinal 93.8 px, diagonal 94.7 px over 1.5 s"
+   "detail": "cardinal 94.0 px, diagonal 94.3 px over 1.5 s"
   },
   {
    "name": "stops without sliding",
    "ok": true,
-   "detail": "slid 0.7 px after release"
+   "detail": "slid 1.3 px after release"
   },
   {
    "name": "blocked by oak trunk",
    "ok": true,
-   "detail": "stopped at x=206.4 (trunk at 216)"
+   "detail": "stopped at x=205.4 (trunk at 216)"
   },
   {
    "name": "blocked by pond",
    "ok": true,
-   "detail": "stopped at x=552.5 walking east into the pond (bank near 548)"
+   "detail": "stopped at x=552.4 walking east into the pond (bank near 548)"
   },
   {
    "name": "blocked by tent",
@@ -98,7 +98,7 @@
   {
    "name": "behind oak trunk: partially hidden",
    "ok": true,
-   "detail": "46% of player visible"
+   "detail": "31% of player visible"
   },
   {
    "name": "in front of oak trunk: fully visible",
@@ -108,7 +108,7 @@
   {
    "name": "behind foreground canopy: hidden",
    "ok": true,
-   "detail": "20% visible under the framing oak"
+   "detail": "6% visible under the framing oak"
   },
   {
    "name": "under the oak canopy, in front of trunk base: visible",

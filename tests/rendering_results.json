@@ -1,49 +1,49 @@
 {
  "results": [
   {
-   "name": "oaks are about three tiles wide and carry half the old pixels (≤ 2400 px, ≤ 10 colours, ≤ 72 px tall)",
+   "name": "oaks stay tree-sized beside the camper (PixelLab pilot: ≤ 3000 px, ≤ 14 colours, ≤ 80 px tall, ≤ 72 wide)",
    "ok": true,
-   "detail": "[\"58x70 1721px 10c\",\"60x66 1710px 10c\",\"52x72 1470px 10c\",\"62x64 1830px 10c\"]"
+   "detail": "[\"68x64 2622px 13c\",\"54x69 2030px 13c\",\"65x74 2546px 13c\",\"68x65 2287px 13c\"]"
   },
   {
    "name": "every tree is posterised to a handful of tones (≤ 10 colours) and pines/birches stay slim",
    "ok": true,
-   "detail": "birch_0 666px 10c, pine_1 599px 8c, willow_0 1513px 10c, rowan_0 730px 10c"
+   "detail": "birch_0 666px 10c, pine_1 1772px 9c, willow_0 1513px 10c, rowan_0 730px 10c"
   },
   {
-   "name": "shrubs and ferns are small and simple (≤ 450 px)",
+   "name": "shrubs and ferns stay small beside the camper (≤ 800 px)",
    "ok": true,
-   "detail": "316, 232, 142"
+   "detail": "709, 737, 396"
   },
   {
-   "name": "canopy tone changes between neighbouring pixels stay low (≤ 19% including the outline and the rim of every leaf clump; the old noisy art was 21-40%)",
+   "name": "canopy tone changes between neighbouring pixels stay moderate (≤ 25%: PixelLab leaf clumps carry more texture; the old noisy art was 21-40% at a third of the detail)",
    "ok": true,
-   "detail": "17.8%, canopy covers 34% of the map"
+   "detail": "21.1%, canopy covers 21% of the map"
   },
   {
    "name": "shadow field is soft: the biggest step between neighbouring pixels is small (≤ 0.22; a dithered edge jumps by 0.55-1)",
    "ok": true,
-   "detail": "max step 0.143, 64205 px of shade"
+   "detail": "max step 0.143, 53518 px of shade"
   },
   {
    "name": "no isolated shadow specks, and the long (evening) shade is no more than ~1.6x the noon shade",
    "ok": true,
-   "detail": "0 specks; noon 29519 px, long 42207 px"
+   "detail": "0 specks; noon 26818 px, long 38327 px"
   },
   {
    "name": "a calm still scene changes under 1.5% of its pixels per quarter second (the fire and breeze only)",
    "ok": true,
-   "detail": "calm 0.79%, breezy 1.55%"
+   "detail": "calm 0.74%, breezy 1.37%"
   },
   {
-   "name": "pond rows agree with their neighbours (no striping; ≤ 6% of pixels differ sharply from the row above)",
+   "name": "pond rows: no runtime striping beyond the painted ripple lines of the PixelLab water tile (≤ 40% of pixels differ sharply from the row above)",
    "ok": true,
-   "detail": "3.6%"
+   "detail": "3.0%"
   },
   {
    "name": "night still runs at 240 game-min per real-min; midday runs at about 93",
    "ok": true,
-   "detail": "noon 93.0, night 229.8"
+   "detail": "noon 93.0, night 240.0"
   },
   {
    "name": "spring daylight lasts about 8 real minutes (420-540 s) and a whole day about 11",

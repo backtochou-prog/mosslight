@@ -114,15 +114,17 @@ class Scene:
 
     def render_indexed(self, tiles: TerrainTiles, night=False, season='spring', debug_extra=None) -> Canvas:
         self.season = season
-        c = render_terrain(self.mm, tiles)
-        water_depth_pass(c)
+        from . import pl_terrain
+        if getattr(self, 'terrain_style', '') == 'pixellab' and pl_terrain.available(): c = pl_terrain.render(self.mm)     # PixelLab Wang sets
+        else: c = render_terrain(self.mm, tiles)
+        if getattr(self, 'terrain_style', '') != 'pixellab': water_depth_pass(c)
         from .canvas import refine
         refine(c, families={'water', 'stone'})
         if season == 'winter': ice_pass(c)
         if getattr(self, 'use_meadow_pass', True): meadow_tone_pass(c)
         if season != 'winter':
             from .terrain_render import bank_pass
-            bank_pass(c)
+            if getattr(self, 'terrain_style', '') != 'pixellab': bank_pass(c)
         litter_pass(c, self.mm, season)
         for gp in getattr(self, 'ground_passes', []): gp(c)          # hand-authored surface detail (ground_art.py)
         rng = random.Random(77)

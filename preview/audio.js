@@ -1,11 +1,11 @@
 // MOSSlight procedural audio. WebAudio only: every sound is synthesised from oscillators and filtered noise.
 // One engine per AudioContext (the live one, or an OfflineAudioContext for tests): buses, ambience layers,
 // one-shot recipes, UI sounds, creature calls, stings, and a generative score built from authored motifs.
-// Public API: window.Sound = { init, start, tick, play, ui, creature, sting, settings, setVolume, setMuted, setMusicMuted, save, mood, debug }.
+// Public API: window.Sound = { init, start, tick, play, ui, creature, sting, settings, setVolume, setMuted, setMusicMuted, setSoundsMuted, save, mood, debug }.
 window.Sound = (() => {
   'use strict';
   const KEY = 'mosslight.audio';
-  const DEFAULTS = { master: 0.8, music: 0.55, ambient: 0.7, sfx: 0.8, ui: 0.5, creatures: 0.8, muted: false, musicMuted: false, reduceRepetition: false };
+  const DEFAULTS = { master: 0.8, music: 0.55, ambient: 0.7, sfx: 0.8, ui: 0.5, creatures: 0.8, muted: false, musicMuted: false, soundsMuted: false, reduceRepetition: false };
   const BUSES = ['music', 'ambient', 'sfx', 'ui', 'creatures'];
   const PHASES = ['dawn', 'dawn_transition', 'day', 'sunset', 'early_night', 'deep_night'];
   const SEASONS = ['spring', 'summer', 'autumn', 'winter'];
@@ -178,7 +178,7 @@ window.Sound = (() => {
     const duck = G(1, bus.music), musicMix = G(1, duck), stingBus = G(1, bus.music);
     const uiIn = F('lowpass', 5200, .5, bus.ui);
     function applySettings(instant) { const st = E.settings, t = now(); const set = (p, v) => (instant ? p.setValueAtTime(v, t) : p.setTargetAtTime(v, t, .06));
-      set(master.gain, st.muted ? 0 : clamp(num(st.master, .8))); for (const b of BUSES) set(bus[b].gain, b === 'music' && st.musicMuted ? 0 : clamp(num(st[b], DEFAULTS[b]))); }
+      set(master.gain, st.muted ? 0 : clamp(num(st.master, .8))); for (const b of BUSES) set(bus[b].gain, (b === 'music' ? st.musicMuted : st.soundsMuted) ? 0 : clamp(num(st[b], DEFAULTS[b]))); }
     applySettings(true);
 
     // ---- distance + pan for point one-shots
@@ -455,6 +455,7 @@ window.Sound = (() => {
     creature(kind, x, y) { return eng ? eng.creature(kind, x, y) : false; },
     sting(kind) { return eng ? eng.sting(kind) : false; },
     setVolume(b, v) { if (!BUSES.includes(b) && b !== 'master') return false; settings[b] = clamp(num(+v, DEFAULTS[b])); if (eng) eng.applySettings(); Sound.save(); return true; },
+    setSoundsMuted(m) { settings.soundsMuted = !!m; if (eng) eng.applySettings(); Sound.save(); return settings.soundsMuted; },          // everything but the music
     setMusicMuted(m) { settings.musicMuted = !!m; if (eng) eng.applySettings(); Sound.save(); return settings.musicMuted; },
     setMuted(m) { settings.muted = !!m; if (eng) eng.applySettings(); Sound.save(); return settings.muted; },
     save() { try { localStorage.setItem(KEY, JSON.stringify(settings)); } catch (e) { } },

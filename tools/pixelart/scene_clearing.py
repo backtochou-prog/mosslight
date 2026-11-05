@@ -43,6 +43,7 @@ def build(lib) -> Scene:
         nb = sum(p[1 + dy:p.shape[0] - 1 + dy, 1 + dx:p.shape[1] - 1 + dx].astype(int) for dy in (-1, 0, 1) for dx in (-1, 0, 1) if (dx, dy) != (0, 0))
         mm.m[f & (nb <= 3)] = GRASS
     mm.metaball([(12, 10, 2.5)], FOREST)
+    mm.metaball([(18.6, 17.2, 2.2), (15.6, 16.2, 1.6), (20.6, 17.6, 1.6), (12.6, 16.0, 1.2)], DIRT, threshold=0.9)    # the trodden camp ground
     # paths: the main way to the dock (widening at the camp), the narrow climb to the ruin
     main = Path([(4.5, 30.5), (6.5, 27), (9.5, 24), (13.5, 21.5), (17.5, 19.5), (22, 18.6), (26.5, 19.2), (30, 18.4), (33, 17.2)],
                 width=[0.75, 0.78, 0.8, 0.85, 0.9, 0.85, 0.8, 0.78, 0.75], surface=DIRT, verge=WORN, verge_width=0.95, seed=3)
@@ -80,22 +81,20 @@ def build(lib) -> Scene:
     # worn patch between tent and path; firewood is stacked by the tent where it stays dry;
     # the lantern post stands where it lights both the entrance and the fire; a flat stone
     # is the step at the tent mouth; two seats face the fire.
-    for (nm, x, y, fl) in (('oak_0', 216, 206, False), ('tent', 248, 246, False), ('woodpile', 182, 240, False), ('chop_block', 192, 268, False),
-                           ('lantern_post', 232, 270, False), ('supply_crate', 284, 262, False), ('forage_basket', 270, 266, False), ('water_bucket', 340, 270, False),
-                           ('campfire', 318, 274, False), ('log_seat', 302, 300, False), ('log_seat_b', 352, 286, True)):
+    for (nm, x, y, fl) in (('oak_0', 216, 206, False), ('tent', 262, 246, False), ('woodpile', 190, 250, False), ('chop_block', 186, 286, False),
+                           ('lantern_post', 300, 260, False), ('supply_crate', 224, 272, False),
+                           ('campfire', 318, 276, False), ('log_seat', 318, 306, False), ('log_seat_b', 362, 290, False)):
         put(nm, x, y, fl)
-    # THE OUTCROP — a broken shelf of the same stone behind the tent: one big block, a mossy second leaning on it,
-    # small pieces that have split off at its foot. Ferns grow in its shade. Small stones gather by big ones.
-    for (nm, x, y, fl) in (('rock_xl', 324, 216, False), ('rock_m1', 347, 222, False), ('rock_m0', 304, 222, True), ('rock_s1', 336, 228, False),
-                           ('rock_s0', 360, 228, False), ('rock_s2', 314, 229, False), ('fern_1', 292, 232, False), ('fern_0', 372, 234, True), ('tuft_2', 312, 230, False)):
+    # THE OUTCROP — one big mossy block behind the tent, a second leaning on it, split-off pieces at its foot
+    for (nm, x, y, fl) in (('rock_xl', 338, 216, False), ('rock_l0', 366, 224, True), ('rock_s0', 316, 224, False), ('rock_m1', 350, 232, False),
+                           ('fern_b', 300, 236, False), ('tall_b', 386, 236, False), ('tuft_2', 330, 236, False)):
         put(nm, x, y, fl)
-    # CAMP DRESSING — plants where plants would be: ferns and long grass in the shade and shelter of things (the oak's
-    # foot, the lee of the rocks, the tent's back corners, the ends of the seat logs), flowers in the sun at the
-    # camp's edge where nobody walks, mushrooms in the damp under the oak.
-    for (nm, x, y, fl) in (('fern_b', 200, 214, False), ('shrooms_brown', 234, 212, False), ('tall_b', 164, 246, True), ('tall_a', 212, 254, False),
-                           ('fern_c', 302, 242, True), ('tall_b', 308, 232, False), ('patch_daisy_s', 366, 240, False), ('tall_c', 381, 232, False),
-                           ('patch_blue', 212, 262, False), ('tall_c', 336, 314, True), ('patch_butter', 270, 308, False), ('tall_a', 384, 280, False),
-                           ('patch_daisy', 236, 300, True), ('tall_b', 168, 276, False), ('fern_a', 160, 230, False)):
+    # CAMP DRESSING — ferns and mushrooms in the oak's shade, long grass in the shelter of the woodpile and the seats,
+    # flowers at the sunny edge where nobody walks
+    for (nm, x, y, fl) in (('fern_a', 198, 214, False), ('shrooms_red', 240, 212, False), ('fern_c', 168, 226, True), ('tall_a', 164, 256, False),
+                           ('tuft_0', 212, 262, False), ('patch_blue', 206, 300, False), ('tall_c', 352, 322, True), ('patch_butter', 280, 314, False),
+                           ('patch_daisy', 392, 262, False), ('tuft_1', 268, 228, False), ('patch_daisy_s', 236, 316, True), ('tall_b', 150, 288, False),
+                           ('shrooms_brown', 176, 236, False), ('tuft_2', 404, 286, False)):
         put(nm, x, y, fl)
     # THE STONY RISE — rock shelves stepping up toward the north-west woods, dark firs on the thin soil, heather in
     # the cracks, scree fallen to the foot of each shelf. A different place from the meadow a few steps away.
@@ -180,7 +179,6 @@ def build(lib) -> Scene:
         for k in range(len(xs)):
             x, y = int(xs[k]), int(ys[k]); d = ((x - 318) / 16) ** 2 + ((y - 276) / 7) ** 2
             if d < 0.45 or (d < 0.8 and (x + y) % 2 == 0) or (d < 1 and (x * 3 + y) % 5 == 0): c.put(x, y, PAL.i('earth', 1) if d < 0.45 else PAL.i('earth', 2))
-    sc.decals.append(GA.camp_ground(300, 276, 44, 22, fire=None, links=[(250, 258, 24, 10), (194, 254, 18, 10)]))
     sc.decals.append(distant_backdrop)
     sc.decals.append(GA.forest_depth())
 
@@ -195,7 +193,11 @@ def build(lib) -> Scene:
     for (x, y, L) in ((632, 250, 3), (640, 256, 4), (628, 262, 3), (644, 268, 5), (636, 274, 3), (648, 280, 4), (640, 288, 3), (652, 294, 2)):
         for i in range(L): sc.night_pixels.append((x + i, y, ml[2] if 0 < i < L - 1 else ml[1]))
     # ------------------------------------------------------------------ lights
-    sc.lights.append(Light(242, 252, 46, color=(1.0, 0.84, 0.58), intensity=0.8))
+    for p_ in sc.placements:                                     # the lantern light sits on the lantern's glass, wherever the post stands
+        if p_.sprite.name == 'lantern_post':
+            g_ = np.isin(p_.sprite.c.a, PAL.ramp('lantern_glass')); ys_, xs_ = np.nonzero(g_)
+            lx_, ly_ = (int(p_.x - p_.sprite.ox + xs_.mean()), int(p_.y - p_.sprite.oy + ys_.mean())) if len(xs_) else (p_.x, p_.y - 20)
+            sc.lights.append(Light(lx_, ly_ + 8, 46, color=(1.0, 0.84, 0.58), intensity=0.8))
     sc.lights.append(Light(318, 262, 50, color=(1.0, 0.72, 0.42), intensity=0.95))
     sc.lights.append(Light(272, 236, 34, color=(1.0, 0.80, 0.55), intensity=0.6))
     sc.lights.append(Light(592, 262, 52, color=(1.0, 0.84, 0.58)))
@@ -203,7 +205,8 @@ def build(lib) -> Scene:
     for (x, y) in ((596, 134), (684, 124), (500, 410)): sc.lights.append(Light(x, y, 14, color=(0.55, 0.95, 1.0), intensity=0.5))
     sc.use_meadow_pass = False
     shade_near = [(p.x + 3, p.y + 1, max(12, p.sprite.w * 0.55), 9) for p in sc.placements if 'tree' in p.sprite.tags and 'sapling' not in p.sprite.tags]
-    sc.ground_passes = [GA.edge_cleanup, lambda c: GA.grass_pass(c, shade_near=shade_near), GA.path_pass]
+    sc.terrain_style = 'pixellab'                               # the ground comes from the PixelLab Wang sets (pl_terrain.py)
+    sc.ground_passes = [] if sc.terrain_style == 'pixellab' else [GA.edge_cleanup, lambda c: GA.grass_pass(c, shade_near=shade_near), GA.path_pass]
     sc.playable = (32, 48, sc.W - 64, sc.H - 80)
     sc.paths = [main, branch]
     return sc
