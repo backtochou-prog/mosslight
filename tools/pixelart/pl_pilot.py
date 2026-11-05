@@ -93,6 +93,10 @@ PICKS = {
     'chop_block': ('chopblock', 13, 'prop'), 'supply_crate': ('crate2d', 36, 'prop'), 'log_seat': ('bench2d', 9, 'prop'), 'log_seat_b': ('bench2d', 31, 'prop'),
     'fern_a': ('fern', 5, 'plant'), 'fern_b': ('fern', 12, 'plant'), 'fern_c': ('fern', 22, 'plant'),
     'tall_a': ('tallgrass', 0, 'plant'), 'tall_b': ('tallgrass', 8, 'plant'), 'tall_c': ('tallgrass', 15, 'plant'),
+    'gd_tuft_0': ('gd_tufts', 3, 'detail'), 'gd_tuft_1': ('gd_tufts', 16, 'detail'), 'gd_clover_0': ('gd_clover', 4, 'detail'), 'gd_clover_1': ('gd_clover', 13, 'detail'),
+    'gd_specks_0': ('gd_specks', 5, 'detail'), 'gd_specks_1': ('gd_specks', 14, 'detail'), 'gd_specks_2': ('gd_specks', 23, 'detail'),
+    'gd_pebbles_0': ('gd_pebbles', 5, 'detail'), 'gd_pebbles_1': ('gd_pebbles', 18, 'detail'), 'gd_pebbles_2': ('gd_pebbles', 12, 'detail'),
+    'gd_litter_0': ('gd_litter', 8, 'detail'), 'gd_litter_1': ('gd_litter', 19, 'detail'),
     'tuft_0': ('tuft', 3, 'plant'), 'tuft_1': ('tuft', 11, 'plant'), 'tuft_2': ('tuft', 23, 'plant'),
 }
 
@@ -122,6 +126,8 @@ def sprite_for(name, asset, k, kind, prev=None):
         return Sprite(name, c, ox, oy + 1, shadow=(5, 2, 3, 0), soft_shadow=True, tags=('structure', 'ysort', 'light', 'solid'), contact=(4, 1.2))
     if kind == 'prop':
         return Sprite(name, c, ox, oy + 1, shadow=(int(w * 0.42), 3, 2, 0), soft_shadow=True, tags=('prop', 'ysort', 'solid'), contact=(w * 0.38, 1.5), ground_blend=True)
+    if kind == 'detail':
+        return Sprite(name, c, ox, oy, shadow=None, tags=('ground',))
     if kind == 'flower':
         return Sprite(name, c, ox, oy + 1, shadow=None, tags=('plant', 'ysort', 'flower'))
     return Sprite(name, c, ox, oy + 1, shadow=None, tags=('plant', 'ysort', 'mushroom'))

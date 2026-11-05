@@ -316,3 +316,40 @@ def season_sprite(lib: dict, name: str, season: str):
     if base in ('birch', 'rowan'): return lib[f'birch_winter_{int(name[-1]) % 2}']
     if base == 'sapling': return lib['sapling_birch0'] if 'birch' in name else lib['sapling_oak0']
     return lib[name]
+
+
+def ground_details(ctx: Context, anchors, quiet=(), seed=77):
+    """Small ground details (PixelLab pieces: tufts, clover, tiny flowers, pebbles, leaf litter) placed as deliberate
+    clusters where they belong, never as an even sprinkle:
+      * at the feet of trees and rocks (anchors: (x, y, r, kind) with kind 'tree' or 'rock'): tufts and clover, a few flowers
+      * along the paths' edges: pebbles on the dirt side, a tuft on the grass side, at irregular intervals
+      * a handful of tiny-flower clusters in the open meadow
+    quiet: (x, y, r) circles kept clear so the eye has somewhere to rest (the camp ground, the dock landing)."""
+    rng = random.Random(seed); sc = ctx.sc; lib = ctx.lib
+    def free(x, y):
+        if any(math.hypot(x - qx, y - qy) < qr for (qx, qy, qr) in quiet): return False
+        return not ctx.in_keepout(x, y) and not ctx.is_water(x, y)
+    def put(nm, x, y):
+        if nm in lib and free(x, y): sc.add(lib[nm], int(x), int(y), flip=rng.random() < 0.5, layer='ground')
+    grassy = (GRASS, WORN)
+    for (ax, ay, ar, kind) in anchors:
+        if rng.random() > (0.55 if kind == 'tree' else 0.8): continue
+        n = rng.randint(2, 4)
+        for k in range(n):
+            a = rng.uniform(-math.pi * 0.15, math.pi * 1.15); d = ar + rng.uniform(2, 9)
+            x, y = ax + math.cos(a) * d, ay + math.sin(a) * d * 0.5 + 2
+            if ctx.ground(x, y) not in grassy or ctx.on_path(x, y, 0.2): continue
+            put(rng.choice(['gd_tuft_0', 'gd_tuft_1', 'gd_clover_0', 'gd_clover_1'] if kind == 'tree' else ['gd_tuft_0', 'gd_tuft_1', 'gd_specks_0']), x, y)
+    for p in ctx.paths:                                               # path edges
+        pts = p.samples()
+        i = rng.randint(0, 6)
+        while i < len(pts):
+            tx, ty, w = pts[i]; i += rng.randint(6, 12)
+            if rng.random() < 0.4: continue
+            side = rng.choice((-1, 1))
+            x, y = tx * T + side * w * T * 0.75 + rng.uniform(-2, 2), ty * T + rng.uniform(-3, 3)
+            if ctx.ground(x, y) in (DIRT, EARTH, PEBBLE): put(rng.choice(['gd_pebbles_0', 'gd_pebbles_1', 'gd_pebbles_2']), x, y)
+            x2 = tx * T + side * (w + 0.7) * T
+            if ctx.ground(x2, ty * T) in grassy: put(rng.choice(['gd_tuft_0', 'gd_tuft_1']), x2, ty * T)
+    return sc
+

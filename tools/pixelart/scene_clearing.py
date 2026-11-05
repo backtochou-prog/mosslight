@@ -46,12 +46,26 @@ def build(lib) -> Scene:
     mm.metaball([(18.6, 17.2, 2.2), (15.6, 16.2, 1.6), (20.6, 17.6, 1.6), (12.6, 16.0, 1.2)], DIRT, threshold=0.9)    # the trodden camp ground
     # paths: the main way to the dock (widening at the camp), the narrow climb to the ruin
     main = Path([(4.5, 30.5), (6.5, 27), (9.5, 24), (13.5, 21.5), (17.5, 19.5), (22, 18.6), (26.5, 19.2), (30, 18.4), (33, 17.2)],
-                width=[0.75, 0.78, 0.8, 0.85, 0.9, 0.85, 0.8, 0.78, 0.75], surface=DIRT, verge=WORN, verge_width=0.95, seed=3)
-    branch = Path([(27.5, 19), (29.5, 15.5), (31.5, 12), (34, 9.3), (36.5, 7.6)], width=0.7, surface=DIRT, verge=WORN, verge_width=1.05, seed=8)
-    east = Path([(34, 21), (36.5, 23.2), (38, 24), (44.6, 24.1), (47.5, 25)], width=0.6, surface=DIRT, verge=WORN, verge_width=0.7, seed=11)
+                width=[0.75, 0.78, 0.8, 0.85, 0.9, 0.85, 0.8, 0.78, 0.75], surface=DIRT, verge=GRASS, verge_width=0.95, seed=3)
+    branch = Path([(27.5, 19), (29.5, 15.5), (31.5, 12), (34, 9.3), (36.5, 7.6)], width=0.7, surface=DIRT, verge=GRASS, verge_width=1.05, seed=8)
+    east = Path([(34, 21), (36.5, 23.2), (38, 24), (44.6, 24.1), (47.5, 25)], width=0.6, surface=DIRT, verge=GRASS, verge_width=0.7, seed=11)
     main.stamp(mm); branch.stamp(mm); east.stamp(mm)
     Path.aprons(mm, [main, branch])
     mm.metaball([(31.6, 17.6, 1.0), (33.0, 17.3, 1.0)], PEBBLE)       # pebbled landing at the dock
+    # GRASS TONES — the meadow is two greens, not a carpet: deeper, cooler grass gathers toward the woods and in a few
+    # loose drifts; the light grass stays open around the camp and along the walking lines, so the eye has room to rest
+    from .noise import value_noise as _vn
+    sh = np.zeros_like(mm.m, dtype=bool)
+    for ty in range(mm.h + 1):
+        for tx in range(mm.w + 1):
+            if mm.m[ty, tx] != GRASS: continue
+            dd = clearing_dist(tx, ty); n = _vn(tx * 16, ty * 16, 120.0, 17) + (_vn(tx * 16, ty * 16, 48.0, 23) - .5) * .35
+            if math.hypot(tx - 19, (ty - 16.5) * 1.3) < 6.5: continue                     # the camp stays in the light
+            if dd > -1.6 or n > 0.62: sh[ty, tx] = True
+    for _ in range(2):                                                                     # round the patches: no lone squares, no pinholes
+        p_ = np.pad(sh, 1); nb = sum(p_[1 + dy:p_.shape[0] - 1 + dy, 1 + dx:p_.shape[1] - 1 + dx].astype(int) for dy in (-1, 0, 1) for dx in (-1, 0, 1) if (dx, dy) != (0, 0))
+        sh = (sh & (nb >= 3)) | (~sh & (nb >= 6))
+    mm.m[sh & (mm.m == GRASS)] = WORN
     # pond: shallow rim, deep heart, a small sandy bank on the south-west
     mm.pond([(38.5, 15.5, 3.4), (41, 17.5, 2.8), (37.5, 18.5, 2.4), (40.5, 14.2, 2.0)], deep_threshold=2.1, shore=False)
     mm.metaball([(37.6, 21.3, 1.3)], SAND)
@@ -170,6 +184,12 @@ def build(lib) -> Scene:
     C.vegetation_cluster(ctx, 300, 150, 26, [('flowers_b', 2, 2), ('flowers_p', 2, 1), ('tallgrass_', 3, 1)], spacing=8, n=3)
     C.vegetation_cluster(ctx, 640, 400, 24, [('flowers_r', 2, 2), ('flowers_y', 2, 1)], spacing=8, n=3)
     C.foreground_frame(ctx)
+    # GROUND DETAIL — small pieces in deliberate clusters at the feet of trees and rocks and along the path edges; the
+    # camp ground and the dock landing stay quiet
+    anchors = [(p.x, p.y, max(6, p.sprite.w * 0.3), 'tree' if 'tree' in p.sprite.tags else 'rock') for p in sc.placements if ('tree' in p.sprite.tags or 'rock' in p.sprite.tags) and p.layer == 'ysort']
+    C.ground_details(ctx, anchors, quiet=[(300, 276, 50), (560, 296, 30)])
+    for (x, y) in ((262, 160), (430, 300), (470, 168), (380, 356), (540, 372)):           # a few tiny-flower clusters out in the light grass
+        for k in range(3): sc.add(lib['gd_specks_%d' % (k % 3)], x + (k - 1) * 9 + (k % 2) * 3, y + (k % 2) * 6, layer='ground')
     for (x, y, rx, ry) in ((176, 192, 11, 6), (150, 110, 9, 5), (660, 380, 10, 6)):
         sc.decals.append(C.moss_patch(x, y, rx, ry))
     sc.decals.append(C.pebbles(520, 280, 22, 7)); sc.decals.append(C.pebbles(330, 318, 18, 5))

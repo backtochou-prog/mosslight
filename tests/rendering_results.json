@@ -8,7 +8,7 @@
   {
    "name": "every tree is posterised to a handful of tones (≤ 10 colours) and pines/birches stay slim",
    "ok": true,
-   "detail": "birch_0 666px 10c, pine_1 1772px 9c, willow_0 1513px 10c, rowan_0 730px 10c"
+   "detail": "birch_0 666px 10c, pine_1 1772px 8c, willow_0 1513px 10c, rowan_0 730px 10c"
   },
   {
    "name": "shrubs and ferns stay small beside the camper (≤ 800 px)",
@@ -18,7 +18,7 @@
   {
    "name": "canopy tone changes between neighbouring pixels stay moderate (≤ 25%: PixelLab leaf clumps carry more texture; the old noisy art was 21-40% at a third of the detail)",
    "ok": true,
-   "detail": "21.1%, canopy covers 21% of the map"
+   "detail": "19.0%, canopy covers 21% of the map"
   },
   {
    "name": "shadow field is soft: the biggest step between neighbouring pixels is small (≤ 0.22; a dithered edge jumps by 0.55-1)",
@@ -33,12 +33,12 @@
   {
    "name": "a calm still scene changes under 1.5% of its pixels per quarter second (the fire and breeze only)",
    "ok": true,
-   "detail": "calm 0.74%, breezy 1.37%"
+   "detail": "calm 0.68%, breezy 1.13%"
   },
   {
    "name": "pond rows: no runtime striping beyond the painted ripple lines of the PixelLab water tile (≤ 40% of pixels differ sharply from the row above)",
    "ok": true,
-   "detail": "3.0%"
+   "detail": "3.4%"
   },
   {
    "name": "night still runs at 240 game-min per real-min; midday runs at about 93",

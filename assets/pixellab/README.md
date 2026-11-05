@@ -34,3 +34,40 @@ ground contact point (trees: the trunk's foot; props: their middle).
 
 Not yet regenerated (still the earlier drawn art): birches, willows, rowans, the snag, cattails, lily pads, the dock,
 the footbridge, fences, signs, the ruin, the highland outcrops, winter (bare) trees.
+
+## Visual refinement 01: terrain noise, grass and the protagonist
+
+**Terrain.**
+- The ground uses the calm `*3` tilesets (basic shading, low detail).
+- Grass marks are thinned: two in three lone marks go back to the base green. Marks at a path or bank edge stay.
+- The dark/light hatching in the shade-grass set is resolved by a 5x5 majority.
+- Deeper-grass patches are no longer tile-shaped. They are cut at pixel resolution from a smooth field (the painted
+  patches plus a gentle wobble), so their edges are organic and clean.
+- Ground detail (pebbles at path edges, tufts and clover at tree and rock feet, a few tiny-flower clusters) is
+  placed in clusters. Quiet zones are left around the camp ground and the dock.
+
+**Protagonist** (`src/hero/`, downloaded by `tools/pixellab/hero.py`, built by `tools/pixelart/pl_hero.py`).
+- Made with `create_character` from the approved `hero_south` design: 32x40, 4 directions, low top-down view.
+  It keeps the auburn hair, green vest, white shirt, blue scarf and grey trousers.
+- Animations:
+
+  | Clip | Source | Directions | Frames used |
+  |---|---|---|---|
+  | breathing-idle | template | 4 | 4 |
+  | walking | template | 4 | 6 |
+  | running-6-frames | template | S, N, E | 6 |
+  | picking-up (gather) | template | 4 | south 0, 1, 3, 4 (frame 2 came out mangled) |
+  | taking-punch (hurt) | template | S, N, E | gentle recoil frames only |
+  | fishing | custom v3 | E | rod held out |
+  | hammering (build) | custom v3 | S | 4 |
+
+- Every frame is mapped onto the game palette (hero families). The rotations map exactly; the animated frames drift
+  by at most about 25 RGB.
+- Blink frames close the eyes on every idle frame. The sleeping frame is the front pose laid down in a green
+  bedroll.
+- Sheet layout:
+  - Cells are 48x40, so the cast rod fits.
+  - Origin (24, 36) is at the feet; the foot box is 8x4.
+  - Contacts are detected from the widest stride.
+  - Frame rates: walk 10 fps, run 14 fps, idle 2.2 fps.
+  - `rod_tip` is exported, so the fishing line leaves from the drawn rod.

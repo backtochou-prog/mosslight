@@ -713,5 +713,153 @@
   ],
   "response": "id: 74a6ad19-8a5b-4458-9d6c-9c4ffa6610a9\nterrain: slightly deeper green meadow grass with a few clover leaves, mostly flat calm colour with only a few sparse soft texture marks, large quiet areas, no speckles, no noise, low contrast \u2192 soft meadow grass\ntiles: 16 (generating ~100s)\n\nbase_tile_ids:\n  lower (slightly deeper green meadow grass with a few clover leaves, mostly flat calm colour with only a few sparse soft texture marks, large quiet areas, no speckles, no noise, low contrast): 5b13806c-b44b-4069-93f5-ae70adb8444a\n  upper (soft meadow grass): 264a9b50-d544-4a09-8f08-0d02e3615970\n\nhint",
   "tileset_id": "74a6ad19-8a5b-4458-9d6c-9c4ffa6610a9"
+ },
+ "hero_south": {
+  "tool": "create_image_pro",
+  "description": "the protagonist of a cozy survival game, a young explorer standing facing the viewer, full body, about two and a half heads tall: tousled auburn hair, calm kind face with dark eyes, cream shirt with rolled sleeves, dark green vest with a leather bandolier strap and a small pouch, blue neckerchief, grey-blue trousers, sturdy brown boots, the straps of a backpack over the shoulders. Clean readable silhouette, flat 2D front view as in a classic 16-bit RPG, soft dark outline, simple clean shading with few tones, no noise, no ground, no shadow. cozy top-down farming-game pixel art in the spirit of a handcrafted 16-bit valley, three-quarter top-down view, light from the upper left, soft dark selective outline, clean readable clusters, no ground, no cast shadow",
+  "size": [
+   32,
+   40
+  ],
+  "seed": 5,
+  "palette_families": [
+   "shroom",
+   "dirt",
+   "wood",
+   "leaf_litter",
+   "rope",
+   "flower_w",
+   "forest",
+   "flower_b",
+   "pebble",
+   "reed",
+   "metal"
+  ],
+  "style_anchor": null,
+  "job_id": "ba2bd85b-28b4-4ea7-b95a-c8671781b9dd",
+  "candidates": 49,
+  "cost": "15 generations"
+ },
+ "gd_pebbles": {
+  "tool": "create_image_pro",
+  "description": "a tiny cluster of three small pebbles lying on bare ground, seen from above, clean simple shapes. cozy top-down farming-game pixel art in the spirit of a handcrafted 16-bit valley, three-quarter top-down view, light from the upper left, soft dark selective outline, clean readable clusters, no ground, no cast shadow",
+  "size": [
+   16,
+   16
+  ],
+  "seed": 11,
+  "palette_families": [
+   "dirt",
+   "earth",
+   "pebble",
+   "stone"
+  ],
+  "style_anchor": "src/oak/cand_06.png",
+  "job_id": "2e220778-a205-4e41-a139-4c2016a7d53f",
+  "candidates": 64,
+  "cost": "10 generations"
+ },
+ "gd_clover": {
+  "tool": "create_image_pro",
+  "description": "a tiny flat patch of clover leaves on the ground seen from above, one small white clover flower, few tones. cozy top-down farming-game pixel art in the spirit of a handcrafted 16-bit valley, three-quarter top-down view, light from the upper left, soft dark selective outline, clean readable clusters, no ground, no cast shadow",
+  "size": [
+   16,
+   16
+  ],
+  "seed": 11,
+  "palette_families": [
+   "grass",
+   "fern",
+   "flower_w"
+  ],
+  "style_anchor": "src/oak/cand_06.png",
+  "job_id": "776cfc20-d8d0-45a5-9b36-54f5378e600a",
+  "candidates": 64,
+  "cost": "10 generations"
+ },
+ "gd_specks": {
+  "tool": "create_image_pro",
+  "description": "three or four tiny wildflower blossoms in the grass seen from above, each just a few pixels, on short stems. cozy top-down farming-game pixel art in the spirit of a handcrafted 16-bit valley, three-quarter top-down view, light from the upper left, soft dark selective outline, clean readable clusters, no ground, no cast shadow",
+  "size": [
+   16,
+   16
+  ],
+  "seed": 11,
+  "palette_families": [
+   "grass",
+   "flower_w",
+   "flower_y",
+   "flower_b",
+   "flower_p"
+  ],
+  "style_anchor": "src/oak/cand_06.png",
+  "job_id": "f6ee4908-c2fb-444a-89d0-359c79393a1f",
+  "candidates": 64,
+  "cost": "10 generations"
+ },
+ "gd_litter": {
+  "tool": "create_image_pro",
+  "description": "a tiny scatter of two or three fallen leaves and a twig on the forest floor seen from above. cozy top-down farming-game pixel art in the spirit of a handcrafted 16-bit valley, three-quarter top-down view, light from the upper left, soft dark selective outline, clean readable clusters, no ground, no cast shadow",
+  "size": [
+   16,
+   16
+  ],
+  "seed": 11,
+  "palette_families": [
+   "leaf_litter",
+   "forest",
+   "wood",
+   "moss"
+  ],
+  "style_anchor": "src/oak/cand_06.png",
+  "job_id": "67b3d976-4a63-46e5-917b-9805f4ef05b9",
+  "candidates": 64,
+  "cost": "10 generations"
+ },
+ "gd_tufts": {
+  "tool": "create_image_pro",
+  "description": "a small low cluster of two or three short grass tufts growing together, darker at the roots, a few lit blade tips. cozy top-down farming-game pixel art in the spirit of a handcrafted 16-bit valley, three-quarter top-down view, light from the upper left, soft dark selective outline, clean readable clusters, no ground, no cast shadow",
+  "size": [
+   24,
+   16
+  ],
+  "seed": 11,
+  "palette_families": [
+   "grass",
+   "reed"
+  ],
+  "style_anchor": "src/oak/cand_06.png",
+  "job_id": "97adfefc-0970-4cb7-99d5-59ba6f186007",
+  "candidates": 64,
+  "cost": "10 generations"
+ },
+ "ts_grass_shade3": {
+  "tool": "create_topdown_tileset",
+  "args": {
+   "lower_description": "the same meadow grass one shade darker and cooler, same calm texture, mostly flat calm colour with only a few sparse soft texture marks, large quiet areas, no speckles, no noise, low contrast",
+   "upper_description": "soft meadow grass",
+   "mode": "pro",
+   "tile_size": 16,
+   "transition_size": 0.0,
+   "raggedness": 0.7,
+   "boundary_amplitude": 0.25,
+   "boundary_seed": 3,
+   "view": "high top-down",
+   "shading": "basic shading",
+   "detail": "low detail",
+   "palette_name": "MOSSlight",
+   "upper_base_tile_id": "264a9b50-d544-4a09-8f08-0d02e3615970"
+  },
+  "palette_families": [
+   "grass"
+  ],
+  "response": "id: 6c9e3abb-41ef-46b1-8418-ad6e903bc894\nterrain: the same meadow grass one shade darker and cooler, same calm texture, mostly flat calm colour with only a few sparse soft texture marks, large quiet areas, no speckles, no noise, low contrast \u2192 soft meadow grass\ntiles: 16 (generating ~100s)\n\nbase_tile_ids:\n  lower (the same meadow grass one shade darker and cooler, same calm texture, mostly flat calm colour with only a few sparse soft texture marks, large quiet areas, no speckles, no noise, low contrast): b94305d8-ecd9-46dd-a98d-1d7d89c6c8af\n  upper (soft meadow grass): 264a9b50-d544-4a09-8f08-",
+  "tileset_id": "6c9e3abb-41ef-46b1-8418-ad6e903bc894"
+ },
+ "hero_character": {
+  "tool": "create_character",
+  "mode": "v3",
+  "reference": "src/hero_south/cand_32.png",
+  "response": "id: eac84316-f0c4-4dea-b6a4-5086b838c049\nname: MOSSlight protagonist\nmode: v3 reference (1 generations, 4 directions)\nbody: humanoid\nsize: 32x40px\nview: low top-down\nstyle: from reference image (outline/detail hints ignored)\nstatus: processing (~3-5 min)\n\nhint: get_character(character_id=\"eac84316-f0c4-4dea-b6a4-5086b838c049\")"
  }
 }

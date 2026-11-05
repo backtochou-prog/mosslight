@@ -9,7 +9,7 @@ from pixelart.objects import build_library, build_library_extended
 from pixelart.scene_clearing import build
 from pixelart.palette import PAL
 from pixelart.canvas import Canvas
-from pixelart import survivor as player          # v5 survivor (parts-built, cozy and cheerful); v4 field_camper, v3 camper.py, v2 player.py
+from pixelart import pl_hero as player           # v6: the PixelLab protagonist (pl_hero.py); v5 survivor.py (parts-built), v4 field_camper, v3 camper.py
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 out = os.path.join(ROOT, 'assets/play'); os.makedirs(out, exist_ok=True)

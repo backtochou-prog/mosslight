@@ -327,7 +327,9 @@ const Player = {
     if (H && H.inv > 0 && H.cur < H.max && F.includes('hurt') && (H.inv % .5) > .25) return [F.indexOf('hurt'), fcol];
     if (act && act.anim) return [F.indexOf(act.anim), this.frame()];
     if (this.moving && this.running && F.includes('run_' + this.facing)) { const L = this.cols().walk; return [F.indexOf('run_' + this.facing), L[Math.floor(this.animT) % L.length]]; }
-    if (!this.moving && F.includes('blink') && !(window.UIKit && UIKit.S.reduceMotion) && (T % 3.7) < .13) { const L = this.cols().idle, lifted = L.indexOf(this.frame()) >= L.length / 2; return [F.indexOf('blink'), (lifted ? ((pm.blink && pm.blink.lifted_offset) || 3) : 0) + fcol]; }
+    if (!this.moving && F.includes('blink') && !(window.UIKit && UIKit.S.reduceMotion) && (T % 3.7) < .13) { const L = this.cols().idle, k = L.indexOf(this.frame()); const per = pm.blink && pm.blink.per_idle;   // per_idle: a closed-eyes copy of every idle frame (down, side); the back view has no eyes to close
+      if (per) { if (per[this.facing] !== undefined) return [F.indexOf('blink'), per[this.facing] + Math.max(0, k)]; }
+      else { const lifted = k >= L.length / 2; return [F.indexOf('blink'), (lifted ? ((pm.blink && pm.blink.lifted_offset) || 3) : 0) + fcol]; } }
     return [F.indexOf(this.facing), this.frame()]; },
   setPos(x, y) { this.x = x; this.y = y; this.vx = this.vy = 0; },
 };

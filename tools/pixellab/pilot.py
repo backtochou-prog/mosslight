@@ -42,6 +42,17 @@ ASSETS = {
                     d="a rustic log bench seen straight from the front, flat 2D front view like a classic 16-bit RPG: a long split-log seat on two short stump legs, the seat's top surface visible, a little moss. Orthographic, not isometric, horizontal, no corner angle"),
     'woodpile2d': dict(w=48, h=40, fams=('wood', 'wood_grey'), seed=21,
                        d="a stack of split firewood seen straight from the front, flat 2D front view like a classic 16-bit RPG: round log ends facing the viewer in neat rows between two upright stakes. Orthographic, not isometric, no corner angle"),
+    # REFINEMENT 01 - the protagonist (south view first; rotations and animations come from it) and ground details
+    'hero_south': dict(w=32, h=40, fams=('shroom', 'dirt', 'wood', 'leaf_litter', 'rope', 'flower_w', 'forest', 'flower_b', 'pebble', 'reed', 'metal'), seed=5, anchor=False,
+                       d="the protagonist of a cozy survival game, a young explorer standing facing the viewer, full body, about two and a half heads tall: "
+                         "tousled auburn hair, calm kind face with dark eyes, cream shirt with rolled sleeves, dark green vest with a leather bandolier strap and a small pouch, "
+                         "blue neckerchief, grey-blue trousers, sturdy brown boots, the straps of a backpack over the shoulders. Clean readable silhouette, "
+                         "flat 2D front view as in a classic 16-bit RPG, soft dark outline, simple clean shading with few tones, no noise, no ground, no shadow"),
+    'gd_pebbles': dict(w=16, h=16, fams=('dirt', 'earth', 'pebble', 'stone'), d="a tiny cluster of three small pebbles lying on bare ground, seen from above, clean simple shapes"),
+    'gd_clover': dict(w=16, h=16, fams=('grass', 'fern', 'flower_w'), d="a tiny flat patch of clover leaves on the ground seen from above, one small white clover flower, few tones"),
+    'gd_specks': dict(w=16, h=16, fams=('grass', 'flower_w', 'flower_y', 'flower_b', 'flower_p'), d="three or four tiny wildflower blossoms in the grass seen from above, each just a few pixels, on short stems"),
+    'gd_litter': dict(w=16, h=16, fams=('leaf_litter', 'forest', 'wood', 'moss'), d="a tiny scatter of two or three fallen leaves and a twig on the forest floor seen from above"),
+    'gd_tufts': dict(w=24, h=16, fams=('grass', 'reed'), d="a small low cluster of two or three short grass tufts growing together, darker at the roots, a few lit blade tips"),
     # second pass at true scale: the 32 px mushrooms and flowers read as big as a bush beside the camper
     'mushrooms_s': dict(w=20, h=20, fams=('shroom', 'shroom_stem', 'wood', 'moss'), d="a tiny cluster of two or three small forest mushrooms with brown and red caps and pale stems on a little moss"),
     'flowers_s': dict(w=20, h=20, fams=('flower_w', 'flower_y', 'flower_b', 'flower_p', 'grass'), d="a tiny clump of wildflowers on a small tuft of leaves, a few small blossoms"),
@@ -59,7 +70,7 @@ def submit(names):
         a = ASSETS[n]
         args = {'description': a['d'] + '. ' + STYLE, 'width': a['w'], 'height': a['h'], 'no_background': True,
                 'palette': palette_hex(*a['fams']), 'palette_name': 'MOSSlight', 'seed': a.get('seed', 11)}
-        if anchor and n != 'oak': args['style_image_base64'] = anchor; args['style_copy'] = ['outline', 'detail', 'shading']
+        if anchor and n != 'oak' and a.get('anchor', True): args['style_image_base64'] = anchor; args['style_copy'] = ['outline', 'detail', 'shading']
         r = text_of(m.call('create_image_pro', args))
         job = [l.split(': ', 1)[1] for l in r.splitlines() if l.startswith('job_id:')][0]
         cands = int([l.split(': ', 1)[1] for l in r.splitlines() if l.startswith('candidates:')][0])
@@ -90,6 +101,8 @@ TILESETS = {
                             fams=('water', 'grass', 'mud', 'sand'), transition=0.25, raggedness=0.3, amp=0.12, tdesc="a low earthy bank", shading='basic shading', detail='low detail'),
     'ts_grass_clover3': dict(lower="slightly deeper green meadow grass with a few clover leaves, " + CALM, upper="soft meadow grass", upper_base='264a9b50-d544-4a09-8f08-0d02e3615970',
                              fams=('grass', 'fern'), transition=0.0, raggedness=0.6, amp=0.2, shading='basic shading', detail='low detail'),
+    'ts_grass_shade3': dict(lower="the same meadow grass one shade darker and cooler, same calm texture, " + CALM, upper="soft meadow grass", upper_base='264a9b50-d544-4a09-8f08-0d02e3615970',
+                            fams=('grass',), transition=0.0, raggedness=0.7, amp=0.25, shading='basic shading', detail='low detail'),
     'ts_grass_dirt3': dict(lower="smooth trodden dirt path in warm brown, " + CALM, upper="soft meadow grass in one calm green, " + CALM,
                            fams=('dirt', 'grass', 'earth'), transition=0.0, raggedness=0.35, amp=0.15, shading='basic shading', detail='low detail'),
     'ts_grass_clover': dict(lower="deeper, slightly darker meadow grass with clover leaves and longer blades, calm low contrast", upper="soft lush grass", upper_base=GRASS_BASE,

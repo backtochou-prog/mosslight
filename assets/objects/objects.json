@@ -4415,6 +4415,174 @@
   "solid": true,
   "trunk_top": null
  },
+ "gd_tuft_0": {
+  "w": 23,
+  "h": 17,
+  "origin": [
+   11,
+   15
+  ],
+  "shadow": null,
+  "tags": [
+   "ground"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "gd_tuft_1": {
+  "w": 24,
+  "h": 15,
+  "origin": [
+   12,
+   13
+  ],
+  "shadow": null,
+  "tags": [
+   "ground"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "gd_clover_0": {
+  "w": 18,
+  "h": 16,
+  "origin": [
+   9,
+   14
+  ],
+  "shadow": null,
+  "tags": [
+   "ground"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "gd_clover_1": {
+  "w": 18,
+  "h": 16,
+  "origin": [
+   9,
+   14
+  ],
+  "shadow": null,
+  "tags": [
+   "ground"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "gd_specks_0": {
+  "w": 15,
+  "h": 14,
+  "origin": [
+   7,
+   12
+  ],
+  "shadow": null,
+  "tags": [
+   "ground"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "gd_specks_1": {
+  "w": 14,
+  "h": 15,
+  "origin": [
+   7,
+   13
+  ],
+  "shadow": null,
+  "tags": [
+   "ground"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "gd_specks_2": {
+  "w": 18,
+  "h": 13,
+  "origin": [
+   9,
+   11
+  ],
+  "shadow": null,
+  "tags": [
+   "ground"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "gd_pebbles_0": {
+  "w": 17,
+  "h": 14,
+  "origin": [
+   8,
+   12
+  ],
+  "shadow": null,
+  "tags": [
+   "ground"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "gd_pebbles_1": {
+  "w": 18,
+  "h": 14,
+  "origin": [
+   9,
+   12
+  ],
+  "shadow": null,
+  "tags": [
+   "ground"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "gd_pebbles_2": {
+  "w": 18,
+  "h": 12,
+  "origin": [
+   9,
+   10
+  ],
+  "shadow": null,
+  "tags": [
+   "ground"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "gd_litter_0": {
+  "w": 18,
+  "h": 15,
+  "origin": [
+   9,
+   13
+  ],
+  "shadow": null,
+  "tags": [
+   "ground"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
+ "gd_litter_1": {
+  "w": 18,
+  "h": 14,
+  "origin": [
+   9,
+   12
+  ],
+  "shadow": null,
+  "tags": [
+   "ground"
+  ],
+  "solid": false,
+  "trunk_top": null
+ },
  "forage_basket": {
   "w": 14,
   "h": 12,

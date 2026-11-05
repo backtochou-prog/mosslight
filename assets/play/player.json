@@ -1,10 +1,10 @@
 {
- "name": "survivor v5 (original; cozy chunky camper, built from parts)",
- "frame_w": 22,
- "frame_h": 36,
+ "name": "MOSSlight protagonist (PixelLab character on the game palette)",
+ "frame_w": 48,
+ "frame_h": 40,
  "origin": [
-  11,
-  35
+  24,
+  36
  ],
  "facings": [
   "down",
@@ -23,40 +23,52 @@
  "frames": [
   "idle0",
   "idle1",
+  "idle2",
+  "idle3",
   "walk0",
   "walk1",
   "walk2",
-  "walk3"
+  "walk3",
+  "walk4",
+  "walk5"
  ],
  "rows": "facing",
  "cols": "frame",
  "side_flips_for_left": true,
  "idle_cols": [
   0,
-  1
+  1,
+  2,
+  3
  ],
  "walk_cols": [
-  2,
-  3,
   4,
-  5
+  5,
+  6,
+  7,
+  8,
+  9
  ],
  "contacts": [
-  3,
-  5
+  5,
+  8
  ],
- "walk_fps": 6,
- "run_fps": 10,
- "idle_fps": 1.0,
+ "walk_fps": 10,
+ "run_fps": 14,
+ "idle_fps": 2.2,
  "foot_box": [
-  9,
+  8,
   4
  ],
  "action_frames": 4,
  "action_fps": 6,
  "shadow": [
-  8,
+  7,
   2
+ ],
+ "rod_tip": [
+  17,
+  -18
  ],
  "run": {
   "rows": {
@@ -65,20 +77,20 @@
    "side": "run_side"
   },
   "cols": [
-   2,
-   3,
    4,
-   5
+   5,
+   6,
+   7,
+   8,
+   9
   ]
  },
  "blink": {
   "row": "blink",
-  "cols": {
+  "per_idle": {
    "down": 0,
-   "side": 1,
-   "up": 2
-  },
-  "lifted_offset": 3
+   "side": 4
+  }
  },
  "hurt": {
   "row": "hurt",

@@ -197,12 +197,12 @@
   {
    "name": "25 s of fast-forwarded play (rain, day into night): steady frame time, bounded particles, no runaway memory",
    "ok": true,
-   "detail": "1444 frames, 17.3 ms/frame, heap +0.0 MB, particles fire 19 ripples 4 rain 194, 7 tap targets"
+   "detail": "1370 frames, 18.3 ms/frame, heap +0.0 MB, particles fire 11 ripples 2 rain 191, 7 tap targets"
   },
   {
    "name": "night with 12 creatures renders under the frame budget",
    "ok": true,
-   "detail": "17.3 ms/frame"
+   "detail": "16.2 ms/frame"
   },
   {
    "name": "the site root opens the game: no lab controls, a title page, the canvas fills the window",
